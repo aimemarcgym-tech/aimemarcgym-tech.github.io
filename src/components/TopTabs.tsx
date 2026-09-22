@@ -13,17 +13,17 @@ export default function TopTabs() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex justify-center gap-1 border-b border-border-subtle bg-surface/80 px-4 backdrop-blur">
+    <nav className="flex justify-center gap-2 border-b border-border-subtle bg-surface/80 px-4 py-3 backdrop-blur">
       {TABS.map((tab) => {
         const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
         return (
           <Link
             key={tab.href}
             href={tab.href}
-            className={`rounded-t px-4 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-lg px-4 py-2 text-sm transition-colors ${
               active
-                ? "border-b-2 border-accent-solid text-foreground"
-                : "border-b-2 border-transparent text-muted hover:text-foreground"
+                ? "bg-foreground font-semibold text-background"
+                : "font-medium text-muted hover:text-foreground"
             }`}
           >
             {tab.label}
