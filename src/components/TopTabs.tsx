@@ -20,10 +20,10 @@ export default function TopTabs() {
           <Link
             key={tab.href}
             href={tab.href}
-            className={`rounded-lg px-4 py-2 text-sm transition-colors ${
+            className={`rounded-lg border px-4 py-2 text-sm transition-colors ${
               active
-                ? "bg-foreground font-semibold text-background"
-                : "font-medium text-muted hover:text-foreground"
+                ? "border-border-strong bg-surface-alt font-semibold text-white"
+                : "border-transparent font-medium text-muted hover:text-foreground"
             }`}
           >
             {tab.label}
