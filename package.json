@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/generate-sw.mjs",
+    "build": "next build && node scripts/generate-sw.mjs && node scripts/sync-docs.mjs",
     "start": "npx serve out -l 3000",
     "lint": "eslint"
   },
