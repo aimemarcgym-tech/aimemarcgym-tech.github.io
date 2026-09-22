@@ -10,6 +10,12 @@ const { count, size, warnings } = await generateSW({
   globPatterns: ["**/*.{html,js,css,json,webmanifest,svg,png,ico,woff,woff2}"],
   swDest: "out/sw.js",
   cleanupOutdatedCaches: true,
+  // Sans ça, un nouveau service worker téléchargé reste "en attente" tant
+  // qu'un onglet de l'ancienne version reste ouvert quelque part -> les
+  // mises à jour ne s'appliquaient jamais malgré un rechargement complet.
+  // Ici on force l'activation immédiate de chaque nouvelle version.
+  skipWaiting: true,
+  clientsClaim: true,
   // SPA en export statique : toute navigation non trouvée dans le cache
   // retombe sur la page d'accueil précachée (fonctionne hors-ligne).
   navigateFallback: "/index.html",
