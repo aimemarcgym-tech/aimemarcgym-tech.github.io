@@ -1,0 +1,79 @@
+{
+  "apparatus": "SOL",
+  "source": "Sept26_Arches Sol.pdf (édition SEPT. 26)",
+  "arches": [
+    {
+      "id": "SOL-ACROS1",
+      "name": "Acros 1",
+      "subtitle": "Avant et arrière",
+      "category": "ACRO",
+      "sourcePage": 65,
+      "baseElement": { "code": "70new", "name": "Chandelle tenue 2''" },
+      "branches": ["avant", "arriere"]
+    },
+    {
+      "id": "SOL-ACROS2",
+      "name": "Acros 2",
+      "subtitle": "Avant et arrière",
+      "category": "ACRO",
+      "sourcePage": 66,
+      "baseElement": { "code": "8", "name": "Départ fente ATR. ATR ou ATR écart" },
+      "branches": ["avant", "arriere"],
+      "dataQuality": "a_verifier"
+    },
+    {
+      "id": "SOL-ATR-FORCE",
+      "name": "ATR Force",
+      "subtitle": null,
+      "category": "FORCE",
+      "sourcePage": 67,
+      "baseElement": { "code": "121", "name": "Départ accroupi ou à genoux, placement de dos, retour libre" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "SOL-CERCLES",
+      "name": "Cercles",
+      "subtitle": null,
+      "category": "CERCLES",
+      "sourcePage": 68,
+      "baseElement": { "code": "131", "name": "Cercle des jambes 360°" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "SOL-MAINTIEN-SOUPLESSE",
+      "name": "Maintien et souplesse",
+      "subtitle": null,
+      "category": "MAINTIEN_SOUPLESSE",
+      "sourcePage": 69,
+      "baseElement": null,
+      "branches": ["maintien", "souplesse"]
+    },
+    {
+      "id": "SOL-PIVOTS",
+      "name": "Pivots",
+      "subtitle": null,
+      "category": "PIVOT",
+      "sourcePage": 70,
+      "baseElement": { "code": "4", "name": "1/2 tour (180°) sur 1 jambe et sur 1/2 pointes, position de la jambe libre indifférente" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "SOL-SAUTS-2PIEDS",
+      "name": "Sauts gymniques",
+      "subtitle": "Appel 2 pieds",
+      "category": "SAUT_GYM",
+      "sourcePage": 71,
+      "baseElement": { "code": "121", "name": "Saut extension" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "SOL-SAUTS-1PIED",
+      "name": "Sauts gymniques",
+      "subtitle": "Appel 1 pied",
+      "category": "SAUT_GYM",
+      "sourcePage": 72,
+      "baseElement": { "code": "29", "name": "Cabriole. Saut appel 1 pied et réception même pied en écartant la jambe libre" },
+      "branches": ["A", "B"]
+    }
+  ]
+}

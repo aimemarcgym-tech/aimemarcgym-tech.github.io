@@ -1,0 +1,187 @@
+{
+  "apparatus": "SOL",
+  "source": "Sept26_Decompo note 11 sept 2026 AGRES.pdf, page 3 (Décomposition de la note - SOL)",
+  "note": "Chaque valorisation a un nombre de points fixe : pondérée (*) = 3 pts, normale = 2 pts (déduit des totaux affichés sur le document officiel). Chaque exigence de tronc commun = 1 pt.",
+  "evolutions": [
+    {
+      "id": "A1", "genre": "GAF/GAM", "ordre": 1,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "A1-TC-1", "label": "1 souplesse" },
+          { "id": "A1-TC-2", "label": "2 acros" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "A1-V1", "label": "1 ATR - Départ et retour en fente avec envol", "pondere": true, "points": 3 },
+          { "id": "A1-V2", "label": "1 saut", "pondere": false, "points": 2 },
+          { "id": "A1-V3", "label": "1 élément P2", "pondere": false, "points": 2 },
+          { "id": "A1-V4", "label": "2 acros de sens différents", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "A2", "genre": "GAF", "ordre": 2,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "A2-TC-1", "label": "1 saut" },
+          { "id": "A2-TC-2", "label": "2 acros" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "A2-V1", "label": "1 ATR - Départ et retour en fente avec envol", "pondere": true, "points": 3 },
+          { "id": "A2-V2", "label": "1 saut P2 (min.)", "pondere": false, "points": 2 },
+          { "id": "A2-V3", "label": "Sursaut + fente + roue", "pondere": false, "points": 2 },
+          { "id": "A2-V4", "label": "2 acros de sens différents", "pondere": false, "points": 3 }
+        ]
+      }
+    },
+    {
+      "id": "B1", "genre": "GAF/GAM", "ordre": 3,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "B1-TC-1", "label": "1 LA" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P2", "P3", "P4"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "B1-V1", "label": "1 ATR tenu 2'' - Départ et retour en fente", "pondere": false, "points": 2 },
+          { "id": "B1-V2", "label": "1 LAE dont 1 élément P3 (min.)", "pondere": true, "points": 3 },
+          { "id": "B1-V3", "label": "1 FORCE ou 1 saut écart P3 (min.)", "pondere": true, "points": 3 },
+          { "id": "B1-V4", "label": "1 élément acro avec envol P3 (min.)", "pondere": false, "points": 2 },
+          { "id": "B1-V5", "label": "2 acros de sens différents", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B2", "genre": "GAF/GAM", "ordre": 4,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "B2-TC-1", "label": "2 LA distinctes" },
+          { "id": "B2-TC-2", "label": "1 élément P4" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P2", "P3", "P4"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "B2-V1", "label": "1 LAE dont 1 acro avec appui manuel", "pondere": false, "points": 2 },
+          { "id": "B2-V2", "label": "1 LAE dont 1 élément P4 (min.)", "pondere": true, "points": 3 },
+          { "id": "B2-V3", "label": "1 FORCE ou 1 saut écart P3 (min.)", "pondere": true, "points": 3 },
+          { "id": "B2-V4", "label": "1 salto en P4", "pondere": false, "points": 2 },
+          { "id": "B2-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B3", "genre": "GAF/GAM", "ordre": 5,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "B3-TC-1", "label": "1 PG ou 1 FORCE" },
+          { "id": "B3-TC-2", "label": "2 LA distinctes" },
+          { "id": "B3-TC-3", "label": "1 élément P5" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P3", "P4", "P5"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "B3-V1", "label": "1 LAE dont 1 salto appel 2 pieds", "pondere": false, "points": 2 },
+          { "id": "B3-V2", "label": "1 LAE dont 1 élément P5", "pondere": true, "points": 3 },
+          { "id": "B3-V3", "label": "1 FORCE ou 1 Saut écart P4 (min.)", "pondere": true, "points": 3 },
+          { "id": "B3-V4", "label": "1 salto en P5", "pondere": false, "points": 2 },
+          { "id": "B3-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C1", "genre": "GAF", "ordre": 6,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 12,
+        "exigences": [
+          { "id": "C1-TC-1", "label": "1 PG ou 1 FORCE" },
+          { "id": "C1-TC-2", "label": "2 LA distinctes" },
+          { "id": "C1-TC-3", "label": "1 élément P6 (min.)" }
+        ]
+      },
+      "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P3", "P4", "P5", "P6"],
+      "valorisations": {
+        "choisir": 4, "parmi": 6,
+        "options": [
+          { "id": "C1-V1", "label": "1 salto position tendue", "pondere": true, "points": 3 },
+          { "id": "C1-V2", "label": "1 LAE de 3 éléments différents dont 1 P5 (min.)", "pondere": true, "points": 3 },
+          { "id": "C1-V3", "label": "1 FORCE ou 1 SAUT P5 (min.)", "pondere": false, "points": 2 },
+          { "id": "C1-V4", "label": "1 élément acro avec envol P5 (min.)", "pondere": false, "points": 2 },
+          { "id": "C1-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 },
+          { "id": "C1-V6", "label": "2 salti appel 2 pieds liés directement ou indirectement", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C2", "genre": "GAF/GAM", "ordre": 7,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 12,
+        "exigences": [
+          { "id": "C2-TC-1", "label": "1 PG ou 1 FORCE" },
+          { "id": "C2-TC-2", "label": "2 LA distinctes" },
+          { "id": "C2-TC-3", "label": "1 élément P5 (min.)" }
+        ]
+      },
+      "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 4, "parmi": 6,
+        "options": [
+          { "id": "C2-V1", "label": "1 salto avec rotation longitudinale 360°", "pondere": true, "points": 3 },
+          { "id": "C2-V2", "label": "1 LAE de 3 éléments différents dont 1 P5 (min.)", "pondere": true, "points": 3 },
+          { "id": "C2-V3", "label": "1 FORCE ou 1 SAUT P4 (min.)", "pondere": false, "points": 2 },
+          { "id": "C2-V4", "label": "1 élément acro P6 (min.)", "pondere": false, "points": 2 },
+          { "id": "C2-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 },
+          { "id": "C2-V6", "label": "2 salti appel 2 pieds liés directement ou indirectement", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C3", "genre": "GAF/GAM", "ordre": 8,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 12,
+        "exigences": [
+          { "id": "C3-TC-1", "label": "1 PG ou 1 FORCE" },
+          { "id": "C3-TC-2", "label": "2 LA distinctes" },
+          { "id": "C3-TC-3", "label": "1 élément P7" }
+        ]
+      },
+      "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 4, "parmi": 6,
+        "options": [
+          { "id": "C3-V1", "label": "1 acro avec double rotation longitudinale ou transversale, avec envol", "pondere": true, "points": 3 },
+          { "id": "C3-V2", "label": "1 LAE de 3 éléments différents dont 1 P6 (min.)", "pondere": true, "points": 3 },
+          { "id": "C3-V3", "label": "1 FORCE ou 1 SAUT P6 (min.)", "pondere": false, "points": 2 },
+          { "id": "C3-V4", "label": "1 élément acro P7", "pondere": false, "points": 2 },
+          { "id": "C3-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 },
+          { "id": "C3-V6", "label": "2 salti liés dont 1 P5 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    }
+  ]
+}

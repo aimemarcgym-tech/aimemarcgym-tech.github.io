@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a10;
+  --surface: #14141d;
+  --surface-alt: #1b1b27;
+  --border-subtle: #27272f;
+  --border-strong: #35354a;
+  --foreground: #f5f5f7;
+  --muted: #9a9aab;
+  --accent-from: #8b5cf6;
+  --accent-to: #ec4899;
+  --accent-solid: #a855f7;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-accent-from: var(--accent-from);
+  --color-accent-to: var(--accent-to);
+  --color-accent-solid: var(--accent-solid);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: radial-gradient(circle at 20% -10%, rgba(139, 92, 246, 0.12), transparent 45%),
+    radial-gradient(circle at 90% 0%, rgba(236, 72, 153, 0.10), transparent 40%), var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+.accent-gradient {
+  background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+}
+
+.accent-gradient-text {
+  background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Scrollbars discrets sur fond sombre */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+}

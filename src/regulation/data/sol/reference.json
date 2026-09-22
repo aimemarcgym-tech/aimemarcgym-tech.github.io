@@ -1,0 +1,36 @@
+{
+  "apparatus": "SOL",
+  "source": "Sept26_Generalites 11 sept 2026.pdf (pages 2 et 4)",
+  "tempsMax": [
+    { "evolutions": ["A1", "A2"], "label": "Évolution A", "duree": "40''" },
+    { "evolutions": ["B1", "B2"], "label": "Évolution B1 et B2", "duree": "55''" },
+    { "evolutions": ["B3"], "label": "Évolution B3", "duree": "1'10''" },
+    { "evolutions": ["C1", "C2", "C3"], "label": "Évolution C", "duree": "1'30''" }
+  ],
+  "lexique": [
+    { "acronym": "LA", "name": "Liaison Acrobatique", "definition": "Enchaînement de plusieurs éléments acrobatiques liés directement sans pas intermédiaires et sans sursauts." },
+    { "acronym": "LAE", "name": "Liaison Acrobatique avec Envol", "definition": "Enchaînement de plusieurs éléments acrobatiques avec envol liés directement sans pas intermédiaires et sans sursauts." },
+    { "acronym": "LG", "name": "Liaison Gymnique", "definition": "Enchaînement de 2 éléments minimum gymniques différents." },
+    { "acronym": "LM", "name": "Liaison Mixte", "definition": "Enchaînement d'un élément gymnique et d'un élément acrobatique, ou inversement." },
+    { "acronym": "PG", "name": "Passage Gymnique", "definition": "Enchaînement de 2 sauts minimum différents liés directement ou indirectement avec des pas courus, petits sauts, pas chassés, tour chorégraphique... sans passage au sol ni passage chorégraphique statique entre les sauts." },
+    { "acronym": "Nomade", "name": "Élément nomade", "definition": "Élément non évolutif (élément isolé). Ne peut jamais être compté dans une valorisation." },
+    { "acronym": "Tronc commun", "name": "Tronc commun", "definition": "Base commune indispensable à chaque niveau (nombre d'arches, quantité d'éléments, fondamentaux techniques)." },
+    { "acronym": "Valorisation", "name": "Valorisation", "definition": "Orientation technique de l'évolution gymnique et acrobatique. 2 niveaux : principales (pondérées, ★) et secondaires." },
+    { "acronym": "Palier", "name": "Palier", "definition": "Niveau de classification technique des éléments sur chaque arche (P1 à P7, du plus facile au plus difficile)." },
+    { "acronym": "Prérequis", "name": "Prérequis", "definition": "Base technique initiale à l'évolution de l'arche." }
+  ],
+  "materiel": {
+    "praticable": "12 x 12 m dynamique (obligatoire en compétitions nationales ; praticable non dynamique toléré en A1/A2).",
+    "musique": "Accompagnement musical obligatoire (orchestre sans chant, piano ou autre instrument). Vocalises sans mot autorisées. Chaque gymnaste doit avoir son enregistrement sur clé USB.",
+    "jugementDebut": "Premier mouvement gymnique ou acrobatique.",
+    "jugementFin": "Dernier mouvement gymnique ou acrobatique (l'enchaînement doit se terminer avec la musique).",
+    "chuteSalti": "Chute sur les salti : reconnu si réception sur les pieds d'abord, sinon non reconnu."
+  },
+  "regleGenerales": [
+    "La valorisation est validée même avec une chute, mais ne peut jamais contenir d'éléments nomades.",
+    "Un élément non terminé sur les pieds et/ou sur l'agrès n'est pas reconnu (+ 1 pt de pénalité pour chute).",
+    "Au Sol, les salti doivent être appel 2 pieds dans les LAE.",
+    "Au Sol, les éléments rondade, flip, saut de mains sont répétables dans les LAE mais comptabilisés 1 seule fois dans le nombre d'éléments.",
+    "Pour les 2 premiers niveaux (A1/A2), l'utilisation du praticable se limite à 1 changement de direction."
+  ]
+}

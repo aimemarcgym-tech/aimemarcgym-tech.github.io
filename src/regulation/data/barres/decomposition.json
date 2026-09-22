@@ -1,0 +1,189 @@
+{
+  "apparatus": "BARRES_ASYM",
+  "source": "Sept26_Decompo note 11 sept 2026 AGRES.pdf, page 4 (Décomposition de la note - BARRES ASYMÉTRIQUE, GAF)",
+  "note": "Barème spécifique GAF (les barres asymétriques n'existent pas en GAM, qui utilise la barre fixe). Points : pondérée (*) = 3 pts, normale = 2 pts, exigence de tronc commun = 1 pt (convention identique au Sol).",
+  "evolutions": [
+    {
+      "id": "A1", "genre": "GAF", "ordre": 1,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "BA-A1-TC-1", "label": "1 élément BI et 1 BS" },
+          { "id": "BA-A1-TC-2", "label": "1 élément des arches des balancés" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "BA-A1-V1", "label": "1 élément des arches Balancés (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-A1-V2", "label": "1 mvt en 2 parties avec interruption (BI ou BS ou inversement)", "pondere": false, "points": 2 },
+          { "id": "BA-A1-V3", "label": "1 élément de l'arche des élans", "pondere": false, "points": 2 },
+          { "id": "BA-A1-V4", "label": "1 élément de l'arche venir à l'appui", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "A2", "genre": "GAF", "ordre": 2,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "BA-A2-TC-1", "label": "1 élément BI et 1 BS" },
+          { "id": "BA-A2-TC-2", "label": "1 élément des arches des balancés" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "BA-A2-V1", "label": "Enchaînement de 2 balancers (av. et arr) aide possible au démarrage du bal. av. (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-A2-V2", "label": "1 sauter à l'appui", "pondere": false, "points": 2 },
+          { "id": "BA-A2-V3", "label": "1 élément de l'arche des élans", "pondere": false, "points": 2 },
+          { "id": "BA-A2-V4", "label": "1 pose de pieds à la station debout puis sortie en saut droit vers l'avant", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B1", "genre": "GAF", "ordre": 3,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "BA-B1-TC-1", "label": "1 élément des arches des balancés" },
+          { "id": "BA-B1-TC-2", "label": "1 élément des arches venir à l'appui" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P1", "P2", "P3", "P4"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "BA-B1-V1", "label": "Enchaînement de deux balancers (av et ar ou inversement x2) (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-B1-V2", "label": "1 élément P2 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-B1-V3", "label": "1 prise d'élan tour d'appui arrière", "pondere": true, "points": 3 },
+          { "id": "BA-B1-V4", "label": "1 changement de barre BI - BS", "pondere": false, "points": 2 },
+          { "id": "BA-B1-V5", "label": "1 sortie amenée du balancé arrière", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B2", "genre": "GAF", "ordre": 4,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "BA-B2-TC-1", "label": "1 changement de barre BI-BS" },
+          { "id": "BA-B2-TC-2", "label": "1 élément des arches des élans" },
+          { "id": "BA-B2-TC-3", "label": "1 élément des arches venir à l'appui" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P2", "P3", "P4"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "BA-B2-V1", "label": "Enchaînement de deux balancers (av et ar ou inversement x2) (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-B2-V2", "label": "1 élément P3 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-B2-V3", "label": "1 rotation P3 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-B2-V4", "label": "Bascule prise d'élan à l'horizontale", "pondere": true, "points": 3 },
+          { "id": "BA-B2-V5", "label": "1 sortie P3 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B3", "genre": "GAF", "ordre": 5,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "BA-B3-TC-1", "label": "1 changement de barre BI-BS" },
+          { "id": "BA-B3-TC-2", "label": "1 élément des arches des balancés" },
+          { "id": "BA-B3-TC-3", "label": "1 élément des arches venir à l'appui" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P3", "P4", "P5"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "BA-B3-V1", "label": "1 élément en balancé av ou arr (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-B3-V2", "label": "2 éléments P3 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-B3-V3", "label": "1 rotation P3 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-B3-V4", "label": "Bascule P4 prise d'élan au dessus de l'horizontale", "pondere": true, "points": 3 },
+          { "id": "BA-B3-V5", "label": "1 sortie P4 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C1", "genre": "GAF", "ordre": 6,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "BA-C1-TC-1", "label": "1 changement de barre BI-BS" },
+          { "id": "BA-C1-TC-2", "label": "1 élément des arches des élans" },
+          { "id": "BA-C1-TC-3", "label": "1 élément des arches des balancés" }
+        ]
+      },
+      "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P3", "P4", "P5", "P6"],
+      "valorisations": {
+        "choisir": 4, "parmi": 6,
+        "options": [
+          { "id": "BA-C1-V1", "label": "1 lâcher", "pondere": false, "points": 2 },
+          { "id": "BA-C1-V2", "label": "1 élément en balancé av ou arr (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-C1-V3", "label": "1 élément P4 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-C1-V4", "label": "1 rotation P4 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-C1-V5", "label": "1 élément fini à l'ATR", "pondere": true, "points": 3 },
+          { "id": "BA-C1-V6", "label": "1 sortie P4 (min.) amené du balancé", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C2", "genre": "GAF", "ordre": 7,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "BA-C2-TC-1", "label": "1 changement de barre BI-BS" },
+          { "id": "BA-C2-TC-2", "label": "1 élément des arches des balancés" },
+          { "id": "BA-C2-TC-3", "label": "1 élément à l'ATR" }
+        ]
+      },
+      "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6"],
+      "valorisations": {
+        "choisir": 4, "parmi": 6,
+        "options": [
+          { "id": "BA-C2-V1", "label": "1 lâcher", "pondere": false, "points": 2 },
+          { "id": "BA-C2-V2", "label": "1 grand tour", "pondere": true, "points": 3 },
+          { "id": "BA-C2-V3", "label": "1 élément P5 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-C2-V4", "label": "1 rotation P4 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-C2-V5", "label": "Bascule avec un élément fini à l'ATR", "pondere": true, "points": 3 },
+          { "id": "BA-C2-V6", "label": "1 sortie P5 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C3", "genre": "GAF", "ordre": 8,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "BA-C3-TC-1", "label": "1 changement de barre BI-BS" },
+          { "id": "BA-C3-TC-2", "label": "1 élément des arches des balancés" },
+          { "id": "BA-C3-TC-3", "label": "2 éléments à l'ATR" }
+        ]
+      },
+      "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 4, "parmi": 6,
+        "options": [
+          { "id": "BA-C3-V1", "label": "1 lâcher P5 (min.)", "pondere": true, "points": 3 },
+          { "id": "BA-C3-V2", "label": "1 élément en balancé av ou arr P5 (min.) (hors sortie)", "pondere": false, "points": 2 },
+          { "id": "BA-C3-V3", "label": "1 élément P5 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-C3-V4", "label": "1 rotation P6 (min.)", "pondere": false, "points": 2 },
+          { "id": "BA-C3-V5", "label": "1 ATR ou grand tour, avec rotation 180° (min.)", "pondere": true, "points": 3 },
+          { "id": "BA-C3-V6", "label": "1 sortie P5 (min.) amené d'un élément P5 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    }
+  ]
+}

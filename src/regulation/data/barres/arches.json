@@ -1,0 +1,52 @@
+{
+  "apparatus": "BARRES_ASYM",
+  "source": "Sept26_Arches BARRES ASYM.pdf (édition SEPT. 26)",
+  "arches": [
+    {
+      "id": "BARRES-BALANCES",
+      "name": "Balancés",
+      "subtitle": "Avant et arrière",
+      "category": "BALANCES",
+      "sourcePage": 52,
+      "baseElement": { "code": "6new-bb", "name": "Courbe avant statique" },
+      "branches": ["avant", "arriere"]
+    },
+    {
+      "id": "BARRES-VENIR-APPUI",
+      "name": "Venir à l'appui",
+      "subtitle": null,
+      "category": "VENIR_APPUI",
+      "sourcePage": 54,
+      "baseElement": { "code": "1bisnew", "name": "Sauter à l'appui" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "BARRES-ELANS",
+      "name": "Élans",
+      "subtitle": null,
+      "category": "ELANS",
+      "sourcePage": 55,
+      "baseElement": { "code": "70elan", "name": "Prise d'élan corps aligné au-dessus de l'horizontale" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "BARRES-ROTATIONS",
+      "name": "Rotations",
+      "subtitle": null,
+      "category": "ROTATIONS",
+      "sourcePage": 56,
+      "baseElement": { "code": "91rot", "name": "Tour d'appui facial en arrière" },
+      "branches": ["A", "B"]
+    },
+    {
+      "id": "BARRES-SORTIES",
+      "name": "Sorties",
+      "subtitle": null,
+      "category": "SORTIES",
+      "sourcePage": 56,
+      "baseElement": null,
+      "branches": [],
+      "dataQuality": "a_verifier"
+    }
+  ]
+}

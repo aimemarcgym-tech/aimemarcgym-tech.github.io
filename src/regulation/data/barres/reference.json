@@ -1,0 +1,27 @@
+{
+  "apparatus": "BARRES_ASYM",
+  "source": "Sept26_Generalites 11 sept 2026.pdf (page 3)",
+  "tempsMax": [],
+  "lexique": [
+    { "acronym": "BI", "name": "Barre Inférieure", "definition": "Hauteur réglementaire 1,75 m. Écartement de 1,80 m avec la BS (réglable ensuite librement)." },
+    { "acronym": "BS", "name": "Barre Supérieure", "definition": "Hauteur réglementaire 2,55 m." },
+    { "acronym": "ATR", "name": "Appui Tendu Renversé", "definition": "Position verticale, bras tendus, corps aligné (référentiel : alignement épaules/bassin)." },
+    { "acronym": "Lâcher", "name": "Lâcher", "definition": "Élément avec envol avec saisie de la barre avec les mains simultanées ou alternatives." },
+    { "acronym": "Reprise d'élan", "name": "Reprise d'élan", "definition": "Élan des jambes à l'appui facial qui n'est pas nécessaire à l'élément suivant (élan à vide)." },
+    { "acronym": "Balancé intermédiaire", "name": "Balancé intermédiaire", "definition": "Balancé répété à la suite qui n'est pas nécessaire à l'élément suivant, sauf si la valorisation le demande." }
+  ],
+  "materiel": {
+    "praticable": "Barres : hauteur BI 1,75 m / BS 2,55 m, écartement initial 1,80 m puis libre. Tapis : hauteur 20 cm, longueur 8 m x 2 m.",
+    "musique": "Aucun accompagnement musical requis aux barres asymétriques.",
+    "jugementDebut": "Appel sur le tremplin ou le sol.",
+    "jugementFin": "Réception au sol.",
+    "chuteSalti": "Chute sur les éléments avec envol : reconnu si saisie de la barre d'une ou des deux mains (même brève) ; non reconnu si la barre est seulement frôlée."
+  },
+  "regleGenerales": [
+    "La valorisation est validée même avec une chute, mais ne peut jamais contenir d'éléments nomades.",
+    "En cas de chute, la gymnaste a 30'' pour reprendre son enchaînement (au-delà, l'enchaînement est considéré comme fini).",
+    "Une seule pénalité d'élan à vide est comptée pour balancer avant-arrière.",
+    "Aux barres asymétriques, il n'existe aucun élément gymnique.",
+    "L'entraîneur est autorisé à rester près de l'agrès, mais ne peut pas modifier l'écartement des barres en cours d'enchaînement ou après une chute (sinon arrêt du jugement)."
+  ]
+}
