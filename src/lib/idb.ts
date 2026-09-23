@@ -57,6 +57,16 @@ export interface MovementSnapshotRow {
   detailJson: string;
 }
 
+export interface GymnastMusicRow {
+  id: string;
+  gymnastId: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  blob: Blob;
+  updatedAt: string;
+}
+
 interface AppDB extends DBSchema {
   clubs: { key: string; value: ClubRow };
   gymnasts: { key: string; value: GymnastRow; indexes: { clubId: string } };
@@ -68,10 +78,11 @@ interface AppDB extends DBSchema {
   movements: { key: string; value: MovementRow; indexes: { gymnastId: string } };
   movementElements: { key: string; value: MovementElementRow; indexes: { movementId: string } };
   movementSnapshots: { key: string; value: MovementSnapshotRow; indexes: { movementId: string } };
+  gymnastMusic: { key: string; value: GymnastMusicRow; indexes: { gymnastId: string } };
 }
 
 const DB_NAME = "ufolep-gaf";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbPromise: Promise<IDBPDatabase<AppDB>> | null = null;
 
@@ -82,23 +93,40 @@ export function getDb(): Promise<IDBPDatabase<AppDB>> {
   if (!dbPromise) {
     dbPromise = openDB<AppDB>(DB_NAME, DB_VERSION, {
       upgrade(db) {
-        db.createObjectStore("clubs", { keyPath: "id" });
+        if (!db.objectStoreNames.contains("clubs")) {
+          db.createObjectStore("clubs", { keyPath: "id" });
+        }
 
-        const gymnasts = db.createObjectStore("gymnasts", { keyPath: "id" });
-        gymnasts.createIndex("clubId", "clubId");
+        if (!db.objectStoreNames.contains("gymnasts")) {
+          const gymnasts = db.createObjectStore("gymnasts", { keyPath: "id" });
+          gymnasts.createIndex("clubId", "clubId");
+        }
 
-        const skills = db.createObjectStore("gymnastSkills", { keyPath: "id" });
-        skills.createIndex("gymnastId", "gymnastId");
-        skills.createIndex("gymnastId_elementCode", ["gymnastId", "elementCode"], { unique: true });
+        if (!db.objectStoreNames.contains("gymnastSkills")) {
+          const skills = db.createObjectStore("gymnastSkills", { keyPath: "id" });
+          skills.createIndex("gymnastId", "gymnastId");
+          skills.createIndex("gymnastId_elementCode", ["gymnastId", "elementCode"], { unique: true });
+        }
 
-        const movements = db.createObjectStore("movements", { keyPath: "id" });
-        movements.createIndex("gymnastId", "gymnastId");
+        if (!db.objectStoreNames.contains("movements")) {
+          const movements = db.createObjectStore("movements", { keyPath: "id" });
+          movements.createIndex("gymnastId", "gymnastId");
+        }
 
-        const elements = db.createObjectStore("movementElements", { keyPath: "id" });
-        elements.createIndex("movementId", "movementId");
+        if (!db.objectStoreNames.contains("movementElements")) {
+          const elements = db.createObjectStore("movementElements", { keyPath: "id" });
+          elements.createIndex("movementId", "movementId");
+        }
 
-        const snapshots = db.createObjectStore("movementSnapshots", { keyPath: "id" });
-        snapshots.createIndex("movementId", "movementId");
+        if (!db.objectStoreNames.contains("movementSnapshots")) {
+          const snapshots = db.createObjectStore("movementSnapshots", { keyPath: "id" });
+          snapshots.createIndex("movementId", "movementId");
+        }
+
+        if (!db.objectStoreNames.contains("gymnastMusic")) {
+          const music = db.createObjectStore("gymnastMusic", { keyPath: "id" });
+          music.createIndex("gymnastId", "gymnastId");
+        }
       },
     });
   }

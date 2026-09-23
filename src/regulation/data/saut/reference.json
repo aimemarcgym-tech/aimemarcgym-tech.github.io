@@ -1,0 +1,25 @@
+{
+  "apparatus": "SAUT",
+  "source": "Sept26_Generalites 11 sept 2026.pdf / Sept26_Decompo note 11 sept 2026 AGRES.pdf (page Saut)",
+  "tempsMax": [],
+  "lexique": [
+    { "acronym": "1er envol", "name": "Premier envol", "definition": "Phase entre l'appel sur le tremplin et la pose des mains sur la table de saut." },
+    { "acronym": "2e envol", "name": "Second envol", "definition": "Phase entre la pose des mains sur la table de saut et la réception." },
+    { "acronym": "PR1/PR2/PR3", "name": "Paliers prérequis (Saut)", "definition": "Uniquement en filière jeune : PR1 (saut droit) est dans les paliers du A1 mais non valorisable ; PR2 (lune plat dos) est valorisable en A1 ; PR2 (rondade plat ventre et rondade sur tremplin) est valorisable en A2, B1 et B2." }
+  ],
+  "materiel": {
+    "praticable": "Pile de tapis : min. L 4,0 m x l 2,0 m, hauteur 0,8 m (± 5 cm). Table de saut : de 1 m à 1 m 35 du sol. Piste d'élan : 25 m maximum.",
+    "musique": "Aucun accompagnement musical requis au saut.",
+    "jugementDebut": "Appel sur le tremplin 2 pieds.",
+    "jugementFin": "Réception au sol.",
+    "chuteSalti": "Chute : réception sur les pieds d'abord = saut validé. Sinon = saut nul."
+  },
+  "regleGenerales": [
+    "Pénalisations et valorisation appliquées au saut qui compte.",
+    "Une seule valorisation possible.",
+    "Je note chaque saut, puis j'applique les fautes, je calcule la note finale PUIS j'ajoute la valorisation sur la meilleure des deux notes.",
+    "À partir de 13 ans, trampo-tremp autorisé avec déduction d'un point (trampo-tremp = tremplin pour les moins de 13 ans).",
+    "Mini trampoline autorisé pour la saison 2026-2027 avec une pénalité de 1 point.",
+    "Le barème chiffré de la valorisation du Saut n'est pas publié dans les documents officiels à ce jour — l'application ne peut donc pas l'ajouter au calcul sans inventer une règle absente des documents."
+  ]
+}

@@ -31,24 +31,6 @@
       "detail": ["Un élément non terminé sur les pieds et/ou sur l'agrès n'est pas reconnu (+ 1 pt de pénalité pour chute)."]
     },
     {
-      "portee": "GAM",
-      "theme": "Sol : occupation de l'espace",
-      "detail": ["Pour les 2 premiers niveaux (A1/A2), l'utilisation du praticable se limite à 1 changement de direction."]
-    },
-    {
-      "portee": "GAM",
-      "theme": "Aménagement Barre fixe et Anneaux",
-      "detail": [
-        "Pour la barre fixe et les anneaux, les moins de 10 ans bénéficient d'un aménagement de hauteur.",
-        "En suspension, le gymnaste ne doit pas toucher le sol avec ses pieds."
-      ]
-    },
-    {
-      "portee": "GAM",
-      "theme": "Arçons : répétition",
-      "detail": ["Aux arçons, l'enchaînement de cercles n'est pas une répétition."]
-    },
-    {
       "portee": "MIXTE",
       "theme": "Sol : salti dans les LAE",
       "detail": ["Au Sol, les salti doivent être appel 2 pieds dans les LAE."]
@@ -90,7 +72,6 @@
     { "acronym": "LM — Liaison Mixte", "definition": "Enchaînement d'un élément gymnique et d'un élément acrobatique, ou inversement." },
     { "acronym": "PG — Passage Gymnique", "definition": "Enchaînement de 2 sauts minimum différents liés directement ou indirectement avec des pas courus, petits sauts, pas chassés, tour chorégraphique... etc, sans passage au sol ni passage chorégraphique statique entre les sauts." },
     { "acronym": "Éléments gymniques", "definition": "Sauts, Pivots, Maintiens." },
-    { "acronym": "Cheval d'arçons : contre-élan (GAM)", "definition": "Utilisation de la même jambe à la suite lors de l'enchaînement." },
     { "acronym": "Lâcher", "definition": "Élément avec envol avec saisie de la barre avec les mains simultanées ou alternatives." },
     { "acronym": "Reprise d'élan", "definition": "Élan des jambes à l'appui facial qui n'est pas nécessaire à l'élément suivant (élan à vide)." },
     { "acronym": "Balancé intermédiaire", "definition": "Balancé répété à la suite qui n'est pas nécessaire à l'élément suivant, sauf si la valorisation le demande. Une seule pénalité d'élan à vide est comptée pour balancer avant-arrière." }
@@ -188,93 +169,6 @@
         "Une seule valorisation possible. Je note chaque saut, j'applique les fautes, je calcule la note finale, PUIS j'ajoute la valorisation sur la meilleure des deux notes.",
         "À partir de 13 ans, trampo-tremp autorisé avec déduction d'un point (trampo-tremp = tremplin pour les moins de 13 ans).",
         "Mini trampoline autorisé pour la saison 2026-2027 avec une pénalité de 1 point."
-      ]
-    },
-    {
-      "id": "ANNEAUX",
-      "name": "Anneaux",
-      "genre": "GAM",
-      "materiel": [
-        "Hauteur mesurée à partir du sol : 2,90 m.",
-        "Pour les 10 ans et moins : aménagement de hauteur (abaissement ou rallonge type pédagogique) pour être à 1,80 m au-dessus des tapis ; à défaut, ajouter des tapis sur une longueur satisfaisante (3 m).",
-        "Tapis : hauteur 20 cm, longueur 5 m x 2 m. Sur-tapis obligatoire lorsqu'il est présent."
-      ],
-      "jugement": {
-        "debut": "Au moment où le gymnaste quitte le sol (possibilité d'être monté par l'entraîneur).",
-        "fin": "Réception au sol."
-      },
-      "rappels": [
-        "L'exercice comprend uniquement des éléments d'élan, de force et de maintien répartis en nombre égal.",
-        "Tout balancé précédant une sortie fait partie intégrante de la « difficulté » sortie.",
-        "Les éléments au siège écart ne sont pas comptabilisés et le gymnaste reçoit une pénalité de 0,5 pt pour chute sur agrès.",
-        "L'entraîneur peut monter le gymnaste à l'appui, sans pénalité (sauf fautes de tenue).",
-        "Entraîneurs : autorisés à rester près de l'agrès."
-      ]
-    },
-    {
-      "id": "ARCONS",
-      "name": "Arçons",
-      "genre": "GAM",
-      "materiel": [
-        "Hauteur mesurée à partir de la surface supérieure du tapis : 1,05 m.",
-        "Champignon : hauteur 45 cm du sol (± 5 cm), diamètre min. 60 cm.",
-        "Tapis : hauteur 10 ou 20 cm, longueur 4 m x 4 m.",
-        "Tremplin : possibilité d'utiliser un socle mousse 18 cm en remplacement."
-      ],
-      "jugement": {
-        "debut": "Appui sur le cheval.",
-        "fin": "Réception au sol."
-      },
-      "rappels": [
-        "L'exercice comprend exclusivement des éléments d'élan, sans arrêt ni force.",
-        "Pour qu'un cercle soit compté, il faut au moins 360°.",
-        "Lors d'une entrée avec tremplin, les hanches ne doivent pas dépasser l'arête supérieure du cuir.",
-        "Tous les changements de face et transports sont reconnus lorsque les cercles sont terminés « devant ».",
-        "Entraîneurs : non autorisés à rester près de l'agrès."
-      ]
-    },
-    {
-      "id": "FIXE",
-      "name": "Barre fixe",
-      "genre": "GAM",
-      "materiel": [
-        "Hauteur mesurée à partir du sol : 2,80 m.",
-        "Pour les 10 ans et moins : barre fixe « éducative » abaissée, ou barres asymétriques avec porte-mains barre fixe sur la partie haute et sans barre sur la partie basse.",
-        "Si le gymnaste touche, possibilité de remonter la barre à hauteur adéquate. À défaut d'aménagement, ajouter des tapis sous la barre sur une longueur satisfaisante (6 m).",
-        "Tapis : hauteur 20 cm, longueur 12 m x 2 m. Sur-tapis obligatoire lorsqu'il est présent."
-      ],
-      "jugement": {
-        "debut": "Au moment où le gymnaste quitte le sol (possibilité d'être monté par l'entraîneur).",
-        "fin": "Réception au sol."
-      },
-      "rappels": [
-        "L'exercice comprend uniquement des mouvements d'élan sans arrêt, avec de grands élans, des éléments près de la barre, des changements de face.",
-        "Tout balancé précédant une sortie fait partie intégrante de la « difficulté » sortie.",
-        "Les éléments terminant à l'ATR (passe fil, Endo, soleil, etc.) ne sont reconnus que s'il y a franchissement de la barre.",
-        "Tout lâcher est reconnu à partir du moment où les deux mains ont rattrapé la barre.",
-        "Entraîneurs : autorisés à rester près de l'agrès."
-      ]
-    },
-    {
-      "id": "PARALLELES",
-      "name": "Barres parallèles",
-      "genre": "GAM",
-      "materiel": [
-        "Hauteur mesurée à partir du sol : 2,00 m.",
-        "Possibilité de régler la hauteur des barres à hauteur des épaules du gymnaste debout sur le tremplin, pour les évolutions A1 et B1.",
-        "Porte-mains au sol : 80 cm de long, à 15 cm maximum du sol.",
-        "Tapis : hauteur 20 cm, longueur 5 m x 4,50 m (sortie 2 m x 2 m). Sur-tapis obligatoire lorsqu'il est présent."
-      ],
-      "jugement": {
-        "debut": "Appel sur le tremplin.",
-        "fin": "Réception au sol."
-      },
-      "rappels": [
-        "L'exercice doit être un ensemble harmonieux d'éléments en suspension et à l'appui, de force et de maintien.",
-        "En cas de chute, la gymnaste a 30'' pour reprendre son enchaînement (au-delà, l'enchaînement est considéré comme fini).",
-        "Sauf précision, les réceptions des sorties se font sur le côté des barres parallèles.",
-        "Chute sur les salti : reconnue si réception sur les pieds d'abord, sinon non reconnue.",
-        "Entraîneurs : autorisés à rester près de l'agrès."
       ]
     }
   ]

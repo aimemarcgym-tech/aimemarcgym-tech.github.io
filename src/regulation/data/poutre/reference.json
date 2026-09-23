@@ -1,0 +1,27 @@
+{
+  "apparatus": "POUTRE",
+  "source": "Sept26_Generalites 11 sept 2026.pdf (page Poutre)",
+  "tempsMax": [
+    { "evolutions": ["A1", "A2"], "label": "Évolution A", "duree": "1'10\" (chutes comprises)" },
+    { "evolutions": ["B1", "B2", "B3"], "label": "Évolution B", "duree": "1'30\" (chutes comprises)" },
+    { "evolutions": ["C1", "C2", "C3"], "label": "Évolution C", "duree": "2' (chutes comprises)" }
+  ],
+  "lexique": [
+    { "acronym": "LA", "name": "Liaison Acrobatique", "definition": "Enchaînement de plusieurs éléments acrobatiques liés directement sans pas intermédiaires et sans sursauts." },
+    { "acronym": "LG", "name": "Liaison Gymnique", "definition": "Enchaînement de 2 éléments minimum gymniques différents." },
+    { "acronym": "LM", "name": "Liaison Mixte", "definition": "Enchaînement d'un élément gymnique et d'un élément acrobatique, ou inversement." },
+    { "acronym": "Poutre mousse", "name": "Poutre mousse", "definition": "Barème d'équivalence pour l'entraînement/la progression : un niveau minimum sur poutre mousse est indiqué par évolution (ex. « Acro P4 min. »)." },
+    { "acronym": "Nomade", "name": "Élément nomade", "definition": "Élément non évolutif (élément isolé). Ne peut jamais être compté dans une valorisation." }
+  ],
+  "materiel": {
+    "praticable": "Hauteur 1,25 m (1,10 m pour les évolutions A1/A2 filière jeunes). Poutre mousse : longueur 250 cm, en prévoir 2.",
+    "musique": "Aucun accompagnement musical requis à la poutre.",
+    "jugementDebut": "Appel sur le tremplin ou le sol.",
+    "jugementFin": "Réception au sol.",
+    "chuteSalti": "Chute avec réception d'un ou deux pieds sur la poutre : difficulté reconnue. Sans réception d'un ou deux pieds sur la poutre : difficulté non reconnue."
+  },
+  "regleGenerales": [
+    "La valorisation est validée même avec une chute, mais ne peut jamais contenir d'éléments nomades.",
+    "Entraîneurs : non autorisés à rester près de l'agrès."
+  ]
+}

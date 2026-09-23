@@ -6,12 +6,20 @@ import barresArchesJson from "./data/barres/arches.json";
 import barresElementsJson from "./data/barres/elements.json";
 import barresDecompositionJson from "./data/barres/decomposition.json";
 import barresReferenceJson from "./data/barres/reference.json";
+import poutreArchesJson from "./data/poutre/arches.json";
+import poutreElementsJson from "./data/poutre/elements.json";
+import poutreDecompositionJson from "./data/poutre/decomposition.json";
+import poutreReferenceJson from "./data/poutre/reference.json";
+import sautArchesJson from "./data/saut/arches.json";
+import sautElementsJson from "./data/saut/elements.json";
+import sautDecompositionJson from "./data/saut/decomposition.json";
+import sautReferenceJson from "./data/saut/reference.json";
 import generalitesJson from "./data/generalites.json";
 import type { Arche, ApparatusRegulation, Evolution, RegElement } from "./types";
 
 // Version des données réglementaires chargées (affichée dans l'UI pour traçabilité).
 export const REGULATION_VERSION =
-  "UFOLEP NPT — Sol & Barres asym. SEPT.26 / Décomposition note 11 sept 2026";
+  "UFOLEP NPT — Sol, Barres asym., Poutre & Saut SEPT.26 / Décomposition note 11 sept 2026";
 
 const solRegulation: ApparatusRegulation = {
   apparatus: "SOL",
@@ -27,14 +35,32 @@ const barresRegulation: ApparatusRegulation = {
   evolutions: barresDecompositionJson.evolutions as Evolution[],
 };
 
+const poutreRegulation: ApparatusRegulation = {
+  apparatus: "POUTRE",
+  arches: poutreArchesJson.arches as Arche[],
+  elements: poutreElementsJson.elements as RegElement[],
+  evolutions: poutreDecompositionJson.evolutions as Evolution[],
+};
+
+const sautRegulation: ApparatusRegulation = {
+  apparatus: "SAUT",
+  arches: sautArchesJson.arches as Arche[],
+  elements: sautElementsJson.elements as RegElement[],
+  evolutions: sautDecompositionJson.evolutions as Evolution[],
+};
+
 const REGULATIONS: Partial<Record<string, ApparatusRegulation>> = {
   SOL: solRegulation,
   BARRES_ASYM: barresRegulation,
+  POUTRE: poutreRegulation,
+  SAUT: sautRegulation,
 };
 
 const REFERENCES: Partial<Record<string, typeof solReferenceJson>> = {
   SOL: solReferenceJson,
   BARRES_ASYM: barresReferenceJson,
+  POUTRE: poutreReferenceJson,
+  SAUT: sautReferenceJson,
 };
 
 export function getReference(apparatus: string) {

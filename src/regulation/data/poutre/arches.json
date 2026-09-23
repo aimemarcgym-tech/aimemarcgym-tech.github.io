@@ -1,0 +1,92 @@
+{
+  "apparatus": "POUTRE",
+  "source": "Sept26_Arches Poutre.pdf (édition SEPT. 26)",
+  "arches": [
+    {
+      "id": "POUTRE-ATR-MAINTIEN",
+      "name": "ATR et Maintien",
+      "subtitle": null,
+      "category": "ATR_MAINTIEN",
+      "sourcePage": 57,
+      "baseElement": { "code": "1new", "name": "Départ accroupi Placement du dos jambes fléchies" },
+      "branches": ["atr", "maintien"]
+    },
+    {
+      "id": "POUTRE-PIVOTS",
+      "name": "Pivots",
+      "subtitle": null,
+      "category": "PIVOT",
+      "sourcePage": 58,
+      "baseElement": { "code": "73", "name": "1/2 tour (180°) sur 2 pieds et 1/2 pointes" },
+      "branches": []
+    },
+    {
+      "id": "POUTRE-ACROS1",
+      "name": "Acros 1",
+      "subtitle": "Avant et arrière",
+      "category": "ACRO",
+      "sourcePage": 59,
+      "baseElement": { "code": "5new", "name": "Saut droit" },
+      "branches": ["avant", "arriere"],
+      "dataQuality": "a_verifier"
+    },
+    {
+      "id": "POUTRE-ACROS2",
+      "name": "Acros 2",
+      "subtitle": "Avant et arrière",
+      "category": "ACRO",
+      "sourcePage": 60,
+      "baseElement": { "code": "146", "name": "De la fente avant, venir à l'ATR 1 jambe à la verticale, retour libre" },
+      "branches": ["avant", "arriere"],
+      "dataQuality": "a_verifier"
+    },
+    {
+      "id": "POUTRE-SAUTS-1PIED",
+      "name": "Sauts gymniques",
+      "subtitle": "Appel 1 pied",
+      "category": "SAUT_GYM",
+      "sourcePage": 62,
+      "baseElement": { "code": "25new", "name": "Cabriole jambe libre fléchie" },
+      "branches": []
+    },
+    {
+      "id": "POUTRE-SAUTS-2PIEDS",
+      "name": "Sauts gymniques",
+      "subtitle": "Appel 2 pieds",
+      "category": "SAUT_GYM",
+      "sourcePage": 63,
+      "baseElement": { "code": "38", "name": "Soubresaut sans ou avec changement de pieds, réception 2 pieds" },
+      "branches": []
+    },
+    {
+      "id": "POUTRE-ENTREES",
+      "name": "Entrées",
+      "subtitle": null,
+      "category": "ENTREE",
+      "sourcePage": 64,
+      "baseElement": { "code": "1", "name": "De la station faciale, sauter à l'appui tendu et sans arrêt, passer 1 jambe tendue latéralement et par 1/4 de tour (90°) s'établir au siège transversal" },
+      "branches": [],
+      "dataQuality": "a_verifier"
+    },
+    {
+      "id": "POUTRE-ACCRO-MOUSSE",
+      "name": "Accro poutre mousse",
+      "subtitle": null,
+      "category": "ACRO",
+      "sourcePage": 61,
+      "baseElement": { "code": "152-26", "name": "Roue : renversement latéral sans envol arrivée 1 ou 2 pieds" },
+      "branches": [],
+      "dataQuality": "a_verifier"
+    },
+    {
+      "id": "POUTRE-SORTIES",
+      "name": "Sorties",
+      "subtitle": null,
+      "category": "SORTIES",
+      "sourcePage": 59,
+      "baseElement": null,
+      "branches": [],
+      "dataQuality": "a_verifier"
+    }
+  ]
+}

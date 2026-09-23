@@ -1,0 +1,188 @@
+{
+  "apparatus": "POUTRE",
+  "source": "Sept26_Decompo note 11 sept 2026 AGRES.pdf (page Poutre)",
+  "evolutions": [
+    {
+      "id": "A1", "genre": "GAF/GAM", "ordre": 1,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "P-A1-TC-1", "label": "1 acro en poutre haute" },
+          { "id": "P-A1-TC-2", "label": "2 sauts" },
+          { "id": "P-A1-TC-3", "label": "1 sortie (poutre mousse) : 1 ATR (PR)" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 3, "parmi": 3,
+        "options": [
+          { "id": "P-A1-V1", "label": "1 élément de l'arche des pivots", "pondere": false, "points": 2 },
+          { "id": "P-A1-V2", "label": "1 cabriole", "pondere": false, "points": 2 },
+          { "id": "P-A1-V3", "label": "ATR 1 jambe ou placement du dos", "pondere": true, "points": 3 }
+        ]
+      }
+    },
+    {
+      "id": "A2", "genre": "GAF", "ordre": 2,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "P-A2-TC-1", "label": "1 acro en poutre haute" },
+          { "id": "P-A2-TC-2", "label": "2 sauts" },
+          { "id": "P-A2-TC-3", "label": "1 sortie (poutre mousse) : Roue" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 3, "parmi": 3,
+        "options": [
+          { "id": "P-A2-V1", "label": "1 demi pivot sur 1 jambe", "pondere": false, "points": 2 },
+          { "id": "P-A2-V2", "label": "1 saut appel 2 pieds", "pondere": false, "points": 2 },
+          { "id": "P-A2-V3", "label": "1 ATR P2", "pondere": true, "points": 3 }
+        ]
+      }
+    },
+    {
+      "id": "B1", "genre": "GAF/GAM", "ordre": 3,
+      "troncCommun": {
+        "arches": 4, "elementsMin": 6, "elementsMax": 8,
+        "exigences": [
+          { "id": "P-B1-TC-1", "label": "2 acros en poutre haute" },
+          { "id": "P-B1-TC-2", "label": "2 sauts" },
+          { "id": "P-B1-TC-3", "label": "1 sortie (poutre mousse) : Acro P2 (min.)" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P1", "P2", "P3", "P4"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "P-B1-V1", "label": "1 élément pivot P3 (min.)", "pondere": false, "points": 2 },
+          { "id": "P-B1-V2", "label": "1 saut P3 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-B1-V3", "label": "1 acro P2 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-B1-V4", "label": "1 sortie P3 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B2", "genre": "GAF/GAM", "ordre": 4,
+      "troncCommun": {
+        "arches": 5, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "P-B2-TC-1", "label": "2 acros en poutre haute" },
+          { "id": "P-B2-TC-2", "label": "1 pivots P4 (min.)" },
+          { "id": "P-B2-TC-3", "label": "1 élément P3" },
+          { "id": "P-B2-TC-4", "label": "1 sortie (poutre mousse) : Acro P3 (min.)" }
+        ]
+      },
+      "paliersAutorises": ["PR", "P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P1", "P2", "P3"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "P-B2-V1", "label": "2 éléments gymniques P3 (min.) dans le mouvement", "pondere": true, "points": 3 },
+          { "id": "P-B2-V2", "label": "1 saut avec écart antéro", "pondere": false, "points": 2 },
+          { "id": "P-B2-V3", "label": "1 élément acro sur la poutre P3 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-B2-V4", "label": "1 sortie P3 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "B3", "genre": "GAF/GAM", "ordre": 5,
+      "troncCommun": {
+        "arches": 5, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "P-B3-TC-1", "label": "3 acros en poutre haute" },
+          { "id": "P-B3-TC-2", "label": "1 pivots P4 (min.)" },
+          { "id": "P-B3-TC-3", "label": "1 élément P4" },
+          { "id": "P-B3-TC-4", "label": "1 sortie (poutre mousse) : Acro P4 (min.)" }
+        ]
+      },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P3", "P4", "P5"],
+      "valorisations": {
+        "choisir": 4, "parmi": 4,
+        "options": [
+          { "id": "P-B3-V1", "label": "1 LG ou LM", "pondere": true, "points": 3 },
+          { "id": "P-B3-V2", "label": "1 saut avec écart antéro", "pondere": false, "points": 2 },
+          { "id": "P-B3-V3", "label": "1 acro sur la poutre P4 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-B3-V4", "label": "1 sortie P4 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C1", "genre": "GAF", "ordre": 6,
+      "troncCommun": {
+        "arches": 5, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "P-C1-TC-1", "label": "3 acros en poutre haute" },
+          { "id": "P-C1-TC-2", "label": "1 pivots P4 (min.)" },
+          { "id": "P-C1-TC-3", "label": "1 élément P5" },
+          { "id": "P-C1-TC-4", "label": "1 sortie (poutre mousse) : 1 LA dont 1 élément avec envol" }
+        ]
+      },
+      "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P2", "P3", "P4", "P5", "P6"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "P-C1-V1", "label": "1 LG ou LM dont 2 P3 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-C1-V2", "label": "1 saut avec 1 rotation à 180° (min.)", "pondere": false, "points": 2 },
+          { "id": "P-C1-V3", "label": "1 LA sur poutre", "pondere": true, "points": 3 },
+          { "id": "P-C1-V4", "label": "1 élément acro P5 (min.) sur la poutre", "pondere": false, "points": 2 },
+          { "id": "P-C1-V5", "label": "1 sortie avec liaison acro", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C2", "genre": "GAF/GAM", "ordre": 7,
+      "troncCommun": {
+        "arches": 5, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "P-C2-TC-1", "label": "3 acros en poutre haute" },
+          { "id": "P-C2-TC-2", "label": "1 pivots P4 (min.)" },
+          { "id": "P-C2-TC-3", "label": "1 élément P6" },
+          { "id": "P-C2-TC-4", "label": "1 sortie (poutre mousse) : 1 LA 2 éléments dont 1 salto" }
+        ]
+      },
+      "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "P-C2-V1", "label": "1 LG ou LM dont 2 P4 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-C2-V2", "label": "1 saut avec 1 rotation à 180°", "pondere": false, "points": 2 },
+          { "id": "P-C2-V3", "label": "1 LA dont 1 élément avec envol sur poutre", "pondere": true, "points": 3 },
+          { "id": "P-C2-V4", "label": "1 acro avec envol sur la poutre", "pondere": false, "points": 2 },
+          { "id": "P-C2-V5", "label": "1 sortie avec liaison acro dont un élément P5 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    },
+    {
+      "id": "C3", "genre": "GAF/GAM", "ordre": 8,
+      "troncCommun": {
+        "arches": 5, "elementsMin": 8, "elementsMax": 10,
+        "exigences": [
+          { "id": "P-C3-TC-1", "label": "3 acros en poutre haute" },
+          { "id": "P-C3-TC-2", "label": "1 pivots P4 (min.)" },
+          { "id": "P-C3-TC-3", "label": "1 élément P7" },
+          { "id": "P-C3-TC-4", "label": "1 sortie (poutre mousse) : 1 LA de 2 éléments avec envol dont 1 salto" }
+        ]
+      },
+      "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 4, "parmi": 5,
+        "options": [
+          { "id": "P-C3-V1", "label": "1 LG ou LM dont 2 P4 (min.)", "pondere": true, "points": 3 },
+          { "id": "P-C3-V2", "label": "1 saut écart avec 1 rotation à 180°", "pondere": false, "points": 2 },
+          { "id": "P-C3-V3", "label": "1 LA 2 éléments dont 1 salto sur poutre", "pondere": true, "points": 3 },
+          { "id": "P-C3-V4", "label": "1 salto sur poutre P6 (min.)", "pondere": false, "points": 2 },
+          { "id": "P-C3-V5", "label": "1 sortie avec liaison acro dont 1 élément P5 (min.)", "pondere": false, "points": 2 }
+        ]
+      }
+    }
+  ]
+}

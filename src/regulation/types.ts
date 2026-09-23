@@ -6,6 +6,9 @@ export type Apparatus = "SOL" | "POUTRE" | "BARRES_ASYM" | "SAUT";
 
 export type Palier =
   | "PREREQUIS"
+  | "PR1"
+  | "PR2"
+  | "PR3"
   | "BASE"
   | "P1"
   | "P2"
@@ -45,6 +48,10 @@ export interface RegElement {
   rotationDeg?: number;
   sourcePage: number;
   verified: boolean;
+  // Saut uniquement : valeur fixe de départ associée au palier de l'élément
+  // (barème "Valeur des sauts"), indépendante du système tronc commun /
+  // valorisations utilisé par les autres agrès.
+  value?: number;
 }
 
 export interface TroncCommunExigence {

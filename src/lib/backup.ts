@@ -7,8 +7,21 @@ import { getDb } from "@/lib/idb";
 
 const STORES = ["clubs", "gymnasts", "gymnastSkills", "movements", "movementElements", "movementSnapshots"] as const;
 
+// Les musiques (Blob) ne sont pas sérialisables telles quelles en JSON :
+// elles sont converties en base64 à l'export, puis reconverties en Blob à
+// l'import.
+export interface BackupMusicEntry {
+  id: string;
+  gymnastId: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  updatedAt: string;
+  dataBase64: string;
+}
+
 export interface BackupData {
-  version: 1;
+  version: 1 | 2;
   exportedAt: string;
   clubs: unknown[];
   gymnasts: unknown[];
@@ -16,6 +29,27 @@ export interface BackupData {
   movements: unknown[];
   movementElements: unknown[];
   movementSnapshots: unknown[];
+  gymnastMusic?: BackupMusicEntry[];
+}
+
+function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      // dataURL au format "data:<mime>;base64,<data>" -> ne garder que <data>
+      const result = String(reader.result);
+      resolve(result.slice(result.indexOf(",") + 1));
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
+function base64ToBlob(base64: string, mimeType: string): Blob {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: mimeType });
 }
 
 export async function exportAll(): Promise<BackupData> {
@@ -24,19 +58,32 @@ export async function exportAll(): Promise<BackupData> {
   for (const store of STORES) {
     data[store] = await db.getAll(store);
   }
+  const musicRows = await db.getAll("gymnastMusic");
+  const gymnastMusic: BackupMusicEntry[] = await Promise.all(
+    musicRows.map(async (m) => ({
+      id: m.id,
+      gymnastId: m.gymnastId,
+      fileName: m.fileName,
+      mimeType: m.mimeType,
+      size: m.size,
+      updatedAt: m.updatedAt,
+      dataBase64: await blobToBase64(m.blob),
+    }))
+  );
   return {
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     ...data,
+    gymnastMusic,
   } as BackupData;
 }
 
 export async function importAll(data: BackupData): Promise<{ counts: Record<string, number> }> {
-  if (!data || data.version !== 1) {
+  if (!data || (data.version !== 1 && data.version !== 2)) {
     throw new Error("Fichier de sauvegarde invalide ou d'une version non prise en charge.");
   }
   const db = await getDb();
-  const tx = db.transaction(STORES, "readwrite");
+  const tx = db.transaction([...STORES, "gymnastMusic"], "readwrite");
   const counts: Record<string, number> = {};
   for (const store of STORES) {
     const objectStore = tx.objectStore(store);
@@ -50,6 +97,23 @@ export async function importAll(data: BackupData): Promise<{ counts: Record<stri
     }
     counts[store] = rows.length;
   }
+
+  const musicStore = tx.objectStore("gymnastMusic");
+  await musicStore.clear();
+  const musicRows = data.gymnastMusic ?? [];
+  for (const entry of musicRows) {
+    await musicStore.put({
+      id: entry.id,
+      gymnastId: entry.gymnastId,
+      fileName: entry.fileName,
+      mimeType: entry.mimeType,
+      size: entry.size,
+      updatedAt: entry.updatedAt,
+      blob: base64ToBlob(entry.dataBase64, entry.mimeType),
+    });
+  }
+  counts.gymnastMusic = musicRows.length;
+
   await tx.done;
   return { counts };
 }

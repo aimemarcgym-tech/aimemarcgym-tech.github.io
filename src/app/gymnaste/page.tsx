@@ -15,6 +15,8 @@ import ApparatusSkillsTabs from "@/components/ApparatusSkillsTabs";
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
   BARRES_ASYM: "Barres asymétriques",
+  POUTRE: "Poutre",
+  SAUT: "Saut",
 };
 
 type Gymnast = Awaited<ReturnType<typeof getGymnast>>;

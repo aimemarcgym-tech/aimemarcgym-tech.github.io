@@ -1,0 +1,100 @@
+{
+  "genre": "GAF",
+  "saison": "2026-2027",
+  "source": "ufolepgym.com — 2026-2027_GAF_catégories_âges.pdf",
+  "niveaux": [
+    {
+      "evolution": "A1",
+      "format": "6 gyms / 4 notes",
+      "categories": [
+        { "ans": "7-9 ans", "annees": "2019/2017", "filiere": "jeune" },
+        { "ans": "7-10 ans", "annees": "2019/2016", "filiere": "jeune" },
+        { "ans": "7-11 ans", "annees": "2019/2015", "filiere": "jeune" },
+        { "ans": "7-14 ans", "annees": "2019/2012", "filiere": "jeune" },
+        { "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "groupe" }
+      ]
+    },
+    {
+      "evolution": "A2",
+      "format": "6 gyms / 4 notes",
+      "categories": [
+        { "ans": "7-10 ans", "annees": "2019/2016", "filiere": "jeune" },
+        { "ans": "7-11 ans", "annees": "2019/2015", "filiere": "jeune" },
+        { "ans": "7-14 ans", "annees": "2019/2012", "filiere": "jeune" },
+        { "ans": "11-14 ans", "annees": "2015/2012", "filiere": "groupe" },
+        { "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "groupe" }
+      ]
+    },
+    {
+      "evolution": "B1",
+      "format": "6 gyms / 4 notes",
+      "categories": [
+        { "ans": "7-11 ans", "annees": "2019/2015", "filiere": "jeune" },
+        { "ans": "7-13 ans", "annees": "2019/2013", "filiere": "jeune" },
+        { "ans": "11-14 ans", "annees": "2015/2012", "filiere": "nationale" },
+        { "ans": "11-16 ans", "annees": "2015/2010", "filiere": "nationale" },
+        { "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "nationale" }
+      ]
+    },
+    {
+      "evolution": "B2",
+      "format": "6 gyms / 4 notes",
+      "categories": [
+        { "ans": "7-14 ans", "annees": "2019/2012", "filiere": "jeune" },
+        { "ans": "11-15 ans", "annees": "2015/2011", "filiere": "nationale" },
+        { "ans": "11-18 ans", "annees": "2015/2008", "filiere": "nationale" },
+        { "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "nationale" }
+      ]
+    },
+    {
+      "evolution": "B3",
+      "format": "6 gyms / 3 notes",
+      "categories": [
+        { "ans": "7-14 ans", "annees": "2019/2012", "filiere": "jeune" },
+        { "ans": "11-16 ans", "annees": "2015/2010", "filiere": "nationale" },
+        { "ans": "11-20 ans", "annees": "2015/2006", "filiere": "nationale" },
+        { "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "nationale" }
+      ]
+    },
+    {
+      "evolution": "C1",
+      "format": "6 gyms / 3 notes",
+      "categories": [
+        { "ans": "11-18 ans", "annees": "2015/2008", "filiere": "nationale" },
+        { "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "nationale" }
+      ]
+    },
+    {
+      "evolution": "C2",
+      "format": "6 gyms / 3 notes",
+      "categories": [{ "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "nationale" }]
+    },
+    {
+      "evolution": "C3",
+      "format": "6 gyms / 3 notes",
+      "categories": [{ "ans": "11 ans et +", "annees": "2015 et avant", "filiere": "nationale" }]
+    }
+  ],
+  "ageAnnee": [
+    { "ans": 5, "annee": 2021 },
+    { "ans": 6, "annee": 2020 },
+    { "ans": 7, "annee": 2019 },
+    { "ans": 8, "annee": 2018 },
+    { "ans": 9, "annee": 2017 },
+    { "ans": 10, "annee": 2016 },
+    { "ans": 11, "annee": 2015 },
+    { "ans": 12, "annee": 2014 },
+    { "ans": 13, "annee": 2013 },
+    { "ans": 14, "annee": 2012 },
+    { "ans": 15, "annee": 2011 },
+    { "ans": 16, "annee": 2010 },
+    { "ans": 17, "annee": 2009 },
+    { "ans": 18, "annee": 2008 },
+    { "ans": 19, "annee": 2007 },
+    { "ans": 20, "annee": 2006 }
+  ],
+  "regles": [
+    "La/le gym la/le plus jeune détermine la filière : de 7 à 10 ans → filière jeunes ; 11 ans et + → filière nationale.",
+    "La/le gym la/le plus âgé(e) détermine la catégorie d'âge."
+  ]
+}

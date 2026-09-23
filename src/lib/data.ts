@@ -104,17 +104,19 @@ export async function updateGymnast(
 
 export async function deleteGymnast(gymnastId: string) {
   const db = await getDb();
-  const [skills, movements] = await Promise.all([
+  const [skills, movements, music] = await Promise.all([
     db.getAllFromIndex("gymnastSkills", "gymnastId", gymnastId),
     db.getAllFromIndex("movements", "gymnastId", gymnastId),
+    db.getAllFromIndex("gymnastMusic", "gymnastId", gymnastId),
   ]);
   for (const m of movements) {
     await deleteMovementCascade(m.id);
   }
-  const tx = db.transaction(["gymnasts", "gymnastSkills"], "readwrite");
+  const tx = db.transaction(["gymnasts", "gymnastSkills", "gymnastMusic"], "readwrite");
   await Promise.all([
     tx.objectStore("gymnasts").delete(gymnastId),
     ...skills.map((s) => tx.objectStore("gymnastSkills").delete(s.id)),
+    ...music.map((m) => tx.objectStore("gymnastMusic").delete(m.id)),
     tx.done,
   ]);
 }
@@ -238,4 +240,31 @@ async function deleteMovementCascade(movementId: string) {
 
 export async function deleteMovement(movementId: string) {
   await deleteMovementCascade(movementId);
+}
+
+export async function getGymnastMusic(gymnastId: string) {
+  const db = await getDb();
+  return db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+}
+
+export async function saveGymnastMusic(gymnastId: string, file: File) {
+  const db = await getDb();
+  const existing = await db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  const row = {
+    id: existing?.id ?? crypto.randomUUID(),
+    gymnastId,
+    fileName: file.name,
+    mimeType: file.type || "audio/mpeg",
+    size: file.size,
+    blob: file,
+    updatedAt: nowIso(),
+  };
+  await db.put("gymnastMusic", row);
+  return row;
+}
+
+export async function deleteGymnastMusic(gymnastId: string) {
+  const db = await getDb();
+  const existing = await db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  if (existing) await db.delete("gymnastMusic", existing.id);
 }

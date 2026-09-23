@@ -120,7 +120,7 @@ export default function MovementBuilder({
   const archeByCode = useMemo(() => new Map(regulation.arches.map((a) => [a.id, a])), [regulation]);
 
   function categoryKeyOf(archeId: string, branch: string | null): string {
-    if (branch === "avant" || branch === "arriere" || branch === "maintien" || branch === "souplesse") {
+    if (branch === "avant" || branch === "arriere" || branch === "maintien" || branch === "souplesse" || branch === "atr") {
       return `${archeId}:${branch}`;
     }
     return archeId;
@@ -133,6 +133,7 @@ export default function MovementBuilder({
     if (branch === "arriere") return `${base} — arrière`;
     if (branch === "maintien") return "Maintien";
     if (branch === "souplesse") return "Souplesse";
+    if (branch === "atr") return "ATR";
     return base;
   }
 
@@ -529,7 +530,7 @@ export default function MovementBuilder({
             </>
           ) : (
             <>
-              <p className="mb-2 text-xs text-muted">Tout le référentiel Sol — cherchez et ajoutez librement n&apos;importe quel élément.</p>
+              <p className="mb-2 text-xs text-muted">Tout le référentiel — cherchez et ajoutez librement n&apos;importe quel élément.</p>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}

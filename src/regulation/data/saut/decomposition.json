@@ -1,0 +1,116 @@
+{
+  "apparatus": "SAUT",
+  "source": "Sept26_Decompo note 11 sept 2026 AGRES.pdf (page Saut)",
+  "note": "Le Saut ne fonctionne pas comme les autres agrès (pas de tronc commun d'arches/éléments cumulés). La note de départ = valeur du (meilleur) saut retenu (barème « Valeur des sauts ») + 1 seule valorisation possible. Les évolutions B2 et plus exigent 2 sauts de familles de 1er envol différentes (Renversement vs Rondade/Saut de mains), dont au moins 1 dans les paliers valorisables.",
+  "evolutions": [
+    {
+      "id": "A1", "genre": "GAF/GAM", "ordre": 1,
+      "troncCommun": { "arches": 1, "elementsMin": 1, "elementsMax": 1, "exigences": [] },
+      "paliersAutorises": ["PREREQUIS", "P1"],
+      "paliersValorisables": ["PREREQUIS", "P1"],
+      "valorisations": {
+        "choisir": 1, "parmi": 2,
+        "options": [
+          { "id": "SAUT-A1-V1", "label": "Saut à 1m", "pondere": false, "points": 0 },
+          { "id": "SAUT-A1-V2", "label": "Saut tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "A2", "genre": "GAF", "ordre": 2,
+      "troncCommun": { "arches": 1, "elementsMin": 1, "elementsMax": 1, "exigences": [] },
+      "paliersAutorises": ["PREREQUIS", "P1"],
+      "paliersValorisables": ["P1"],
+      "valorisations": {
+        "choisir": 1, "parmi": 2,
+        "options": [
+          { "id": "SAUT-A2-V1", "label": "Saut à 1m", "pondere": false, "points": 0 },
+          { "id": "SAUT-A2-V2", "label": "Saut tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "B1", "genre": "GAF/GAM", "ordre": 3,
+      "troncCommun": { "arches": 1, "elementsMin": 1, "elementsMax": 1, "exigences": [] },
+      "paliersAutorises": ["P1", "P2", "P3"],
+      "paliersValorisables": ["P1", "P2"],
+      "valorisations": {
+        "choisir": 1, "parmi": 2,
+        "options": [
+          { "id": "SAUT-B1-V1", "label": "Saut tremplin", "pondere": false, "points": 0 },
+          { "id": "SAUT-B1-V2", "label": "2 sauts à 1.20 m (min.)", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "B2", "genre": "GAF/GAM", "ordre": 4,
+      "troncCommun": { "arches": 2, "elementsMin": 2, "elementsMax": 2, "exigences": [] },
+      "paliersAutorises": ["P1", "P2", "P3", "P4"],
+      "paliersValorisables": ["P1", "P2", "P3"],
+      "valorisations": {
+        "choisir": 1, "parmi": 3,
+        "options": [
+          { "id": "SAUT-B2-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
+          { "id": "SAUT-B2-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
+          { "id": "SAUT-B2-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "B3", "genre": "GAF/GAM", "ordre": 5,
+      "troncCommun": { "arches": 2, "elementsMin": 2, "elementsMax": 2, "exigences": [] },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
+      "paliersValorisables": ["P2", "P3", "P4"],
+      "valorisations": {
+        "choisir": 1, "parmi": 3,
+        "options": [
+          { "id": "SAUT-B3-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
+          { "id": "SAUT-B3-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
+          { "id": "SAUT-B3-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "C1", "genre": "GAF", "ordre": 6,
+      "troncCommun": { "arches": 2, "elementsMin": 2, "elementsMax": 2, "exigences": [] },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5", "P6"],
+      "paliersValorisables": ["P3", "P4", "P5"],
+      "valorisations": {
+        "choisir": 1, "parmi": 3,
+        "options": [
+          { "id": "SAUT-C1-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
+          { "id": "SAUT-C1-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
+          { "id": "SAUT-C1-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "C2", "genre": "GAF/GAM", "ordre": 7,
+      "troncCommun": { "arches": 2, "elementsMin": 2, "elementsMax": 2, "exigences": [] },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 1, "parmi": 3,
+        "options": [
+          { "id": "SAUT-C2-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
+          { "id": "SAUT-C2-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
+          { "id": "SAUT-C2-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    },
+    {
+      "id": "C3", "genre": "GAF/GAM", "ordre": 8,
+      "troncCommun": { "arches": 2, "elementsMin": 2, "elementsMax": 2, "exigences": [] },
+      "paliersAutorises": ["P1", "P2", "P3", "P4", "P5", "P6", "P7"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
+      "valorisations": {
+        "choisir": 1, "parmi": 3,
+        "options": [
+          { "id": "SAUT-C3-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
+          { "id": "SAUT-C3-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
+          { "id": "SAUT-C3-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+        ]
+      }
+    }
+  ]
+}

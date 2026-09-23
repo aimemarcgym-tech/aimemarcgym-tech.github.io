@@ -113,9 +113,77 @@ export const BARRES_ASYM_CHECKS: Record<string, CheckSpec> = {
   // d'enchaînement non vérifiable automatiquement -> confirmation manuelle.
 };
 
+// Poutre (GAF). Catégories d'arches : ATR_MAINTIEN, PIVOT, ACRO, SAUT_GYM,
+// ENTREE, SORTIES (voir src/regulation/data/poutre/arches.json). Les 2 arches de
+// sauts (appel 1 pied / 2 pieds) partagent la catégorie SAUT_GYM : les
+// exigences qui distinguent précisément l'appel ne sont donc pas
+// vérifiables automatiquement (confirmation manuelle) tant que le système
+// de vérification ne sait pas filtrer par archeId.
+export const POUTRE_CHECKS: Record<string, CheckSpec> = {
+  // --- Tronc commun ---
+  "P-A1-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 1 },
+  "P-A1-TC-2": { type: "CATEGORY_COUNT", category: "SAUT_GYM", min: 2 },
+  "P-A2-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 1 },
+  "P-A2-TC-2": { type: "CATEGORY_COUNT", category: "SAUT_GYM", min: 2 },
+  "P-B1-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 2 },
+  "P-B1-TC-2": { type: "CATEGORY_COUNT", category: "SAUT_GYM", min: 2 },
+  "P-B1-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P2", category: "ACRO" },
+  "P-B2-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 2 },
+  "P-B2-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
+  "P-B2-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3" },
+  "P-B2-TC-4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "ACRO" },
+  "P-B3-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
+  "P-B3-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
+  "P-B3-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4" },
+  "P-B3-TC-4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ACRO" },
+  "P-C1-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
+  "P-C1-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
+  "P-C1-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5" },
+  "P-C2-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
+  "P-C2-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
+  "P-C2-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P6" },
+  "P-C3-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
+  "P-C3-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
+  "P-C3-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P7" },
+  // P-A1-TC-3 "1 ATR (PR)", P-A2-TC-3 "Roue", P-C1/C2/C3-TC-4 "1 LA ..." :
+  // exigences "poutre mousse" (catégorie ACRO, arche Accro poutre mousse)
+  // non vérifiables précisément avec le système de vérification actuel
+  // (palier PR / élément nominatif / liaison chaînée) -> confirmation
+  // manuelle. Pour B1/B2/B3, la vérification par catégorie ACRO ci-dessus
+  // ne distingue pas l'arche Accro poutre mousse des autres arches ACRO
+  // (Acros 1/2) faute de filtrage par archeId dans le système actuel.
+
+  // --- Valorisations ---
+  "P-A1-V1": { type: "CATEGORY_COUNT", category: "PIVOT", min: 1 },
+  // P-A1-V2 "1 cabriole", P-A1-V3 "ATR 1 jambe ou placement du dos" (2
+  // options) : non vérifiables précisément -> confirmation manuelle.
+
+  // P-A2-V1/V2 (demi pivot précis / saut appel 2 pieds précis) et P-A2-V3
+  // (ATR spécifiquement branche "atr" à P2) : non distinguables avec le
+  // système de vérification actuel -> confirmation manuelle.
+
+  "P-B1-V1": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "PIVOT" },
+  "P-B1-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P2", category: "ACRO" },
+  "P-B1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "SORTIES" },
+  // P-B1-V2 "1 saut P3 (min.)" : catégorie SAUT_GYM commune aux 2 arches de
+  // sauts, palier P3 pas atteint dans les données actuelles -> manuel.
+
+  "P-B2-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "ACRO" },
+  "P-B2-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "SORTIES" },
+
+  "P-B3-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ACRO" },
+  "P-B3-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "SORTIES" },
+
+  "P-C1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5", category: "ACRO" },
+  // P-C1-V5/P-C2-V5/P-C3-V5 "1 sortie avec liaison acro..." : condition de
+  // liaison acrobatique (chaînage de plusieurs éléments avec envol) non
+  // vérifiable automatiquement -> confirmation manuelle.
+};
+
 const CHECKS_BY_APPARATUS: Record<string, Record<string, CheckSpec>> = {
   SOL: SOL_CHECKS,
   BARRES_ASYM: BARRES_ASYM_CHECKS,
+  POUTRE: POUTRE_CHECKS,
 };
 
 export function getCheck(id: string, apparatus: string = "SOL"): CheckSpec {

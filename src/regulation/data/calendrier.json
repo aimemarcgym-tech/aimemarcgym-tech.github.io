@@ -1,0 +1,1382 @@
+{
+  "genre": "GAF",
+  "saison": "2026-2027",
+  "source": "Google Sheets ufolepgym_competitions (Groupe1-4) — docs.google.com/spreadsheets/d/1j8FqXcZ7xSnXoJEEeN4F3ika2IonL4NfhNtOVh2Q2HQ",
+  "note": "Données brutes du calendrier prévisionnel, telles que publiées par les groupes régionaux UFOLEP au moment de l'export. De nombreuses dates/lieux ne sont pas encore fixés (mentions '?' ou 'à déterminer') : c'est l'état réel du document source, pas une omission de notre part.",
+  "departements": [
+    {
+      "region": "ILE DE FRANCE",
+      "num": "75",
+      "name": "Paris",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 94",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "77",
+      "name": "Seine et Marne",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N6 - N1",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Petite Enfance",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "GAF N8 - N7",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "6 et 7 mars\nNogent sur Seine (10)",
+          "niveau": "GAF Evo B-C\nGAM Evo B-C",
+          "fj": false,
+          "fn": true
+        },
+        {
+          "dateLieu": "13 et 14 mars\nBeauchamp (95)",
+          "niveau": "GAF Evo B\nGAM Evo A-B",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "78",
+      "name": "Yvelines",
+      "departemental": [
+        {
+          "dateLieu": "? 9 et 10 janvier\nA. Dreux",
+          "niveau": "GAF Evo B-C\nGAM Evo A-B",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "? 23 et 24 janvier\nHouilles",
+          "niveau": "GAF Evo B + A ?",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "? 30 et 31 janvier\nLes Clayes",
+          "niveau": "GAF Evo A",
+          "fj": false,
+          "fn": true
+        },
+        {
+          "dateLieu": "16 et 17 janvier\nHoudan",
+          "niveau": "Petite enfance",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "91",
+      "name": "Essonne",
+      "departemental": [
+        {
+          "dateLieu": "16 et 17 janvier\nSt Pierre du Perray",
+          "niveau": "GAF niveaux à déterminer",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "23 et 24 janvier\nSt Michel sur Orge",
+          "niveau": "GAF niveaux à déterminer",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "12 et 13 décembre\nAthis-Mons",
+          "niveau": "GAF N5 - N1\nGAM Evo B-C",
+          "fj": false,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "20 et 21 mars\nGargenville (78)",
+          "niveau": "GAF Evo B",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "27 et 28 mars\nCharenton (94)",
+          "niveau": "GAF Evo A",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "92",
+      "name": "Hauts de Seine",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 95",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "93",
+      "name": "Seine Saint Denis",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 94",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "20 et 21 mars\nProvins (77)",
+          "niveau": "GAF Evo B",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "27 et 28 mars\nVigneux sur Seine (91)",
+          "niveau": "GAF Evo A",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "94",
+      "name": "Val de Marne",
+      "departemental": [
+        {
+          "dateLieu": "30-31 janvier \nVilecresnes",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "95",
+      "name": "Val d Oise",
+      "departemental": [
+        {
+          "dateLieu": "16 et 17 janvier \nGonesse",
+          "niveau": "GAF Evo A\nPetite Enfance",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "30 et 31 janvier \nPontoise",
+          "niveau": "GAF Evo B -C",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "?\nLisses",
+          "niveau": "Petite enfance",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "?\nChamps",
+          "niveau": "Coupe régionale",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "?\n?",
+          "niveau": "Petite enfance",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "29 et 30 mai\nJouy le Moutier",
+          "niveau": "Coupe régionale",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "ILE DE FRANCE",
+      "num": "28",
+      "name": "Eure et Loir",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 78",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "2",
+      "name": "Aisne",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "Tous",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "59",
+      "name": "Nord",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "Finalité Jeunes",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Finalité Nationale",
+          "fj": false,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "60",
+      "name": "Oise",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 2",
+          "niveau": "Tous",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Finalité Jeunes",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "62",
+      "name": "Pas de Calais",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "Finalité Jeunes",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Finalité Nationale",
+          "fj": false,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "67",
+      "name": "Bas Rhin",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF\nGAM",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Finalité Nationale",
+          "fj": false,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "68",
+      "name": "Haut Rhin",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 67",
+          "niveau": "Tous",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "76",
+      "name": "Seine Maritime",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 80",
+          "niveau": "Tous",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "HAUTS DE FRANCE",
+      "num": "80",
+      "name": "Somme",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe1"
+    },
+    {
+      "region": "RHÔNE-ALPES",
+      "num": "7",
+      "name": "Ardeche",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 26",
+          "niveau": "GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE-ALPES",
+      "num": "26",
+      "name": "Drôme",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAM avec 38 et 73\n+ ME GAF",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "6 et 7 mars 2027",
+          "niveau": "Catégories définies début 2027",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE-ALPES",
+      "num": "38",
+      "name": "Isere",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Parcours 1",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Départemental 2",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "MEI et Amicale",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Parcours 2",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "MER",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "PARCOURS 3",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "20 et 21 mars 2027",
+          "niveau": "Catégories définies début 2027",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE-ALPES",
+      "num": "42",
+      "name": "Loire",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 69",
+          "niveau": "GAF ME à N4\nGAM Interdep avec 69",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Niveaux 3, 2 et 1 GAF dans le 63",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Tous niveaux GAF jusqu'au N6",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Petite Enfance",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "3 et 4 avril 2027 Chaponnay / Saint Priest 69",
+          "niveau": "Catégories définies début 2027",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE-ALPES",
+      "num": "69",
+      "name": "Rhone",
+      "departemental": [
+        {
+          "dateLieu": "16 et 17 janvier 2027 GMCT",
+          "niveau": "1er tour des trophées GYMNI",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "23 et 24 janvier 2027 Saint Genis les olliéres",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "23 et 24 janvier 2027 BRINDAS",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "30 et 31 janvier 2027 Savigny",
+          "niveau": "GAM Interdep avec le 42 et GAF",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "13 et 14 mars 2027 Villette d'Anthon",
+          "niveau": "2 tour Parcours et mini-enchaînement",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "22 et 23 mai 2027     Montmélian (73)",
+          "niveau": "Niveaux : ME",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE-ALPES",
+      "num": "73",
+      "name": "Savoie",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "REGION SUD",
+      "num": "4",
+      "name": "Alpes de Haute Provence",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 13",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "REGION SUD",
+      "num": "5",
+      "name": "Hautes Alpes",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 13",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "REGION SUD",
+      "num": "6",
+      "name": "Alpes Maritimes",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 13",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Région GAF ME N8 et N7",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "REGION SUD",
+      "num": "13",
+      "name": "Bouches du Rhone",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF ME N8 & N7",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "GAF GAM N6 et -",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "UfoGym Challenge 13",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Région GAF GAM N6 et -",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "REGION SUD",
+      "num": "83",
+      "name": "Var",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 13",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "REGION SUD",
+      "num": "84",
+      "name": "Vaucluse",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 13",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "AQUITAINE",
+      "num": "17",
+      "name": "Charente Maritime",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 33",
+          "niveau": "GAF + GAM",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "AQUITAINE",
+      "num": "24",
+      "name": "Dordogne",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 47",
+          "niveau": "GAF + GAM",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF filière Jeunes",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "AQUITAINE",
+      "num": "33",
+      "name": "Gironde",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF Jeunes et Nationales",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "GYM'INI",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF filière Nationale",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "AQUITAINE",
+      "num": "40",
+      "name": "Landes",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 47",
+          "niveau": "GAF + GAM",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "AQUITAINE",
+      "num": "47",
+      "name": "Lot et Garonne",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF Jeunes + Nationales",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Gyms en herbe",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF tous niveaux\n+ GYM'INI",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "AQUITAINE",
+      "num": "64",
+      "name": "Pyrenees Atlantiques",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 47",
+          "niveau": "GAF + GAM",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "9",
+      "name": "Ariège",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "12",
+      "name": "Aveyron",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "31",
+      "name": "Haute Garonne",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "Inter départements\nGAF N6 et + GAM",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "32",
+      "name": "Gers",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "N8 et 7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "46",
+      "name": "Lot",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N6 et +\nGAM",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "65",
+      "name": "Hautes Pyrenees",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "81",
+      "name": "Tarn",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "rattaché au 82",
+          "niveau": "N8 et N7 GAF",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE OUEST",
+      "num": "82",
+      "name": "Tarn et Garonne",
+      "departemental": [
+        {
+          "dateLieu": "rattaché au 31",
+          "niveau": "GAF N6 et + et GAM",
+          "fj": false,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Inter départements \nN8 et N7 GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE EST",
+      "num": "11",
+      "name": "Aude",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF tous niveaux",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE EST",
+      "num": "30",
+      "name": "Gard",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAM + GAF tous niveaux",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N3-N5-N7 et GAM",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE EST",
+      "num": "34",
+      "name": "Herault",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF tous niveaux",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N8-N7",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE EST",
+      "num": "48",
+      "name": "Lozere",
+      "departemental": [
+        {
+          "dateLieu": "rattaché 34",
+          "niveau": "GAF tous niveaux",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N1-N2-N4-N5-N6",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "OCCITANIE EST",
+      "num": "66",
+      "name": "Pyrenees Orientales",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N3/2/1 + tous GAM",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "GAF N8 à N4",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe3"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
+      "num": "3",
+      "name": "Allier",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Tous niveaux GAM\net GAF N6",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
+      "num": "15",
+      "name": "Cantal",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N5-1",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
+      "num": "43",
+      "name": "Haute Loire",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N7",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
+      "num": "63",
+      "name": "Puy de Dome",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF N6-1",
+          "fj": false,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Tous niveaux GAM et N6-7 GAF",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "N8 GAF",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "N8 GAF",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
+      "num": "19",
+      "name": "Correze",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Circuits",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
+      "num": "87",
+      "name": "Haute Vienne",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Bonus",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE / PAYS DE LOIRE",
+      "num": "35",
+      "name": "Ile et Vilaine",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "GAF tous niveaux",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE / PAYS DE LOIRE",
+      "num": "56",
+      "name": "Morbihan",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Masculins +\nN6&- FN + N5 FJ",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE / PAYS DE LOIRE",
+      "num": "44",
+      "name": "Loire Atlantique",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "Masculins + N5&-FN + N8-7 FJ",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "N8-7 FG + N6 FN + N5 FJ",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "N8-7-6 FJ + N8-7 FG",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "CENTRE",
+      "num": "36",
+      "name": "Indre",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "GAM et\nGAF N8 et N7 11+ - N6 FN",
+          "fj": true,
+          "fn": true
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "CENTRE",
+      "num": "37",
+      "name": "Indre et Loire",
+      "departemental": [
+        {
+          "dateLieu": "",
+          "niveau": "N6/N7",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "N5 et moins et N6 11+ GAF",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "N8/PC",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "Parcours A et B",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "N6/N7 filière jeune",
+          "fj": true,
+          "fn": false
+        },
+        {
+          "dateLieu": "",
+          "niveau": "N5 et moins\nN6 11+",
+          "fj": true,
+          "fn": true
+        },
+        {
+          "dateLieu": "",
+          "niveau": "N8 filière jeunes et\nParcours C régional",
+          "fj": true,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "CENTRE",
+      "num": "41",
+      "name": "Loir et Cher",
+      "departemental": [],
+      "regional": [
+        {
+          "dateLieu": "",
+          "niveau": "Parcours A et B",
+          "fj": false,
+          "fn": false
+        }
+      ],
+      "groupe": "Groupe4"
+    }
+  ]
+}

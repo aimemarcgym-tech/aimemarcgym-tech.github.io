@@ -42,7 +42,16 @@ export default function SkillsEditor({
   }, [regulation]);
 
   function categoryKeyOf(archeId: string, branch: string | null): string {
-    if (branch === "avant" || branch === "arriere" || branch === "maintien" || branch === "souplesse") {
+    if (
+      branch === "avant" ||
+      branch === "arriere" ||
+      branch === "maintien" ||
+      branch === "souplesse" ||
+      branch === "atr" ||
+      branch === "lateral" ||
+      branch === "rondade" ||
+      branch === "mains"
+    ) {
       return `${archeId}:${branch}`;
     }
     return archeId;
@@ -55,6 +64,10 @@ export default function SkillsEditor({
     if (branch === "arriere") return `${base} — arrière`;
     if (branch === "maintien") return "Maintien";
     if (branch === "souplesse") return "Souplesse";
+    if (branch === "atr") return "ATR";
+    if (branch === "lateral") return `${base} — latéral`;
+    if (branch === "rondade") return "Rondade";
+    if (branch === "mains") return "Saut de mains";
     return base;
   }
 

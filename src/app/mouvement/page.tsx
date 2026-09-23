@@ -6,10 +6,13 @@ import { getMovement } from "@/lib/data";
 import { getRegulation } from "@/regulation/loader";
 import Link from "next/link";
 import MovementBuilder from "@/components/MovementBuilder";
+import SautBuilder from "@/components/SautBuilder";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
   BARRES_ASYM: "Barres asymétriques",
+  POUTRE: "Poutre",
+  SAUT: "Saut",
 };
 
 type Movement = Awaited<ReturnType<typeof getMovement>>;
@@ -65,14 +68,23 @@ function MovementPageInner() {
         </div>
       </header>
 
-      <MovementBuilder
-        movementId={movement.id}
-        apparatus={movement.apparatus}
-        evolutionId={movement.evolution}
-        regulation={regulation}
-        initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
-        gymnastSkills={movement.gymnast.skills}
-      />
+      {movement.apparatus === "SAUT" ? (
+        <SautBuilder
+          movementId={movement.id}
+          evolutionId={movement.evolution}
+          regulation={regulation}
+          initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
+        />
+      ) : (
+        <MovementBuilder
+          movementId={movement.id}
+          apparatus={movement.apparatus}
+          evolutionId={movement.evolution}
+          regulation={regulation}
+          initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
+          gymnastSkills={movement.gymnast.skills}
+        />
+      )}
     </div>
   );
 }
