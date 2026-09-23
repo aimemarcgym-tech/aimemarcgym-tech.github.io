@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getGymnasts, getGymnastMusic, saveGymnastMusic, deleteGymnastMusic } from "@/lib/data";
+import { getGymnasts, getGymnastMusic, saveGymnastMusic, deleteGymnastMusic, setGymnastsMusicOrder } from "@/lib/data";
 import type { GymnastMusicRow as GymnastMusicRecord } from "@/lib/idb";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
@@ -70,7 +70,10 @@ function GymnastMusicItem({
   return (
     <div className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-sm font-medium text-foreground">
+        <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+          <span className="cursor-grab select-none text-muted active:cursor-grabbing" title="Glisser pour réordonner">
+            ⠿
+          </span>
           {gymnast.firstName} {gymnast.lastName}
         </span>
         <div className="flex items-center gap-2">
@@ -152,8 +155,28 @@ export default function TeamMusicManager() {
     if (!gymnasts || !teamKey) return [];
     const selected = teams.find((t) => t.key === teamKey);
     if (!selected) return [];
-    return gymnasts.filter((g) => (g.club?.name ?? "Sans club") === selected.club && g.team === selected.team);
+    const filtered = gymnasts.filter((g) => (g.club?.name ?? "Sans club") === selected.club && g.team === selected.team);
+    // Ordre choisi par glisser-déposer (musicOrder), sinon ordre alphabétique
+    // déjà appliqué par getGymnasts() -> tri stable, les non-ordonnées
+    // gardent leur position relative à la fin.
+    return [...filtered].sort((a, b) => {
+      const ao = a.musicOrder ?? Infinity;
+      const bo = b.musicOrder ?? Infinity;
+      return ao - bo;
+    });
   }, [gymnasts, teamKey, teams]);
+
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
+  async function reorderTo(from: number, to: number) {
+    if (from === to) return;
+    const next = [...members];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    await setGymnastsMusicOrder(next.map((g) => g.id));
+    refresh();
+  }
 
   async function reloadMusic() {
     const entries = await Promise.all(members.map(async (g) => [g.id, await getGymnastMusic(g.id)] as const));
@@ -239,9 +262,44 @@ export default function TeamMusicManager() {
           </div>
           {exportStatus && <p className="text-xs text-muted">{exportStatus}</p>}
           <div className="space-y-2">
-            {members.map((g) => (
-              <GymnastMusicItem key={g.id} gymnast={g} music={musicByGymnast[g.id]} onChange={reloadMusic} />
-            ))}
+            {members.map((g, i) => {
+              const isDragging = dragIndex === i;
+              const isDragOver = dragOverIndex === i && dragIndex !== null && dragIndex !== i;
+              return (
+                <div
+                  key={g.id}
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = "move";
+                    e.dataTransfer.setData("text/plain", String(i));
+                    setDragIndex(i);
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    if (dragOverIndex !== i) setDragOverIndex(i);
+                  }}
+                  onDragLeave={() => {
+                    setDragOverIndex((cur) => (cur === i ? null : cur));
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const from = dragIndex ?? Number(e.dataTransfer.getData("text/plain"));
+                    if (!Number.isNaN(from)) reorderTo(from, i);
+                    setDragIndex(null);
+                    setDragOverIndex(null);
+                  }}
+                  onDragEnd={() => {
+                    setDragIndex(null);
+                    setDragOverIndex(null);
+                  }}
+                  className={`rounded-lg transition ${
+                    isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
+                  }`}
+                >
+                  <GymnastMusicItem gymnast={g} music={musicByGymnast[g.id]} onChange={reloadMusic} />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

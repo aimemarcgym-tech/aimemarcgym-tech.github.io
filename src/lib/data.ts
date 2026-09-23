@@ -268,3 +268,33 @@ export async function deleteGymnastMusic(gymnastId: string) {
   const existing = await db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
   if (existing) await db.delete("gymnastMusic", existing.id);
 }
+
+export async function setGymnastsMusicOrder(orderedGymnastIds: string[]) {
+  const db = await getDb();
+  const tx = db.transaction("gymnasts", "readwrite");
+  const store = tx.objectStore("gymnasts");
+  await Promise.all(
+    orderedGymnastIds.map(async (id, index) => {
+      const gymnast = await store.get(id);
+      if (!gymnast) return;
+      gymnast.musicOrder = index;
+      await store.put(gymnast);
+    })
+  );
+  await tx.done;
+}
+
+export async function setGymnastsPassageOrder(apparatus: string, orderedGymnastIds: string[]) {
+  const db = await getDb();
+  const tx = db.transaction("gymnasts", "readwrite");
+  const store = tx.objectStore("gymnasts");
+  await Promise.all(
+    orderedGymnastIds.map(async (id, index) => {
+      const gymnast = await store.get(id);
+      if (!gymnast) return;
+      gymnast.passageOrder = { ...(gymnast.passageOrder ?? {}), [apparatus]: index };
+      await store.put(gymnast);
+    })
+  );
+  await tx.done;
+}

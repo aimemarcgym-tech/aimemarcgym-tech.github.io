@@ -19,6 +19,14 @@ export interface GymnastRow {
   team: string | null;
   birthYear: number | null;
   createdAt: string;
+  // Ordre d'affichage dans l'onglet Musiques (glisser-déposer). Absent
+  // (undefined) pour les gymnastes créées avant cette fonctionnalité ->
+  // on retombe alors sur l'ordre alphabétique habituel.
+  musicOrder?: number | null;
+  // Ordre de passage à chaque agrès (clé = code agrès : SOL, BARRES_ASYM,
+  // POUTRE, SAUT), réglé par glisser-déposer dans l'onglet Musiques >
+  // Ordres de passage. Indépendant par agrès.
+  passageOrder?: Record<string, number> | null;
 }
 
 export interface GymnastSkillRow {
