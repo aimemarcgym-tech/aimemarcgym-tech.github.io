@@ -15,12 +15,24 @@ export default function MusiquesPage() {
           <Link href="/" className="text-sm accent-gradient-text font-medium">
             ← Accueil
           </Link>
-          <h1 className="mt-1 text-xl font-bold text-foreground">
-            <span className="accent-gradient-text">Musiques</span>
-          </h1>
-          <p className="mt-1 text-sm text-muted">
-            Importez, écoutez et exportez les musiques de compétition de chaque gymnaste, par équipe.
-          </p>
+          <div className="mt-1 flex flex-wrap justify-between gap-6">
+            <div>
+              <h1 className="text-xl font-bold text-foreground">
+                <span className="accent-gradient-text">Musiques</span>
+              </h1>
+              <p className="mt-1 text-sm text-muted">
+                Importez, écoutez et exportez les musiques de compétition de chaque gymnaste, par équipe.
+              </p>
+            </div>
+            <div className="text-right">
+              <h1 className="text-xl font-bold text-foreground">
+                <span className="accent-gradient-text">Ordres de passage</span>
+              </h1>
+              <p className="mt-1 text-sm text-muted">
+                Réglez l&apos;ordre de passage de chaque gymnaste à chaque agrès, par équipe.
+              </p>
+            </div>
+          </div>
         </div>
       </header>
 

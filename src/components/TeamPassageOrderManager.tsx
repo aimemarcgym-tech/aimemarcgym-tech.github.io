@@ -140,7 +140,7 @@ export default function TeamPassageOrderManager() {
 
   return (
     <div className="max-w-4xl rounded-xl border border-border-subtle bg-surface p-4">
-      <h2 className="mb-3 text-sm font-semibold text-foreground">Ordres de passage</h2>
+      <h2 className="mb-3 text-sm font-semibold text-foreground">Ordres de passage par équipe</h2>
 
       {!gymnasts ? (
         <p className="text-sm text-muted">Chargement…</p>

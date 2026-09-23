@@ -14,12 +14,15 @@ const COMPETITION_ITEMS = [
   { href: "/competition/categories-age", label: "Catégories d'âges" },
   { href: "/competition/calendrier", label: "Calendrier" },
   { href: "/competition/musiques", label: "Musiques" },
+  { href: "/competition/resultats", label: "Résultats" },
 ];
 
-const LAST_TABS = [
-  { href: "/entrainement", label: "Entraînement" },
-  { href: "/sauvegarde", label: "Sauvegarde" },
+const MEDIA_ITEMS = [
+  { href: "/media/photos", label: "Photos" },
+  { href: "/media/videos", label: "Vidéos" },
 ];
+
+const LAST_TABS = [{ href: "/sauvegarde", label: "Sauvegarde" }];
 
 const tabClasses = (active: boolean) =>
   `rounded-lg border px-4 py-2 text-sm transition-colors ${
@@ -33,12 +36,22 @@ const tabClasses = (active: boolean) =>
 // à l'intérieur d'un conteneur flex se retrouvait rendu flou par certains
 // navigateurs (bug de compositing constaté en test), le portail contourne
 // le problème en sortant complètement le menu de ce conteneur.
-function CompetitionDropdown({ pathname }: { pathname: string }) {
+function TabDropdown({
+  pathname,
+  label,
+  basePath,
+  items,
+}: {
+  pathname: string;
+  label: string;
+  basePath: string;
+  items: { href: string; label: string }[];
+}) {
   const [open, setOpen] = useState(false);
   const [coords, setCoords] = useState<{ left: number; top: number } | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const active = pathname.startsWith("/competition");
+  const active = pathname.startsWith(basePath);
 
   useEffect(() => {
     function onClickOutside(e: MouseEvent) {
@@ -83,7 +96,7 @@ function CompetitionDropdown({ pathname }: { pathname: string }) {
         aria-expanded={open}
         className={`${tabClasses(active)} inline-flex items-center gap-1.5`}
       >
-        Compétition
+        {label}
         <svg
           viewBox="0 0 12 12"
           className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`}
@@ -103,7 +116,7 @@ function CompetitionDropdown({ pathname }: { pathname: string }) {
             style={{ left: coords.left, top: coords.top }}
             className="fixed z-50 min-w-[12rem] rounded-lg border border-border-strong bg-surface-alt py-1 shadow-lg"
           >
-            {COMPETITION_ITEMS.map((item) => (
+            {items.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -136,7 +149,14 @@ export default function TopTabs() {
           </Link>
         );
       })}
-      <CompetitionDropdown pathname={pathname} />
+      <TabDropdown pathname={pathname} label="Compétition" basePath="/competition" items={COMPETITION_ITEMS} />
+      <Link
+        href="/entrainement"
+        className={tabClasses(pathname.startsWith("/entrainement"))}
+      >
+        Entraînement
+      </Link>
+      <TabDropdown pathname={pathname} label="Média" basePath="/media" items={MEDIA_ITEMS} />
       {LAST_TABS.map((tab) => {
         const active = pathname.startsWith(tab.href);
         return (
