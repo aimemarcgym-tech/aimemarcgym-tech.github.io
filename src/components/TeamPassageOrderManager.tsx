@@ -14,12 +14,10 @@ const APPARATUS_LABELS: Record<string, string> = {
 
 function ApparatusOrderList({
   apparatus,
-  label,
   members,
   onReorder,
 }: {
   apparatus: string;
-  label: string;
   members: Gymnast[];
   onReorder: (apparatus: string, orderedIds: string[]) => void;
 }) {
@@ -47,7 +45,6 @@ function ApparatusOrderList({
 
   return (
     <div>
-      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted">{label}</h3>
       <ol className="space-y-1.5">
         {ordered.map((g, i) => {
           const isDragging = dragIndex === i;
@@ -105,6 +102,7 @@ function ApparatusOrderList({
 export default function TeamPassageOrderManager() {
   const [gymnasts, setGymnasts] = useState<Gymnast[] | null>(null);
   const [teamKey, setTeamKey] = useState("");
+  const [apparatus, setApparatus] = useState<string>(Object.keys(APPARATUS_LABELS)[0]);
 
   function refresh() {
     getGymnasts().then(setGymnasts);
@@ -141,7 +139,7 @@ export default function TeamPassageOrderManager() {
   }
 
   return (
-    <div className="max-w-2xl rounded-xl border border-border-subtle bg-surface p-4">
+    <div className="max-w-4xl rounded-xl border border-border-subtle bg-surface p-4">
       <h2 className="mb-3 text-sm font-semibold text-foreground">Ordres de passage</h2>
 
       {!gymnasts ? (
@@ -166,10 +164,24 @@ export default function TeamPassageOrderManager() {
       )}
 
       {teamKey && members.length > 0 && (
-        <div className="mt-4 space-y-5">
-          {Object.entries(APPARATUS_LABELS).map(([apparatus, label]) => (
-            <ApparatusOrderList key={apparatus} apparatus={apparatus} label={label} members={members} onReorder={handleReorder} />
-          ))}
+        <div className="mt-4 space-y-4">
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(APPARATUS_LABELS).map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setApparatus(key)}
+                className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+                  apparatus === key
+                    ? "border-border-strong bg-surface-alt text-white"
+                    : "border-transparent text-muted hover:text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <ApparatusOrderList apparatus={apparatus} members={members} onReorder={handleReorder} />
         </div>
       )}
     </div>

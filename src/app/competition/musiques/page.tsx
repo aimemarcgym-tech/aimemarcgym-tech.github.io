@@ -25,7 +25,7 @@ export default function MusiquesPage() {
       </header>
 
       <main className="mx-auto max-w-[1600px] px-6 py-10">
-        <div className="flex flex-wrap items-start gap-6">
+        <div className="flex flex-wrap items-start justify-center gap-12">
           <TeamMusicManager />
 
           {showPassageOrder ? (
