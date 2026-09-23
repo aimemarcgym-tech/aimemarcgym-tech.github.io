@@ -222,7 +222,7 @@ export default function TeamMusicManager() {
   }
 
   return (
-    <div className="max-w-2xl rounded-xl border border-border-subtle bg-surface p-4">
+    <div className="w-full max-w-2xl min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
       <h2 className="mb-3 text-sm font-semibold text-foreground">Musiques d&apos;équipe</h2>
 
       {!gymnasts ? (
