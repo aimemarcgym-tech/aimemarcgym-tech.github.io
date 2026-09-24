@@ -110,12 +110,18 @@ export default function MovementBuilder({
     [apparatus, evolutionId, sequence, manualConfirmations]
   );
 
+  const [dismissedSuggestions, setDismissedSuggestions] = useState<Set<string>>(new Set());
+
   const visibleSuggestions = useMemo(() => {
     const base = assistantOnlyMastered
       ? diagnostic.suggestions.filter((s) => skillMap.get(s.elementCode) === "MAITRISE")
       : diagnostic.suggestions;
-    return base.slice(0, 40);
-  }, [diagnostic.suggestions, assistantOnlyMastered, skillMap]);
+    return base.filter((s) => !dismissedSuggestions.has(s.elementCode)).slice(0, 40);
+  }, [diagnostic.suggestions, assistantOnlyMastered, skillMap, dismissedSuggestions]);
+
+  function dismissSuggestion(code: string) {
+    setDismissedSuggestions((prev) => new Set(prev).add(code));
+  }
 
   const elementByCode = useMemo(() => new Map(regulation.elements.map((e) => [e.code, e])), [regulation]);
   const archeByCode = useMemo(() => new Map(regulation.arches.map((a) => [a.id, a])), [regulation]);
@@ -534,14 +540,23 @@ export default function MovementBuilder({
                             : "border-border-subtle bg-surface-alt"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <span className="text-sm font-medium text-foreground">{sug.elementName}</span>
-                          <button
-                            onClick={() => addElement(sug.elementCode)}
-                            className="rounded bg-foreground px-2 py-1 text-xs text-background hover:opacity-80"
-                          >
-                            + Ajouter
-                          </button>
+                          <div className="flex shrink-0 items-center gap-1.5">
+                            <button
+                              onClick={() => addElement(sug.elementCode)}
+                              className="rounded bg-foreground px-2 py-1 text-xs text-background hover:opacity-80"
+                            >
+                              + Ajouter
+                            </button>
+                            <button
+                              onClick={() => dismissSuggestion(sug.elementCode)}
+                              className="rounded border border-danger/40 px-1.5 py-1 text-xs text-danger hover:bg-danger/10"
+                              title="Masquer cette suggestion"
+                            >
+                              ✕
+                            </button>
+                          </div>
                         </div>
                         <ul className="mt-1 space-y-0.5 text-xs text-muted">
                           {sug.reasons.map((r, i) => (
