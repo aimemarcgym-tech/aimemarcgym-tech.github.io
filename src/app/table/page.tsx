@@ -26,12 +26,20 @@ function palierBadgeClasses(p: Palier) {
   return "border-accent-solid/50 bg-accent-from/10 text-white";
 }
 
-// Un code contenant "+" désigne, dans les PDF sources, une variante du même
-// élément exécutée en enchaînement/série (liaison directe avec un autre
-// élément) plutôt qu'isolée — d'où un palier parfois supérieur à la version
-// de base au même nom. On le distingue visuellement dans la table.
-function isSerieVariant(code: string) {
-  return code.includes("+");
+// Un code contenant "+" désigne toujours une variante d'un élément de même
+// nom (rejouée à un palier différent). Deux cas distincts dans les PDF
+// sources :
+//  - la variante est explicitement nommée "(variante)" -> même mouvement,
+//    exigence technique différente (ex : "Rondade" / "Rondade (variante)").
+//  - la variante n'a pas cette mention -> le même nom apparaît une 2e fois
+//    dans une arche différente, généralement parce que l'élément y est
+//    exécuté en enchaînement/liaison avec un autre élément plutôt qu'isolé
+//    (ex : "ATR passagé" isolé vs "ATR passagé" en liaison sur Acro 2).
+function isNamedVariant(name: string) {
+  return name.toLowerCase().includes("variante");
+}
+function isChainVariant(code: string, name: string) {
+  return code.includes("+") && !isNamedVariant(name);
 }
 
 export default function TablePage() {
@@ -69,9 +77,15 @@ export default function TablePage() {
           <p className="mt-1 text-sm text-muted">
             Tous les éléments de chaque arche, par agrès, avec leur code et leur palier (P1 à P7).
           </p>
-          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted">
-            <span className="inline-block h-3 w-3 rounded-sm border border-violet-400/50 bg-violet-400/15" />
-            Élément en enchaînement/série (code avec « + »)
+          <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-3 w-3 rounded-sm border border-amber-400/50 bg-amber-400/15" />
+              Variante d&apos;un élément (nommée « variante »)
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block h-3 w-3 rounded-sm border border-violet-400/50 bg-violet-400/15" />
+              Élément en enchaînement/liaison (même nom, autre arche)
+            </span>
           </p>
         </div>
       </header>
@@ -128,7 +142,11 @@ export default function TablePage() {
                         <tr
                           key={el.code}
                           className={`border-t border-border-subtle ${
-                            isSerieVariant(el.code) ? "bg-violet-400/10" : ""
+                            isChainVariant(el.code, el.name)
+                              ? "bg-violet-400/10"
+                              : isNamedVariant(el.name)
+                              ? "bg-amber-400/10"
+                              : ""
                           }`}
                         >
                           <td className="whitespace-nowrap px-4 py-2 font-mono text-xs text-foreground">{el.code}</td>
