@@ -39,8 +39,27 @@ export interface BackupPhotoEntry {
   dataBase64: string;
 }
 
+export interface BackupVideoAlbumEntry {
+  id: string;
+  name: string;
+  date: string | null;
+  team: string | null;
+  createdAt: string;
+}
+
+export interface BackupVideoEntry {
+  id: string;
+  albumId: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  tags: string[];
+  createdAt: string;
+  dataBase64: string;
+}
+
 export interface BackupData {
-  version: 1 | 2 | 3;
+  version: 1 | 2 | 3 | 4;
   exportedAt: string;
   clubs: unknown[];
   gymnasts: unknown[];
@@ -51,6 +70,8 @@ export interface BackupData {
   gymnastMusic?: BackupMusicEntry[];
   photoAlbums?: BackupPhotoAlbumEntry[];
   photos?: BackupPhotoEntry[];
+  videoAlbums?: BackupVideoAlbumEntry[];
+  videos?: BackupVideoEntry[];
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
@@ -115,22 +136,50 @@ export async function exportAll(): Promise<BackupData> {
     }))
   );
 
+  const videoAlbumRows = await db.getAll("videoAlbums");
+  const videoAlbums: BackupVideoAlbumEntry[] = videoAlbumRows.map((a) => ({
+    id: a.id,
+    name: a.name,
+    date: a.date,
+    team: a.team,
+    createdAt: a.createdAt,
+  }));
+
+  const videoRows = await db.getAll("videos");
+  const videos: BackupVideoEntry[] = await Promise.all(
+    videoRows.map(async (v) => ({
+      id: v.id,
+      albumId: v.albumId,
+      fileName: v.fileName,
+      mimeType: v.mimeType,
+      size: v.size,
+      tags: v.tags,
+      createdAt: v.createdAt,
+      dataBase64: await blobToBase64(v.blob),
+    }))
+  );
+
   return {
-    version: 3,
+    version: 4,
     exportedAt: new Date().toISOString(),
     ...data,
     gymnastMusic,
     photoAlbums,
     photos,
+    videoAlbums,
+    videos,
   } as BackupData;
 }
 
 export async function importAll(data: BackupData): Promise<{ counts: Record<string, number> }> {
-  if (!data || (data.version !== 1 && data.version !== 2 && data.version !== 3)) {
+  if (!data || (data.version !== 1 && data.version !== 2 && data.version !== 3 && data.version !== 4)) {
     throw new Error("Fichier de sauvegarde invalide ou d'une version non prise en charge.");
   }
   const db = await getDb();
-  const tx = db.transaction([...STORES, "gymnastMusic", "photoAlbums", "photos"], "readwrite");
+  const tx = db.transaction(
+    [...STORES, "gymnastMusic", "photoAlbums", "photos", "videoAlbums", "videos"],
+    "readwrite"
+  );
   const counts: Record<string, number> = {};
   for (const store of STORES) {
     const objectStore = tx.objectStore(store);
@@ -185,6 +234,31 @@ export async function importAll(data: BackupData): Promise<{ counts: Record<stri
     });
   }
   counts.photos = photoRows.length;
+
+  const videoAlbumStore = tx.objectStore("videoAlbums");
+  await videoAlbumStore.clear();
+  const videoAlbumRows = data.videoAlbums ?? [];
+  for (const entry of videoAlbumRows) {
+    await videoAlbumStore.put(entry);
+  }
+  counts.videoAlbums = videoAlbumRows.length;
+
+  const videoStore = tx.objectStore("videos");
+  await videoStore.clear();
+  const videoRows = data.videos ?? [];
+  for (const entry of videoRows) {
+    await videoStore.put({
+      id: entry.id,
+      albumId: entry.albumId,
+      fileName: entry.fileName,
+      mimeType: entry.mimeType,
+      size: entry.size,
+      tags: entry.tags,
+      createdAt: entry.createdAt,
+      blob: base64ToBlob(entry.dataBase64, entry.mimeType),
+    });
+  }
+  counts.videos = videoRows.length;
 
   await tx.done;
   return { counts };

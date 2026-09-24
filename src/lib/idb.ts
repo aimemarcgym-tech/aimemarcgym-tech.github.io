@@ -96,6 +96,26 @@ export interface PhotoRow {
   createdAt: string;
 }
 
+// Même principe que les photos, pour l'onglet Média > Vidéos.
+export interface VideoAlbumRow {
+  id: string;
+  name: string;
+  date: string | null;
+  team: string | null;
+  createdAt: string;
+}
+
+export interface VideoRow {
+  id: string;
+  albumId: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  blob: Blob;
+  tags: string[];
+  createdAt: string;
+}
+
 interface AppDB extends DBSchema {
   clubs: { key: string; value: ClubRow };
   gymnasts: { key: string; value: GymnastRow; indexes: { clubId: string } };
@@ -110,10 +130,12 @@ interface AppDB extends DBSchema {
   gymnastMusic: { key: string; value: GymnastMusicRow; indexes: { gymnastId: string } };
   photoAlbums: { key: string; value: PhotoAlbumRow };
   photos: { key: string; value: PhotoRow; indexes: { albumId: string } };
+  videoAlbums: { key: string; value: VideoAlbumRow };
+  videos: { key: string; value: VideoRow; indexes: { albumId: string } };
 }
 
 const DB_NAME = "ufolep-gaf";
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 let dbPromise: Promise<IDBPDatabase<AppDB>> | null = null;
 
@@ -166,6 +188,15 @@ export function getDb(): Promise<IDBPDatabase<AppDB>> {
         if (!db.objectStoreNames.contains("photos")) {
           const photos = db.createObjectStore("photos", { keyPath: "id" });
           photos.createIndex("albumId", "albumId");
+        }
+
+        if (!db.objectStoreNames.contains("videoAlbums")) {
+          db.createObjectStore("videoAlbums", { keyPath: "id" });
+        }
+
+        if (!db.objectStoreNames.contains("videos")) {
+          const videos = db.createObjectStore("videos", { keyPath: "id" });
+          videos.createIndex("albumId", "albumId");
         }
       },
     });

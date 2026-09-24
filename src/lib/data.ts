@@ -376,3 +376,80 @@ export async function deletePhoto(photoId: string) {
   const db = await getDb();
   await db.delete("photos", photoId);
 }
+
+export async function getVideoAlbums() {
+  const db = await getDb();
+  const albums = await db.getAll("videoAlbums");
+  albums.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return albums;
+}
+
+export async function createVideoAlbum(name: string, date: string, team: string) {
+  const db = await getDb();
+  const album = {
+    id: crypto.randomUUID(),
+    name: name.trim(),
+    date: date.trim() || null,
+    team: team.trim() || null,
+    createdAt: nowIso(),
+  };
+  await db.put("videoAlbums", album);
+  return album;
+}
+
+export async function updateVideoAlbum(albumId: string, name: string, date: string, team: string) {
+  const db = await getDb();
+  const album = await db.get("videoAlbums", albumId);
+  if (!album) return;
+  album.name = name.trim() || album.name;
+  album.date = date.trim() || null;
+  album.team = team.trim() || null;
+  await db.put("videoAlbums", album);
+}
+
+export async function deleteVideoAlbum(albumId: string) {
+  const db = await getDb();
+  const videos = await db.getAllFromIndex("videos", "albumId", albumId);
+  const tx = db.transaction(["videoAlbums", "videos"], "readwrite");
+  await Promise.all([
+    tx.objectStore("videoAlbums").delete(albumId),
+    ...videos.map((v) => tx.objectStore("videos").delete(v.id)),
+    tx.done,
+  ]);
+}
+
+export async function getVideosByAlbum(albumId: string) {
+  const db = await getDb();
+  const videos = await db.getAllFromIndex("videos", "albumId", albumId);
+  videos.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  return videos;
+}
+
+export async function addVideo(albumId: string, file: File) {
+  const db = await getDb();
+  const video = {
+    id: crypto.randomUUID(),
+    albumId,
+    fileName: file.name,
+    mimeType: file.type || "video/mp4",
+    size: file.size,
+    blob: file,
+    tags: [] as string[],
+    createdAt: nowIso(),
+  };
+  await db.put("videos", video);
+  return video;
+}
+
+export async function setVideoTags(videoId: string, tags: string[]) {
+  const db = await getDb();
+  const video = await db.get("videos", videoId);
+  if (!video) return;
+  video.tags = tags;
+  await db.put("videos", video);
+}
+
+export async function deleteVideo(videoId: string) {
+  const db = await getDb();
+  await db.delete("videos", videoId);
+}
