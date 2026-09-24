@@ -118,6 +118,15 @@ export default function TablePage() {
                           <td className="px-4 py-2 text-foreground">
                             {el.name}
                             {!el.verified && <span className="ml-1.5 text-xs text-warning">⚠ à confirmer</span>}
+                            {el.extraCategories?.map((c) => (
+                              <span
+                                key={c}
+                                className="ml-1.5 rounded-full border border-accent-solid/40 bg-accent-from/10 px-1.5 py-0.5 text-[10px] font-medium text-white"
+                                title={`Compte aussi dans la catégorie ${c}`}
+                              >
+                                + {c}
+                              </span>
+                            ))}
                           </td>
                           <td className="px-4 py-2 text-xs text-muted">{el.branch ?? "—"}</td>
                           <td className="px-4 py-2">
