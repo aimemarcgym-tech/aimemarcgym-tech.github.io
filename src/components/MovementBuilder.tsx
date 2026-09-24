@@ -5,6 +5,7 @@ import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
+import { isNamedVariant, isChainVariant } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
 
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
@@ -553,14 +554,29 @@ export default function MovementBuilder({
                 <input type="checkbox" checked={onlyMastered} onChange={(e) => setOnlyMastered(e.target.checked)} />
                 N&apos;afficher que les éléments maîtrisés par la gymnaste
               </label>
+              <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted">
+                <span className="flex items-center gap-1">
+                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-amber-400/50 bg-amber-400/15" />
+                  Variante
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-violet-400/50 bg-violet-400/15" />
+                  En enchaînement/liaison
+                </span>
+              </div>
               <div className="grid max-h-[32rem] grid-cols-2 gap-2 overflow-y-auto">
                 {filteredLibrary.map((el) => {
                   const mastery = skillMap.get(el.code);
+                  const variantBg = isChainVariant(el.code, el.name)
+                    ? "bg-violet-400/10"
+                    : isNamedVariant(el.name)
+                    ? "bg-amber-400/10"
+                    : "bg-surface-alt";
                   return (
                     <button
                       key={el.code}
                       onClick={() => addElement(el.code)}
-                      className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10"
+                      className={`flex flex-col items-start gap-1 rounded border border-border-subtle p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10 ${variantBg}`}
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
