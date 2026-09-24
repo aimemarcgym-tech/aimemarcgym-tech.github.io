@@ -320,6 +320,16 @@ export async function createPhotoAlbum(name: string, date: string, team: string)
   return album;
 }
 
+export async function updatePhotoAlbum(albumId: string, name: string, date: string, team: string) {
+  const db = await getDb();
+  const album = await db.get("photoAlbums", albumId);
+  if (!album) return;
+  album.name = name.trim() || album.name;
+  album.date = date.trim() || null;
+  album.team = team.trim() || null;
+  await db.put("photoAlbums", album);
+}
+
 export async function deletePhotoAlbum(albumId: string) {
   const db = await getDb();
   const photos = await db.getAllFromIndex("photos", "albumId", albumId);

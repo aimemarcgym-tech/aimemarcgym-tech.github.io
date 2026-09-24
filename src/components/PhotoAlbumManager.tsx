@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getPhotoAlbums,
   createPhotoAlbum,
+  updatePhotoAlbum,
   deletePhotoAlbum,
   getPhotosByAlbum,
   addPhoto,
@@ -112,10 +113,31 @@ function PhotoCard({ photo, onChange }: { photo: Photo; onChange: () => void }) 
   );
 }
 
-function AlbumView({ album, onBack, onDeleted }: { album: Album; onBack: () => void; onDeleted: () => void }) {
+function AlbumView({
+  album,
+  onBack,
+  onDeleted,
+  onUpdated,
+}: {
+  album: Album;
+  onBack: () => void;
+  onDeleted: () => void;
+  onUpdated: () => void;
+}) {
   const [photos, setPhotos] = useState<Photo[] | null>(null);
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [editing, setEditing] = useState(false);
+  const [editName, setEditName] = useState(album.name);
+  const [editDate, setEditDate] = useState(album.date ?? "");
+  const [editTeam, setEditTeam] = useState(album.team ?? "");
+  const [savingAlbum, setSavingAlbum] = useState(false);
+
+  useEffect(() => {
+    setEditName(album.name);
+    setEditDate(album.date ?? "");
+    setEditTeam(album.team ?? "");
+  }, [album]);
 
   function refresh() {
     getPhotosByAlbum(album.id).then(setPhotos);
@@ -145,6 +167,19 @@ function AlbumView({ album, onBack, onDeleted }: { album: Album; onBack: () => v
     onDeleted();
   }
 
+  async function handleSaveAlbum(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editName.trim()) return;
+    setSavingAlbum(true);
+    try {
+      await updatePhotoAlbum(album.id, editName, editDate, editTeam);
+      onUpdated();
+      setEditing(false);
+    } finally {
+      setSavingAlbum(false);
+    }
+  }
+
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -152,10 +187,61 @@ function AlbumView({ album, onBack, onDeleted }: { album: Album; onBack: () => v
           <button type="button" onClick={onBack} className="text-sm accent-gradient-text font-medium">
             ← Tous les albums
           </button>
-          <h3 className="mt-1 text-lg font-semibold text-foreground">{album.name}</h3>
-          <p className="text-xs text-muted">
-            {[album.date, album.team].filter(Boolean).join(" · ") || "Aucune date/équipe précisée"}
-          </p>
+          {editing ? (
+            <form onSubmit={handleSaveAlbum} className="mt-1 space-y-2">
+              <input
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                required
+                placeholder="Nom de l'album"
+                className="w-full min-w-[280px] rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm font-semibold text-foreground focus:border-accent-solid focus:outline-none"
+              />
+              <div className="flex flex-wrap gap-2">
+                <input
+                  value={editDate}
+                  onChange={(e) => setEditDate(e.target.value)}
+                  placeholder="Date (optionnel)"
+                  className="rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none"
+                />
+                <input
+                  value={editTeam}
+                  onChange={(e) => setEditTeam(e.target.value)}
+                  placeholder="Équipe (optionnel)"
+                  className="rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={savingAlbum}
+                  className="rounded bg-accent-solid px-2.5 py-1 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+                >
+                  Enregistrer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditing(false)}
+                  className="rounded border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:text-foreground"
+                >
+                  Annuler
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="flex items-start gap-2">
+              <div>
+                <h3 className="mt-1 text-lg font-semibold text-foreground">{album.name}</h3>
+                <p className="text-xs text-muted">
+                  {[album.date, album.team].filter(Boolean).join(" · ") || "Aucune date/équipe précisée"}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditing(true)}
+                className="mt-1 text-xs text-muted underline hover:text-foreground"
+              >
+                Modifier
+              </button>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <input
@@ -247,6 +333,7 @@ export default function PhotoAlbumManager() {
           setSelectedId(null);
           refresh();
         }}
+        onUpdated={refresh}
       />
     );
   }
