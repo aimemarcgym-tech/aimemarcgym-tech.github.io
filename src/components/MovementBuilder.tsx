@@ -635,7 +635,7 @@ export default function MovementBuilder({
                   En enchaînement/liaison
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-emerald-400/50 bg-emerald-400/15" />
+                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-yellow-400/50 bg-yellow-400/15" />
                   Poutre mousse
                 </span>
               </div>
@@ -647,7 +647,7 @@ export default function MovementBuilder({
                     : isNamedVariant(el.name)
                     ? "bg-sky-400/10"
                     : isMousseElement(el.archeId)
-                    ? "bg-emerald-400/10"
+                    ? "bg-yellow-400/10"
                     : "bg-surface-alt";
                   return (
                     <button

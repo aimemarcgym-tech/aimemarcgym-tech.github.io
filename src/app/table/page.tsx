@@ -72,7 +72,7 @@ export default function TablePage() {
               Élément en enchaînement/liaison (même nom, autre arche)
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block h-3 w-3 rounded-sm border border-emerald-400/50 bg-emerald-400/15" />
+              <span className="inline-block h-3 w-3 rounded-sm border border-yellow-400/50 bg-yellow-400/15" />
               Poutre mousse (valeur différente de la poutre haute)
             </span>
           </p>
@@ -136,7 +136,7 @@ export default function TablePage() {
                               : isNamedVariant(el.name)
                               ? "bg-sky-400/10"
                               : isMousseElement(el.archeId)
-                              ? "bg-emerald-400/10"
+                              ? "bg-yellow-400/10"
                               : ""
                           }`}
                         >
@@ -146,7 +146,7 @@ export default function TablePage() {
                             {!el.verified && <span className="ml-1.5 text-xs text-warning">⚠ à confirmer</span>}
                             {isMousseElement(el.archeId) && (
                               <span
-                                className="ml-1.5 rounded-full border border-emerald-400/40 bg-emerald-400/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-300"
+                                className="ml-1.5 rounded-full border border-yellow-400/40 bg-yellow-400/10 px-1.5 py-0.5 text-[10px] font-medium text-yellow-300"
                                 title="Poutre mousse : valeur différente de la poutre haute"
                               >
                                 Mousse
