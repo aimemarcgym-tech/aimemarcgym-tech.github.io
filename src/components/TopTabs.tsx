@@ -28,7 +28,7 @@ const LAST_TABS = [
 ];
 
 const tabClasses = (active: boolean) =>
-  `rounded-lg border px-4 py-2 text-sm transition-colors ${
+  `shrink-0 whitespace-nowrap rounded-lg border px-4 py-2 text-sm transition-colors ${
     active
       ? "border-border-strong bg-surface-alt font-semibold text-white"
       : "border-transparent font-medium text-muted hover:text-foreground"
@@ -143,7 +143,7 @@ export default function TopTabs() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex justify-center gap-2 border-b border-border-subtle bg-surface px-4 py-3">
+    <nav className="flex flex-nowrap justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
       {TABS.map((tab) => {
         const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
         return (
