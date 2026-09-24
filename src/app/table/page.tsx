@@ -108,6 +108,7 @@ export default function TablePage() {
                         <th className="px-4 py-2 font-semibold">Nom</th>
                         <th className="px-4 py-2 font-semibold">Branche</th>
                         <th className="px-4 py-2 font-semibold">Palier</th>
+                        {apparatus === "SAUT" && <th className="px-4 py-2 font-semibold">Valeur de départ</th>}
                       </tr>
                     </thead>
                     <tbody>
@@ -126,6 +127,11 @@ export default function TablePage() {
                               {palierLabel(el.palier)}
                             </span>
                           </td>
+                          {apparatus === "SAUT" && (
+                            <td className="px-4 py-2 text-sm font-semibold text-foreground">
+                              {el.value !== undefined ? el.value.toFixed(1).replace(/\.0$/, "") : "—"}
+                            </td>
+                          )}
                         </tr>
                       ))}
                     </tbody>
