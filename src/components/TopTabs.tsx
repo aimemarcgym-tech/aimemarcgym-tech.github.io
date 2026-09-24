@@ -22,7 +22,10 @@ const MEDIA_ITEMS = [
   { href: "/media/videos", label: "Vidéos" },
 ];
 
-const LAST_TABS = [{ href: "/sauvegarde", label: "Sauvegarde" }];
+const LAST_TABS = [
+  { href: "/sauvegarde", label: "Sauvegarde" },
+  { href: "/table", label: "Table" },
+];
 
 const tabClasses = (active: boolean) =>
   `rounded-lg border px-4 py-2 text-sm transition-colors ${
