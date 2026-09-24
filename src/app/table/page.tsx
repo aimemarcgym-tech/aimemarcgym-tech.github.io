@@ -26,6 +26,14 @@ function palierBadgeClasses(p: Palier) {
   return "border-accent-solid/50 bg-accent-from/10 text-white";
 }
 
+// Un code contenant "+" désigne, dans les PDF sources, une variante du même
+// élément exécutée en enchaînement/série (liaison directe avec un autre
+// élément) plutôt qu'isolée — d'où un palier parfois supérieur à la version
+// de base au même nom. On le distingue visuellement dans la table.
+function isSerieVariant(code: string) {
+  return code.includes("+");
+}
+
 export default function TablePage() {
   const apparatuses = getAvailableApparatuses();
   const [apparatus, setApparatus] = useState(apparatuses[0]);
@@ -60,6 +68,10 @@ export default function TablePage() {
           </h1>
           <p className="mt-1 text-sm text-muted">
             Tous les éléments de chaque arche, par agrès, avec leur code et leur palier (P1 à P7).
+          </p>
+          <p className="mt-1 flex items-center gap-1.5 text-xs text-muted">
+            <span className="inline-block h-3 w-3 rounded-sm border border-violet-400/50 bg-violet-400/15" />
+            Élément en enchaînement/série (code avec « + »)
           </p>
         </div>
       </header>
@@ -113,7 +125,12 @@ export default function TablePage() {
                     </thead>
                     <tbody>
                       {elements.map((el) => (
-                        <tr key={el.code} className="border-t border-border-subtle">
+                        <tr
+                          key={el.code}
+                          className={`border-t border-border-subtle ${
+                            isSerieVariant(el.code) ? "bg-violet-400/10" : ""
+                          }`}
+                        >
                           <td className="whitespace-nowrap px-4 py-2 font-mono text-xs text-foreground">{el.code}</td>
                           <td className="px-4 py-2 text-foreground">
                             {el.name}
