@@ -32,10 +32,12 @@ function GymnastMusicItem({
   gymnast,
   music,
   onChange,
+  onExportOne,
 }: {
   gymnast: Gymnast;
   music: GymnastMusicRecord | undefined | null;
   onChange: () => void;
+  onExportOne: (gymnast: Gymnast, music: GymnastMusicRecord) => void;
 }) {
   const [busy, setBusy] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -97,14 +99,24 @@ function GymnastMusicItem({
             {music ? "Remplacer" : "Importer"}
           </button>
           {music && (
-            <button
-              type="button"
-              disabled={busy}
-              onClick={handleDelete}
-              className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:border-red-400 hover:text-red-400 disabled:opacity-50"
-            >
-              Supprimer
-            </button>
+            <>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => onExportOne(gymnast, music)}
+                className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50"
+              >
+                Envoyer sur clé USB
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={handleDelete}
+                className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:border-red-400 hover:text-red-400 disabled:opacity-50"
+              >
+                Supprimer
+              </button>
+            </>
           )}
         </div>
       </div>
@@ -191,7 +203,7 @@ export default function TeamMusicManager() {
 
   const musicCount = members.filter((g) => musicByGymnast[g.id]).length;
 
-  async function handleExport() {
+  async function handleExportTeam() {
     setExportStatus(null);
     const picker = (window as DirectoryPickerWindow).showDirectoryPicker;
     if (!picker) {
@@ -203,20 +215,50 @@ export default function TeamMusicManager() {
     try {
       const dirHandle = await picker();
       let count = 0;
-      for (const g of members) {
+      // Préfixe numérique (01_, 02_...) sur le nom de fichier : les
+      // explorateurs de fichiers/lecteurs trient par défaut par ordre
+      // alphabétique, donc ce préfixe fait apparaître les musiques sur la
+      // clé dans l'ordre de passage défini par glisser-déposer.
+      const total = members.length;
+      const padLength = String(total).length;
+      for (let i = 0; i < members.length; i++) {
+        const g = members[i];
         const music = musicByGymnast[g.id];
         if (!music) continue;
         const ext = music.fileName.includes(".") ? music.fileName.split(".").pop() : "mp3";
-        const name = `${sanitizeFileName(g.firstName)}_${sanitizeFileName(g.lastName)}.${ext}`;
+        const order = String(i + 1).padStart(padLength, "0");
+        const name = `${order}_${sanitizeFileName(g.firstName)}_${sanitizeFileName(g.lastName)}.${ext}`;
         const fileHandle = await dirHandle.getFileHandle(name, { create: true });
         const writable = await fileHandle.createWritable();
         await writable.write(music.blob);
         await writable.close();
         count += 1;
       }
-      setExportStatus(count > 0 ? `${count} musique(s) copiée(s) sur la clé.` : "Aucune musique à exporter pour cette équipe.");
+      setExportStatus(count > 0 ? `${count} musique(s) copiée(s) sur la clé, dans l'ordre défini.` : "Aucune musique à exporter pour cette équipe.");
     } catch {
       // L'utilisateur a annulé la sélection du dossier, ou l'écriture a échoué.
+      setExportStatus(null);
+    }
+  }
+
+  async function handleExportOne(gymnast: Gymnast, music: GymnastMusicRecord) {
+    const picker = (window as DirectoryPickerWindow).showDirectoryPicker;
+    if (!picker) {
+      setExportStatus(
+        "Votre navigateur ne permet pas d'écrire directement sur une clé USB — utilisez le bouton ▶ pour écouter puis téléchargez le fichier autrement."
+      );
+      return;
+    }
+    try {
+      const dirHandle = await picker();
+      const ext = music.fileName.includes(".") ? music.fileName.split(".").pop() : "mp3";
+      const name = `${sanitizeFileName(gymnast.firstName)}_${sanitizeFileName(gymnast.lastName)}.${ext}`;
+      const fileHandle = await dirHandle.getFileHandle(name, { create: true });
+      const writable = await fileHandle.createWritable();
+      await writable.write(music.blob);
+      await writable.close();
+      setExportStatus(`Musique de ${gymnast.firstName} ${gymnast.lastName} copiée sur la clé.`);
+    } catch {
       setExportStatus(null);
     }
   }
@@ -254,10 +296,10 @@ export default function TeamMusicManager() {
             </p>
             <button
               type="button"
-              onClick={handleExport}
+              onClick={handleExportTeam}
               className="rounded-md bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90"
             >
-              Envoyer sur une clé USB
+              Envoyer toute l&apos;équipe sur une clé USB
             </button>
           </div>
           {exportStatus && <p className="text-xs text-muted">{exportStatus}</p>}
@@ -296,7 +338,12 @@ export default function TeamMusicManager() {
                     isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
                   }`}
                 >
-                  <GymnastMusicItem gymnast={g} music={musicByGymnast[g.id]} onChange={reloadMusic} />
+                  <GymnastMusicItem
+                    gymnast={g}
+                    music={musicByGymnast[g.id]}
+                    onChange={reloadMusic}
+                    onExportOne={handleExportOne}
+                  />
                 </div>
               );
             })}
