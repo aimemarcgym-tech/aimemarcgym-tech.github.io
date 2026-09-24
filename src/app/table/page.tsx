@@ -64,11 +64,11 @@ export default function TablePage() {
           </p>
           <p className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
             <span className="flex items-center gap-1.5">
-              <span className="inline-block h-3 w-3 rounded-sm border border-amber-400/50 bg-amber-400/15" />
+              <span className="inline-block h-3 w-3 rounded-sm border border-sky-400/50 bg-sky-400/15" />
               Variante d&apos;un élément (nommée « variante »)
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="inline-block h-3 w-3 rounded-sm border border-violet-400/50 bg-violet-400/15" />
+              <span className="inline-block h-3 w-3 rounded-sm border border-pink-400/50 bg-pink-400/15" />
               Élément en enchaînement/liaison (même nom, autre arche)
             </span>
           </p>
@@ -128,9 +128,9 @@ export default function TablePage() {
                           key={el.code}
                           className={`border-t border-border-subtle ${
                             isChainVariant(el.code, el.name)
-                              ? "bg-violet-400/10"
+                              ? "bg-pink-400/10"
                               : isNamedVariant(el.name)
-                              ? "bg-amber-400/10"
+                              ? "bg-sky-400/10"
                               : ""
                           }`}
                         >
