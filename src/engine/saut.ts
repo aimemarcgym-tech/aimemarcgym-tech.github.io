@@ -1,4 +1,4 @@
-import { getElement, getEvolution } from "@/regulation/loader";
+import { getElement, getEvolution, getRegulation } from "@/regulation/loader";
 import type { Palier } from "@/regulation/types";
 import type { MovementElementRef } from "@/engine/composition";
 
@@ -25,6 +25,12 @@ export interface SautValorisationResult {
   confirmedManually?: boolean;
 }
 
+export interface SautSuggestion {
+  elementCode: string;
+  elementName: string;
+  reasons: string[];
+}
+
 export interface SautDiagnostic {
   apparatus: "SAUT";
   evolutionId: string;
@@ -36,6 +42,7 @@ export interface SautDiagnostic {
   auMoinsUnDansPaliersValorisables: boolean;
   valorisations: SautValorisationResult[];
   noteDepart: number;
+  suggestions: SautSuggestion[];
 }
 
 // PR1/PR2/PR3 (paliers prérequis propres au barème de valeur des sauts) sont
@@ -101,6 +108,8 @@ export function analyzeSaut(
 
   const noteDepart = sauts.length > 0 ? Math.max(...sauts.map((s) => s.value)) : 0;
 
+  const suggestions = computeSautSuggestions(evolutionId, sauts, sautsRequired);
+
   return {
     apparatus: "SAUT",
     evolutionId,
@@ -112,5 +121,46 @@ export function analyzeSaut(
     auMoinsUnDansPaliersValorisables,
     valorisations,
     noteDepart,
+    suggestions,
   };
+}
+
+// Suggère les sauts qui feraient progresser le tronc commun ou une
+// valorisation dépendant du choix des sauts (famille de 1er envol
+// différente). Les valorisations "matériel" (tremplin, hauteur...) restent
+// des confirmations manuelles, indépendantes du saut choisi.
+function computeSautSuggestions(evolutionId: string, sauts: SautResult[], sautsRequired: number): SautSuggestion[] {
+  if (sauts.length >= sautsRequired) return [];
+
+  const evolution = getEvolution("SAUT", evolutionId);
+  if (!evolution) return [];
+
+  const chosenCodes = new Set(sauts.map((s) => s.code));
+  const chosenArches = new Set(sauts.map((s) => s.archeId));
+  const estValorisable = (p: Palier) => evolution.paliersValorisables.includes(p);
+
+  const candidates = getRegulation("SAUT").elements.filter((el) => !chosenCodes.has(el.code));
+
+  const suggestions: SautSuggestion[] = [];
+  for (const el of candidates) {
+    const autorise =
+      el.palier === "BASE" ||
+      el.palier === "NOMADE" ||
+      evolution.paliersAutorises.some((p) =>
+        PREREQUIS_TIER.includes(el.palier) ? PREREQUIS_TIER.includes(p) : p === el.palier
+      );
+    if (!autorise) continue;
+
+    const reasons: string[] = [`Complète le tronc commun (${sauts.length + 1}/${sautsRequired} saut(s))`];
+    if (sautsRequired >= 2 && !chosenArches.has(el.archeId)) {
+      reasons.push("Famille de 1er envol différente des sauts déjà choisis");
+    }
+    if (estValorisable(el.palier)) {
+      reasons.push("Palier valorisable pour cette évolution");
+    }
+
+    suggestions.push({ elementCode: el.code, elementName: el.name, reasons });
+  }
+
+  return suggestions;
 }

@@ -74,6 +74,7 @@ function MovementPageInner() {
           evolutionId={movement.evolution}
           regulation={regulation}
           initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
+          gymnastSkills={movement.gymnast.skills}
         />
       ) : (
         <MovementBuilder

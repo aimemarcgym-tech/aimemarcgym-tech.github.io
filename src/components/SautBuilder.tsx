@@ -27,18 +27,24 @@ const BRANCH_LABEL: Record<string, string> = {
   mains: "Saut de mains",
 };
 
+type SkillStatus = "MAITRISE" | "EN_APPRENTISSAGE" | "NON_DISPONIBLE";
+
 export default function SautBuilder({
   movementId,
   evolutionId,
   regulation,
   initialElements,
+  gymnastSkills,
 }: {
   movementId: string;
   evolutionId: string;
   regulation: ApparatusRegulation;
   initialElements: MovementElementRef[];
+  gymnastSkills: { elementCode: string; status: string }[];
 }) {
   const [sequence, setSequence] = useState<MovementElementRef[]>(initialElements);
+  const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("suggestions");
+  const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
   const [manualConfirmations, setManualConfirmations] = useState<Set<string>>(() => {
     if (typeof window === "undefined") return new Set();
     try {
@@ -80,6 +86,18 @@ export default function SautBuilder({
   );
 
   const elementByCode = useMemo(() => new Map(regulation.elements.map((e) => [e.code, e])), [regulation]);
+
+  const skillMap = useMemo(() => {
+    const m = new Map<string, SkillStatus>();
+    for (const s of gymnastSkills) m.set(s.elementCode, s.status as SkillStatus);
+    return m;
+  }, [gymnastSkills]);
+
+  const visibleSuggestions = useMemo(() => {
+    return assistantOnlyMastered
+      ? diagnostic.suggestions.filter((s) => skillMap.get(s.elementCode) === "MAITRISE")
+      : diagnostic.suggestions;
+  }, [diagnostic.suggestions, assistantOnlyMastered, skillMap]);
 
   function toggleManual(id: string) {
     setManualConfirmations((prev) => {
@@ -256,46 +274,143 @@ export default function SautBuilder({
           </div>
         </section>
 
-        {/* ZONE 3 — BIBLIOTHÈQUE */}
+        {/* ZONE 3 — SUGGESTIONS / BIBLIOTHÈQUE */}
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Bibliothèque</h2>
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Rechercher (nom, code)…"
-            className="mb-3 w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
-          />
-          {sequence.length >= diagnostic.sautsRequired && (
-            <p className="mb-3 text-xs text-warning">
-              {diagnostic.sautsRequired} saut(s) déjà sélectionné(s) — en ajouter un nouveau remplacera le plus ancien.
-            </p>
-          )}
-          <div className="max-h-[70vh] space-y-4 overflow-y-auto">
-            {Array.from(grouped.entries()).map(([key, els]) => (
-              <div key={key}>
-                <h3 className="mb-2 text-sm font-semibold text-foreground">{groupLabel(key)}</h3>
-                <ul className="space-y-1">
-                  {els.map((el) => (
-                    <li key={el.code}>
-                      <button
-                        onClick={() => addSaut(el.code)}
-                        className="w-full rounded border border-border-subtle bg-surface-alt px-3 py-2 text-left text-xs text-foreground hover:border-accent-solid/60"
-                      >
-                        <span className="mr-1 rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
-                          {palierBadge(el.palier)}
-                        </span>
-                        {el.name}
-                        {typeof el.value === "number" && (
-                          <span className="ml-1 accent-gradient-text font-semibold">· {el.value.toFixed(1)}</span>
-                        )}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            {grouped.size === 0 && <p className="text-sm text-muted">Aucun élément ne correspond à ce filtre.</p>}
+          <div className="mb-3 flex gap-1 rounded-lg border border-border-subtle bg-surface-alt p-1">
+            <button
+              onClick={() => setRightTab("suggestions")}
+              className={`flex-1 rounded px-2 py-1.5 text-xs font-semibold uppercase tracking-wide ${
+                rightTab === "suggestions" ? "accent-gradient text-white" : "text-muted hover:text-foreground"
+              }`}
+            >
+              Assistant
+            </button>
+            <button
+              onClick={() => setRightTab("bibliotheque")}
+              className={`flex-1 rounded px-2 py-1.5 text-xs font-semibold uppercase tracking-wide ${
+                rightTab === "bibliotheque" ? "accent-gradient text-white" : "text-muted hover:text-foreground"
+              }`}
+            >
+              Bibliothèque
+            </button>
           </div>
+
+          {rightTab === "suggestions" ? (
+            <>
+              <p className="mb-2 text-xs text-muted">
+                Sélection calculée automatiquement : uniquement des sauts autorisés à cette évolution qui feraient
+                progresser ce mouvement précis, avec l&apos;explication de ce que chacun apporterait.
+              </p>
+              <label className="mb-3 flex items-center gap-2 text-xs text-muted">
+                <input
+                  type="checkbox"
+                  checked={assistantOnlyMastered}
+                  onChange={(e) => setAssistantOnlyMastered(e.target.checked)}
+                />
+                Ne proposer que les éléments maîtrisés (✓ verts dans le profil technique)
+              </label>
+              {sequence.length >= diagnostic.sautsRequired && (
+                <p className="mb-3 text-xs text-warning">
+                  {diagnostic.sautsRequired} saut(s) déjà sélectionné(s) — en ajouter un nouveau remplacera le plus
+                  ancien.
+                </p>
+              )}
+              {visibleSuggestions.length === 0 ? (
+                <p className="text-sm text-success">
+                  {diagnostic.suggestions.length > 0 && assistantOnlyMastered
+                    ? "Aucun saut maîtrisé ne permettrait de progresser ici. Marquez plus d'éléments « maîtrisés » dans le profil technique, ou décochez le filtre ci-dessus."
+                    : diagnostic.troncCommunOk
+                    ? "✓ Mouvement conforme au tronc commun."
+                    : "Ajoutez des sauts pour voir apparaître des suggestions."}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {visibleSuggestions.map((sug) => {
+                    const mastery = skillMap.get(sug.elementCode);
+                    const el = elementByCode.get(sug.elementCode);
+                    const multi = sug.reasons.length > 1;
+                    return (
+                      <li
+                        key={sug.elementCode}
+                        className={`rounded border p-2 ${
+                          multi
+                            ? "border-accent-solid/50 bg-gradient-to-br from-accent-from/10 to-accent-to/10"
+                            : "border-border-subtle bg-surface-alt"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-foreground">{sug.elementName}</span>
+                          <button
+                            onClick={() => addSaut(sug.elementCode)}
+                            className="rounded bg-foreground px-2 py-1 text-xs text-background hover:opacity-80"
+                          >
+                            + Ajouter
+                          </button>
+                        </div>
+                        <ul className="mt-1 space-y-0.5 text-xs text-muted">
+                          {sug.reasons.map((r, i) => (
+                            <li key={i}>· {r}</li>
+                          ))}
+                        </ul>
+                        {typeof el?.value === "number" && (
+                          <div className="mt-1 text-xs accent-gradient-text font-semibold">
+                            Valeur : {el.value.toFixed(1)}
+                          </div>
+                        )}
+                        {mastery === "MAITRISE" && <span className="mt-1 inline-block text-xs text-success">✓ déjà maîtrisé</span>}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </>
+          ) : (
+            <>
+              <h2 className="sr-only">Bibliothèque</h2>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Rechercher (nom, code)…"
+                className="mb-3 w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
+              />
+              {sequence.length >= diagnostic.sautsRequired && (
+                <p className="mb-3 text-xs text-warning">
+                  {diagnostic.sautsRequired} saut(s) déjà sélectionné(s) — en ajouter un nouveau remplacera le plus
+                  ancien.
+                </p>
+              )}
+              <div className="max-h-[70vh] space-y-4 overflow-y-auto">
+                {Array.from(grouped.entries()).map(([key, els]) => (
+                  <div key={key}>
+                    <h3 className="mb-2 text-sm font-semibold text-foreground">{groupLabel(key)}</h3>
+                    <ul className="space-y-1">
+                      {els.map((el) => {
+                        const mastery = skillMap.get(el.code);
+                        return (
+                          <li key={el.code}>
+                            <button
+                              onClick={() => addSaut(el.code)}
+                              className="w-full rounded border border-border-subtle bg-surface-alt px-3 py-2 text-left text-xs text-foreground hover:border-accent-solid/60"
+                            >
+                              <span className="mr-1 rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
+                                {palierBadge(el.palier)}
+                              </span>
+                              {el.name}
+                              {typeof el.value === "number" && (
+                                <span className="ml-1 accent-gradient-text font-semibold">· {el.value.toFixed(1)}</span>
+                              )}
+                              {mastery === "MAITRISE" && <span className="ml-1 text-success">✓</span>}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+                {grouped.size === 0 && <p className="text-sm text-muted">Aucun élément ne correspond à ce filtre.</p>}
+              </div>
+            </>
+          )}
         </section>
       </div>
 
