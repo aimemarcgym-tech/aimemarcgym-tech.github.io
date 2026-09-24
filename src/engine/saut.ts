@@ -59,9 +59,12 @@ export function analyzeSaut(
     .map((e) => getElement("SAUT", e.code))
     .filter((el): el is NonNullable<typeof el> => !!el)
     .map((el) => {
-      const autorise = evolution.paliersAutorises.some((p) =>
-        PREREQUIS_TIER.includes(el.palier) ? PREREQUIS_TIER.includes(p) : p === el.palier
-      );
+      const autorise =
+        el.palier === "BASE" ||
+        el.palier === "NOMADE" ||
+        evolution.paliersAutorises.some((p) =>
+          PREREQUIS_TIER.includes(el.palier) ? PREREQUIS_TIER.includes(p) : p === el.palier
+        );
       return {
         code: el.code,
         name: el.name,
