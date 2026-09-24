@@ -22,3 +22,9 @@ export function isChainVariant(code: string, name: string) {
 export function isMousseElement(archeId: string) {
   return archeId === "POUTRE-ACCRO-MOUSSE";
 }
+
+// Poutre uniquement : élément de l'arche Sorties (peut aussi compter comme
+// ACRO via extraCategories selon les cas).
+export function isSortieElement(archeId: string) {
+  return archeId === "POUTRE-SORTIES";
+}

@@ -5,13 +5,23 @@ import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
-import { isNamedVariant, isChainVariant, isMousseElement } from "@/regulation/variants";
+import { isNamedVariant, isChainVariant, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
+
+// Poutre : ces 3 exigences de tronc commun sont explicitement "1 sortie
+// (poutre mousse) : Acro Px (min.)" — contrairement aux autres exigences
+// ACRO (ex. "3 acros en poutre haute"), elles ne doivent proposer QUE les
+// éléments de l'arche Accro poutre mousse, jamais ceux de poutre haute.
+const POUTRE_MOUSSE_ONLY_CHECKS = new Set(["P-B1-TC-3", "P-B2-TC-4", "P-B3-TC-4"]);
+const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
 
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
 // exigence/valorisation -> permet de proposer "voir dans la Bibliothèque".
 // Plusieurs catégories possibles (ex. FORCE ou PG = FORCE ou SAUT_GYM).
 function categoryForCheck(id: string, apparatus: string): string[] | null {
+  if (apparatus === "POUTRE" && POUTRE_MOUSSE_ONLY_CHECKS.has(id)) {
+    return [CAT_ACRO_MOUSSE];
+  }
   const spec = getCheck(id, apparatus);
   switch (spec.type) {
     case "CATEGORY_COUNT":
@@ -169,7 +179,13 @@ export default function MovementBuilder({
         // dont la catégorie fait partie de la liste.
         if (category.startsWith("CAT:")) {
           const cats = category.slice(4).split(",");
-          return cats.includes(archeByCode.get(e.archeId)?.category ?? "");
+          if (cats.includes(CAT_ACRO_MOUSSE)) return isMousseElement(e.archeId);
+          // Les exigences ACRO génériques (ex. "3 acros en poutre haute") ne
+          // doivent jamais proposer les éléments de l'arche Accro poutre
+          // mousse : ce sont deux agrès/contextes différents.
+          if (isMousseElement(e.archeId)) return false;
+          const elCats = [archeByCode.get(e.archeId)?.category, ...(e.extraCategories ?? [])];
+          return cats.some((c) => elCats.includes(c));
         }
         // Une catégorie sans ":" (ex. sélectionnée via "voir dans la Bibliothèque"
         // depuis une exigence générique) doit inclure toutes les branches de l'arche.
@@ -640,8 +656,15 @@ export default function MovementBuilder({
                       className={`flex flex-col items-start gap-1 rounded border border-border-subtle p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10 ${variantBg}`}
                     >
                       <div className="flex w-full items-center justify-between">
-                        <span className="rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
-                          {el.palier === "BASE" ? "Base" : el.palier === "NOMADE" ? "Nomade" : el.palier}
+                        <span className="flex items-center gap-1">
+                          <span className="rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
+                            {el.palier === "BASE" ? "Base" : el.palier === "NOMADE" ? "Nomade" : el.palier}
+                          </span>
+                          {isSortieElement(el.archeId) && (
+                            <span className="rounded-full border border-orange-400/40 bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-300">
+                              Sortie
+                            </span>
+                          )}
                         </span>
                         {mastery === "MAITRISE" && <span className="text-xs text-success">✓</span>}
                         {mastery === "EN_APPRENTISSAGE" && <span className="text-xs text-warning">○</span>}
