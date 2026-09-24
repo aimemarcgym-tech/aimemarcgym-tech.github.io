@@ -82,6 +82,9 @@ export interface PhotoAlbumRow {
   name: string;
   date: string | null; // date libre (ISO ou texte), affichée telle quelle
   team: string | null;
+  // Utile pour un entraîneur intervenant dans plusieurs clubs, pour
+  // distinguer les albums par club en plus de l'équipe.
+  club: string | null;
   createdAt: string;
 }
 
@@ -102,6 +105,7 @@ export interface VideoAlbumRow {
   name: string;
   date: string | null;
   team: string | null;
+  club: string | null;
   createdAt: string;
 }
 

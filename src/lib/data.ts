@@ -307,26 +307,33 @@ export async function getPhotoAlbums() {
   return albums;
 }
 
-export async function createPhotoAlbum(name: string, date: string, team: string): Promise<PhotoAlbumRow> {
+export async function createPhotoAlbum(
+  name: string,
+  date: string,
+  team: string,
+  club: string
+): Promise<PhotoAlbumRow> {
   const db = await getDb();
   const album: PhotoAlbumRow = {
     id: crypto.randomUUID(),
     name: name.trim(),
     date: date.trim() || null,
     team: team.trim() || null,
+    club: club.trim() || null,
     createdAt: nowIso(),
   };
   await db.put("photoAlbums", album);
   return album;
 }
 
-export async function updatePhotoAlbum(albumId: string, name: string, date: string, team: string) {
+export async function updatePhotoAlbum(albumId: string, name: string, date: string, team: string, club: string) {
   const db = await getDb();
   const album = await db.get("photoAlbums", albumId);
   if (!album) return;
   album.name = name.trim() || album.name;
   album.date = date.trim() || null;
   album.team = team.trim() || null;
+  album.club = club.trim() || null;
   await db.put("photoAlbums", album);
 }
 
@@ -384,26 +391,28 @@ export async function getVideoAlbums() {
   return albums;
 }
 
-export async function createVideoAlbum(name: string, date: string, team: string) {
+export async function createVideoAlbum(name: string, date: string, team: string, club: string) {
   const db = await getDb();
   const album = {
     id: crypto.randomUUID(),
     name: name.trim(),
     date: date.trim() || null,
     team: team.trim() || null,
+    club: club.trim() || null,
     createdAt: nowIso(),
   };
   await db.put("videoAlbums", album);
   return album;
 }
 
-export async function updateVideoAlbum(albumId: string, name: string, date: string, team: string) {
+export async function updateVideoAlbum(albumId: string, name: string, date: string, team: string, club: string) {
   const db = await getDb();
   const album = await db.get("videoAlbums", albumId);
   if (!album) return;
   album.name = name.trim() || album.name;
   album.date = date.trim() || null;
   album.team = team.trim() || null;
+  album.club = club.trim() || null;
   await db.put("videoAlbums", album);
 }
 

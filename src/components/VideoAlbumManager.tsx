@@ -131,12 +131,14 @@ function AlbumView({
   const [editName, setEditName] = useState(album.name);
   const [editDate, setEditDate] = useState(album.date ?? "");
   const [editTeam, setEditTeam] = useState(album.team ?? "");
+  const [editClub, setEditClub] = useState(album.club ?? "");
   const [savingAlbum, setSavingAlbum] = useState(false);
 
   useEffect(() => {
     setEditName(album.name);
     setEditDate(album.date ?? "");
     setEditTeam(album.team ?? "");
+    setEditClub(album.club ?? "");
   }, [album]);
 
   function refresh() {
@@ -172,7 +174,7 @@ function AlbumView({
     if (!editName.trim()) return;
     setSavingAlbum(true);
     try {
-      await updateVideoAlbum(album.id, editName, editDate, editTeam);
+      await updateVideoAlbum(album.id, editName, editDate, editTeam, editClub);
       onUpdated();
       setEditing(false);
     } finally {
@@ -209,6 +211,12 @@ function AlbumView({
                   placeholder="Équipe (optionnel)"
                   className="rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none"
                 />
+                <input
+                  value={editClub}
+                  onChange={(e) => setEditClub(e.target.value)}
+                  placeholder="Club (optionnel)"
+                  className="rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none"
+                />
                 <button
                   type="submit"
                   disabled={savingAlbum}
@@ -230,7 +238,8 @@ function AlbumView({
               <div>
                 <h3 className="mt-1 text-lg font-semibold text-foreground">{album.name}</h3>
                 <p className="text-xs text-muted">
-                  {[album.date, album.team].filter(Boolean).join(" · ") || "Aucune date/équipe précisée"}
+                  {[album.date, album.team, album.club].filter(Boolean).join(" · ") ||
+                    "Aucune date/équipe/club précisée"}
                 </p>
               </div>
               <button
@@ -295,6 +304,7 @@ export default function VideoAlbumManager() {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [team, setTeam] = useState("");
+  const [club, setClub] = useState("");
   const [creating, setCreating] = useState(false);
 
   function refresh() {
@@ -312,10 +322,11 @@ export default function VideoAlbumManager() {
     if (!name.trim()) return;
     setCreating(true);
     try {
-      const album = await createVideoAlbum(name, date, team);
+      const album = await createVideoAlbum(name, date, team, club);
       setName("");
       setDate("");
       setTeam("");
+      setClub("");
       setShowForm(false);
       refresh();
       setSelectedId(album.id);
@@ -387,6 +398,15 @@ export default function VideoAlbumManager() {
                 className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
               />
             </div>
+            <div className="flex-1">
+              <label className="mb-1 block text-xs font-medium text-muted">Club (optionnel)</label>
+              <input
+                value={club}
+                onChange={(e) => setClub(e.target.value)}
+                placeholder="Rungis"
+                className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
+              />
+            </div>
           </div>
           <button
             type="submit"
@@ -415,7 +435,7 @@ export default function VideoAlbumManager() {
             >
               <div className="font-medium text-foreground">{a.name}</div>
               <div className="mt-0.5 text-xs text-muted">
-                {[a.date, a.team].filter(Boolean).join(" · ") || "Aucune date/équipe précisée"}
+                {[a.date, a.team, a.club].filter(Boolean).join(" · ") || "Aucune date/équipe/club précisée"}
               </div>
             </button>
           ))}

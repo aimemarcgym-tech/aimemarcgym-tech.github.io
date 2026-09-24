@@ -25,6 +25,7 @@ export interface BackupPhotoAlbumEntry {
   name: string;
   date: string | null;
   team: string | null;
+  club: string | null;
   createdAt: string;
 }
 
@@ -44,6 +45,7 @@ export interface BackupVideoAlbumEntry {
   name: string;
   date: string | null;
   team: string | null;
+  club: string | null;
   createdAt: string;
 }
 
@@ -119,6 +121,7 @@ export async function exportAll(): Promise<BackupData> {
     name: a.name,
     date: a.date,
     team: a.team,
+    club: a.club,
     createdAt: a.createdAt,
   }));
 
@@ -142,6 +145,7 @@ export async function exportAll(): Promise<BackupData> {
     name: a.name,
     date: a.date,
     team: a.team,
+    club: a.club,
     createdAt: a.createdAt,
   }));
 
