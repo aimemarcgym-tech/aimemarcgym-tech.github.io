@@ -64,6 +64,15 @@ function archeCategory(apparatus: string, archeId: string): string | undefined {
   return getArche(apparatus, archeId)?.category;
 }
 
+// Toutes les catégories dans lesquelles un élément compte : celle de son
+// arche, plus ses éventuelles extraCategories (élément partagé entre deux
+// catégories, ex : ACRO + SORTIES).
+function elementCategories(apparatus: string, el: RegElement): string[] {
+  const primary = archeCategory(apparatus, el.archeId);
+  const cats = primary ? [primary] : [];
+  return el.extraCategories ? [...cats, ...el.extraCategories] : cats;
+}
+
 function isSalto(name: string): boolean {
   return /salto/i.test(name);
 }
@@ -79,7 +88,7 @@ function findCategoryRuns(
   const runs: RegElement[][] = [];
   let current: RegElement[] = [];
   for (const el of elements) {
-    if (archeCategory(apparatus, el.archeId) === category) {
+    if (elementCategories(apparatus, el).includes(category)) {
       current.push(el);
     } else {
       if (current.length >= minLength) runs.push(current);
@@ -101,8 +110,7 @@ function evaluateCheck(
   switch (spec.type) {
     case "CATEGORY_COUNT": {
       const matches = usable.filter((e) => {
-        const cat = archeCategory(apparatus, e.archeId);
-        if (cat !== spec.category) return false;
+        if (!elementCategories(apparatus, e).includes(spec.category)) return false;
         if (spec.branch && e.branch !== spec.branch) return false;
         return true;
       });
@@ -112,7 +120,7 @@ function evaluateCheck(
       const minRank = palierRank(spec.palierMin);
       const needed = spec.min ?? 1;
       const matches = usable.filter((e) => {
-        if (spec.category && archeCategory(apparatus, e.archeId) !== spec.category) return false;
+        if (spec.category && !elementCategories(apparatus, e).includes(spec.category)) return false;
         return palierRank(e.palier) >= minRank && minRank >= 0;
       });
       return { ok: matches.length >= needed, detail: matches.length > 0 ? `${matches.length}/${needed} — ex: ${matches[0].name}` : "aucun élément au palier requis" };
@@ -123,7 +131,7 @@ function evaluateCheck(
       return { ok: matches.length > 0, detail: matches.length > 0 ? `ex: ${matches[0].name}` : "aucun salto au palier requis" };
     }
     case "TWO_ACRO_DIFFERENT_DIRECTIONS": {
-      const acros = usable.filter((e) => archeCategory(apparatus, e.archeId) === "ACRO");
+      const acros = usable.filter((e) => elementCategories(apparatus, e).includes("ACRO"));
       const hasAvant = acros.some((e) => e.branch === "avant");
       const hasArriere = acros.some((e) => e.branch === "arriere");
       return { ok: hasAvant && hasArriere, detail: hasAvant && hasArriere ? "avant + arrière présents" : "il manque un sens (avant ou arrière)" };
@@ -140,7 +148,7 @@ function evaluateCheck(
       };
     }
     case "FORCE_OR_PG": {
-      const hasForce = usable.some((e) => archeCategory(apparatus, e.archeId) === "FORCE");
+      const hasForce = usable.some((e) => elementCategories(apparatus, e).includes("FORCE"));
       // PG (Passage Gymnique) = "Enchaînement de 2 sauts minimum différents
       // liés directement OU INDIRECTEMENT avec des pas courus, petits sauts,
       // pas chassés, tour chorégraphique... etc" (Généralités, lexique). Les
@@ -149,7 +157,7 @@ function evaluateCheck(
       // les 2 sauts dans la séquence saisie -> on vérifie juste la présence
       // de 2 sauts gymniques différents (peu importe l'appel 1 ou 2 pieds,
       // la catégorie SAUT_GYM regroupe déjà les deux arches).
-      const sauts = usable.filter((e) => archeCategory(apparatus, e.archeId) === "SAUT_GYM");
+      const sauts = usable.filter((e) => elementCategories(apparatus, e).includes("SAUT_GYM"));
       const hasPG = new Set(sauts.map((e) => e.code)).size >= 2;
       return { ok: hasForce || hasPG, detail: hasForce ? "1 élément FORCE présent" : hasPG ? "passage gymnique (2 sauts différents) détecté" : "ni FORCE ni PG détecté" };
     }

@@ -52,6 +52,11 @@ export interface RegElement {
   // (barème "Valeur des sauts"), indépendante du système tronc commun /
   // valorisations utilisé par les autres agrès.
   value?: number;
+  // Catégories supplémentaires (en plus de celle de son arche/archeId) dans
+  // lesquelles cet élément doit aussi compter pour les exigences de tronc
+  // commun/valorisation (ex : un salto qui sert à la fois d'élément ACRO et
+  // de SORTIE reconnue).
+  extraCategories?: string[];
 }
 
 export interface TroncCommunExigence {
