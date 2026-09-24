@@ -57,7 +57,7 @@
     { "code": "196-26", "name": "Rondade à la station debout (avec ou sans sursaut)", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P3", "sourcePage": 60, "verified": true },
     { "code": "152+", "name": "Roue : renversement latéral sans envol arrivée 1 ou 2 pieds (variante)", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P4", "sourcePage": 60, "verified": true },
     { "code": "197-26", "name": "Saut de mains. Renversement avant avec envol à la station debout avec ou sans sursaut", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P3", "sourcePage": 60, "verified": true },
-    { "code": "200-26", "name": "Costal", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P4", "sourcePage": 60, "verified": true },
+    { "code": "200-26", "name": "Costal", "archeId": "POUTRE-SORTIES", "branch": null, "palier": "P4", "sourcePage": 60, "extraCategories": ["ACRO"], "verified": true },
     { "code": "159", "name": "Souplesse avant ou roue arabe. Renversement avant sans envol aussi avec appui sur 1 bras ou avec appui des mains successif retour libre", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P4", "sourcePage": 60, "verified": true },
     { "code": "164", "name": "Rondade", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P5", "sourcePage": 60, "verified": true },
     { "code": "159+", "name": "Souplesse avant ou roue arabe (variante)", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P5", "sourcePage": 60, "verified": true },
