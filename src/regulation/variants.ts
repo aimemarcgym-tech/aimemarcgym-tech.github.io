@@ -14,3 +14,11 @@ export function isNamedVariant(name: string) {
 export function isChainVariant(code: string, name: string) {
   return code.includes("+") && !isNamedVariant(name);
 }
+
+// Poutre uniquement : les mêmes noms/gestes exécutés sur poutre basse en
+// mousse (arche "Accro poutre mousse") n'ont pas la même valeur/difficulté
+// que sur poutre haute réglementaire — à ne pas confondre avec l'élément de
+// même nom des arches Acro 1/Acro 2.
+export function isMousseElement(archeId: string) {
+  return archeId === "POUTRE-ACCRO-MOUSSE";
+}

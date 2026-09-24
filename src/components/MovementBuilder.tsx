@@ -5,7 +5,7 @@ import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
-import { isNamedVariant, isChainVariant } from "@/regulation/variants";
+import { isNamedVariant, isChainVariant, isMousseElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
 
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
@@ -618,6 +618,10 @@ export default function MovementBuilder({
                   <span className="inline-block h-2.5 w-2.5 rounded-sm border border-pink-400/50 bg-pink-400/15" />
                   En enchaînement/liaison
                 </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-emerald-400/50 bg-emerald-400/15" />
+                  Poutre mousse
+                </span>
               </div>
               <div className="grid max-h-[32rem] grid-cols-2 gap-2 overflow-y-auto">
                 {filteredLibrary.map((el) => {
@@ -626,6 +630,8 @@ export default function MovementBuilder({
                     ? "bg-pink-400/10"
                     : isNamedVariant(el.name)
                     ? "bg-sky-400/10"
+                    : isMousseElement(el.archeId)
+                    ? "bg-emerald-400/10"
                     : "bg-surface-alt";
                   return (
                     <button
