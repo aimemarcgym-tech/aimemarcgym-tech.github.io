@@ -306,6 +306,7 @@ export default function PhotoAlbumManager() {
   const [team, setTeam] = useState("");
   const [club, setClub] = useState("");
   const [creating, setCreating] = useState(false);
+  const [clubFilter, setClubFilter] = useState<string>("all");
 
   function refresh() {
     getPhotoAlbums().then(setAlbums);
@@ -316,6 +317,18 @@ export default function PhotoAlbumManager() {
   }, []);
 
   const selected = albums?.find((a) => a.id === selectedId) ?? null;
+
+  const clubs = useMemo(() => {
+    if (!albums) return [];
+    const set = new Set(albums.map((a) => a.club).filter((c): c is string => Boolean(c)));
+    return Array.from(set).sort();
+  }, [albums]);
+
+  const filteredAlbums = useMemo(() => {
+    if (!albums) return [];
+    if (clubFilter === "all") return albums;
+    return albums.filter((a) => a.club === clubFilter);
+  }, [albums, clubFilter]);
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -361,6 +374,36 @@ export default function PhotoAlbumManager() {
           {showForm ? "Annuler" : "+ Nouvel album"}
         </button>
       </div>
+
+      {clubs.length > 0 && (
+        <div className="mb-4 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setClubFilter("all")}
+            className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+              clubFilter === "all"
+                ? "border-border-strong bg-surface-alt text-white"
+                : "border-transparent text-muted hover:text-foreground"
+            }`}
+          >
+            Tous les clubs
+          </button>
+          {clubs.map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setClubFilter(c)}
+              className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+                clubFilter === c
+                  ? "border-border-strong bg-surface-alt text-white"
+                  : "border-transparent text-muted hover:text-foreground"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
 
       {showForm && (
         <form
@@ -424,9 +467,11 @@ export default function PhotoAlbumManager() {
         <p className="text-sm text-muted">
           Aucun album pour l&apos;instant. Créez-en un pour commencer à classer vos photos par compétition/événement.
         </p>
+      ) : filteredAlbums.length === 0 ? (
+        <p className="text-sm text-muted">Aucun album pour ce club.</p>
       ) : (
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {albums.map((a) => (
+          {filteredAlbums.map((a) => (
             <button
               key={a.id}
               type="button"
