@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import calendrierData from "@/regulation/data/calendrier.json";
 import TeamCalendarChecker from "@/components/TeamCalendarChecker";
@@ -13,6 +16,17 @@ function FiliereBadges({ fj, fn }: { fj: boolean; fn: boolean }) {
 
 export default function CalendrierPage() {
   const { departements, saison, source, note } = calendrierData;
+  const [groupeFilter, setGroupeFilter] = useState<string>("all");
+
+  const groupes = useMemo(() => {
+    const set = new Set(departements.map((d) => d.groupe));
+    return Array.from(set).sort();
+  }, [departements]);
+
+  const filteredDepartements = useMemo(() => {
+    if (groupeFilter === "all") return departements;
+    return departements.filter((d) => d.groupe === groupeFilter);
+  }, [departements, groupeFilter]);
 
   return (
     <div className="min-h-screen">
@@ -35,6 +49,34 @@ export default function CalendrierPage() {
 
         <TeamCalendarChecker />
 
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => setGroupeFilter("all")}
+            className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+              groupeFilter === "all"
+                ? "border-border-strong bg-surface-alt text-white"
+                : "border-transparent text-muted hover:text-foreground"
+            }`}
+          >
+            Tous les groupes
+          </button>
+          {groupes.map((g) => (
+            <button
+              key={g}
+              type="button"
+              onClick={() => setGroupeFilter(g)}
+              className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+                groupeFilter === g
+                  ? "border-border-strong bg-surface-alt text-white"
+                  : "border-transparent text-muted hover:text-foreground"
+              }`}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
+
         <section className="overflow-x-auto rounded-xl border border-border-subtle">
           <table className="w-full min-w-[900px] border-collapse text-sm">
             <thead>
@@ -45,7 +87,7 @@ export default function CalendrierPage() {
               </tr>
             </thead>
             <tbody>
-              {departements.map((dep) => (
+              {filteredDepartements.map((dep) => (
                 <tr key={`${dep.groupe}-${dep.num}`} className="border-t border-border-subtle align-top">
                   <td className="px-4 py-3 font-semibold text-foreground whitespace-nowrap">
                     {dep.num} — {dep.name}
