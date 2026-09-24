@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PhotoAlbumManager from "@/components/PhotoAlbumManager";
 
 export default function PhotosPage() {
   return (
@@ -11,11 +12,14 @@ export default function PhotosPage() {
           <h1 className="mt-1 text-xl font-bold text-foreground">
             <span className="accent-gradient-text">Photos</span>
           </h1>
+          <p className="mt-1 text-sm text-muted">
+            Classez vos photos par compétition ou événement, taguez-les et retrouvez-les en un clic.
+          </p>
         </div>
       </header>
 
       <main className="mx-auto max-w-[1600px] px-6 py-10">
-        <p className="text-sm text-muted">En construction.</p>
+        <PhotoAlbumManager />
       </main>
     </div>
   );

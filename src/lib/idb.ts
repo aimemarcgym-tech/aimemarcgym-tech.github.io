@@ -75,6 +75,27 @@ export interface GymnastMusicRow {
   updatedAt: string;
 }
 
+// Un album regroupe les photos d'une compétition/événement précis (ex :
+// "Compétition 31 janvier à Rungis, Équipe B3"). Onglet Média > Photos.
+export interface PhotoAlbumRow {
+  id: string;
+  name: string;
+  date: string | null; // date libre (ISO ou texte), affichée telle quelle
+  team: string | null;
+  createdAt: string;
+}
+
+export interface PhotoRow {
+  id: string;
+  albumId: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  blob: Blob;
+  tags: string[];
+  createdAt: string;
+}
+
 interface AppDB extends DBSchema {
   clubs: { key: string; value: ClubRow };
   gymnasts: { key: string; value: GymnastRow; indexes: { clubId: string } };
@@ -87,10 +108,12 @@ interface AppDB extends DBSchema {
   movementElements: { key: string; value: MovementElementRow; indexes: { movementId: string } };
   movementSnapshots: { key: string; value: MovementSnapshotRow; indexes: { movementId: string } };
   gymnastMusic: { key: string; value: GymnastMusicRow; indexes: { gymnastId: string } };
+  photoAlbums: { key: string; value: PhotoAlbumRow };
+  photos: { key: string; value: PhotoRow; indexes: { albumId: string } };
 }
 
 const DB_NAME = "ufolep-gaf";
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 let dbPromise: Promise<IDBPDatabase<AppDB>> | null = null;
 
@@ -134,6 +157,15 @@ export function getDb(): Promise<IDBPDatabase<AppDB>> {
         if (!db.objectStoreNames.contains("gymnastMusic")) {
           const music = db.createObjectStore("gymnastMusic", { keyPath: "id" });
           music.createIndex("gymnastId", "gymnastId");
+        }
+
+        if (!db.objectStoreNames.contains("photoAlbums")) {
+          db.createObjectStore("photoAlbums", { keyPath: "id" });
+        }
+
+        if (!db.objectStoreNames.contains("photos")) {
+          const photos = db.createObjectStore("photos", { keyPath: "id" });
+          photos.createIndex("albumId", "albumId");
         }
       },
     });

@@ -1,4 +1,5 @@
 import { getDb, type ClubRow, type GymnastRow, type MovementRow } from "@/lib/idb";
+import type { PhotoAlbumRow, PhotoRow } from "@/lib/idb";
 import { REGULATION_VERSION } from "@/regulation/loader";
 
 // Couche de données 100% locale (remplace les Server Actions + Prisma de
@@ -297,4 +298,71 @@ export async function setGymnastsPassageOrder(apparatus: string, orderedGymnastI
     })
   );
   await tx.done;
+}
+
+export async function getPhotoAlbums() {
+  const db = await getDb();
+  const albums = await db.getAll("photoAlbums");
+  albums.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return albums;
+}
+
+export async function createPhotoAlbum(name: string, date: string, team: string): Promise<PhotoAlbumRow> {
+  const db = await getDb();
+  const album: PhotoAlbumRow = {
+    id: crypto.randomUUID(),
+    name: name.trim(),
+    date: date.trim() || null,
+    team: team.trim() || null,
+    createdAt: nowIso(),
+  };
+  await db.put("photoAlbums", album);
+  return album;
+}
+
+export async function deletePhotoAlbum(albumId: string) {
+  const db = await getDb();
+  const photos = await db.getAllFromIndex("photos", "albumId", albumId);
+  const tx = db.transaction(["photoAlbums", "photos"], "readwrite");
+  await Promise.all([
+    tx.objectStore("photoAlbums").delete(albumId),
+    ...photos.map((p) => tx.objectStore("photos").delete(p.id)),
+    tx.done,
+  ]);
+}
+
+export async function getPhotosByAlbum(albumId: string) {
+  const db = await getDb();
+  const photos = await db.getAllFromIndex("photos", "albumId", albumId);
+  photos.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  return photos;
+}
+
+export async function addPhoto(albumId: string, file: File): Promise<PhotoRow> {
+  const db = await getDb();
+  const photo: PhotoRow = {
+    id: crypto.randomUUID(),
+    albumId,
+    fileName: file.name,
+    mimeType: file.type || "image/jpeg",
+    size: file.size,
+    blob: file,
+    tags: [],
+    createdAt: nowIso(),
+  };
+  await db.put("photos", photo);
+  return photo;
+}
+
+export async function setPhotoTags(photoId: string, tags: string[]) {
+  const db = await getDb();
+  const photo = await db.get("photos", photoId);
+  if (!photo) return;
+  photo.tags = tags;
+  await db.put("photos", photo);
+}
+
+export async function deletePhoto(photoId: string) {
+  const db = await getDb();
+  await db.delete("photos", photoId);
 }

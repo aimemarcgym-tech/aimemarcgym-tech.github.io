@@ -20,8 +20,27 @@ export interface BackupMusicEntry {
   dataBase64: string;
 }
 
+export interface BackupPhotoAlbumEntry {
+  id: string;
+  name: string;
+  date: string | null;
+  team: string | null;
+  createdAt: string;
+}
+
+export interface BackupPhotoEntry {
+  id: string;
+  albumId: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  tags: string[];
+  createdAt: string;
+  dataBase64: string;
+}
+
 export interface BackupData {
-  version: 1 | 2;
+  version: 1 | 2 | 3;
   exportedAt: string;
   clubs: unknown[];
   gymnasts: unknown[];
@@ -30,6 +49,8 @@ export interface BackupData {
   movementElements: unknown[];
   movementSnapshots: unknown[];
   gymnastMusic?: BackupMusicEntry[];
+  photoAlbums?: BackupPhotoAlbumEntry[];
+  photos?: BackupPhotoEntry[];
 }
 
 function blobToBase64(blob: Blob): Promise<string> {
@@ -70,20 +91,46 @@ export async function exportAll(): Promise<BackupData> {
       dataBase64: await blobToBase64(m.blob),
     }))
   );
+
+  const albumRows = await db.getAll("photoAlbums");
+  const photoAlbums: BackupPhotoAlbumEntry[] = albumRows.map((a) => ({
+    id: a.id,
+    name: a.name,
+    date: a.date,
+    team: a.team,
+    createdAt: a.createdAt,
+  }));
+
+  const photoRows = await db.getAll("photos");
+  const photos: BackupPhotoEntry[] = await Promise.all(
+    photoRows.map(async (p) => ({
+      id: p.id,
+      albumId: p.albumId,
+      fileName: p.fileName,
+      mimeType: p.mimeType,
+      size: p.size,
+      tags: p.tags,
+      createdAt: p.createdAt,
+      dataBase64: await blobToBase64(p.blob),
+    }))
+  );
+
   return {
-    version: 2,
+    version: 3,
     exportedAt: new Date().toISOString(),
     ...data,
     gymnastMusic,
+    photoAlbums,
+    photos,
   } as BackupData;
 }
 
 export async function importAll(data: BackupData): Promise<{ counts: Record<string, number> }> {
-  if (!data || (data.version !== 1 && data.version !== 2)) {
+  if (!data || (data.version !== 1 && data.version !== 2 && data.version !== 3)) {
     throw new Error("Fichier de sauvegarde invalide ou d'une version non prise en charge.");
   }
   const db = await getDb();
-  const tx = db.transaction([...STORES, "gymnastMusic"], "readwrite");
+  const tx = db.transaction([...STORES, "gymnastMusic", "photoAlbums", "photos"], "readwrite");
   const counts: Record<string, number> = {};
   for (const store of STORES) {
     const objectStore = tx.objectStore(store);
@@ -113,6 +160,31 @@ export async function importAll(data: BackupData): Promise<{ counts: Record<stri
     });
   }
   counts.gymnastMusic = musicRows.length;
+
+  const albumStore = tx.objectStore("photoAlbums");
+  await albumStore.clear();
+  const albumRows = data.photoAlbums ?? [];
+  for (const entry of albumRows) {
+    await albumStore.put(entry);
+  }
+  counts.photoAlbums = albumRows.length;
+
+  const photoStore = tx.objectStore("photos");
+  await photoStore.clear();
+  const photoRows = data.photos ?? [];
+  for (const entry of photoRows) {
+    await photoStore.put({
+      id: entry.id,
+      albumId: entry.albumId,
+      fileName: entry.fileName,
+      mimeType: entry.mimeType,
+      size: entry.size,
+      tags: entry.tags,
+      createdAt: entry.createdAt,
+      blob: base64ToBlob(entry.dataBase64, entry.mimeType),
+    });
+  }
+  counts.photos = photoRows.length;
 
   await tx.done;
   return { counts };
