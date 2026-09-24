@@ -123,6 +123,8 @@ export default function MovementBuilder({
     setDismissedSuggestions((prev) => new Set(prev).add(code));
   }
 
+  const [revealedSuggestion, setRevealedSuggestion] = useState<string | null>(null);
+
   const elementByCode = useMemo(() => new Map(regulation.elements.map((e) => [e.code, e])), [regulation]);
   const archeByCode = useMemo(() => new Map(regulation.arches.map((a) => [a.id, a])), [regulation]);
 
@@ -534,7 +536,10 @@ export default function MovementBuilder({
                     return (
                       <li
                         key={sug.elementCode}
-                        className={`rounded border p-2 ${
+                        onClick={() =>
+                          setRevealedSuggestion((cur) => (cur === sug.elementCode ? null : sug.elementCode))
+                        }
+                        className={`cursor-pointer rounded border p-2 ${
                           multi
                             ? "border-accent-solid/50 bg-gradient-to-br from-accent-from/10 to-accent-to/10"
                             : "border-border-subtle bg-surface-alt"
@@ -544,18 +549,26 @@ export default function MovementBuilder({
                           <span className="text-sm font-medium text-foreground">{sug.elementName}</span>
                           <div className="flex shrink-0 items-center gap-1.5">
                             <button
-                              onClick={() => addElement(sug.elementCode)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addElement(sug.elementCode);
+                              }}
                               className="rounded bg-foreground px-2 py-1 text-xs text-background hover:opacity-80"
                             >
                               + Ajouter
                             </button>
-                            <button
-                              onClick={() => dismissSuggestion(sug.elementCode)}
-                              className="rounded border border-danger/40 px-1.5 py-1 text-xs text-danger hover:bg-danger/10"
-                              title="Masquer cette suggestion"
-                            >
-                              ✕
-                            </button>
+                            {revealedSuggestion === sug.elementCode && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  dismissSuggestion(sug.elementCode);
+                                }}
+                                className="rounded border border-danger/40 px-1.5 py-1 text-xs text-danger hover:bg-danger/10"
+                                title="Masquer cette suggestion"
+                              >
+                                ✕
+                              </button>
+                            )}
                           </div>
                         </div>
                         <ul className="mt-1 space-y-0.5 text-xs text-muted">
