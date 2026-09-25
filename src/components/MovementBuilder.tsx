@@ -643,19 +643,16 @@ export default function MovementBuilder({
                 {filteredLibrary.map((el) => {
                   const mastery = skillMap.get(el.code);
                   const mousse = isMousseElement(el.archeId);
-                  const variantBg = isChainVariant(el.code, el.name)
-                    ? "bg-pink-400/10"
-                    : isNamedVariant(el.name)
-                    ? "bg-sky-400/10"
-                    : "bg-surface-alt";
+                  const chain = isChainVariant(el.code, el.name);
+                  const named = isNamedVariant(el.name);
                   return (
                     <button
                       key={el.code}
                       onClick={() => addElement(el.code)}
-                      className={`flex flex-col items-start gap-1 rounded border border-border-subtle p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10 ${variantBg}`}
+                      className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10"
                     >
                       <div className="flex w-full items-center justify-between">
-                        <span className="flex items-center gap-1">
+                        <span className="flex flex-wrap items-center gap-1">
                           <span className="rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
                             {el.palier === "BASE" ? "Base" : el.palier === "NOMADE" ? "Nomade" : el.palier}
                           </span>
@@ -667,6 +664,16 @@ export default function MovementBuilder({
                           {mousse && (
                             <span className="rounded-full border border-red-400/40 bg-red-400/10 px-1.5 py-0.5 text-[10px] font-medium text-red-300">
                               Mousse
+                            </span>
+                          )}
+                          {named && (
+                            <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-medium text-sky-300">
+                              Variante
+                            </span>
+                          )}
+                          {chain && (
+                            <span className="rounded-full border border-pink-400/40 bg-pink-400/10 px-1.5 py-0.5 text-[10px] font-medium text-pink-300">
+                              Liaison
                             </span>
                           )}
                         </span>

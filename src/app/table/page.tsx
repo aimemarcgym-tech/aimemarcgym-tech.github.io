@@ -128,16 +128,7 @@ export default function TablePage() {
                     </thead>
                     <tbody>
                       {elements.map((el) => (
-                        <tr
-                          key={el.code}
-                          className={`border-t border-border-subtle ${
-                            isChainVariant(el.code, el.name)
-                              ? "bg-pink-400/10"
-                              : isNamedVariant(el.name)
-                              ? "bg-sky-400/10"
-                              : ""
-                          }`}
-                        >
+                        <tr key={el.code} className="border-t border-border-subtle">
                           <td className="whitespace-nowrap px-4 py-2 font-mono text-xs text-foreground">{el.code}</td>
                           <td className="px-4 py-2 text-foreground">
                             {el.name}
@@ -148,6 +139,22 @@ export default function TablePage() {
                                 title="Poutre mousse : valeur différente de la poutre haute"
                               >
                                 Mousse
+                              </span>
+                            )}
+                            {isNamedVariant(el.name) && (
+                              <span
+                                className="ml-1.5 rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-medium text-sky-300"
+                                title="Variante d'un élément"
+                              >
+                                Variante
+                              </span>
+                            )}
+                            {isChainVariant(el.code, el.name) && (
+                              <span
+                                className="ml-1.5 rounded-full border border-pink-400/40 bg-pink-400/10 px-1.5 py-0.5 text-[10px] font-medium text-pink-300"
+                                title="Élément en enchaînement/liaison"
+                              >
+                                Liaison
                               </span>
                             )}
                             {el.extraCategories?.map((c) => (
