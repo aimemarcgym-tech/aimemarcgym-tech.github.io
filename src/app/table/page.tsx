@@ -67,10 +67,12 @@ export default function TablePage() {
               <span className="inline-block h-3 w-3 rounded-sm border border-sky-400/50 bg-sky-400/15" />
               Variante d&apos;un élément (nommée « variante »)
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block h-3 w-3 rounded-sm border border-red-400/50 bg-red-400/15" />
-              Poutre mousse (valeur différente de la poutre haute)
-            </span>
+            {apparatus === "POUTRE" && (
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block h-3 w-3 rounded-sm border border-red-400/50 bg-red-400/15" />
+                Poutre mousse (valeur différente de la poutre haute)
+              </span>
+            )}
           </p>
         </div>
       </header>
