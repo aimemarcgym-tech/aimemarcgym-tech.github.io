@@ -298,7 +298,7 @@ export default function MovementBuilder({
           onClick={handleSave}
           disabled={saving}
           title="Enregistre un instantané dans l'historique de progression (la séquence, elle, est déjà sauvegardée automatiquement)"
-          className="rounded border border-border-strong px-4 py-2 text-sm font-medium text-foreground hover:border-accent-solid/60 disabled:opacity-50"
+          className="rounded border border-border-strong px-4 py-2 text-sm font-medium text-foreground transition-transform hover:border-accent-solid/60 active:scale-95 active:bg-surface-alt disabled:opacity-50"
         >
           Enregistrer un instantané (historique)
         </button>
