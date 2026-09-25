@@ -112,11 +112,11 @@ export default function TablePage() {
                 <p className="px-4 py-4 text-sm text-muted">Aucun élément recensé pour cette arche.</p>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[600px] border-collapse text-sm" style={{ tableLayout: "fixed" }}>
+                  <table className="min-w-[600px] border-collapse text-sm">
                     <thead>
                       <tr className="bg-surface-alt text-left text-xs uppercase tracking-wide text-muted">
                         <th className="w-20 px-4 py-2 font-semibold">Code</th>
-                        <th className="px-4 py-2 font-semibold">Nom</th>
+                        <th className="w-0 px-4 py-2 font-semibold">Nom</th>
                         <th className="w-28 px-4 py-2 font-semibold">Branche</th>
                         <th className="w-24 px-4 py-2 font-semibold">Palier</th>
                         {apparatus === "SAUT" && <th className="w-32 px-4 py-2 font-semibold">Valeur de départ</th>}
