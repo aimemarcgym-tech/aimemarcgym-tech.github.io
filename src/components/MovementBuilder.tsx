@@ -507,10 +507,10 @@ export default function MovementBuilder({
                   <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted">
                     Éléments sélectionnés
                   </p>
-                  <ul className="space-y-1">
+                  <ul className="max-h-32 space-y-1 overflow-y-auto">
                     {masteredElements.map((el) => (
-                      <li key={el.code} className="rounded bg-surface px-2 py-1">
-                        <span className="truncate text-xs text-foreground">{el.name}</span>
+                      <li key={el.code} className="truncate rounded bg-surface px-2 py-1 text-xs text-foreground">
+                        {el.name}
                       </li>
                     ))}
                   </ul>
