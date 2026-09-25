@@ -95,7 +95,7 @@ export default function TablePage() {
 
         <div className="space-y-8">
           {archesWithElements.map(({ arche, elements }) => (
-            <section key={arche.id} className="overflow-hidden rounded-xl border border-border-subtle">
+            <section key={arche.id} className="mx-auto w-fit max-w-full overflow-hidden rounded-xl border border-border-subtle">
               <div className="border-b border-border-subtle bg-surface-alt/50 px-4 py-3">
                 <h2 className="text-sm font-semibold text-foreground">
                   {arche.name}
