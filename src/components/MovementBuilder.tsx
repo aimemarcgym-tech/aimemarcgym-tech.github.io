@@ -624,10 +624,12 @@ export default function MovementBuilder({
                   <span className="inline-block h-2.5 w-2.5 rounded-sm border border-sky-400/50 bg-sky-400/15" />
                   Variante
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-red-400/50 bg-red-400/15" />
-                  Poutre mousse
-                </span>
+                {apparatus === "POUTRE" && (
+                  <span className="flex items-center gap-1">
+                    <span className="inline-block h-2.5 w-2.5 rounded-sm border border-red-400/50 bg-red-400/15" />
+                    Poutre mousse
+                  </span>
+                )}
               </div>
               <div className="grid max-h-[32rem] grid-cols-2 gap-2 overflow-y-auto">
                 {filteredLibrary.map((el) => {
