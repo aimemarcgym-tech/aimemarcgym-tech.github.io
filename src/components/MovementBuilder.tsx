@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
-import type { ApparatusRegulation } from "@/regulation/types";
+import { palierRank, type ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
@@ -212,7 +212,7 @@ export default function MovementBuilder({
         if (!onlyMastered) return true;
         return skillMap.get(e.code) === "MAITRISE";
       })
-      .slice(0, 80);
+      .sort((a, b) => palierRank(a.palier) - palierRank(b.palier) || a.name.localeCompare(b.name));
   }, [regulation, sequence, search, onlyMastered, skillMap, archeByCode, category]);
 
   function addElement(code: string) {
