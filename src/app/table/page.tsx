@@ -178,6 +178,13 @@ export default function TablePage() {
           ))}
         </div>
       </main>
+      <button
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="fixed bottom-6 right-6 rounded-full border border-border-strong bg-surface-alt px-4 py-2 text-sm font-medium text-foreground shadow-lg hover:border-accent-solid/60 hover:bg-accent-from/10"
+      >
+        ↑ Retour en haut
+      </button>
     </div>
   );
 }
