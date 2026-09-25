@@ -508,16 +508,9 @@ export default function MovementBuilder({
                       return (
                         <li
                           key={`${s.code}-${i}`}
-                          className="flex items-center justify-between gap-2 rounded bg-surface px-2 py-1"
+                          className="rounded bg-surface px-2 py-1"
                         >
                           <span className="truncate text-xs text-foreground">{el?.name ?? s.code}</span>
-                          <button
-                            onClick={() => removeElement(i)}
-                            className="shrink-0 rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10"
-                            title="Retirer cet élément"
-                          >
-                            ✕
-                          </button>
                         </li>
                       );
                     })}
