@@ -18,8 +18,7 @@
       "category": "ACRO",
       "sourcePage": 66,
       "baseElement": { "code": "8", "name": "Départ fente ATR. ATR ou ATR écart" },
-      "branches": ["avant", "arriere"],
-      "dataQuality": "a_verifier"
+      "branches": ["avant", "arriere"]
     },
     {
       "id": "SOL-ATR-FORCE",
