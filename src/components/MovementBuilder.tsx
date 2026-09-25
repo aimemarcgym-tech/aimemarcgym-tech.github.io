@@ -444,8 +444,8 @@ export default function MovementBuilder({
             </div>
             <ul className="space-y-1 text-sm">
               {(diagnostic.valorisations.choisir === 1 &&
-              diagnostic.valorisations.results.some((v) => !v.auto && v.confirmedManually)
-                ? diagnostic.valorisations.results.filter((v) => !v.auto && v.confirmedManually)
+              diagnostic.valorisations.results.some((v) => v.status === "OK")
+                ? diagnostic.valorisations.results.filter((v) => v.status === "OK")
                 : diagnostic.valorisations.results
               ).map((v) => (
                 <CheckLine
