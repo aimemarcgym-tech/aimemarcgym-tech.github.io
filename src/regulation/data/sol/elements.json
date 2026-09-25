@@ -49,6 +49,7 @@
     { "code": "153", "name": "Saut de mains 1 pied. Renversement avant avec envol appel 1 pied et réception 1 pied", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P3", "sourcePage": 66, "verified": false },
     { "code": "195+", "name": "Flic-Flac. Renversement arrière avec envol départ et réception libre (variante)", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P4", "sourcePage": 66, "verified": false },
     { "code": "154", "name": "Saut de mains 2 pieds. Renversement avant avec envol appel 1 pied et réception 2 pieds", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P3", "sourcePage": 66, "verified": false },
+    { "code": "154+", "name": "Saut de mains 2 pieds. Renversement avant avec envol appel 1 pied et réception 2 pieds (variante)", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P4", "sourcePage": 66, "verified": true },
     { "code": "195", "name": "Flic-Flac. Renversement arrière avec envol départ et réception libre", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P4", "sourcePage": 66, "verified": false },
     { "code": "158", "name": "Flic-flac avant. Renversement avant avec envol appel 2 pieds et réception libre", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P5", "sourcePage": 66, "verified": false },
     { "code": "158+", "name": "Flic-flac avant (variante)", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P6", "sourcePage": 66, "verified": false },
