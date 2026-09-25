@@ -238,7 +238,10 @@ export default function SautBuilder({
               <span className="text-xs text-muted">1 seule possible</span>
             </div>
             <ul className="space-y-1 text-sm">
-              {diagnostic.valorisations.map((v) => (
+              {(diagnostic.valorisations.some((v) => v.status === "OK")
+                ? diagnostic.valorisations.filter((v) => v.status === "OK")
+                : diagnostic.valorisations
+              ).map((v) => (
                 <li key={v.id} className={`flex items-center justify-between gap-2 ${v.status === "OK" ? "text-success" : v.status === "A_CONFIRMER" ? "text-warning" : "text-danger"}`}>
                   <span>
                     {v.status === "OK" ? "✓" : v.status === "A_CONFIRMER" ? "⚠" : "✕"} {v.label}
