@@ -93,11 +93,24 @@ export default function SautBuilder({
     return m;
   }, [gymnastSkills]);
 
+  const masteredElements = useMemo(
+    () => regulation.elements.filter((e) => skillMap.get(e.code) === "MAITRISE"),
+    [regulation, skillMap]
+  );
+
+  const [dismissedSuggestions, setDismissedSuggestions] = useState<Set<string>>(new Set());
+  const [revealedSuggestion, setRevealedSuggestion] = useState<string | null>(null);
+
+  function dismissSuggestion(code: string) {
+    setDismissedSuggestions((prev) => new Set(prev).add(code));
+  }
+
   const visibleSuggestions = useMemo(() => {
-    return assistantOnlyMastered
+    const base = assistantOnlyMastered
       ? diagnostic.suggestions.filter((s) => skillMap.get(s.elementCode) === "MAITRISE")
       : diagnostic.suggestions;
-  }, [diagnostic.suggestions, assistantOnlyMastered, skillMap]);
+    return base.filter((s) => !dismissedSuggestions.has(s.elementCode));
+  }, [diagnostic.suggestions, assistantOnlyMastered, skillMap, dismissedSuggestions]);
 
   function toggleManual(id: string) {
     setManualConfirmations((prev) => {
@@ -300,6 +313,20 @@ export default function SautBuilder({
 
           {rightTab === "suggestions" ? (
             <>
+              {masteredElements.length > 0 && (
+                <div className="mb-3 rounded border border-border-subtle bg-surface-alt/40 p-2">
+                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted">
+                    Éléments sélectionnés
+                  </p>
+                  <ul className="max-h-32 space-y-1 overflow-y-auto">
+                    {masteredElements.map((el) => (
+                      <li key={el.code} className="truncate rounded bg-surface px-2 py-1 text-xs text-foreground">
+                        {el.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               <p className="mb-2 text-xs text-muted">
                 Sélection calculée automatiquement : uniquement des sauts autorisés à cette évolution qui feraient
                 progresser ce mouvement précis, avec l&apos;explication de ce que chacun apporterait.
@@ -335,20 +362,40 @@ export default function SautBuilder({
                     return (
                       <li
                         key={sug.elementCode}
-                        className={`rounded border p-2 ${
+                        onClick={() =>
+                          setRevealedSuggestion((cur) => (cur === sug.elementCode ? null : sug.elementCode))
+                        }
+                        className={`cursor-pointer rounded border p-2 ${
                           multi
                             ? "border-accent-solid/50 bg-gradient-to-br from-accent-from/10 to-accent-to/10"
                             : "border-border-subtle bg-surface-alt"
                         }`}
                       >
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <span className="text-sm font-medium text-foreground">{sug.elementName}</span>
-                          <button
-                            onClick={() => addSaut(sug.elementCode)}
-                            className="rounded bg-foreground px-2 py-1 text-xs text-background hover:opacity-80"
-                          >
-                            + Ajouter
-                          </button>
+                          <div className="flex shrink-0 items-center gap-1.5">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addSaut(sug.elementCode);
+                              }}
+                              className="rounded bg-foreground px-2 py-1 text-xs text-background hover:opacity-80"
+                            >
+                              + Ajouter
+                            </button>
+                            {revealedSuggestion === sug.elementCode && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  dismissSuggestion(sug.elementCode);
+                                }}
+                                className="rounded border border-danger/40 px-1.5 py-1 text-xs text-danger hover:bg-danger/10"
+                                title="Masquer cette suggestion"
+                              >
+                                ✕
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <ul className="mt-1 space-y-0.5 text-xs text-muted">
                           {sug.reasons.map((r, i) => (
