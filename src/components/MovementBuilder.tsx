@@ -635,19 +635,18 @@ export default function MovementBuilder({
                   En enchaînement/liaison
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-yellow-300/60 bg-yellow-300/25" />
+                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-red-400/50 bg-red-400/15" />
                   Poutre mousse
                 </span>
               </div>
               <div className="grid max-h-[32rem] grid-cols-2 gap-2 overflow-y-auto">
                 {filteredLibrary.map((el) => {
                   const mastery = skillMap.get(el.code);
+                  const mousse = isMousseElement(el.archeId);
                   const variantBg = isChainVariant(el.code, el.name)
                     ? "bg-pink-400/10"
                     : isNamedVariant(el.name)
                     ? "bg-sky-400/10"
-                    : isMousseElement(el.archeId)
-                    ? "bg-yellow-300/20"
                     : "bg-surface-alt";
                   return (
                     <button
@@ -663,6 +662,11 @@ export default function MovementBuilder({
                           {isSortieElement(el.archeId) && (
                             <span className="rounded-full border border-orange-400/40 bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-300">
                               Sortie
+                            </span>
+                          )}
+                          {mousse && (
+                            <span className="rounded-full border border-red-400/40 bg-red-400/10 px-1.5 py-0.5 text-[10px] font-medium text-red-300">
+                              Mousse
                             </span>
                           )}
                         </span>
