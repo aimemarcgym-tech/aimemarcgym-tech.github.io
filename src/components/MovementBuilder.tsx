@@ -152,7 +152,9 @@ export default function MovementBuilder({
   function categoryLabelOf(key: string): string {
     const [archeId, branch] = key.split(":");
     const arche = archeByCode.get(archeId);
-    const base = arche ? `${arche.name}${arche.subtitle ? " — " + arche.subtitle : ""}` : archeId;
+    const base =
+      (arche ? `${arche.name}${arche.subtitle ? " — " + arche.subtitle : ""}` : archeId) +
+      (isSortieElement(archeId) ? " (compte aussi comme Acro)" : "");
     if (branch === "avant") return `${base} — avant`;
     if (branch === "arriere") return `${base} — arrière`;
     if (branch === "maintien") return "Maintien";
