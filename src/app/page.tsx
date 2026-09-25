@@ -102,7 +102,7 @@ export default function Home() {
                     <div className="mb-1 flex items-center justify-between">
                       <span className="text-xl font-bold accent-gradient-text">{e.id}</span>
                       <span className="rounded-full border border-border-strong px-2 py-0.5 text-[10px] text-muted">
-                        {e.genre}
+                        GAF
                       </span>
                     </div>
                     <div className="text-xs text-muted">

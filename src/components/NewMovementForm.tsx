@@ -49,7 +49,7 @@ export default function NewMovementForm({
         >
           {evolutions.map((e) => (
             <option key={e.id} value={e.id}>
-              {e.id} ({e.genre})
+              {e.id} (GAF)
             </option>
           ))}
         </select>
