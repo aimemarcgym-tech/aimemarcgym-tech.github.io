@@ -25,6 +25,16 @@ const { count, size, warnings } = await generateSW({
   // SPA en export statique : toute navigation non trouvée dans le cache
   // retombe sur la page d'accueil précachée (fonctionne hors-ligne).
   navigateFallback: "/index.html",
+  // CRITIQUE : les pages type /mouvement/?id=xxx ou /gymnaste/?id=xxx portent
+  // un paramètre de requête (l'id est lu côté client depuis l'URL). Sans ça,
+  // Workbox compare l'URL demandée telle quelle à ses entrées précachées
+  // (ex. "mouvement/index.html"), ne trouve jamais de correspondance à cause
+  // du "?id=...", et retombe sur navigateFallback -> l'appli reste bloquée
+  // sur la page d'accueil dès qu'on recharge/ouvre directement une page avec
+  // un id dans l'URL. On ignore donc tous les paramètres de requête lors du
+  // matching du précache pour que /mouvement/?id=xxx serve bien
+  // mouvement/index.html.
+  ignoreURLParametersMatching: [/.*/],
 });
 
 if (warnings.length > 0) {
