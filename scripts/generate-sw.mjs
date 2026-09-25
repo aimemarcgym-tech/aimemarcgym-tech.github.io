@@ -10,12 +10,15 @@ const { count, size, warnings } = await generateSW({
   globPatterns: ["**/*.{html,js,css,json,webmanifest,svg,png,ico,woff,woff2}"],
   swDest: "out/sw.js",
   cleanupOutdatedCaches: true,
-  // Sans ça, un nouveau service worker téléchargé reste "en attente" tant
-  // qu'un onglet de l'ancienne version reste ouvert quelque part -> les
-  // mises à jour ne s'appliquaient jamais malgré un rechargement complet.
-  // Ici on force l'activation immédiate de chaque nouvelle version.
-  skipWaiting: true,
-  clientsClaim: true,
+  // IMPORTANT : ne pas activer automatiquement (skipWaiting/clientsClaim).
+  // Le nouveau SW reste "en attente" tant qu'un onglet de l'ancienne version
+  // tourne encore. Sinon, le nouveau SW prend le contrôle en arrière-plan et
+  // purge du cache les fichiers (JS hashés) dont l'onglet resté ouvert a
+  // encore besoin -> certains clics (ex. ouvrir le mouvement d'une gym)
+  // échouent tant que la page n'est pas rechargée. À la place,
+  // ServiceWorkerRegister.tsx déclenche l'activation (message SKIP_WAITING)
+  // seulement quand le coach clique sur "Actualiser", juste avant un reload
+  // complet.
   // SPA en export statique : toute navigation non trouvée dans le cache
   // retombe sur la page d'accueil précachée (fonctionne hors-ligne).
   navigateFallback: "/index.html",
