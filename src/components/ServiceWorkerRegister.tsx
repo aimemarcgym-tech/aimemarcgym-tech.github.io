@@ -12,25 +12,36 @@ import { useEffect, useRef, useState } from "react";
 // affiche un bandeau pour la charger d'un clic — sans ça, un appareil garde
 // sa version en cache indéfiniment tant qu'on ne vide pas le cache à la main.
 //
-// Le nouveau SW n'est PAS activé automatiquement (voir generate-sw.mjs) :
-// tant que le coach n'a pas cliqué sur "Actualiser", l'onglet ouvert continue
-// de tourner avec l'ancienne version et son cache intact. On ne déclenche le
-// passage à la nouvelle version (message SKIP_WAITING) qu'au clic, juste
-// avant un rechargement complet de la page.
+// Le nouveau SW n'est PAS activé automatiquement PENDANT une session en cours
+// (voir generate-sw.mjs) : si la mise à jour arrive alors que l'onglet est
+// déjà ouvert (potentiellement en pleine saisie), on affiche un bandeau et on
+// laisse le coach choisir le moment (clic "Actualiser") avant de recharger.
+//
+// En revanche, si une mise à jour est DÉJÀ en attente dès l'ouverture de la
+// page (téléchargée en arrière-plan lors d'une session précédente, avant même
+// que ce composant s'exécute), on l'applique automatiquement et on recharge
+// une fois, sans rien demander : il n'y a rien en cours à ce moment-là, donc
+// aucun risque, et ça évite au coach de devoir savoir qu'il faut fermer/
+// rouvrir l'appli pour obtenir la dernière version.
 export default function ServiceWorkerRegister() {
   const [updateReady, setUpdateReady] = useState(false);
   const waitingRef = useRef<ServiceWorker | null>(null);
+  const autoAppliedRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
 
     let registration: ServiceWorkerRegistration | null = null;
 
-    const handleWaiting = (worker: ServiceWorker | null) => {
-      if (worker) {
-        waitingRef.current = worker;
-        setUpdateReady(true);
+    const handleWaiting = (worker: ServiceWorker | null, auto: boolean) => {
+      if (!worker) return;
+      if (auto && !autoAppliedRef.current) {
+        autoAppliedRef.current = true;
+        worker.postMessage({ type: "SKIP_WAITING" });
+        return;
       }
+      waitingRef.current = worker;
+      setUpdateReady(true);
     };
 
     const check = () => registration?.update().catch(() => {});
@@ -45,13 +56,16 @@ export default function ServiceWorkerRegister() {
       .register("/sw.js")
       .then((r) => {
         registration = r;
-        handleWaiting(r.waiting);
+        // Déjà en attente avant même d'avoir rien fait cette session ->
+        // laissée par une vérification précédente, rien à protéger.
+        handleWaiting(r.waiting, true);
         r.addEventListener("updatefound", () => {
           const installing = r.installing;
           if (!installing) return;
           installing.addEventListener("statechange", () => {
             if (installing.state === "installed" && navigator.serviceWorker.controller) {
-              handleWaiting(r.waiting ?? installing);
+              // Mise à jour détectée PENDANT cette session -> on demande.
+              handleWaiting(r.waiting ?? installing, false);
             }
           });
         });
