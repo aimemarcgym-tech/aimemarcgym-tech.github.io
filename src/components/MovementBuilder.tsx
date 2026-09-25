@@ -5,7 +5,7 @@ import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
-import { isNamedVariant, isMousseElement, isSortieElement } from "@/regulation/variants";
+import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
 
 // Poutre : ces 3 exigences de tronc commun sont explicitement "1 sortie
@@ -631,7 +631,7 @@ export default function MovementBuilder({
                 {filteredLibrary.map((el) => {
                   const mastery = skillMap.get(el.code);
                   const mousse = isMousseElement(el.archeId);
-                  const named = isNamedVariant(el.name);
+                  const variant = isVariantElement(el.code, el.name);
                   return (
                     <button
                       key={el.code}
@@ -653,7 +653,7 @@ export default function MovementBuilder({
                               Mousse
                             </span>
                           )}
-                          {named && (
+                          {variant && (
                             <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-medium text-sky-300">
                               Variante
                             </span>

@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import { palierRank, type Palier } from "@/regulation/types";
-import { isNamedVariant, isMousseElement } from "@/regulation/variants";
+import { isVariantElement, isMousseElement } from "@/regulation/variants";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -137,7 +137,7 @@ export default function TablePage() {
                                 Mousse
                               </span>
                             )}
-                            {isNamedVariant(el.name) && (
+                            {isVariantElement(el.code, el.name) && (
                               <span
                                 className="ml-1.5 rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-medium text-sky-300"
                                 title="Variante d'un élément"

@@ -15,6 +15,13 @@ export function isChainVariant(code: string, name: string) {
   return code.includes("+") && !isNamedVariant(name);
 }
 
+// Un élément est une "variante" (au sens large affiché dans l'UI) dès qu'il
+// est nommé "(variante)" ou que son code contient "+" : dans les deux cas
+// c'est ce qui distingue l'élément isolé de sa version en enchaînement/liaison.
+export function isVariantElement(code: string, name: string) {
+  return isNamedVariant(name) || code.includes("+");
+}
+
 // Poutre uniquement : les mêmes noms/gestes exécutés sur poutre basse en
 // mousse (arche "Accro poutre mousse") n'ont pas la même valeur/difficulté
 // que sur poutre haute réglementaire — à ne pas confondre avec l'élément de
