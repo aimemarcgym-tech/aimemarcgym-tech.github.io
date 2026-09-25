@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import { palierRank, type Palier } from "@/regulation/types";
-import { isNamedVariant, isChainVariant, isMousseElement } from "@/regulation/variants";
+import { isNamedVariant, isMousseElement } from "@/regulation/variants";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -66,10 +66,6 @@ export default function TablePage() {
             <span className="flex items-center gap-1.5">
               <span className="inline-block h-3 w-3 rounded-sm border border-sky-400/50 bg-sky-400/15" />
               Variante d&apos;un élément (nommée « variante »)
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block h-3 w-3 rounded-sm border border-pink-400/50 bg-pink-400/15" />
-              Élément en enchaînement/liaison (même nom, autre arche)
             </span>
             <span className="flex items-center gap-1.5">
               <span className="inline-block h-3 w-3 rounded-sm border border-red-400/50 bg-red-400/15" />
@@ -147,14 +143,6 @@ export default function TablePage() {
                                 title="Variante d'un élément"
                               >
                                 Variante
-                              </span>
-                            )}
-                            {isChainVariant(el.code, el.name) && (
-                              <span
-                                className="ml-1.5 rounded-full border border-pink-400/40 bg-pink-400/10 px-1.5 py-0.5 text-[10px] font-medium text-pink-300"
-                                title="Élément en enchaînement/liaison"
-                              >
-                                Liaison
                               </span>
                             )}
                             {el.extraCategories?.map((c) => (

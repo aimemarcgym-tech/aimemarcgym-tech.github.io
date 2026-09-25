@@ -5,7 +5,7 @@ import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
-import { isNamedVariant, isChainVariant, isMousseElement, isSortieElement } from "@/regulation/variants";
+import { isNamedVariant, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
 
 // Poutre : ces 3 exigences de tronc commun sont explicitement "1 sortie
@@ -623,10 +623,6 @@ export default function MovementBuilder({
                   Variante
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="inline-block h-2.5 w-2.5 rounded-sm border border-pink-400/50 bg-pink-400/15" />
-                  En enchaînement/liaison
-                </span>
-                <span className="flex items-center gap-1">
                   <span className="inline-block h-2.5 w-2.5 rounded-sm border border-red-400/50 bg-red-400/15" />
                   Poutre mousse
                 </span>
@@ -635,7 +631,6 @@ export default function MovementBuilder({
                 {filteredLibrary.map((el) => {
                   const mastery = skillMap.get(el.code);
                   const mousse = isMousseElement(el.archeId);
-                  const chain = isChainVariant(el.code, el.name);
                   const named = isNamedVariant(el.name);
                   return (
                     <button
@@ -661,11 +656,6 @@ export default function MovementBuilder({
                           {named && (
                             <span className="rounded-full border border-sky-400/40 bg-sky-400/10 px-1.5 py-0.5 text-[10px] font-medium text-sky-300">
                               Variante
-                            </span>
-                          )}
-                          {chain && (
-                            <span className="rounded-full border border-pink-400/40 bg-pink-400/10 px-1.5 py-0.5 text-[10px] font-medium text-pink-300">
-                              Liaison
                             </span>
                           )}
                         </span>
