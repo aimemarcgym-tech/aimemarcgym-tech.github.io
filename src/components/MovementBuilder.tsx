@@ -443,7 +443,11 @@ export default function MovementBuilder({
               </span>
             </div>
             <ul className="space-y-1 text-sm">
-              {diagnostic.valorisations.results.map((v) => (
+              {(diagnostic.valorisations.choisir === 1 &&
+              diagnostic.valorisations.results.some((v) => !v.auto && v.confirmedManually)
+                ? diagnostic.valorisations.results.filter((v) => !v.auto && v.confirmedManually)
+                : diagnostic.valorisations.results
+              ).map((v) => (
                 <CheckLine
                   key={v.id}
                   ok={v.status === "OK"}
