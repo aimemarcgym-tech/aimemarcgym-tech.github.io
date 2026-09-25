@@ -91,6 +91,11 @@ export default function MovementBuilder({
     return m;
   }, [gymnastSkills]);
 
+  const masteredElements = useMemo(
+    () => regulation.elements.filter((e) => skillMap.get(e.code) === "MAITRISE"),
+    [regulation, skillMap]
+  );
+
   useEffect(() => {
     localStorage.setItem(`manual-confirm-${movementId}`, JSON.stringify(Array.from(manualConfirmations)));
   }, [manualConfirmations, movementId]);
@@ -497,23 +502,17 @@ export default function MovementBuilder({
 
           {rightTab === "suggestions" ? (
             <>
-              {sequence.length > 0 && (
+              {masteredElements.length > 0 && (
                 <div className="mb-3 rounded border border-border-subtle bg-surface-alt/40 p-2">
                   <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted">
                     Éléments sélectionnés
                   </p>
                   <ul className="space-y-1">
-                    {sequence.map((s, i) => {
-                      const el = elementByCode.get(s.code);
-                      return (
-                        <li
-                          key={`${s.code}-${i}`}
-                          className="rounded bg-surface px-2 py-1"
-                        >
-                          <span className="truncate text-xs text-foreground">{el?.name ?? s.code}</span>
-                        </li>
-                      );
-                    })}
+                    {masteredElements.map((el) => (
+                      <li key={el.code} className="rounded bg-surface px-2 py-1">
+                        <span className="truncate text-xs text-foreground">{el.name}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               )}
