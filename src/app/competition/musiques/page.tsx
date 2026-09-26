@@ -6,7 +6,7 @@ export default function MusiquesPage() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
-        <div className="mx-auto max-w-[1600px] px-6 py-5">
+        <div className="mx-auto max-w-[1600px] px-2 py-5 sm:px-6">
           <Link href="/" className="text-sm accent-gradient-text font-medium">
             ← Accueil
           </Link>
@@ -31,7 +31,7 @@ export default function MusiquesPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1600px] px-6 py-10">
+      <main className="mx-auto max-w-[1600px] px-2 py-10 sm:px-6">
         <div className="flex flex-wrap items-start justify-center gap-20">
           <TeamMusicManager />
           <TeamPassageOrderManager />
