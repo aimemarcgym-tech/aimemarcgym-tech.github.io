@@ -172,8 +172,8 @@ export default function TopTabs() {
         );
       })}
       {user && (
-        <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted md:absolute md:right-4 md:top-1/2 md:ml-0 md:-translate-y-1/2">
-          {showEmail && <span className="hidden sm:inline">{user.email}</span>}
+        <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted lg:absolute lg:right-4 lg:top-1/2 lg:ml-0 lg:-translate-y-1/2">
+          {showEmail && <span className="hidden lg:inline">{user.email}</span>}
           <button
             onClick={() => setShowEmail((v) => !v)}
             title={showEmail ? "Masquer l'email" : "Afficher l'email"}
