@@ -72,8 +72,7 @@
       "category": "ENTREE",
       "sourcePage": 64,
       "baseElement": { "code": "1", "name": "De la station faciale, sauter à l'appui tendu et sans arrêt, passer 1 jambe tendue latéralement et par 1/4 de tour (90°) s'établir au siège transversal" },
-      "branches": [],
-      "dataQuality": "a_verifier"
+      "branches": []
     },
     {
       "id": "POUTRE-SORTIES",
@@ -82,8 +81,7 @@
       "category": "SORTIES",
       "sourcePage": 59,
       "baseElement": null,
-      "branches": [],
-      "dataQuality": "a_verifier"
+      "branches": []
     }
   ]
 }
