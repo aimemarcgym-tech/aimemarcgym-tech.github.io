@@ -169,7 +169,7 @@ function EmailReveal({ email }: { email: string }) {
     if (!open || !wrapperRef.current) return;
     const update = () => {
       const rect = wrapperRef.current!.getBoundingClientRect();
-      setCoords({ left: rect.right, top: rect.bottom + 6 });
+      setCoords({ left: rect.left + rect.width / 2, top: rect.bottom + 6 });
     };
     update();
     window.addEventListener("resize", update);
@@ -195,7 +195,7 @@ function EmailReveal({ email }: { email: string }) {
         createPortal(
           <div
             ref={bubbleRef}
-            style={{ left: coords.left, top: coords.top, transform: "translateX(-100%)" }}
+            style={{ left: coords.left, top: coords.top, transform: "translateX(-50%)" }}
             className="fixed z-50 whitespace-nowrap rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-muted shadow-lg"
           >
             {email}
