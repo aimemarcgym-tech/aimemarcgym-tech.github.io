@@ -74,6 +74,39 @@ export async function getGymnasts() {
   return enriched;
 }
 
+// Renomme un club pour tout le monde d'un coup (le club est une entité à
+// part, référencée par id -> il suffit de mettre à jour son nom, chaque
+// gymnaste qui pointe dessus suit automatiquement).
+export async function renameClub(clubId: string, newName: string) {
+  const trimmed = newName.trim();
+  if (!trimmed) return;
+  const db = await getDb();
+  const club = await db.get("clubs", clubId);
+  if (!club) return;
+  club.name = trimmed;
+  await db.put("clubs", club);
+}
+
+// Renomme une équipe pour toutes les gymnastes qui la partagent (le champ
+// "team" est un texte libre par gymnaste, pas une entité séparée -> on met
+// à jour chaque gymnaste du club dont le champ correspond à l'ancien nom).
+export async function renameTeam(clubId: string | null, oldTeamName: string, newTeamName: string) {
+  const trimmed = newTeamName.trim();
+  if (!trimmed) return;
+  const db = await getDb();
+  const all = await db.getAll("gymnasts");
+  const matching = all.filter((g) => (g.clubId ?? null) === clubId && g.team === oldTeamName);
+  const tx = db.transaction("gymnasts", "readwrite");
+  const store = tx.objectStore("gymnasts");
+  await Promise.all(
+    matching.map((g) => {
+      g.team = trimmed;
+      return store.put(g);
+    })
+  );
+  await tx.done;
+}
+
 export async function updateGymnastTeam(gymnastId: string, team: string) {
   const db = await getDb();
   const gymnast = await db.get("gymnasts", gymnastId);

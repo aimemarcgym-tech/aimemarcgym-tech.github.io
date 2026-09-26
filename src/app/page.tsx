@@ -138,12 +138,25 @@ export default function Home() {
               <div className="space-y-6">
                 {clubGroups.map(([clubName, members]) => {
                   const hasTeams = members.some((g) => g.team);
+                  const clubId = members[0]?.club?.id ?? null;
                   return (
-                    <ClubGroup key={clubName} clubName={clubName} memberCount={members.length}>
+                    <ClubGroup
+                      key={clubName}
+                      clubId={clubId}
+                      clubName={clubName}
+                      memberCount={members.length}
+                      onRenamed={refresh}
+                    >
                       {hasTeams ? (
                         <div className="space-y-3">
                           {groupByTeam(members).map(([teamName, teamMembers]) => (
-                            <TeamGroup key={teamName} teamName={teamName} memberCount={teamMembers.length}>
+                            <TeamGroup
+                              key={teamName}
+                              clubId={clubId}
+                              teamName={teamName}
+                              memberCount={teamMembers.length}
+                              onRenamed={refresh}
+                            >
                               <DraggableGymnastList members={teamMembers} onReordered={refresh} onDeleted={refresh} />
                             </TeamGroup>
                           ))}
