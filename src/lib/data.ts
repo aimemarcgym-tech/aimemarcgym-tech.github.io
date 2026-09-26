@@ -1,25 +1,55 @@
-import { getDb, type ClubRow, type GymnastRow, type MovementRow } from "@/lib/idb";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+  writeBatch,
+} from "firebase/firestore";
+import { db, getCurrentUid } from "@/lib/firebase";
+import {
+  getDb,
+  type ClubRow,
+  type GymnastRow,
+  type GymnastSkillRow,
+  type MovementRow,
+  type MovementElementRow,
+  type MovementSnapshotRow,
+} from "@/lib/idb";
 import type { PhotoAlbumRow, PhotoRow } from "@/lib/idb";
 import { REGULATION_VERSION } from "@/regulation/loader";
 
-// Couche de données 100% locale (remplace les Server Actions + Prisma de
-// l'ancienne version serveur). Mêmes noms/signatures que l'ancien
-// src/app/actions.ts pour que les composants appelants n'aient qu'à changer
-// leur import.
+// Couche de données : clubs/gymnastes/mouvements passent par Firestore
+// (synchronisés entre appareils, cf. le plan de migration cloud), tandis que
+// musiques/photos/vidéos restent en IndexedDB local (données binaires,
+// hors périmètre de la synchro pour l'instant). Mêmes noms/signatures que
+// l'ancienne couche 100% locale pour que les composants appelants n'aient
+// rien à changer.
 
 function nowIso() {
   return new Date().toISOString();
 }
 
+function col(name: string) {
+  return collection(db, "users", getCurrentUid(), name);
+}
+
+function docRef(name: string, id: string) {
+  return doc(db, "users", getCurrentUid(), name, id);
+}
+
 async function findOrCreateClub(clubName: string): Promise<string | undefined> {
   if (!clubName) return undefined;
-  const db = await getDb();
-  const all = await db.getAll("clubs");
-  const existing = all.find((c) => c.name === clubName);
+  const snap = await getDocs(col("clubs"));
+  const existing = snap.docs.find((d) => (d.data() as ClubRow).name === clubName);
   if (existing) return existing.id;
-  const club: ClubRow = { id: crypto.randomUUID(), name: clubName, createdAt: nowIso() };
-  await db.put("clubs", club);
-  return club.id;
+  const id = crypto.randomUUID();
+  const club: ClubRow = { id, name: clubName, createdAt: nowIso() };
+  await setDoc(docRef("clubs", id), club);
+  return id;
 }
 
 export async function createGymnast(formData: FormData) {
@@ -31,7 +61,6 @@ export async function createGymnast(formData: FormData) {
 
   const clubId = await findOrCreateClub(String(formData.get("clubName") ?? "").trim());
 
-  const db = await getDb();
   const gymnast: GymnastRow = {
     id: crypto.randomUUID(),
     firstName,
@@ -41,17 +70,20 @@ export async function createGymnast(formData: FormData) {
     birthYear: birthYearRaw ? Number(birthYearRaw) : null,
     createdAt: nowIso(),
   };
-  await db.put("gymnasts", gymnast);
+  await setDoc(docRef("gymnasts", gymnast.id), gymnast);
   return gymnast;
 }
 
 export async function getGymnasts() {
-  const db = await getDb();
-  const [gymnasts, clubs, movements] = await Promise.all([
-    db.getAll("gymnasts"),
-    db.getAll("clubs"),
-    db.getAll("movements"),
+  const [gymnastsSnap, clubsSnap, movementsSnap] = await Promise.all([
+    getDocs(col("gymnasts")),
+    getDocs(col("clubs")),
+    getDocs(col("movements")),
   ]);
+  const gymnasts = gymnastsSnap.docs.map((d) => d.data() as GymnastRow);
+  const clubs = clubsSnap.docs.map((d) => d.data() as ClubRow);
+  const movements = movementsSnap.docs.map((d) => d.data() as MovementRow);
+
   const clubById = new Map(clubs.map((c) => [c.id, c]));
   const movementsByGymnast = new Map<string, MovementRow[]>();
   for (const m of movements) {
@@ -80,11 +112,10 @@ export async function getGymnasts() {
 export async function renameClub(clubId: string, newName: string) {
   const trimmed = newName.trim();
   if (!trimmed) return;
-  const db = await getDb();
-  const club = await db.get("clubs", clubId);
-  if (!club) return;
-  club.name = trimmed;
-  await db.put("clubs", club);
+  const ref = docRef("clubs", clubId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  await updateDoc(ref, { name: trimmed });
 }
 
 // Renomme une équipe pour toutes les gymnastes qui la partagent (le champ
@@ -93,26 +124,22 @@ export async function renameClub(clubId: string, newName: string) {
 export async function renameTeam(clubId: string | null, oldTeamName: string, newTeamName: string) {
   const trimmed = newTeamName.trim();
   if (!trimmed) return;
-  const db = await getDb();
-  const all = await db.getAll("gymnasts");
-  const matching = all.filter((g) => (g.clubId ?? null) === clubId && g.team === oldTeamName);
-  const tx = db.transaction("gymnasts", "readwrite");
-  const store = tx.objectStore("gymnasts");
-  await Promise.all(
-    matching.map((g) => {
-      g.team = trimmed;
-      return store.put(g);
-    })
-  );
-  await tx.done;
+  const snap = await getDocs(col("gymnasts"));
+  const matching = snap.docs.filter((d) => {
+    const g = d.data() as GymnastRow;
+    return (g.clubId ?? null) === clubId && g.team === oldTeamName;
+  });
+  if (matching.length === 0) return;
+  const batch = writeBatch(db);
+  for (const d of matching) batch.update(d.ref, { team: trimmed });
+  await batch.commit();
 }
 
 export async function updateGymnastTeam(gymnastId: string, team: string) {
-  const db = await getDb();
-  const gymnast = await db.get("gymnasts", gymnastId);
-  if (!gymnast) return;
-  gymnast.team = team.trim() || null;
-  await db.put("gymnasts", gymnast);
+  const ref = docRef("gymnasts", gymnastId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  await updateDoc(ref, { team: team.trim() || null });
 }
 
 export async function updateGymnast(
@@ -123,65 +150,75 @@ export async function updateGymnast(
   const lastName = data.lastName.trim();
   if (!firstName || !lastName) throw new Error("Nom et prénom requis");
 
-  const clubName = data.clubName.trim();
-  const clubId = await findOrCreateClub(clubName);
+  const clubId = await findOrCreateClub(data.clubName.trim());
 
-  const db = await getDb();
-  const gymnast = await db.get("gymnasts", gymnastId);
-  if (!gymnast) return;
-  gymnast.firstName = firstName;
-  gymnast.lastName = lastName;
-  gymnast.clubId = clubId ?? null;
-  gymnast.birthYear = data.birthYear.trim() ? Number(data.birthYear) : null;
-  await db.put("gymnasts", gymnast);
-}
-
-export async function deleteGymnast(gymnastId: string) {
-  const db = await getDb();
-  const [skills, movements, music] = await Promise.all([
-    db.getAllFromIndex("gymnastSkills", "gymnastId", gymnastId),
-    db.getAllFromIndex("movements", "gymnastId", gymnastId),
-    db.getAllFromIndex("gymnastMusic", "gymnastId", gymnastId),
-  ]);
-  for (const m of movements) {
-    await deleteMovementCascade(m.id);
-  }
-  const tx = db.transaction(["gymnasts", "gymnastSkills", "gymnastMusic"], "readwrite");
-  await Promise.all([
-    tx.objectStore("gymnasts").delete(gymnastId),
-    ...skills.map((s) => tx.objectStore("gymnastSkills").delete(s.id)),
-    ...music.map((m) => tx.objectStore("gymnastMusic").delete(m.id)),
-    tx.done,
-  ]);
-}
-
-export async function getGymnast(id: string) {
-  const db = await getDb();
-  const gymnast = await db.get("gymnasts", id);
-  if (!gymnast) return null;
-  const [club, skills, movements] = await Promise.all([
-    gymnast.clubId ? db.get("clubs", gymnast.clubId) : Promise.resolve(undefined),
-    db.getAllFromIndex("gymnastSkills", "gymnastId", id),
-    db.getAllFromIndex("movements", "gymnastId", id),
-  ]);
-  movements.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-  return { ...gymnast, club: club ?? null, skills, movements };
-}
-
-export async function setSkillStatus(gymnastId: string, elementCode: string, status: string) {
-  const db = await getDb();
-  const existing = await db.getFromIndex("gymnastSkills", "gymnastId_elementCode", [gymnastId, elementCode]);
-  await db.put("gymnastSkills", {
-    id: existing?.id ?? crypto.randomUUID(),
-    gymnastId,
-    elementCode,
-    status,
-    updatedAt: nowIso(),
+  const ref = docRef("gymnasts", gymnastId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return;
+  await updateDoc(ref, {
+    firstName,
+    lastName,
+    clubId: clubId ?? null,
+    birthYear: data.birthYear.trim() ? Number(data.birthYear) : null,
   });
 }
 
+export async function deleteGymnast(gymnastId: string) {
+  const [skillsSnap, movementsSnap] = await Promise.all([
+    getDocs(query(col("gymnastSkills"), where("gymnastId", "==", gymnastId))),
+    getDocs(query(col("movements"), where("gymnastId", "==", gymnastId))),
+  ]);
+  for (const m of movementsSnap.docs) {
+    await deleteMovementCascade(m.id);
+  }
+  const batch = writeBatch(db);
+  batch.delete(docRef("gymnasts", gymnastId));
+  for (const s of skillsSnap.docs) batch.delete(s.ref);
+  await batch.commit();
+
+  // La musique reste locale à l'appareil (non synchronisée) : on nettoie
+  // directement dans IndexedDB.
+  const localDb = await getDb();
+  const music = await localDb.getAllFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  if (music.length > 0) {
+    const tx = localDb.transaction("gymnastMusic", "readwrite");
+    await Promise.all([...music.map((m) => tx.objectStore("gymnastMusic").delete(m.id)), tx.done]);
+  }
+}
+
+export async function getGymnast(id: string) {
+  const ref = docRef("gymnasts", id);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return null;
+  const gymnast = snap.data() as GymnastRow;
+
+  const [clubSnap, skillsSnap, movementsSnap] = await Promise.all([
+    gymnast.clubId ? getDoc(docRef("clubs", gymnast.clubId)) : Promise.resolve(null),
+    getDocs(query(col("gymnastSkills"), where("gymnastId", "==", id))),
+    getDocs(query(col("movements"), where("gymnastId", "==", id))),
+  ]);
+
+  const skills = skillsSnap.docs.map((d) => d.data() as GymnastSkillRow);
+  const movements = movementsSnap.docs.map((d) => d.data() as MovementRow);
+  movements.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+
+  return {
+    ...gymnast,
+    club: clubSnap && clubSnap.exists() ? (clubSnap.data() as ClubRow) : null,
+    skills,
+    movements,
+  };
+}
+
+export async function setSkillStatus(gymnastId: string, elementCode: string, status: string) {
+  // Id déterministe = clé unique (gymnastId, elementCode), remplace l'index
+  // composé unique qu'IndexedDB permettait.
+  const id = `${gymnastId}_${elementCode}`;
+  const row: GymnastSkillRow = { id, gymnastId, elementCode, status, updatedAt: nowIso() };
+  await setDoc(docRef("gymnastSkills", id), row);
+}
+
 export async function createMovement(gymnastId: string, apparatus: string, evolution: string, label: string) {
-  const db = await getDb();
   const movement: MovementRow = {
     id: crypto.randomUUID(),
     label,
@@ -192,84 +229,77 @@ export async function createMovement(gymnastId: string, apparatus: string, evolu
     createdAt: nowIso(),
     updatedAt: nowIso(),
   };
-  await db.put("movements", movement);
+  await setDoc(docRef("movements", movement.id), movement);
   return movement;
 }
 
 export async function getMovement(id: string) {
-  const db = await getDb();
-  const movement = await db.get("movements", id);
-  if (!movement) return null;
-  const [elements, gymnast] = await Promise.all([
-    db.getAllFromIndex("movementElements", "movementId", id),
-    db.get("gymnasts", movement.gymnastId),
+  const ref = docRef("movements", id);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) return null;
+  const movement = snap.data() as MovementRow;
+
+  const [elementsSnap, gymnastSnap] = await Promise.all([
+    getDocs(query(col("movementElements"), where("movementId", "==", id))),
+    getDoc(docRef("gymnasts", movement.gymnastId)),
   ]);
+
+  const elements = elementsSnap.docs.map((d) => d.data() as MovementElementRow);
   elements.sort((a, b) => a.position - b.position);
-  const skills = gymnast ? await db.getAllFromIndex("gymnastSkills", "gymnastId", gymnast.id) : [];
-  return {
-    ...movement,
-    elements,
-    gymnast: gymnast ? { ...gymnast, skills } : null,
-  };
+
+  let gymnastWithSkills: (GymnastRow & { skills: GymnastSkillRow[] }) | null = null;
+  if (gymnastSnap.exists()) {
+    const gymnast = gymnastSnap.data() as GymnastRow;
+    const skillsSnap = await getDocs(query(col("gymnastSkills"), where("gymnastId", "==", gymnast.id)));
+    gymnastWithSkills = { ...gymnast, skills: skillsSnap.docs.map((d) => d.data() as GymnastSkillRow) };
+  }
+
+  return { ...movement, elements, gymnast: gymnastWithSkills };
 }
 
 export async function saveMovementElements(movementId: string, elements: { code: string; role: string }[]) {
-  const db = await getDb();
-  const existing = await db.getAllFromIndex("movementElements", "movementId", movementId);
-  const movement = await db.get("movements", movementId);
-  const tx = db.transaction(["movements", "movementElements"], "readwrite");
-  const store = tx.objectStore("movementElements");
-  await Promise.all(existing.map((e) => store.delete(e.id)));
-  await Promise.all(
-    elements.map((e, i) =>
-      store.put({
-        id: crypto.randomUUID(),
-        movementId,
-        elementCode: e.code,
-        role: e.role,
-        position: i,
-      })
-    )
-  );
-  if (movement) {
-    movement.updatedAt = nowIso();
-    await tx.objectStore("movements").put(movement);
-  }
-  await tx.done;
+  const existingSnap = await getDocs(query(col("movementElements"), where("movementId", "==", movementId)));
+  const batch = writeBatch(db);
+  for (const d of existingSnap.docs) batch.delete(d.ref);
+  elements.forEach((e, i) => {
+    const id = crypto.randomUUID();
+    const row: MovementElementRow = { id, movementId, elementCode: e.code, role: e.role, position: i };
+    batch.set(docRef("movementElements", id), row);
+  });
+  batch.update(docRef("movements", movementId), { updatedAt: nowIso() });
+  await batch.commit();
 }
 
 export async function saveSnapshot(movementId: string, elementCodes: string[], noteDepart: number, detail: unknown) {
-  const db = await getDb();
-  await db.put("movementSnapshots", {
-    id: crypto.randomUUID(),
+  const id = crypto.randomUUID();
+  const row: MovementSnapshotRow = {
+    id,
     movementId,
     createdAt: nowIso(),
     elementCodes: JSON.stringify(elementCodes),
     noteDepart,
     detailJson: JSON.stringify(detail),
-  });
+  };
+  await setDoc(docRef("movementSnapshots", id), row);
 }
 
 export async function getSnapshots(movementId: string) {
-  const db = await getDb();
-  const snapshots = await db.getAllFromIndex("movementSnapshots", "movementId", movementId);
+  const snap = await getDocs(query(col("movementSnapshots"), where("movementId", "==", movementId)));
+  const snapshots = snap.docs.map((d) => d.data() as MovementSnapshotRow);
   snapshots.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   return snapshots;
 }
 
 async function deleteMovementCascade(movementId: string) {
-  const db = await getDb();
-  const [elements, snapshots] = await Promise.all([
-    db.getAllFromIndex("movementElements", "movementId", movementId),
-    db.getAllFromIndex("movementSnapshots", "movementId", movementId),
+  const [elementsSnap, snapshotsSnap] = await Promise.all([
+    getDocs(query(col("movementElements"), where("movementId", "==", movementId))),
+    getDocs(query(col("movementSnapshots"), where("movementId", "==", movementId))),
   ]);
-  const tx = db.transaction(["movements", "movementElements", "movementSnapshots"], "readwrite");
-  await Promise.all([
-    tx.objectStore("movements").delete(movementId),
-    ...elements.map((e) => tx.objectStore("movementElements").delete(e.id)),
-    ...snapshots.map((s) => tx.objectStore("movementSnapshots").delete(s.id)),
-    tx.done,
-  ]);
+  const batch = writeBatch(db);
+  batch.delete(docRef("movements", movementId));
+  for (const d of elementsSnap.docs) batch.delete(d.ref);
+  for (const d of snapshotsSnap.docs) batch.delete(d.ref);
+  await batch.commit();
 }
 
 export async function deleteMovement(movementId: string) {
@@ -277,13 +307,13 @@ export async function deleteMovement(movementId: string) {
 }
 
 export async function getGymnastMusic(gymnastId: string) {
-  const db = await getDb();
-  return db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  const localDb = await getDb();
+  return localDb.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
 }
 
 export async function saveGymnastMusic(gymnastId: string, file: File) {
-  const db = await getDb();
-  const existing = await db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  const localDb = await getDb();
+  const existing = await localDb.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
   const row = {
     id: existing?.id ?? crypto.randomUUID(),
     gymnastId,
@@ -293,64 +323,43 @@ export async function saveGymnastMusic(gymnastId: string, file: File) {
     blob: file,
     updatedAt: nowIso(),
   };
-  await db.put("gymnastMusic", row);
+  await localDb.put("gymnastMusic", row);
   return row;
 }
 
 export async function deleteGymnastMusic(gymnastId: string) {
-  const db = await getDb();
-  const existing = await db.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
-  if (existing) await db.delete("gymnastMusic", existing.id);
+  const localDb = await getDb();
+  const existing = await localDb.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  if (existing) await localDb.delete("gymnastMusic", existing.id);
 }
 
 export async function setGymnastsMusicOrder(orderedGymnastIds: string[]) {
-  const db = await getDb();
-  const tx = db.transaction("gymnasts", "readwrite");
-  const store = tx.objectStore("gymnasts");
-  await Promise.all(
-    orderedGymnastIds.map(async (id, index) => {
-      const gymnast = await store.get(id);
-      if (!gymnast) return;
-      gymnast.musicOrder = index;
-      await store.put(gymnast);
-    })
-  );
-  await tx.done;
+  const batch = writeBatch(db);
+  orderedGymnastIds.forEach((id, index) => {
+    batch.update(docRef("gymnasts", id), { musicOrder: index });
+  });
+  await batch.commit();
 }
 
 export async function setGymnastsHomeOrder(orderedGymnastIds: string[]) {
-  const db = await getDb();
-  const tx = db.transaction("gymnasts", "readwrite");
-  const store = tx.objectStore("gymnasts");
-  await Promise.all(
-    orderedGymnastIds.map(async (id, index) => {
-      const gymnast = await store.get(id);
-      if (!gymnast) return;
-      gymnast.homeOrder = index;
-      await store.put(gymnast);
-    })
-  );
-  await tx.done;
+  const batch = writeBatch(db);
+  orderedGymnastIds.forEach((id, index) => {
+    batch.update(docRef("gymnasts", id), { homeOrder: index });
+  });
+  await batch.commit();
 }
 
 export async function setGymnastsPassageOrder(apparatus: string, orderedGymnastIds: string[]) {
-  const db = await getDb();
-  const tx = db.transaction("gymnasts", "readwrite");
-  const store = tx.objectStore("gymnasts");
-  await Promise.all(
-    orderedGymnastIds.map(async (id, index) => {
-      const gymnast = await store.get(id);
-      if (!gymnast) return;
-      gymnast.passageOrder = { ...(gymnast.passageOrder ?? {}), [apparatus]: index };
-      await store.put(gymnast);
-    })
-  );
-  await tx.done;
+  const batch = writeBatch(db);
+  orderedGymnastIds.forEach((id, index) => {
+    batch.update(docRef("gymnasts", id), { [`passageOrder.${apparatus}`]: index });
+  });
+  await batch.commit();
 }
 
 export async function getPhotoAlbums() {
-  const db = await getDb();
-  const albums = await db.getAll("photoAlbums");
+  const localDb = await getDb();
+  const albums = await localDb.getAll("photoAlbums");
   albums.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return albums;
 }
@@ -361,7 +370,7 @@ export async function createPhotoAlbum(
   team: string,
   club: string
 ): Promise<PhotoAlbumRow> {
-  const db = await getDb();
+  const localDb = await getDb();
   const album: PhotoAlbumRow = {
     id: crypto.randomUUID(),
     name: name.trim(),
@@ -370,25 +379,25 @@ export async function createPhotoAlbum(
     club: club.trim() || null,
     createdAt: nowIso(),
   };
-  await db.put("photoAlbums", album);
+  await localDb.put("photoAlbums", album);
   return album;
 }
 
 export async function updatePhotoAlbum(albumId: string, name: string, date: string, team: string, club: string) {
-  const db = await getDb();
-  const album = await db.get("photoAlbums", albumId);
+  const localDb = await getDb();
+  const album = await localDb.get("photoAlbums", albumId);
   if (!album) return;
   album.name = name.trim() || album.name;
   album.date = date.trim() || null;
   album.team = team.trim() || null;
   album.club = club.trim() || null;
-  await db.put("photoAlbums", album);
+  await localDb.put("photoAlbums", album);
 }
 
 export async function deletePhotoAlbum(albumId: string) {
-  const db = await getDb();
-  const photos = await db.getAllFromIndex("photos", "albumId", albumId);
-  const tx = db.transaction(["photoAlbums", "photos"], "readwrite");
+  const localDb = await getDb();
+  const photos = await localDb.getAllFromIndex("photos", "albumId", albumId);
+  const tx = localDb.transaction(["photoAlbums", "photos"], "readwrite");
   await Promise.all([
     tx.objectStore("photoAlbums").delete(albumId),
     ...photos.map((p) => tx.objectStore("photos").delete(p.id)),
@@ -397,14 +406,14 @@ export async function deletePhotoAlbum(albumId: string) {
 }
 
 export async function getPhotosByAlbum(albumId: string) {
-  const db = await getDb();
-  const photos = await db.getAllFromIndex("photos", "albumId", albumId);
+  const localDb = await getDb();
+  const photos = await localDb.getAllFromIndex("photos", "albumId", albumId);
   photos.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   return photos;
 }
 
 export async function addPhoto(albumId: string, file: File): Promise<PhotoRow> {
-  const db = await getDb();
+  const localDb = await getDb();
   const photo: PhotoRow = {
     id: crypto.randomUUID(),
     albumId,
@@ -415,32 +424,32 @@ export async function addPhoto(albumId: string, file: File): Promise<PhotoRow> {
     tags: [],
     createdAt: nowIso(),
   };
-  await db.put("photos", photo);
+  await localDb.put("photos", photo);
   return photo;
 }
 
 export async function setPhotoTags(photoId: string, tags: string[]) {
-  const db = await getDb();
-  const photo = await db.get("photos", photoId);
+  const localDb = await getDb();
+  const photo = await localDb.get("photos", photoId);
   if (!photo) return;
   photo.tags = tags;
-  await db.put("photos", photo);
+  await localDb.put("photos", photo);
 }
 
 export async function deletePhoto(photoId: string) {
-  const db = await getDb();
-  await db.delete("photos", photoId);
+  const localDb = await getDb();
+  await localDb.delete("photos", photoId);
 }
 
 export async function getVideoAlbums() {
-  const db = await getDb();
-  const albums = await db.getAll("videoAlbums");
+  const localDb = await getDb();
+  const albums = await localDb.getAll("videoAlbums");
   albums.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return albums;
 }
 
 export async function createVideoAlbum(name: string, date: string, team: string, club: string) {
-  const db = await getDb();
+  const localDb = await getDb();
   const album = {
     id: crypto.randomUUID(),
     name: name.trim(),
@@ -449,25 +458,25 @@ export async function createVideoAlbum(name: string, date: string, team: string,
     club: club.trim() || null,
     createdAt: nowIso(),
   };
-  await db.put("videoAlbums", album);
+  await localDb.put("videoAlbums", album);
   return album;
 }
 
 export async function updateVideoAlbum(albumId: string, name: string, date: string, team: string, club: string) {
-  const db = await getDb();
-  const album = await db.get("videoAlbums", albumId);
+  const localDb = await getDb();
+  const album = await localDb.get("videoAlbums", albumId);
   if (!album) return;
   album.name = name.trim() || album.name;
   album.date = date.trim() || null;
   album.team = team.trim() || null;
   album.club = club.trim() || null;
-  await db.put("videoAlbums", album);
+  await localDb.put("videoAlbums", album);
 }
 
 export async function deleteVideoAlbum(albumId: string) {
-  const db = await getDb();
-  const videos = await db.getAllFromIndex("videos", "albumId", albumId);
-  const tx = db.transaction(["videoAlbums", "videos"], "readwrite");
+  const localDb = await getDb();
+  const videos = await localDb.getAllFromIndex("videos", "albumId", albumId);
+  const tx = localDb.transaction(["videoAlbums", "videos"], "readwrite");
   await Promise.all([
     tx.objectStore("videoAlbums").delete(albumId),
     ...videos.map((v) => tx.objectStore("videos").delete(v.id)),
@@ -476,14 +485,14 @@ export async function deleteVideoAlbum(albumId: string) {
 }
 
 export async function getVideosByAlbum(albumId: string) {
-  const db = await getDb();
-  const videos = await db.getAllFromIndex("videos", "albumId", albumId);
+  const localDb = await getDb();
+  const videos = await localDb.getAllFromIndex("videos", "albumId", albumId);
   videos.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   return videos;
 }
 
 export async function addVideo(albumId: string, file: File) {
-  const db = await getDb();
+  const localDb = await getDb();
   const video = {
     id: crypto.randomUUID(),
     albumId,
@@ -494,19 +503,19 @@ export async function addVideo(albumId: string, file: File) {
     tags: [] as string[],
     createdAt: nowIso(),
   };
-  await db.put("videos", video);
+  await localDb.put("videos", video);
   return video;
 }
 
 export async function setVideoTags(videoId: string, tags: string[]) {
-  const db = await getDb();
-  const video = await db.get("videos", videoId);
+  const localDb = await getDb();
+  const video = await localDb.get("videos", videoId);
   if (!video) return;
   video.tags = tags;
-  await db.put("videos", video);
+  await localDb.put("videos", video);
 }
 
 export async function deleteVideo(videoId: string) {
-  const db = await getDb();
-  await db.delete("videos", videoId);
+  const localDb = await getDb();
+  await localDb.delete("videos", videoId);
 }

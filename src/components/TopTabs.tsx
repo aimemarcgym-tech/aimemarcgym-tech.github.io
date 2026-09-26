@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 const TABS = [
   { href: "/", label: "Accueil" },
@@ -141,9 +142,10 @@ function TabDropdown({
 
 export default function TopTabs() {
   const pathname = usePathname();
+  const { user, signOut } = useAuth();
 
   return (
-    <nav className="flex flex-nowrap justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
+    <nav className="flex flex-nowrap items-center justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
       {TABS.map((tab) => {
         const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
         return (
@@ -168,6 +170,17 @@ export default function TopTabs() {
           </Link>
         );
       })}
+      {user && (
+        <div className="ml-auto flex shrink-0 items-center gap-2 pl-2 text-xs text-muted">
+          <span className="hidden sm:inline">{user.email}</span>
+          <button
+            onClick={() => signOut()}
+            className="rounded border border-border-strong px-2 py-1 text-muted hover:border-accent-solid/60 hover:text-foreground"
+          >
+            Déconnexion
+          </button>
+        </div>
+      )}
     </nav>
   );
 }
