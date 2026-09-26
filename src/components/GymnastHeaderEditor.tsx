@@ -9,12 +9,16 @@ export default function GymnastHeaderEditor({
   lastName,
   clubName,
   birthYear,
+  revealed,
+  onToggleReveal,
 }: {
   gymnastId: string;
   firstName: string;
   lastName: string;
   clubName: string;
   birthYear: number | null;
+  revealed: boolean;
+  onToggleReveal: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   // Reflète l'état sauvegardé localement (pas de re-rendu serveur pour
@@ -31,18 +35,20 @@ export default function GymnastHeaderEditor({
   if (!editing) {
     return (
       <div className="flex items-center gap-3">
-        <div>
+        <button type="button" onClick={onToggleReveal} className="text-left">
           <h1 className="text-xl font-bold text-foreground">
             {saved.firstName} {saved.lastName}
           </h1>
           <p className="text-sm text-muted">{saved.clubName || "Aucun club"}</p>
-        </div>
-        <button
-          onClick={() => setEditing(true)}
-          className="rounded border border-border-strong px-2 py-1 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
-        >
-          Modifier
         </button>
+        {revealed && (
+          <button
+            onClick={() => setEditing(true)}
+            className="rounded border border-border-strong px-2 py-1 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+          >
+            Modifier
+          </button>
+        )}
       </div>
     );
   }

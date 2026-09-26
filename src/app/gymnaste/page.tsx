@@ -27,6 +27,7 @@ function GymnastPageInner() {
   const id = searchParams.get("id") ?? "";
   const [gymnast, setGymnast] = useState<Gymnast | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [headerActionsRevealed, setHeaderActionsRevealed] = useState(false);
 
   function refresh() {
     if (!id) return;
@@ -88,17 +89,21 @@ function GymnastPageInner() {
                   lastName={gymnast.lastName}
                   clubName={gymnast.club?.name ?? ""}
                   birthYear={gymnast.birthYear}
+                  revealed={headerActionsRevealed}
+                  onToggleReveal={() => setHeaderActionsRevealed((v) => !v)}
                 />
               </div>
               <div className="mt-1">
                 <TeamEditor gymnastId={gymnast.id} initialTeam={gymnast.team} />
               </div>
             </div>
-            <DeleteGymnastButton
-              gymnastId={gymnast.id}
-              gymnastName={`${gymnast.firstName} ${gymnast.lastName}`}
-              redirectHome
-            />
+            {headerActionsRevealed && (
+              <DeleteGymnastButton
+                gymnastId={gymnast.id}
+                gymnastName={`${gymnast.firstName} ${gymnast.lastName}`}
+                redirectHome
+              />
+            )}
           </div>
         </div>
       </header>
