@@ -90,7 +90,7 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
         step={0.1}
         value={currentTime}
         onChange={(e) => handleSeek(Number(e.target.value))}
-        className="h-1.5 min-w-0 flex-1 accent-accent-solid"
+        className="accent-gradient-range min-w-0 flex-1"
       />
       <span className="w-8 shrink-0 text-[10px] tabular-nums text-muted">{formatTime(duration)}</span>
       <button
@@ -108,7 +108,7 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
         step={0.01}
         value={muted ? 0 : volume}
         onChange={(e) => handleVolumeChange(Number(e.target.value))}
-        className="h-1.5 w-16 shrink-0 accent-accent-solid"
+        className="accent-gradient-range w-16 shrink-0"
       />
     </div>
   );

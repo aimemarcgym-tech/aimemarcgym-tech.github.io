@@ -60,6 +60,47 @@ body {
   color: transparent;
 }
 
+/* Curseur <input type="range"> avec piste en dégradé : accent-color (utilisé
+   ailleurs via la classe accent-*) ne supporte qu'une couleur unie, donc on
+   reconstruit l'apparence nous-mêmes (piste + poignée) pour chaque moteur. */
+.accent-gradient-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  outline: none;
+}
+.accent-gradient-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+}
+.accent-gradient-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -4px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 2px solid var(--accent-to);
+  cursor: pointer;
+}
+.accent-gradient-range::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+}
+.accent-gradient-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 2px solid var(--accent-to);
+  cursor: pointer;
+}
+
 /* Scrollbars discrets sur fond sombre */
 ::-webkit-scrollbar {
   width: 8px;
