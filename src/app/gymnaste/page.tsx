@@ -19,6 +19,9 @@ const APPARATUS_LABELS: Record<string, string> = {
   SAUT: "Saut",
 };
 
+// Ordre officiel de rotation en compétition GAF.
+const APPARATUS_ORDER = ["SAUT", "BARRES_ASYM", "POUTRE", "SOL"];
+
 type Gymnast = Awaited<ReturnType<typeof getGymnast>>;
 
 function GymnastPageInner() {
@@ -112,7 +115,9 @@ function GymnastPageInner() {
         <section>
           <h2 className="mb-4 text-lg font-semibold text-foreground">Mouvements</h2>
           <div className="mb-4 flex flex-wrap items-center gap-3">
-            {gymnast.movements.map((m) => (
+            {[...gymnast.movements]
+              .sort((a, b) => APPARATUS_ORDER.indexOf(a.apparatus) - APPARATUS_ORDER.indexOf(b.apparatus))
+              .map((m) => (
               <MovementChip
                 key={m.id}
                 movementId={m.id}
