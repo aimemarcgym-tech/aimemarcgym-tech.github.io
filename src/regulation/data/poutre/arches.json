@@ -27,8 +27,7 @@
       "category": "ACRO",
       "sourcePage": 59,
       "baseElement": { "code": "5new", "name": "Saut droit" },
-      "branches": ["avant", "arriere"],
-      "dataQuality": "a_verifier"
+      "branches": ["avant", "arriere"]
     },
     {
       "id": "POUTRE-ACROS2",
@@ -37,8 +36,7 @@
       "category": "ACRO",
       "sourcePage": 60,
       "baseElement": { "code": "146", "name": "De la fente avant, venir à l'ATR 1 jambe à la verticale, retour libre" },
-      "branches": ["avant", "arriere"],
-      "dataQuality": "a_verifier"
+      "branches": ["avant", "arriere"]
     },
     {
       "id": "POUTRE-SAUTS-1PIED",
