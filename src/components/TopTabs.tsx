@@ -15,6 +15,7 @@ const COMPETITION_ITEMS = [
   { href: "/competition/categories-age", label: "Catégories d'âges" },
   { href: "/competition/calendrier", label: "Calendrier" },
   { href: "/competition/musiques", label: "Musiques" },
+  { href: "/competition/ordres-passage", label: "Ordres de passage" },
   { href: "/competition/resultats", label: "Résultats" },
 ];
 
