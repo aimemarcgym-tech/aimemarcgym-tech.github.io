@@ -143,6 +143,7 @@ function TabDropdown({
 export default function TopTabs() {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
+  const [showEmail, setShowEmail] = useState(false);
 
   return (
     <nav className="relative flex flex-nowrap items-center justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
@@ -172,6 +173,14 @@ export default function TopTabs() {
       })}
       {user && (
         <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted md:absolute md:right-4 md:top-1/2 md:ml-0 md:-translate-y-1/2">
+          {showEmail && <span className="hidden sm:inline">{user.email}</span>}
+          <button
+            onClick={() => setShowEmail((v) => !v)}
+            title={showEmail ? "Masquer l'email" : "Afficher l'email"}
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-border-strong text-[10px] font-semibold uppercase text-muted hover:border-accent-solid/60 hover:text-foreground"
+          >
+            {user.email?.[0] ?? "?"}
+          </button>
           <button
             onClick={() => signOut()}
             className="rounded border border-border-strong px-2 py-1 text-muted hover:border-accent-solid/60 hover:text-foreground"
