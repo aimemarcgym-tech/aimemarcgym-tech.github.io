@@ -120,7 +120,6 @@ function GymnastPageInner() {
                 apparatus={m.apparatus}
                 evolution={m.evolution}
                 onDeleted={refresh}
-                showDelete={headerActionsRevealed}
               />
             ))}
           </div>
