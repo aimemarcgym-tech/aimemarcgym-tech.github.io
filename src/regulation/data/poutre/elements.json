@@ -39,6 +39,8 @@
     { "code": "124-26", "name": "Départ libre, roulade avant arrivée au siège écart", "archeId": "POUTRE-ACROS1", "branch": null, "palier": "NOMADE", "sourcePage": 59, "verified": true },
     { "code": "127-26", "name": "Départ libre, roulade avant arrivée sur 1 ou 2 pieds", "archeId": "POUTRE-ACROS1", "branch": null, "palier": "NOMADE", "sourcePage": 59, "verified": true },
     { "code": "130-26", "name": "Départ libre, roulade avant sans les mains arrivée sur 1 ou 2 pieds", "archeId": "POUTRE-ACROS1", "branch": null, "palier": "NOMADE", "sourcePage": 59, "verified": true },
+    { "code": "205-26", "name": "Salto Auerbach groupé, carpé ou tendu sur le côté de la poutre à la station debout", "archeId": "POUTRE-ACROS1", "branch": null, "palier": "NOMADE", "sourcePage": 59, "verified": true },
+    { "code": "213-26", "name": "Salto Auerbach groupé au bout de la poutre à la station debout", "archeId": "POUTRE-ACROS1", "branch": null, "palier": "NOMADE", "sourcePage": 59, "verified": true },
     { "code": "205-26", "name": "Salto Auerbach groupé, carpé ou tendu sur le côté de la poutre à la station debout", "archeId": "POUTRE-SORTIES", "branch": null, "palier": "NOMADE", "sourcePage": 59, "extraCategories": ["ACRO"], "verified": true },
     { "code": "213-26", "name": "Salto Auerbach groupé au bout de la poutre à la station debout", "archeId": "POUTRE-SORTIES", "branch": null, "palier": "NOMADE", "sourcePage": 59, "extraCategories": ["ACRO"], "verified": true },
     { "code": "4new", "name": "En bout de poutre, appel 2 pieds, saut vertical vers l'arrière et réception à la station debout", "archeId": "POUTRE-SORTIES", "branch": null, "palier": "P2", "sourcePage": 59, "extraCategories": ["ACRO"], "verified": true },
