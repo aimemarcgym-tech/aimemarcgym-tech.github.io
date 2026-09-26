@@ -27,6 +27,9 @@ export interface GymnastRow {
   // POUTRE, SAUT), réglé par glisser-déposer dans l'onglet Musiques >
   // Ordres de passage. Indépendant par agrès.
   passageOrder?: Record<string, number> | null;
+  // Ordre d'affichage dans la liste "Mes gymnastes" de l'accueil (glisser-
+  // déposer), au sein de son club/équipe. Absent -> ordre alphabétique.
+  homeOrder?: number | null;
 }
 
 export interface GymnastSkillRow {

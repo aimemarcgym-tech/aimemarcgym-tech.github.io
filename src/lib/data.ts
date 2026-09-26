@@ -285,6 +285,21 @@ export async function setGymnastsMusicOrder(orderedGymnastIds: string[]) {
   await tx.done;
 }
 
+export async function setGymnastsHomeOrder(orderedGymnastIds: string[]) {
+  const db = await getDb();
+  const tx = db.transaction("gymnasts", "readwrite");
+  const store = tx.objectStore("gymnasts");
+  await Promise.all(
+    orderedGymnastIds.map(async (id, index) => {
+      const gymnast = await store.get(id);
+      if (!gymnast) return;
+      gymnast.homeOrder = index;
+      await store.put(gymnast);
+    })
+  );
+  await tx.done;
+}
+
 export async function setGymnastsPassageOrder(apparatus: string, orderedGymnastIds: string[]) {
   const db = await getDb();
   const tx = db.transaction("gymnasts", "readwrite");

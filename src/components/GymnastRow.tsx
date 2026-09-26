@@ -15,7 +15,7 @@ export default function GymnastRow({
   onDeleted?: () => void;
 }) {
   return (
-    <li className="flex items-center justify-between rounded-lg border border-border-subtle bg-surface px-4 py-3 shadow-sm transition hover:border-accent-solid/60">
+    <div className="flex items-center justify-between rounded-lg border border-border-subtle bg-surface px-4 py-3 shadow-sm transition hover:border-accent-solid/60">
       <Link href={`/gymnaste?id=${gymnastId}`} className="flex-1">
         <div className="font-medium text-foreground">
           {firstName} {lastName}
@@ -28,6 +28,6 @@ export default function GymnastRow({
         </Link>
         <DeleteGymnastButton gymnastId={gymnastId} gymnastName={`${firstName} ${lastName}`} onDeleted={onDeleted} />
       </div>
-    </li>
+    </div>
   );
 }

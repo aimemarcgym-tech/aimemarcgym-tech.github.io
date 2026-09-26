@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition, type FormEvent } from "react";
 import { getGymnasts, createGymnast } from "@/lib/data";
 import { getRegulation } from "@/regulation/loader";
-import GymnastRow from "@/components/GymnastRow";
+import DraggableGymnastList from "@/components/DraggableGymnastList";
 import ClubGroup from "@/components/ClubGroup";
 import TeamGroup from "@/components/TeamGroup";
 import HorizontalScroll from "@/components/HorizontalScroll";
@@ -144,34 +144,12 @@ export default function Home() {
                         <div className="space-y-3">
                           {groupByTeam(members).map(([teamName, teamMembers]) => (
                             <TeamGroup key={teamName} teamName={teamName} memberCount={teamMembers.length}>
-                              <ul className="space-y-2">
-                                {teamMembers.map((g) => (
-                                  <GymnastRow
-                                    key={g.id}
-                                    gymnastId={g.id}
-                                    firstName={g.firstName}
-                                    lastName={g.lastName}
-                                    movementCount={g.movements.length}
-                                    onDeleted={refresh}
-                                  />
-                                ))}
-                              </ul>
+                              <DraggableGymnastList members={teamMembers} onReordered={refresh} onDeleted={refresh} />
                             </TeamGroup>
                           ))}
                         </div>
                       ) : (
-                        <ul className="space-y-2">
-                          {members.map((g) => (
-                            <GymnastRow
-                              key={g.id}
-                              gymnastId={g.id}
-                              firstName={g.firstName}
-                              lastName={g.lastName}
-                              movementCount={g.movements.length}
-                              onDeleted={refresh}
-                            />
-                          ))}
-                        </ul>
+                        <DraggableGymnastList members={members} onReordered={refresh} onDeleted={refresh} />
                       )}
                     </ClubGroup>
                   );
