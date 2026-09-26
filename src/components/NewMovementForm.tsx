@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function NewMovementForm({
   action,
@@ -20,6 +20,14 @@ export default function NewMovementForm({
   const defaultForApparatus =
     (evolutions.some((e) => e.id === defaultEvolutionId) ? defaultEvolutionId : evolutions[0]?.id) ?? "";
   const [evolution, setEvolution] = useState(defaultForApparatus);
+
+  // Si le rang/équipe de la gymnaste change (TeamEditor), on aligne
+  // automatiquement l'évolution présélectionnée, tant que le champ Agrès
+  // n'a pas changé entre-temps (recalculé par apparatus ci-dessus).
+  useEffect(() => {
+    setEvolution(defaultForApparatus);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultEvolutionId]);
 
   function handleApparatusChange(a: string) {
     setApparatus(a);

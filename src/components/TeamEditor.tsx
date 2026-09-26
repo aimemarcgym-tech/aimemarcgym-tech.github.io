@@ -4,7 +4,15 @@ import { useState, useTransition } from "react";
 import { updateGymnastTeam } from "@/lib/data";
 import { teamColor } from "@/lib/teamColor";
 
-export default function TeamEditor({ gymnastId, initialTeam }: { gymnastId: string; initialTeam: string | null }) {
+export default function TeamEditor({
+  gymnastId,
+  initialTeam,
+  onSaved,
+}: {
+  gymnastId: string;
+  initialTeam: string | null;
+  onSaved?: (team: string | null) => void;
+}) {
   const [editing, setEditing] = useState(false);
   // Reflète l'état sauvegardé localement (pas de re-rendu serveur pour
   // rafraîchir la prop après un enregistrement, cf. lib/data.ts).
@@ -34,8 +42,10 @@ export default function TeamEditor({ gymnastId, initialTeam }: { gymnastId: stri
         e.preventDefault();
         startTransition(async () => {
           await updateGymnastTeam(gymnastId, value);
-          setSavedTeam(value.trim() || null);
+          const trimmed = value.trim() || null;
+          setSavedTeam(trimmed);
           setEditing(false);
+          onSaved?.(trimmed);
         });
       }}
       className="flex items-center gap-2"
