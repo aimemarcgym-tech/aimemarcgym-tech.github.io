@@ -187,6 +187,10 @@ export default function SautBuilder({
       list.push(el);
       groups.set(key, list);
     }
+    const isPrerequis = (p: string) => p === "PREREQUIS" || p === "PR1" || p === "PR2" || p === "PR3";
+    for (const list of groups.values()) {
+      list.sort((a, b) => Number(isPrerequis(b.palier)) - Number(isPrerequis(a.palier)));
+    }
     return groups;
   }, [filteredLibrary]);
 
