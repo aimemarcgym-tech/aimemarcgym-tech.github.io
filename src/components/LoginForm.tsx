@@ -52,9 +52,9 @@ export default function LoginForm() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-10">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">
+    <div className="flex min-h-screen flex-col">
+      <div className="flex w-full shrink-0 items-center justify-center gap-3 border-b border-border-subtle bg-surface-alt/60 px-6 py-3">
+        <div className="accent-gradient flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">
           GAF
         </div>
         <div className="leading-tight">
@@ -63,6 +63,7 @@ export default function LoginForm() {
         </div>
       </div>
 
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-10">
       <h1 className="mb-1 text-xl font-bold text-foreground">
         <span className="accent-gradient-text">Gestion Compétitions &amp; Entraînements</span>
       </h1>
@@ -111,6 +112,7 @@ export default function LoginForm() {
       >
         {mode === "connexion" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
       </button>
-    </main>
+      </main>
+    </div>
   );
 }
