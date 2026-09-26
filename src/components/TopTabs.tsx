@@ -172,7 +172,6 @@ export default function TopTabs() {
       })}
       {user && (
         <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted md:absolute md:right-4 md:top-1/2 md:ml-0 md:-translate-y-1/2">
-          <span className="hidden sm:inline">{user.email}</span>
           <button
             onClick={() => signOut()}
             className="rounded border border-border-strong px-2 py-1 text-muted hover:border-accent-solid/60 hover:text-foreground"
