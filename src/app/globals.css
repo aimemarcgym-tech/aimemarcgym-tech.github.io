@@ -53,6 +53,13 @@ body {
   color: transparent;
 }
 
+.accent-gradient-text-white {
+  background-image: linear-gradient(90deg, #ffffff, var(--accent-from), var(--accent-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* Scrollbars discrets sur fond sombre */
 ::-webkit-scrollbar {
   width: 8px;
