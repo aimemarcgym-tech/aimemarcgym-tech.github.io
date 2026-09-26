@@ -172,8 +172,7 @@ export default function TopTabs() {
         );
       })}
       {user && (
-        <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted lg:absolute lg:right-4 lg:top-1/2 lg:ml-0 lg:-translate-y-1/2">
-          {showEmail && <span className="whitespace-nowrap">{user.email}</span>}
+        <div className="relative ml-2 flex shrink-0 items-center gap-2 text-xs text-muted lg:absolute lg:right-4 lg:top-1/2 lg:ml-0 lg:-translate-y-1/2">
           <button
             onClick={() => setShowEmail((v) => !v)}
             title={showEmail ? "Masquer l'email" : "Afficher l'email"}
@@ -187,6 +186,11 @@ export default function TopTabs() {
           >
             Déconnexion
           </button>
+          {showEmail && (
+            <span className="absolute right-0 top-full z-20 mt-1 whitespace-nowrap rounded border border-border-strong bg-surface-alt px-2 py-1 text-muted shadow-lg">
+              {user.email}
+            </span>
+          )}
         </div>
       )}
     </nav>
