@@ -129,7 +129,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <section className="md:col-span-2">
-            <h2 className="mb-4 text-lg font-semibold accent-gradient-text-white">Mes gymnastes — classement par club</h2>
+            <h2 className="mb-4 text-lg font-semibold text-foreground">Mes gymnastes — classement par club</h2>
             {gymnasts.length === 0 ? (
               <p className="rounded-lg border border-dashed border-border-strong bg-surface/60 p-6 text-sm text-muted">
                 Aucune gymnaste enregistrée pour le moment. Ajoutez-en une pour commencer à construire un mouvement.
@@ -181,7 +181,7 @@ export default function Home() {
           </section>
 
           <section>
-            <h2 className="mb-4 text-lg font-semibold accent-gradient-text-white">Ajouter une gymnaste</h2>
+            <h2 className="mb-4 text-lg font-semibold text-foreground">Ajouter une gymnaste</h2>
             <form onSubmit={handleCreate} className="space-y-3 rounded-lg border border-border-subtle bg-surface p-4 shadow-sm">
               <div>
                 <label className="mb-1 block text-xs font-medium text-muted">Prénom</label>
