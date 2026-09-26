@@ -20,6 +20,15 @@ function palierLabel(p: Palier) {
   return p;
 }
 
+// Prérequis, Base et Nomade regroupés en tête de chaque tableau d'arche,
+// avant les paliers gradués P1-P7.
+function topGroupRank(p: Palier): number {
+  if (p === "PREREQUIS" || p === "PR1" || p === "PR2" || p === "PR3") return 0;
+  if (p === "BASE") return 1;
+  if (p === "NOMADE") return 2;
+  return 3;
+}
+
 function palierBadgeClasses(p: Palier) {
   if (p === "PREREQUIS") return "border-border-strong text-muted";
   if (p === "BASE") return "border-sky-400/40 bg-sky-400/10 text-sky-300";
@@ -39,8 +48,8 @@ export default function TablePage() {
         .filter((e) => e.archeId === arche.id)
         .slice()
         .sort((a, b) => {
-          const baseCmp = (b.palier === "BASE" ? 1 : 0) - (a.palier === "BASE" ? 1 : 0);
-          if (baseCmp !== 0) return baseCmp;
+          const topGroupCmp = topGroupRank(a.palier) - topGroupRank(b.palier);
+          if (topGroupCmp !== 0) return topGroupCmp;
           const branchCmp = (a.branch ?? "").localeCompare(b.branch ?? "");
           if (branchCmp !== 0) return branchCmp;
           const rankCmp = palierRank(a.palier) - palierRank(b.palier);
