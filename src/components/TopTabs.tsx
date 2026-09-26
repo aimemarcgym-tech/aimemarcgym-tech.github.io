@@ -140,10 +140,75 @@ function TabDropdown({
   );
 }
 
+// Même principe que TabDropdown : rendu via un portail plutôt qu'en
+// `absolute` dans la barre <nav> (overflow-x-auto), sinon la bulle est
+// coupée par le conteneur scrollable de la barre.
+function EmailReveal({ email }: { email: string }) {
+  const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState<{ left: number; top: number } | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const bubbleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      const target = e.target as Node;
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(target) &&
+        bubbleRef.current &&
+        !bubbleRef.current.contains(target)
+      ) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (!open || !wrapperRef.current) return;
+    const update = () => {
+      const rect = wrapperRef.current!.getBoundingClientRect();
+      setCoords({ left: rect.right, top: rect.bottom + 6 });
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [open]);
+
+  return (
+    <div ref={wrapperRef} className="inline-flex">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        title={open ? "Masquer l'email" : "Afficher l'email"}
+        className="flex h-6 w-6 items-center justify-center rounded-full border border-border-strong text-[10px] font-semibold uppercase text-muted hover:border-accent-solid/60 hover:text-foreground"
+      >
+        {email[0] ?? "?"}
+      </button>
+      {open &&
+        coords &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={bubbleRef}
+            style={{ left: coords.left, top: coords.top, transform: "translateX(-100%)" }}
+            className="fixed z-50 whitespace-nowrap rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-muted shadow-lg"
+          >
+            {email}
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+}
+
 export default function TopTabs() {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
-  const [showEmail, setShowEmail] = useState(false);
 
   return (
     <nav className="relative flex flex-nowrap items-center justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
@@ -172,25 +237,14 @@ export default function TopTabs() {
         );
       })}
       {user && (
-        <div className="relative ml-2 flex shrink-0 items-center gap-2 text-xs text-muted lg:absolute lg:right-4 lg:top-1/2 lg:ml-0 lg:-translate-y-1/2">
-          <button
-            onClick={() => setShowEmail((v) => !v)}
-            title={showEmail ? "Masquer l'email" : "Afficher l'email"}
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-border-strong text-[10px] font-semibold uppercase text-muted hover:border-accent-solid/60 hover:text-foreground"
-          >
-            {user.email?.[0] ?? "?"}
-          </button>
+        <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted lg:absolute lg:right-4 lg:top-1/2 lg:ml-0 lg:-translate-y-1/2">
+          {user.email && <EmailReveal email={user.email} />}
           <button
             onClick={() => signOut()}
             className="rounded border border-border-strong px-2 py-1 text-muted hover:border-accent-solid/60 hover:text-foreground"
           >
             Déconnexion
           </button>
-          {showEmail && (
-            <span className="absolute right-0 top-full z-20 mt-1 whitespace-nowrap rounded border border-border-strong bg-surface-alt px-2 py-1 text-muted shadow-lg">
-              {user.email}
-            </span>
-          )}
         </div>
       )}
     </nav>
