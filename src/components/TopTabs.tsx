@@ -238,7 +238,11 @@ export default function TopTabs() {
       })}
       {user && (
         <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted lg:absolute lg:right-4 lg:top-1/2 lg:ml-0 lg:-translate-y-1/2">
-          {user.email && <EmailReveal email={user.email} />}
+          {/* PC : email toujours visible directement dans le bandeau. */}
+          <span className="hidden lg:inline">{user.email}</span>
+          {/* Mobile/tablette : bouton avatar + bulle en dessous (via portail,
+              pour éviter la coupure par le défilement horizontal de la nav). */}
+          <span className="lg:hidden">{user.email && <EmailReveal email={user.email} />}</span>
           <button
             onClick={() => signOut()}
             className="rounded border border-border-strong px-2 py-1 text-muted hover:border-accent-solid/60 hover:text-foreground"
