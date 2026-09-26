@@ -101,7 +101,7 @@
     { "code": "28new", "name": "Cabriole", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P2", "sourcePage": 62, "verified": true },
     { "code": "27new", "name": "Saut de biche", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P3", "sourcePage": 62, "verified": true },
     { "code": "45", "name": "Saut de chat en avant", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P2", "sourcePage": 62, "verified": true },
-    { "code": "28new-bis", "name": "Cabriole avec maintien sur une jambe tendue à l'horizontale", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P2", "sourcePage": 62, "verified": true },
+    { "code": "28new-bis", "name": "Cabriole avec maintien sur une jambe tendue à l'horizontale", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P3", "sourcePage": 62, "verified": true },
     { "code": "54-26", "name": "Saut de cosaque appel d'1 pied. Saut groupé 1 jambe tendue à l'horizontale en avant", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P3", "sourcePage": 62, "verified": true },
     { "code": "56", "name": "Saut de chat en avant avec 1/2 tour (180°)", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P3", "rotationDeg": 180, "sourcePage": 62, "verified": true },
     { "code": "62", "name": "Saut enjambé appel d'1 pied (écart à 180°) aussi avec la jambe libre fléchie tendue", "archeId": "POUTRE-SAUTS-1PIED", "branch": null, "palier": "P4", "sourcePage": 62, "verified": true },
