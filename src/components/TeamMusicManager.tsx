@@ -125,8 +125,12 @@ function GymnastMusicItem({
           <p className="text-xs text-muted">
             {music.fileName} · {formatSize(music.size)}
           </p>
+          {/* draggable=false : sans ça, le glisser-déposer (réordonnancement de
+              la ligne) capture les interactions avec le curseur du lecteur
+              natif (volume, avancer/reculer), qui devient impossible à
+              utiliser à la souris. */}
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <audio controls src={objectUrl} className="h-9 w-full" />
+          <audio controls src={objectUrl} draggable={false} className="h-9 w-full" />
         </div>
       ) : (
         <p className="mt-2 text-xs text-muted">Aucune musique importée.</p>
