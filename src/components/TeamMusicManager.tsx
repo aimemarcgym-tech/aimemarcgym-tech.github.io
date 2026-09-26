@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getGymnasts, getGymnastMusic, saveGymnastMusic, deleteGymnastMusic, setGymnastsMusicOrder } from "@/lib/data";
 import type { GymnastMusicRow as GymnastMusicRecord } from "@/lib/idb";
+import CustomAudioPlayer from "@/components/CustomAudioPlayer";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
@@ -138,12 +139,7 @@ function GymnastMusicItem({
           <p className="text-xs text-muted">
             {music.fileName} · {formatSize(music.size)}
           </p>
-          {/* draggable=false : sans ça, le glisser-déposer (réordonnancement de
-              la ligne) capture les interactions avec le curseur du lecteur
-              natif (volume, avancer/reculer), qui devient impossible à
-              utiliser à la souris. */}
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <audio controls src={objectUrl} draggable={false} className="h-9 w-full" />
+          <CustomAudioPlayer src={objectUrl} />
         </div>
       ) : (
         <p className="mt-2 text-xs text-muted">Aucune musique importée.</p>
