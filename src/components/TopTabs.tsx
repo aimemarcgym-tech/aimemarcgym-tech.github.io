@@ -145,7 +145,7 @@ export default function TopTabs() {
   const { user, signOut } = useAuth();
 
   return (
-    <nav className="flex flex-nowrap items-center justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
+    <nav className="relative flex flex-nowrap items-center justify-start gap-2 overflow-x-auto border-b border-border-subtle bg-surface px-4 py-3 md:justify-center">
       {TABS.map((tab) => {
         const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
         return (
@@ -171,7 +171,7 @@ export default function TopTabs() {
         );
       })}
       {user && (
-        <div className="ml-auto flex shrink-0 items-center gap-2 pl-2 text-xs text-muted">
+        <div className="ml-2 flex shrink-0 items-center gap-2 text-xs text-muted md:absolute md:right-4 md:top-1/2 md:ml-0 md:-translate-y-1/2">
           <span className="hidden sm:inline">{user.email}</span>
           <button
             onClick={() => signOut()}
