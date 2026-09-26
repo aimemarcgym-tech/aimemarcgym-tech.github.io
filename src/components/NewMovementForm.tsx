@@ -7,14 +7,27 @@ export default function NewMovementForm({
   apparatuses,
   apparatusLabels,
   evolutionsByApparatus,
+  defaultEvolutionId,
 }: {
   action: (formData: FormData) => void;
   apparatuses: string[];
   apparatusLabels: Record<string, string>;
   evolutionsByApparatus: Record<string, { id: string; genre: string }[]>;
+  defaultEvolutionId?: string | null;
 }) {
   const [apparatus, setApparatus] = useState(apparatuses[0]);
   const evolutions = evolutionsByApparatus[apparatus] ?? [];
+  const defaultForApparatus =
+    (evolutions.some((e) => e.id === defaultEvolutionId) ? defaultEvolutionId : evolutions[0]?.id) ?? "";
+  const [evolution, setEvolution] = useState(defaultForApparatus);
+
+  function handleApparatusChange(a: string) {
+    setApparatus(a);
+    const nextEvolutions = evolutionsByApparatus[a] ?? [];
+    setEvolution(
+      (nextEvolutions.some((e) => e.id === defaultEvolutionId) ? defaultEvolutionId : nextEvolutions[0]?.id) ?? ""
+    );
+  }
 
   return (
     <form action={action} className="flex flex-wrap items-end gap-3 rounded-lg border border-border-subtle bg-surface p-4">
@@ -31,7 +44,7 @@ export default function NewMovementForm({
         <select
           name="apparatus"
           value={apparatus}
-          onChange={(e) => setApparatus(e.target.value)}
+          onChange={(e) => handleApparatusChange(e.target.value)}
           className="rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
         >
           {apparatuses.map((a) => (
@@ -45,6 +58,8 @@ export default function NewMovementForm({
         <label className="mb-1 block text-xs font-medium text-muted">Évolution</label>
         <select
           name="evolution"
+          value={evolution}
+          onChange={(e) => setEvolution(e.target.value)}
           className="rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
         >
           {evolutions.map((e) => (

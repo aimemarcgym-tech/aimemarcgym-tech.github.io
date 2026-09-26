@@ -130,6 +130,7 @@ function GymnastPageInner() {
             evolutionsByApparatus={Object.fromEntries(
               apparatuses.map((a) => [a, regulations[a].evolutions.map((e) => ({ id: e.id, genre: e.genre }))])
             )}
+            defaultEvolutionId={gymnast.team?.match(/\b([ABC][123])\b/i)?.[1]?.toUpperCase()}
           />
         </section>
 
