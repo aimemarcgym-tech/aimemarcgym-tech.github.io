@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
 function firebaseErrorMessage(code: string): string {
@@ -22,6 +23,7 @@ function firebaseErrorMessage(code: string): string {
 
 export default function LoginForm() {
   const { signIn, signUp } = useAuth();
+  const router = useRouter();
   const [mode, setMode] = useState<"connexion" | "inscription">("connexion");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +40,9 @@ export default function LoginForm() {
       } else {
         await signUp(email, password);
       }
+      // Toujours atterrir sur l'accueil après connexion, quelle que soit la
+      // page/URL sur laquelle on se trouvait avant d'être déconnecté.
+      router.push("/");
     } catch (err) {
       const code = err instanceof Error && "code" in err ? String((err as { code: unknown }).code) : "";
       setError(firebaseErrorMessage(code));
