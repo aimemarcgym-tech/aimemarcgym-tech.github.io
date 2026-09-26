@@ -63,9 +63,11 @@ export default function BackupPanel() {
       <div className="rounded-lg border border-border-subtle bg-surface p-4">
         <h3 className="mb-1 text-sm font-semibold text-foreground">Exporter</h3>
         <p className="mb-3 text-xs text-muted">
-          Télécharge un fichier JSON contenant toutes les données de cet appareil (clubs, gymnastes, compétences,
-          mouvements, historique, musiques, photos, vidéos). À faire régulièrement, en particulier avant/après une
-          compétition.
+          Télécharge un fichier JSON contenant toutes vos données (clubs, gymnastes, compétences, mouvements,
+          historique) ainsi que les musiques, photos et vidéos <strong className="text-foreground">de cet appareil</strong>{" "}
+          (ces fichiers ne sont pas synchronisés automatiquement entre appareils — ce fichier est le moyen de les
+          transférer vers un autre appareil ou de les sauvegarder sur votre propre stockage : Drive, Dropbox, clé
+          USB…). À faire régulièrement, en particulier avant/après une compétition.
         </p>
         <button
           onClick={handleExport}
@@ -80,7 +82,8 @@ export default function BackupPanel() {
         <h3 className="mb-1 text-sm font-semibold text-foreground">Importer</h3>
         <p className="mb-3 text-xs text-muted">
           Charge un fichier de sauvegarde exporté depuis cet appareil ou un autre.{" "}
-          <strong className="text-danger">Remplace entièrement</strong> les données actuellement sur cet appareil.
+          <strong className="text-danger">Remplace entièrement</strong> vos clubs/gymnastes/mouvements actuels (pour
+          votre compte, sur tous vos appareils) ainsi que les musiques/photos/vidéos de cet appareil.
         </p>
         <input
           ref={fileInputRef}
@@ -94,9 +97,10 @@ export default function BackupPanel() {
       {confirming && (
         <div className="rounded-lg border border-danger/40 bg-danger/10 p-4">
           <p className="mb-3 text-sm text-danger">
-            Remplacer toutes les données de cet appareil par cette sauvegarde ({(confirming.gymnasts as unknown[])?.length ?? 0}{" "}
+            Remplacer toutes vos données de compte par cette sauvegarde ({(confirming.gymnasts as unknown[])?.length ?? 0}{" "}
             gymnaste(s), {(confirming.movements as unknown[])?.length ?? 0} mouvement(s)) ? Cette action est
-            irréversible pour les données actuelles de cet appareil.
+            irréversible pour les données actuelles de votre compte (tous appareils) et de cet appareil (musiques,
+            photos, vidéos).
           </p>
           <div className="flex gap-2">
             <button

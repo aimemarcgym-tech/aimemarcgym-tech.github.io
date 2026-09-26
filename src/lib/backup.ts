@@ -1,9 +1,14 @@
+import { collection, doc, getDocs, writeBatch } from "firebase/firestore";
+import { db, getCurrentUid } from "@/lib/firebase";
 import { getDb } from "@/lib/idb";
 
-// Sauvegarde manuelle complète de la base locale (IndexedDB) -> un seul
-// fichier JSON téléchargeable, et sa réimportation. Sert à la fois de
-// filet de sécurité (pas de synchronisation automatique entre appareils)
-// et de mécanisme de transfert d'un appareil à l'autre.
+// Sauvegarde manuelle complète -> un seul fichier JSON téléchargeable, et sa
+// réimportation. Clubs/gymnastes/mouvements vivent maintenant dans Firestore
+// (synchronisés entre appareils, voir src/lib/data.ts) ; musiques, photos et
+// vidéos restent volontairement locales à l'appareil (pas de synchro cloud
+// automatique pour ces fichiers, cf. le choix fait avec l'utilisateur) — ce
+// fichier de sauvegarde est donc leur seul moyen de transférer ces médias
+// d'un appareil à l'autre ou vers leur propre stockage personnel.
 
 const STORES = ["clubs", "gymnasts", "gymnastSkills", "movements", "movementElements", "movementSnapshots"] as const;
 
@@ -61,7 +66,7 @@ export interface BackupVideoEntry {
 }
 
 export interface BackupData {
-  version: 1 | 2 | 3 | 4;
+  version: 1 | 2 | 3 | 4 | 5;
   exportedAt: string;
   clubs: unknown[];
   gymnasts: unknown[];
@@ -96,13 +101,38 @@ function base64ToBlob(base64: string, mimeType: string): Blob {
   return new Blob([bytes], { type: mimeType });
 }
 
+// Remplace tout le contenu d'une collection Firestore par une nouvelle
+// liste de lignes (chacune gardant son id d'origine), par lots de 450
+// écritures max (limite Firestore : 500 opérations/batch).
+async function replaceFirestoreCollection(uid: string, storeName: string, rows: Record<string, unknown>[]) {
+  const colRef = collection(db, "users", uid, storeName);
+  const existingSnap = await getDocs(colRef);
+  const existingDocs = existingSnap.docs;
+  for (let i = 0; i < existingDocs.length; i += 450) {
+    const batch = writeBatch(db);
+    for (const d of existingDocs.slice(i, i + 450)) batch.delete(d.ref);
+    await batch.commit();
+  }
+  for (let i = 0; i < rows.length; i += 450) {
+    const batch = writeBatch(db);
+    for (const row of rows.slice(i, i + 450)) {
+      const id = String((row as { id: string }).id);
+      batch.set(doc(colRef, id), row);
+    }
+    await batch.commit();
+  }
+}
+
 export async function exportAll(): Promise<BackupData> {
-  const db = await getDb();
+  const uid = getCurrentUid();
   const data = {} as Record<(typeof STORES)[number], unknown[]>;
   for (const store of STORES) {
-    data[store] = await db.getAll(store);
+    const snap = await getDocs(collection(db, "users", uid, store));
+    data[store] = snap.docs.map((d) => d.data());
   }
-  const musicRows = await db.getAll("gymnastMusic");
+
+  const localDb = await getDb();
+  const musicRows = await localDb.getAll("gymnastMusic");
   const gymnastMusic: BackupMusicEntry[] = await Promise.all(
     musicRows.map(async (m) => ({
       id: m.id,
@@ -115,7 +145,7 @@ export async function exportAll(): Promise<BackupData> {
     }))
   );
 
-  const albumRows = await db.getAll("photoAlbums");
+  const albumRows = await localDb.getAll("photoAlbums");
   const photoAlbums: BackupPhotoAlbumEntry[] = albumRows.map((a) => ({
     id: a.id,
     name: a.name,
@@ -125,7 +155,7 @@ export async function exportAll(): Promise<BackupData> {
     createdAt: a.createdAt,
   }));
 
-  const photoRows = await db.getAll("photos");
+  const photoRows = await localDb.getAll("photos");
   const photos: BackupPhotoEntry[] = await Promise.all(
     photoRows.map(async (p) => ({
       id: p.id,
@@ -139,7 +169,7 @@ export async function exportAll(): Promise<BackupData> {
     }))
   );
 
-  const videoAlbumRows = await db.getAll("videoAlbums");
+  const videoAlbumRows = await localDb.getAll("videoAlbums");
   const videoAlbums: BackupVideoAlbumEntry[] = videoAlbumRows.map((a) => ({
     id: a.id,
     name: a.name,
@@ -149,7 +179,7 @@ export async function exportAll(): Promise<BackupData> {
     createdAt: a.createdAt,
   }));
 
-  const videoRows = await db.getAll("videos");
+  const videoRows = await localDb.getAll("videos");
   const videos: BackupVideoEntry[] = await Promise.all(
     videoRows.map(async (v) => ({
       id: v.id,
@@ -164,7 +194,7 @@ export async function exportAll(): Promise<BackupData> {
   );
 
   return {
-    version: 4,
+    version: 5,
     exportedAt: new Date().toISOString(),
     ...data,
     gymnastMusic,
@@ -176,27 +206,20 @@ export async function exportAll(): Promise<BackupData> {
 }
 
 export async function importAll(data: BackupData): Promise<{ counts: Record<string, number> }> {
-  if (!data || (data.version !== 1 && data.version !== 2 && data.version !== 3 && data.version !== 4)) {
+  if (!data || ![1, 2, 3, 4, 5].includes(data.version)) {
     throw new Error("Fichier de sauvegarde invalide ou d'une version non prise en charge.");
   }
-  const db = await getDb();
-  const tx = db.transaction(
-    [...STORES, "gymnastMusic", "photoAlbums", "photos", "videoAlbums", "videos"],
-    "readwrite"
-  );
+  const uid = getCurrentUid();
   const counts: Record<string, number> = {};
+
   for (const store of STORES) {
-    const objectStore = tx.objectStore(store);
-    await objectStore.clear();
     const rows = (data[store] as Record<string, unknown>[]) ?? [];
-    for (const row of rows) {
-      // Import générique multi-stores depuis un JSON externe : la forme
-      // exacte par store est validée à la frontière (version + structure),
-      // pas par le système de types ici.
-      await objectStore.put(row as never);
-    }
+    await replaceFirestoreCollection(uid, store, rows);
     counts[store] = rows.length;
   }
+
+  const localDb = await getDb();
+  const tx = localDb.transaction(["gymnastMusic", "photoAlbums", "photos", "videoAlbums", "videos"], "readwrite");
 
   const musicStore = tx.objectStore("gymnastMusic");
   await musicStore.clear();
