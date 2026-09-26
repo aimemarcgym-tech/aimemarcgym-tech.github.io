@@ -39,6 +39,8 @@ export default function TablePage() {
         .filter((e) => e.archeId === arche.id)
         .slice()
         .sort((a, b) => {
+          const baseCmp = (b.palier === "BASE" ? 1 : 0) - (a.palier === "BASE" ? 1 : 0);
+          if (baseCmp !== 0) return baseCmp;
           const branchCmp = (a.branch ?? "").localeCompare(b.branch ?? "");
           if (branchCmp !== 0) return branchCmp;
           const rankCmp = palierRank(a.palier) - palierRank(b.palier);
