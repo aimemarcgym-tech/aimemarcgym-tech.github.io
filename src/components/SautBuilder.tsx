@@ -58,10 +58,23 @@ export default function SautBuilder({
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
+  const [materielOptions, setMaterielOptions] = useState<{ trampoTremp: boolean; miniTrampoline: boolean; plus13ans: boolean }>(() => {
+    if (typeof window === "undefined") return { trampoTremp: false, miniTrampoline: false, plus13ans: false };
+    try {
+      const raw = localStorage.getItem(`saut-materiel-${movementId}`);
+      return raw ? JSON.parse(raw) : { trampoTremp: false, miniTrampoline: false, plus13ans: false };
+    } catch {
+      return { trampoTremp: false, miniTrampoline: false, plus13ans: false };
+    }
+  });
 
   useEffect(() => {
     localStorage.setItem(`manual-confirm-${movementId}`, JSON.stringify(Array.from(manualConfirmations)));
   }, [manualConfirmations, movementId]);
+
+  useEffect(() => {
+    localStorage.setItem(`saut-materiel-${movementId}`, JSON.stringify(materielOptions));
+  }, [materielOptions, movementId]);
 
   const isFirstRender = useRef(true);
   useEffect(() => {
@@ -84,6 +97,10 @@ export default function SautBuilder({
     () => analyzeSaut(evolutionId, sequence, manualConfirmations),
     [evolutionId, sequence, manualConfirmations]
   );
+
+  const penaliteMateriel =
+    (materielOptions.trampoTremp && materielOptions.plus13ans ? 1 : 0) + (materielOptions.miniTrampoline ? 1 : 0);
+  const noteFinale = Math.max(0, diagnostic.noteDepart - penaliteMateriel);
 
   const elementByCode = useMemo(() => new Map(regulation.elements.map((e) => [e.code, e])), [regulation]);
 
@@ -223,6 +240,37 @@ export default function SautBuilder({
               ))}
             </ul>
           )}
+          <div className="mt-4 space-y-1.5 rounded-lg border border-border-subtle bg-surface-alt p-3">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted">Matériel / pénalités</p>
+            <label className="flex items-center gap-2 text-xs text-muted">
+              <input
+                type="checkbox"
+                checked={materielOptions.trampoTremp}
+                onChange={(e) => setMaterielOptions((o) => ({ ...o, trampoTremp: e.target.checked }))}
+              />
+              Trampo-tremp utilisé
+            </label>
+            <label className="flex items-center gap-2 text-xs text-muted">
+              <input
+                type="checkbox"
+                checked={materielOptions.miniTrampoline}
+                onChange={(e) => setMaterielOptions((o) => ({ ...o, miniTrampoline: e.target.checked }))}
+              />
+              Mini trampoline utilisé
+            </label>
+            <label className="flex items-center gap-2 text-xs text-muted">
+              <input
+                type="checkbox"
+                checked={materielOptions.plus13ans}
+                onChange={(e) => setMaterielOptions((o) => ({ ...o, plus13ans: e.target.checked }))}
+              />
+              Gymnaste de 13 ans ou plus
+            </label>
+            <p className="pt-1 text-[11px] text-muted">
+              À partir de 13 ans, le trampo-tremp entraîne -1 point. Le mini trampoline entraîne -1 point quel que
+              soit l&apos;âge (saison 2026-2027).
+            </p>
+          </div>
         </section>
 
         {/* ZONE 2 — ANALYSE */}
@@ -271,10 +319,15 @@ export default function SautBuilder({
 
           <div className="accent-gradient rounded px-4 py-3 text-white shadow-lg shadow-accent-from/20">
             <div className="flex items-center justify-between text-xs uppercase text-white/70">
-              <span>Note de départ</span>
+              <span>{penaliteMateriel > 0 ? "Note finale" : "Note de départ"}</span>
               <span className="normal-case text-white/60">Meilleur saut retenu</span>
             </div>
-            <div className="text-3xl font-bold">{diagnostic.noteDepart.toFixed(1)}</div>
+            <div className="text-3xl font-bold">{noteFinale.toFixed(1)}</div>
+            {penaliteMateriel > 0 && (
+              <div className="mt-1 text-xs text-white/80">
+                Note de départ {diagnostic.noteDepart.toFixed(1)} − {penaliteMateriel.toFixed(1)} (pénalité matériel)
+              </div>
+            )}
             <button onClick={() => setShowDetail((v) => !v)} className="mt-1 text-xs text-white/90 underline">
               {showDetail ? "Masquer" : "Détail"} du calcul
             </button>
