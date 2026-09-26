@@ -39,6 +39,16 @@
       "branches": ["avant", "arriere"]
     },
     {
+      "id": "POUTRE-ACCRO-MOUSSE",
+      "name": "Accro poutre mousse",
+      "subtitle": null,
+      "category": "ACRO",
+      "sourcePage": 61,
+      "baseElement": { "code": "152-26", "name": "Roue : renversement latéral sans envol arrivée 1 ou 2 pieds" },
+      "branches": [],
+      "dataQuality": "a_verifier"
+    },
+    {
       "id": "POUTRE-SAUTS-1PIED",
       "name": "Sauts gymniques",
       "subtitle": "Appel 1 pied",
@@ -63,16 +73,6 @@
       "category": "ENTREE",
       "sourcePage": 64,
       "baseElement": { "code": "1", "name": "De la station faciale, sauter à l'appui tendu et sans arrêt, passer 1 jambe tendue latéralement et par 1/4 de tour (90°) s'établir au siège transversal" },
-      "branches": [],
-      "dataQuality": "a_verifier"
-    },
-    {
-      "id": "POUTRE-ACCRO-MOUSSE",
-      "name": "Accro poutre mousse",
-      "subtitle": null,
-      "category": "ACRO",
-      "sourcePage": 61,
-      "baseElement": { "code": "152-26", "name": "Roue : renversement latéral sans envol arrivée 1 ou 2 pieds" },
       "branches": [],
       "dataQuality": "a_verifier"
     },
