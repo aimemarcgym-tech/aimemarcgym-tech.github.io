@@ -166,7 +166,7 @@ export default function MovementBuilder({
   const categories = useMemo(() => {
     const keys = new Set<string>();
     for (const el of regulation.elements) {
-      if (el.palier === "PREREQUIS") continue;
+      if (el.palier === "PREREQUIS" && !isSortieElement(el.archeId, el.extraCategories)) continue;
       keys.add(categoryKeyOf(el.archeId, el.branch));
     }
     return Array.from(keys)
@@ -177,7 +177,7 @@ export default function MovementBuilder({
   const filteredLibrary = useMemo(() => {
     const inSeq = new Set(sequence.map((s) => s.code));
     return regulation.elements
-      .filter((e) => e.palier !== "PREREQUIS")
+      .filter((e) => e.palier !== "PREREQUIS" || isSortieElement(e.archeId, e.extraCategories))
       .filter((e) => !inSeq.has(e.code))
       .filter((e) => {
         if (category === "ALL") return true;
@@ -651,7 +651,7 @@ export default function MovementBuilder({
                           <span className="rounded-full border border-border-strong px-1.5 py-0.5 text-[10px] text-muted">
                             {el.palier === "BASE" ? "Base" : el.palier === "NOMADE" ? "Nomade" : el.palier}
                           </span>
-                          {isSortieElement(el.archeId) && (
+                          {isSortieElement(el.archeId, el.extraCategories) && (
                             <span className="rounded-full border border-orange-400/40 bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-300">
                               Sortie
                             </span>

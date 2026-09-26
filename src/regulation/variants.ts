@@ -30,8 +30,9 @@ export function isMousseElement(archeId: string) {
   return archeId === "POUTRE-ACCRO-MOUSSE";
 }
 
-// Poutre uniquement : élément de l'arche Sorties (peut aussi compter comme
-// ACRO via extraCategories selon les cas).
-export function isSortieElement(archeId: string) {
-  return archeId === "POUTRE-SORTIES";
+// Élément d'une arche Sorties (Poutre, Barres), ou élément d'une autre arche
+// qui compte aussi comme Sortie via extraCategories (ex : un élan aux Barres
+// qui sert également de sortie officielle).
+export function isSortieElement(archeId: string, extraCategories?: string[]) {
+  return archeId === "POUTRE-SORTIES" || archeId === "BARRES-SORTIES" || (extraCategories?.includes("SORTIES") ?? false);
 }
