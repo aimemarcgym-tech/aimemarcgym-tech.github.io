@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { getGymnasts, getGymnastMusic, saveGymnastMusic, deleteGymnastMusic, setGymnastsMusicOrder } from "@/lib/data";
 import type { GymnastMusicRow as GymnastMusicRecord } from "@/lib/idb";
 import CustomAudioPlayer from "@/components/CustomAudioPlayer";
+import { shareFiles } from "@/lib/share";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
@@ -74,6 +75,15 @@ function GymnastMusicItem({
     }
   }
 
+  async function handleShare() {
+    if (!music) return;
+    const file = new File([music.blob], music.fileName, { type: music.mimeType });
+    const result = await shareFiles([file], { title: music.fileName });
+    if (result === "unsupported") {
+      alert("Le partage n'est pas disponible sur ce navigateur. Utilisez « Envoyer sur clé USB » ou téléchargez le fichier.");
+    }
+  }
+
   return (
     <div className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -114,6 +124,14 @@ function GymnastMusicItem({
           </button>
           {music && (
             <>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={handleShare}
+                className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50"
+              >
+                Partager
+              </button>
               <button
                 type="button"
                 disabled={busy}

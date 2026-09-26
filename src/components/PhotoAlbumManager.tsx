@@ -11,6 +11,7 @@ import {
   setPhotoTags,
   deletePhoto,
 } from "@/lib/data";
+import { shareFiles } from "@/lib/share";
 
 type Album = Awaited<ReturnType<typeof getPhotoAlbums>>[number];
 type Photo = Awaited<ReturnType<typeof getPhotosByAlbum>>[number];
@@ -77,6 +78,14 @@ function PhotoCard({ photo, onChange }: { photo: Photo; onChange: () => void }) 
     }
   }
 
+  async function handleShare() {
+    const file = new File([photo.blob], photo.fileName, { type: photo.mimeType });
+    const result = await shareFiles([file], { title: photo.fileName });
+    if (result === "unsupported") {
+      alert("Le partage n'est pas disponible sur ce navigateur. Téléchargez la photo puis partagez-la manuellement.");
+    }
+  }
+
   return (
     <div className="overflow-hidden rounded-lg border border-border-subtle bg-surface-alt/40">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,14 +95,19 @@ function PhotoCard({ photo, onChange }: { photo: Photo; onChange: () => void }) 
           <p className="truncate text-xs text-muted" title={photo.fileName}>
             {photo.fileName} · {formatSize(photo.size)}
           </p>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={handleDelete}
-            className="shrink-0 text-xs text-danger hover:underline disabled:opacity-50"
-          >
-            Supprimer
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <button type="button" onClick={handleShare} className="text-xs text-muted hover:underline">
+              Partager
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={handleDelete}
+              className="text-xs text-danger hover:underline disabled:opacity-50"
+            >
+              Supprimer
+            </button>
+          </div>
         </div>
         <PhotoTagsEditor photo={photo} onChange={onChange} />
         {photo.tags.length > 0 && (

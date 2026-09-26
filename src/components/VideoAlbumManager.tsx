@@ -11,6 +11,7 @@ import {
   setVideoTags,
   deleteVideo,
 } from "@/lib/data";
+import { shareFiles } from "@/lib/share";
 
 type Album = Awaited<ReturnType<typeof getVideoAlbums>>[number];
 type Video = Awaited<ReturnType<typeof getVideosByAlbum>>[number];
@@ -77,6 +78,14 @@ function VideoCard({ video, onChange }: { video: Video; onChange: () => void }) 
     }
   }
 
+  async function handleShare() {
+    const file = new File([video.blob], video.fileName, { type: video.mimeType });
+    const result = await shareFiles([file], { title: video.fileName });
+    if (result === "unsupported") {
+      alert("Le partage n'est pas disponible sur ce navigateur. Téléchargez la vidéo puis partagez-la manuellement.");
+    }
+  }
+
   return (
     <div className="overflow-hidden rounded-lg border border-border-subtle bg-surface-alt/40">
       {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
@@ -86,14 +95,19 @@ function VideoCard({ video, onChange }: { video: Video; onChange: () => void }) 
           <p className="truncate text-xs text-muted" title={video.fileName}>
             {video.fileName} · {formatSize(video.size)}
           </p>
-          <button
-            type="button"
-            disabled={busy}
-            onClick={handleDelete}
-            className="shrink-0 text-xs text-danger hover:underline disabled:opacity-50"
-          >
-            Supprimer
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <button type="button" onClick={handleShare} className="text-xs text-muted hover:underline">
+              Partager
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={handleDelete}
+              className="text-xs text-danger hover:underline disabled:opacity-50"
+            >
+              Supprimer
+            </button>
+          </div>
         </div>
         <VideoTagsEditor video={video} onChange={onChange} />
         {video.tags.length > 0 && (
