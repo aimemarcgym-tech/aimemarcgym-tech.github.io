@@ -54,8 +54,8 @@ export default function LoginForm() {
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex w-full shrink-0 items-center justify-center gap-1.5 border-b border-border-subtle bg-surface-alt/60 px-6 py-3">
-        <div className="accent-gradient flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">
-          <span className="-translate-x-1.5">GAF</span>
+        <div className="accent-gradient -translate-x-1.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">
+          GAF
         </div>
         <div className="leading-tight">
           <div className="text-base font-bold uppercase tracking-wide text-foreground">Ufolep</div>
