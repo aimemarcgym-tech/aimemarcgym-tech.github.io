@@ -140,7 +140,7 @@ export default function SautBuilder({
 
   function addSaut(code: string) {
     setSequence((s) => {
-      if (s.some((e) => e.code === code)) return s;
+      // Un même saut peut être choisi 2 fois (ex : 2 fois le même saut de type Lune).
       const next = [...s, { code, role: "ELEMENT" as const }];
       // On ne garde jamais plus de sauts que ce qu'exige l'évolution.
       return next.slice(-diagnostic.sautsRequired);
@@ -148,7 +148,38 @@ export default function SautBuilder({
   }
 
   function removeSaut(code: string) {
-    setSequence((s) => s.filter((e) => e.code !== code));
+    setSequence((s) => {
+      // Ne retire qu'une occurrence : si le saut est doublé, un clic le ramène à 1.
+      const idx = s.findIndex((e) => e.code === code);
+      if (idx === -1) return s;
+      const next = [...s];
+      next.splice(idx, 1);
+      return next;
+    });
+  }
+
+  const [sautDragIndex, setSautDragIndex] = useState<number | null>(null);
+  const [sautDragOverIndex, setSautDragOverIndex] = useState<number | null>(null);
+
+  const sautGroups = useMemo(() => {
+    const order: string[] = [];
+    const bySaut = new Map<string, typeof diagnostic.sauts>();
+    for (const s of diagnostic.sauts) {
+      if (!bySaut.has(s.code)) {
+        order.push(s.code);
+        bySaut.set(s.code, []);
+      }
+      bySaut.get(s.code)!.push(s);
+    }
+    return order.map((code) => ({ code, count: bySaut.get(code)!.length, saut: bySaut.get(code)![0] }));
+  }, [diagnostic.sauts]);
+
+  function reorderSautGroups(from: number, to: number) {
+    if (from === to) return;
+    const next = [...sautGroups];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setSequence(next.flatMap((g) => Array.from({ length: g.count }, () => ({ code: g.code, role: "ELEMENT" as const }))));
   }
 
   async function handleSave() {
@@ -168,9 +199,8 @@ export default function SautBuilder({
   }
 
   const filteredLibrary = useMemo(() => {
-    const inSeq = new Set(sequence.map((s) => s.code));
+    // Un saut déjà sélectionné reste affiché : il peut être choisi une 2e fois (doublé).
     return regulation.elements
-      .filter((e) => !inSeq.has(e.code))
       .filter((e) => {
         if (!search) return true;
         const s = search.toLowerCase();
@@ -221,27 +251,72 @@ export default function SautBuilder({
         {/* ZONE 1 — MES SAUTS */}
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Mon/mes saut(s)</h2>
-          {diagnostic.sauts.length === 0 ? (
+          {sautGroups.length === 0 ? (
             <p className="text-sm text-muted">Ajoutez {diagnostic.sautsRequired} saut(s) depuis la Bibliothèque, à droite →</p>
           ) : (
             <ul className="space-y-2">
-              {diagnostic.sauts.map((s) => (
-                <li key={s.code} className="rounded-lg border border-border-subtle bg-surface-alt p-3">
-                  <div className="mb-1 flex items-center justify-between gap-2">
-                    <span className={`text-xs font-semibold ${s.horsPalierAutorise ? "text-danger" : "text-muted"}`}>
-                      [{palierBadge(s.palier)}] {s.branch ? BRANCH_LABEL[s.branch] ?? s.branch : ""}
-                    </span>
-                    <button onClick={() => removeSaut(s.code)} className="text-xs text-danger hover:underline">
-                      Retirer
-                    </button>
-                  </div>
-                  <div className="text-sm text-foreground">{s.name}</div>
-                  <div className="mt-1 text-xs accent-gradient-text font-semibold">Valeur : {s.value.toFixed(1)}</div>
-                  {s.horsPalierAutorise && (
-                    <div className="mt-1 text-xs text-danger">⚠ Palier non autorisé pour cette évolution</div>
-                  )}
-                </li>
-              ))}
+              {sautGroups.map((g, i) => {
+                const s = g.saut;
+                const isDragging = sautDragIndex === i;
+                const isDragOver = sautDragOverIndex === i && sautDragIndex !== null && sautDragIndex !== i;
+                return (
+                  <li
+                    key={g.code}
+                    draggable={sautGroups.length > 1}
+                    onDragStart={(e) => {
+                      e.dataTransfer.effectAllowed = "move";
+                      e.dataTransfer.setData("text/plain", String(i));
+                      setSautDragIndex(i);
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      if (sautDragOverIndex !== i) setSautDragOverIndex(i);
+                    }}
+                    onDragLeave={() => {
+                      setSautDragOverIndex((cur) => (cur === i ? null : cur));
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      const from = sautDragIndex ?? Number(e.dataTransfer.getData("text/plain"));
+                      if (!Number.isNaN(from)) reorderSautGroups(from, i);
+                      setSautDragIndex(null);
+                      setSautDragOverIndex(null);
+                    }}
+                    onDragEnd={() => {
+                      setSautDragIndex(null);
+                      setSautDragOverIndex(null);
+                    }}
+                    className={`flex items-start gap-2 rounded-lg border border-border-subtle bg-surface-alt p-3 transition ${
+                      isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
+                    }`}
+                  >
+                    {sautGroups.length > 1 && (
+                      <span
+                        className="mt-0.5 shrink-0 cursor-grab select-none text-muted active:cursor-grabbing"
+                        title="Glisser pour réordonner"
+                      >
+                        ⠿
+                      </span>
+                    )}
+                    <div className="flex-1">
+                      <div className="mb-1 flex items-center justify-between gap-2">
+                        <span className={`text-xs font-semibold ${s.horsPalierAutorise ? "text-danger" : "text-muted"}`}>
+                          [{palierBadge(s.palier)}] {s.branch ? BRANCH_LABEL[s.branch] ?? s.branch : ""}
+                          {g.count > 1 && <span className="ml-1 accent-gradient-text">×{g.count}</span>}
+                        </span>
+                        <button onClick={() => removeSaut(s.code)} className="text-xs text-danger hover:underline">
+                          Retirer
+                        </button>
+                      </div>
+                      <div className="text-sm text-foreground">{s.name}</div>
+                      <div className="mt-1 text-xs accent-gradient-text font-semibold">Valeur : {s.value.toFixed(1)}</div>
+                      {s.horsPalierAutorise && (
+                        <div className="mt-1 text-xs text-danger">⚠ Palier non autorisé pour cette évolution</div>
+                      )}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <div className="mt-4 space-y-1.5 rounded-lg border border-border-subtle bg-surface-alt p-3">
@@ -493,6 +568,7 @@ export default function SautBuilder({
                     <ul className="space-y-1">
                       {els.map((el) => {
                         const mastery = skillMap.get(el.code);
+                        const selectedCount = sequence.filter((s) => s.code === el.code).length;
                         return (
                           <li key={el.code}>
                             <button
@@ -507,6 +583,9 @@ export default function SautBuilder({
                                 <span className="ml-1 accent-gradient-text font-semibold">· {el.value.toFixed(1)}</span>
                               )}
                               {mastery === "MAITRISE" && <span className="ml-1 text-success">✓</span>}
+                              {selectedCount > 0 && (
+                                <span className="ml-1 text-success">✓ sélectionné{selectedCount > 1 ? ` ×${selectedCount}` : ""}</span>
+                              )}
                             </button>
                           </li>
                         );
