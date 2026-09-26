@@ -169,7 +169,7 @@ function EmailReveal({ email }: { email: string }) {
     if (!open || !wrapperRef.current) return;
     const update = () => {
       const rect = wrapperRef.current!.getBoundingClientRect();
-      setCoords({ left: rect.left + rect.width / 2, top: rect.bottom + 6 });
+      setCoords({ left: rect.left + rect.width / 2 + 12, top: rect.bottom + 6 });
     };
     update();
     window.addEventListener("resize", update);
@@ -185,7 +185,7 @@ function EmailReveal({ email }: { email: string }) {
       <button
         onClick={() => setOpen((v) => !v)}
         title={open ? "Masquer l'email" : "Afficher l'email"}
-        className="flex h-6 w-6 items-center justify-center rounded-full border border-border-strong text-[10px] font-semibold uppercase text-muted hover:border-accent-solid/60 hover:text-foreground"
+        className="flex h-8 w-8 items-center justify-center rounded-full border border-border-strong text-xs font-semibold uppercase text-muted hover:border-accent-solid/60 hover:text-foreground"
       >
         {email[0] ?? "?"}
       </button>
