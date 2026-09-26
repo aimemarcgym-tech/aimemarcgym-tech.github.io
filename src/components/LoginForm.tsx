@@ -53,6 +53,16 @@ export default function LoginForm() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6 py-10">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="accent-gradient flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold tracking-tight text-white shadow-lg shadow-accent-from/20">
+          GAF
+        </div>
+        <div className="leading-tight">
+          <div className="text-sm font-bold uppercase tracking-wide text-foreground">Ufolep</div>
+          <div className="text-xs font-medium text-muted">Gymnastique Artistique Féminine</div>
+        </div>
+      </div>
+
       <h1 className="mb-1 text-xl font-bold text-foreground">
         <span className="accent-gradient-text">Gestion Compétitions &amp; Entraînements</span>
       </h1>
