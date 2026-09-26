@@ -63,7 +63,7 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-6 py-10">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-6 pt-16 pb-10">
       <h1 className="mb-1 text-xl font-bold text-foreground">
         <span className="accent-gradient-text">Gestion Compétitions &amp; Entraînements</span>
       </h1>
