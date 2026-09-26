@@ -33,11 +33,15 @@ function GymnastMusicItem({
   music,
   onChange,
   onExportOne,
+  onHandleDragStart,
+  onHandleDragEnd,
 }: {
   gymnast: Gymnast;
   music: GymnastMusicRecord | undefined | null;
   onChange: () => void;
   onExportOne: (gymnast: Gymnast, music: GymnastMusicRecord) => void;
+  onHandleDragStart: (e: React.DragEvent) => void;
+  onHandleDragEnd: () => void;
 }) {
   const [busy, setBusy] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -73,7 +77,16 @@ function GymnastMusicItem({
     <div className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-          <span className="cursor-grab select-none text-muted active:cursor-grabbing" title="Glisser pour réordonner">
+          {/* Seule cette poignée est "draggable" (pas toute la ligne) : sinon
+              le glisser-déposer capture aussi les interactions avec le
+              curseur du lecteur audio (volume, avancer/reculer) plus bas. */}
+          <span
+            draggable
+            onDragStart={onHandleDragStart}
+            onDragEnd={onHandleDragEnd}
+            className="cursor-grab select-none text-muted active:cursor-grabbing"
+            title="Glisser pour réordonner"
+          >
             ⠿
           </span>
           {gymnast.firstName} {gymnast.lastName}
@@ -314,12 +327,6 @@ export default function TeamMusicManager() {
               return (
                 <div
                   key={g.id}
-                  draggable
-                  onDragStart={(e) => {
-                    e.dataTransfer.effectAllowed = "move";
-                    e.dataTransfer.setData("text/plain", String(i));
-                    setDragIndex(i);
-                  }}
                   onDragOver={(e) => {
                     e.preventDefault();
                     if (dragOverIndex !== i) setDragOverIndex(i);
@@ -347,6 +354,15 @@ export default function TeamMusicManager() {
                     music={musicByGymnast[g.id]}
                     onChange={reloadMusic}
                     onExportOne={handleExportOne}
+                    onHandleDragStart={(e) => {
+                      e.dataTransfer.effectAllowed = "move";
+                      e.dataTransfer.setData("text/plain", String(i));
+                      setDragIndex(i);
+                    }}
+                    onHandleDragEnd={() => {
+                      setDragIndex(null);
+                      setDragOverIndex(null);
+                    }}
                   />
                 </div>
               );
