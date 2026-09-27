@@ -26,7 +26,7 @@ export default function TeamGroup({
 
   return (
     <div className={`ml-4 border-l pl-3 ${isUnassigned ? "border-border-subtle" : color.border}`}>
-      <div className="mb-2 flex w-full items-center gap-2.5">
+      <div className="mb-2 flex w-full flex-wrap items-center gap-x-2.5 gap-y-1.5">
         <button
           onClick={() => setOpen((v) => !v)}
           className="flex items-center gap-2.5 text-left text-sm font-medium text-muted hover:text-foreground"

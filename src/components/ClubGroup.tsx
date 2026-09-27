@@ -23,7 +23,7 @@ export default function ClubGroup({
 
   return (
     <div>
-      <div className="mb-2 flex w-full items-center gap-2.5">
+      <div className="mb-2 flex w-full flex-wrap items-center gap-x-2.5 gap-y-1.5">
         <button
           onClick={() => setOpen((v) => !v)}
           className="flex items-center gap-2.5 text-left text-base font-semibold text-muted hover:text-foreground"
