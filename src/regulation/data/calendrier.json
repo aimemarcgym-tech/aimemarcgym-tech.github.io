@@ -25,20 +25,20 @@
       "name": "Seine et Marne",
       "departemental": [
         {
-          "dateLieu": "",
-          "niveau": "GAF N6 - N1",
+          "dateLieu": "16 et 17 Janvier\nEcuelles",
+          "niveau": "GAF Evo A-B",
           "fj": true,
           "fn": true
         },
         {
-          "dateLieu": "",
+          "dateLieu": "24 Janvier\nMoissy",
           "niveau": "Petite Enfance",
           "fj": false,
           "fn": false
         },
         {
-          "dateLieu": "",
-          "niveau": "GAF N8 - N7",
+          "dateLieu": "30 et 31 Janvier\nBrie Cte Robert",
+          "niveau": "GAF Evo B-C",
           "fj": true,
           "fn": false
         }
@@ -181,7 +181,7 @@
       "name": "Val de Marne",
       "departemental": [
         {
-          "dateLieu": "30-31 janvier \nVilecresnes",
+          "dateLieu": "30-31 janvier\nVilecresnes",
           "niveau": "GAF",
           "fj": true,
           "fn": true
@@ -196,13 +196,13 @@
       "name": "Val d Oise",
       "departemental": [
         {
-          "dateLieu": "16 et 17 janvier \nGonesse",
+          "dateLieu": "16 et 17 janvier\nGonesse",
           "niveau": "GAF Evo A\nPetite Enfance",
           "fj": true,
           "fn": false
         },
         {
-          "dateLieu": "30 et 31 janvier \nPontoise",
+          "dateLieu": "30 et 31 janvier\nPontoise",
           "niveau": "GAF Evo B -C",
           "fj": true,
           "fn": true
@@ -398,7 +398,15 @@
       "groupe": "Groupe1"
     },
     {
-      "region": "RHÔNE-ALPES",
+      "region": "RHÔNE ALPES",
+      "num": "1",
+      "name": "Ain",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE ALPES",
       "num": "7",
       "name": "Ardeche",
       "departemental": [
@@ -413,7 +421,7 @@
       "groupe": "Groupe2"
     },
     {
-      "region": "RHÔNE-ALPES",
+      "region": "RHÔNE ALPES",
       "num": "26",
       "name": "Drôme",
       "departemental": [
@@ -432,7 +440,7 @@
       ],
       "regional": [
         {
-          "dateLieu": "6 et 7 mars 2027",
+          "dateLieu": "6 et 7 mars 2027\nJonage / l'Isle\nd'Abeau (38)",
           "niveau": "Catégories définies début 2027",
           "fj": true,
           "fn": true
@@ -441,7 +449,7 @@
       "groupe": "Groupe2"
     },
     {
-      "region": "RHÔNE-ALPES",
+      "region": "RHÔNE ALPES",
       "num": "38",
       "name": "Isere",
       "departemental": [
@@ -490,7 +498,7 @@
       ],
       "regional": [
         {
-          "dateLieu": "20 et 21 mars 2027",
+          "dateLieu": "20 et 21 mars 2027\nRiorges / ? (42)",
           "niveau": "Catégories définies début 2027",
           "fj": true,
           "fn": true
@@ -499,30 +507,24 @@
       "groupe": "Groupe2"
     },
     {
-      "region": "RHÔNE-ALPES",
+      "region": "RHÔNE ALPES",
       "num": "42",
       "name": "Loire",
       "departemental": [
         {
-          "dateLieu": "rattaché au 69",
-          "niveau": "GAF ME à N4\nGAM Interdep avec 69",
+          "dateLieu": "16 et 17 janvier 2027\nBoën",
+          "niveau": "Tous Niveau GAF",
           "fj": true,
           "fn": true
         },
         {
-          "dateLieu": "",
-          "niveau": "Niveaux 3, 2 et 1 GAF dans le 63",
+          "dateLieu": "6 et 7 février 2027\nLe Chambon",
+          "niveau": "Tous niveaux GAF jusqu'au B1",
           "fj": true,
           "fn": true
         },
         {
-          "dateLieu": "",
-          "niveau": "Tous niveaux GAF jusqu'au N6",
-          "fj": true,
-          "fn": true
-        },
-        {
-          "dateLieu": "",
+          "dateLieu": "14 mars2027\nCharlieu",
           "niveau": "Petite Enfance",
           "fj": false,
           "fn": false
@@ -530,7 +532,7 @@
       ],
       "regional": [
         {
-          "dateLieu": "3 et 4 avril 2027 Chaponnay / Saint Priest 69",
+          "dateLieu": "3 et 4 avril 2027 Chaponnay / Saint Priest (69)",
           "niveau": "Catégories définies début 2027",
           "fj": true,
           "fn": true
@@ -539,7 +541,7 @@
       "groupe": "Groupe2"
     },
     {
-      "region": "RHÔNE-ALPES",
+      "region": "RHÔNE ALPES",
       "num": "69",
       "name": "Rhone",
       "departemental": [
@@ -585,7 +587,7 @@
       "groupe": "Groupe2"
     },
     {
-      "region": "RHÔNE-ALPES",
+      "region": "RHÔNE ALPES",
       "num": "73",
       "name": "Savoie",
       "departemental": [
@@ -596,6 +598,22 @@
           "fn": true
         }
       ],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE ALPES",
+      "num": "74",
+      "name": "Haute Savoie",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe2"
+    },
+    {
+      "region": "RHÔNE ALPES",
+      "num": "25",
+      "name": "Doubs",
+      "departemental": [],
       "regional": [],
       "groupe": "Groupe2"
     },
@@ -1012,7 +1030,7 @@
         },
         {
           "dateLieu": "",
-          "niveau": "Inter départements \nN8 et N7 GAF",
+          "niveau": "Inter départements\nN8 et N7 GAF",
           "fj": true,
           "fn": true
         }
@@ -1225,6 +1243,14 @@
     },
     {
       "region": "AUVERGNE LIMOUSIN",
+      "num": "23",
+      "name": "Creuse",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "AUVERGNE LIMOUSIN",
       "num": "87",
       "name": "Haute Vienne",
       "departemental": [],
@@ -1239,7 +1265,23 @@
       "groupe": "Groupe4"
     },
     {
-      "region": "BRETAGNE / PAYS DE LOIRE",
+      "region": "BRETAGNE-PAYS LOIRE",
+      "num": "22",
+      "name": "Cotes d Armor",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE-PAYS LOIRE",
+      "num": "29",
+      "name": "Finistere",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE-PAYS LOIRE",
       "num": "35",
       "name": "Ile et Vilaine",
       "departemental": [
@@ -1254,7 +1296,7 @@
       "groupe": "Groupe4"
     },
     {
-      "region": "BRETAGNE / PAYS DE LOIRE",
+      "region": "BRETAGNE-PAYS LOIRE",
       "num": "56",
       "name": "Morbihan",
       "departemental": [],
@@ -1269,7 +1311,7 @@
       "groupe": "Groupe4"
     },
     {
-      "region": "BRETAGNE / PAYS DE LOIRE",
+      "region": "BRETAGNE-PAYS LOIRE",
       "num": "44",
       "name": "Loire Atlantique",
       "departemental": [
@@ -1294,6 +1336,46 @@
           "fn": true
         }
       ],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE-PAYS LOIRE",
+      "num": "49",
+      "name": "maine et Loire",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE-PAYS LOIRE",
+      "num": "53",
+      "name": "Mayenne",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE-PAYS LOIRE",
+      "num": "72",
+      "name": "Sarthe",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "BRETAGNE-PAYS LOIRE",
+      "num": "85",
+      "name": "Vendee",
+      "departemental": [],
+      "regional": [],
+      "groupe": "Groupe4"
+    },
+    {
+      "region": "CENTRE",
+      "num": "18",
+      "name": "Cher",
+      "departemental": [],
+      "regional": [],
       "groupe": "Groupe4"
     },
     {
