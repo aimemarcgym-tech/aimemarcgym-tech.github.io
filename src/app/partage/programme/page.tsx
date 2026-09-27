@@ -60,6 +60,16 @@ function ProgrammePartagePageInner() {
       </header>
 
       <main className="mx-auto max-w-2xl space-y-3 px-6 py-8">
+        {data.attachment && (
+          <a
+            href={`data:${data.attachment.mimeType};base64,${data.attachment.dataBase64}`}
+            download={data.attachment.fileName}
+            className="flex items-center gap-2 rounded-lg border border-accent-solid/40 bg-accent-from/10 p-3 text-sm font-medium accent-gradient-text"
+          >
+            📎 Télécharger « {data.attachment.fileName} »
+          </a>
+        )}
+
         {data.sessions.length === 0 ? (
           <p className="text-sm text-muted">Aucune séance enregistrée.</p>
         ) : (

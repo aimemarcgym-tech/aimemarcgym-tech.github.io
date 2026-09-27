@@ -22,6 +22,29 @@ function formatDate(iso: string) {
   return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
+// Le document du lien de partage est stocké dans Firestore, limité à 1 Mo.
+// L'encodage base64 gonfle la taille d'environ 37%, donc on plafonne le
+// fichier d'origine bien en dessous pour laisser de la marge (métadonnées,
+// séances du journal...).
+const MAX_ATTACHMENT_BYTES = 500 * 1024;
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result);
+      resolve(result.slice(result.indexOf(",") + 1));
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatSize(bytes: number) {
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} Ko`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
+}
+
 export default function TrainingJournal({
   target,
   targetLabel,
@@ -38,6 +61,8 @@ export default function TrainingJournal({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editDate, setEditDate] = useState("");
   const [editContent, setEditContent] = useState("");
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachmentError, setAttachmentError] = useState<string | null>(null);
 
   function refresh() {
     getTrainingSessions(target, type).then(setSessions);
@@ -62,11 +87,33 @@ export default function TrainingJournal({
     }
   }
 
+  function handleAttachmentChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!file) return;
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      setAttachmentError(
+        `« ${file.name} » fait ${formatSize(file.size)}, c'est trop volumineux pour être joint au lien (max ${formatSize(MAX_ATTACHMENT_BYTES)}).`
+      );
+      return;
+    }
+    setAttachmentError(null);
+    setAttachment(file);
+  }
+
   async function handleShare() {
+    const attachmentPayload = attachment
+      ? {
+          fileName: attachment.name,
+          mimeType: attachment.type || "application/octet-stream",
+          dataBase64: await fileToBase64(attachment),
+        }
+      : undefined;
     const shareId = await createShare("trainingJournal", {
       targetLabel,
       programType: type,
       sessions: (sessions ?? []).map((s) => ({ date: s.date, content: s.content })),
+      ...(attachmentPayload ? { attachment: attachmentPayload } : {}),
     });
     return `/partage/programme/?id=${shareId}`;
   }
@@ -92,9 +139,23 @@ export default function TrainingJournal({
 
   return (
     <div className="mt-4 rounded-lg border border-border-subtle bg-surface-alt/30 p-4">
-      <div className="mb-3 flex items-center justify-end">
+      <div className="mb-3 flex flex-wrap items-center justify-end gap-2">
+        <label className="flex cursor-pointer items-center gap-1.5 rounded border border-border-strong px-3 py-1.5 text-xs font-medium text-foreground hover:border-accent-solid/60">
+          📎 {attachment ? attachment.name : "Joindre un document (PDF…)"}
+          <input type="file" accept="application/pdf,image/*,.doc,.docx" onChange={handleAttachmentChange} className="hidden" />
+        </label>
+        {attachment && (
+          <button
+            type="button"
+            onClick={() => setAttachment(null)}
+            className="text-xs text-muted hover:text-foreground"
+          >
+            Retirer
+          </button>
+        )}
         <ShareLinkButton onCreate={handleShare} />
       </div>
+      {attachmentError && <p className="mb-3 text-right text-xs text-danger">{attachmentError}</p>}
       <form onSubmit={handleAdd} className="mb-4 space-y-2">
         <div className="flex flex-wrap items-center gap-2">
           <input

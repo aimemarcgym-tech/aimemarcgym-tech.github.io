@@ -43,12 +43,23 @@ export interface PassageOrderAllShareData {
   }[];
 }
 
+// Pièce jointe encodée directement dans le document Firestore (pas de vrai
+// stockage de fichiers type Firebase Storage) : ça reste gratuit et simple,
+// mais limite la taille à un petit document (voir MAX_ATTACHMENT_BYTES dans
+// TrainingJournal.tsx) à cause de la limite Firestore de 1 Mo par document.
+export interface ShareAttachment {
+  fileName: string;
+  mimeType: string;
+  dataBase64: string;
+}
+
 // Journal d'entraînement (Programme technique/physique) : instantané des
 // séances au moment du partage, pour une gymnaste ou pour toute une équipe.
 export interface TrainingJournalShareData {
   targetLabel: string;
   programType: "TECHNIQUE" | "PHYSIQUE";
   sessions: { date: string; content: string }[];
+  attachment?: ShareAttachment;
 }
 
 export type ShareDoc =
