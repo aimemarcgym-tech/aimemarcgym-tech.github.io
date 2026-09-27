@@ -118,13 +118,15 @@ export default function TeamPassageOrderManager() {
     refresh();
   }
 
-  const orderedForShare = useMemo(() => {
+  function orderFor(apparatusKey: string) {
     return [...members].sort((a, b) => {
-      const ao = a.passageOrder?.[apparatus] ?? Infinity;
-      const bo = b.passageOrder?.[apparatus] ?? Infinity;
+      const ao = a.passageOrder?.[apparatusKey] ?? Infinity;
+      const bo = b.passageOrder?.[apparatusKey] ?? Infinity;
       return ao - bo;
     });
-  }, [members, apparatus]);
+  }
+
+  const orderedForShare = useMemo(() => orderFor(apparatus), [members, apparatus]);
 
   async function handleShare() {
     const selected = teams.find((t) => t.key === teamKey);
@@ -137,6 +139,21 @@ export default function TeamPassageOrderManager() {
       gymnasts: orderedForShare.map((g) => ({ firstName: g.firstName, lastName: g.lastName })),
     });
     return `/partage/ordre-passage/?id=${shareId}`;
+  }
+
+  async function handleShareAll() {
+    const selected = teams.find((t) => t.key === teamKey);
+    if (!selected) throw new Error("Équipe introuvable");
+    const shareId = await createShare("passageOrderAll", {
+      club: selected.club,
+      team: selected.team,
+      apparatuses: Object.entries(APPARATUS_LABELS).map(([key, label]) => ({
+        apparatus: key,
+        apparatusLabel: label,
+        gymnasts: orderFor(key).map((g) => ({ firstName: g.firstName, lastName: g.lastName })),
+      })),
+    });
+    return `/partage/ordres-passage/?id=${shareId}`;
   }
 
   return (
@@ -183,7 +200,14 @@ export default function TeamPassageOrderManager() {
                 </button>
               ))}
             </div>
-            <ShareLinkButton onCreate={handleShare} />
+            <div className="flex flex-wrap items-center gap-2">
+              <ShareLinkButton onCreate={handleShare} label={`Partager ${APPARATUS_LABELS[apparatus] ?? apparatus}`} />
+              <ShareLinkButton
+                onCreate={handleShareAll}
+                label="Partager tous les agrès"
+                className="rounded bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              />
+            </div>
           </div>
           <ApparatusOrderList apparatus={apparatus} members={members} onReorder={handleReorder} />
         </div>

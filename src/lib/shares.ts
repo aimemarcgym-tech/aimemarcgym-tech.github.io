@@ -30,9 +30,23 @@ export interface PassageOrderShareData {
   gymnasts: { firstName: string; lastName: string }[];
 }
 
+// Un seul lien pour les 4 agrès à la fois (une fois que le coach a fini de
+// régler l'ordre de passage partout) : même structure que PassageOrderShareData,
+// répétée par agrès plutôt que d'obliger à partager 4 liens séparés.
+export interface PassageOrderAllShareData {
+  club: string;
+  team: string;
+  apparatuses: {
+    apparatus: string;
+    apparatusLabel: string;
+    gymnasts: { firstName: string; lastName: string }[];
+  }[];
+}
+
 export type ShareDoc =
   | { type: "movement"; ownerUid: string; data: MovementShareData }
-  | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData };
+  | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
+  | { type: "passageOrderAll"; ownerUid: string; data: PassageOrderAllShareData };
 
 export async function createShare(
   type: "movement",
@@ -43,8 +57,12 @@ export async function createShare(
   data: PassageOrderShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder",
-  data: MovementShareData | PassageOrderShareData
+  type: "passageOrderAll",
+  data: PassageOrderAllShareData
+): Promise<string>;
+export async function createShare(
+  type: "movement" | "passageOrder" | "passageOrderAll",
+  data: MovementShareData | PassageOrderShareData | PassageOrderAllShareData
 ): Promise<string> {
   const ref = doc(collection(db, "shares"));
   await setDoc(ref, {
