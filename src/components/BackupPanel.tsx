@@ -32,31 +32,50 @@ export default function BackupPanel() {
     }
   }
 
-  function handleFileChosen(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setStatus("Lecture du fichier…");
-    const reader = new FileReader();
-    reader.onload = () => {
+  // Deux façons de lire le contenu d'un File : l'API moderne Blob.text()
+  // (utilisée en premier) et l'API FileReader plus ancienne en repli. Sur
+  // certains fournisseurs de stockage tiers exposés via un content-provider
+  // Android (Drive, Proton Drive...), l'une des deux peut échouer là où
+  // l'autre fonctionne — sans repli, l'import semblait ne "rien faire" au
+  // clic dès que la première méthode échouait silencieusement.
+  async function readFileAsText(file: File): Promise<string> {
+    try {
+      return await file.text();
+    } catch (e1) {
       try {
-        const data = JSON.parse(String(reader.result)) as BackupData;
-        setStatus(null);
-        setConfirming(data);
-      } catch {
-        setStatus("Fichier illisible : ce n'est pas un JSON de sauvegarde valide.");
+        return await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result));
+          reader.onerror = () => reject(reader.error ?? e1);
+          reader.readAsText(file);
+        });
+      } catch (e2) {
+        const detail = e2 instanceof Error ? e2.message : e1 instanceof Error ? e1.message : String(e2);
+        throw new Error(detail);
       }
-    };
-    // Sans ce gestionnaire, un fichier choisi depuis un stockage cloud
-    // (Drive, OneDrive...) dont la lecture échoue (le navigateur mobile doit
-    // d'abord le télécharger depuis le cloud avant de pouvoir le lire) ne
-    // produisait aucun retour visible : ça semblait ne "rien faire" au clic.
-    reader.onerror = () => {
-      setStatus(
-        "Impossible de lire ce fichier — s'il vient de Drive/OneDrive/Dropbox, essayez de le télécharger d'abord dans le stockage de l'appareil (bouton « Télécharger » ou « Rendre disponible hors ligne » dans l'appli), puis réimportez-le depuis là."
-      );
-    };
-    reader.readAsText(file);
+    }
+  }
+
+  async function handleFileChosen(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
     e.target.value = "";
+    if (!file) return;
+    setStatus(`Lecture du fichier (${(file.size / 1024).toFixed(0)} Ko)…`);
+    try {
+      const text = await readFileAsText(file);
+      const data = JSON.parse(text) as BackupData;
+      setStatus(null);
+      setConfirming(data);
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        setStatus("Fichier illisible : ce n'est pas un JSON de sauvegarde valide.");
+        return;
+      }
+      const detail = err instanceof Error ? err.message : String(err);
+      setStatus(
+        `Impossible de lire ce fichier (${detail || "erreur inconnue"}) — si le problème persiste depuis un stockage cloud, essayez de copier le fichier dans le stockage interne de l'appareil (pas juste "hors ligne" dans l'appli cloud) avant de réimporter.`
+      );
+    }
   }
 
   async function confirmImport() {
