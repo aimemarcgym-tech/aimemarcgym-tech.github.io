@@ -305,6 +305,21 @@ export default function MovementBuilder({
     });
   }
 
+  const CAT_LABELS: Record<string, string> = {
+    ACRO: "Acro",
+    SORTIES: "Sorties",
+    FORCE: "Force",
+    SAUT_GYM: "Sauts gymniques",
+    PIVOT: "Pivots",
+    ENTREE: "Entrées",
+    ATR_MAINTIEN: "ATR et Maintien",
+    [CAT_ACRO_MOUSSE]: "Accro poutre mousse",
+  };
+  function catFilterLabel(value: string): string {
+    const cats = value.slice(4).split(",");
+    return `Filtre : ${cats.map((c) => CAT_LABELS[c] ?? c).join(" ou ")}`;
+  }
+
   function exploreCategory(checkId: string) {
     const cats = categoryForCheck(checkId, apparatus);
     if (!cats || cats.length === 0) return;
@@ -635,6 +650,7 @@ export default function MovementBuilder({
                 className="mb-2 w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
               >
                 <option value="ALL">Toutes les catégories</option>
+                {category.startsWith("CAT:") && <option value={category}>{catFilterLabel(category)}</option>}
                 {categories.map((c) => (
                   <option key={c.key} value={c.key}>
                     {c.label}
