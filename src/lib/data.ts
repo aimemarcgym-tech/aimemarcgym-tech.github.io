@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -18,6 +19,7 @@ import {
   type MovementRow,
   type MovementElementRow,
   type MovementSnapshotRow,
+  type TrainingSessionRow,
 } from "@/lib/idb";
 import type { PhotoAlbumRow, PhotoRow } from "@/lib/idb";
 import { REGULATION_VERSION } from "@/regulation/loader";
@@ -164,9 +166,10 @@ export async function updateGymnast(
 }
 
 export async function deleteGymnast(gymnastId: string) {
-  const [skillsSnap, movementsSnap] = await Promise.all([
+  const [skillsSnap, movementsSnap, trainingSnap] = await Promise.all([
     getDocs(query(col("gymnastSkills"), where("gymnastId", "==", gymnastId))),
     getDocs(query(col("movements"), where("gymnastId", "==", gymnastId))),
+    getDocs(query(col("trainingSessions"), where("gymnastId", "==", gymnastId))),
   ]);
   for (const m of movementsSnap.docs) {
     await deleteMovementCascade(m.id);
@@ -174,6 +177,7 @@ export async function deleteGymnast(gymnastId: string) {
   const batch = writeBatch(db);
   batch.delete(docRef("gymnasts", gymnastId));
   for (const s of skillsSnap.docs) batch.delete(s.ref);
+  for (const t of trainingSnap.docs) batch.delete(t.ref);
   await batch.commit();
 
   // La musique reste locale à l'appareil (non synchronisée) : on nettoie
@@ -518,4 +522,41 @@ export async function setVideoTags(videoId: string, tags: string[]) {
 export async function deleteVideo(videoId: string) {
   const localDb = await getDb();
   await localDb.delete("videos", videoId);
+}
+
+// Journal d'entraînement (onglet Entraînement > Programme technique/physique) :
+// une séance datée par gymnaste et par type de programme.
+export async function getTrainingSessions(gymnastId: string, type: "TECHNIQUE" | "PHYSIQUE") {
+  const snap = await getDocs(
+    query(col("trainingSessions"), where("gymnastId", "==", gymnastId), where("type", "==", type))
+  );
+  const rows = snap.docs.map((d) => d.data() as TrainingSessionRow);
+  rows.sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt));
+  return rows;
+}
+
+export async function addTrainingSession(
+  gymnastId: string,
+  type: "TECHNIQUE" | "PHYSIQUE",
+  date: string,
+  content: string
+) {
+  const row: TrainingSessionRow = {
+    id: crypto.randomUUID(),
+    gymnastId,
+    type,
+    date,
+    content,
+    createdAt: nowIso(),
+  };
+  await setDoc(docRef("trainingSessions", row.id), row);
+  return row;
+}
+
+export async function updateTrainingSession(sessionId: string, date: string, content: string) {
+  await updateDoc(docRef("trainingSessions", sessionId), { date, content });
+}
+
+export async function deleteTrainingSession(sessionId: string) {
+  await deleteDoc(docRef("trainingSessions", sessionId));
 }

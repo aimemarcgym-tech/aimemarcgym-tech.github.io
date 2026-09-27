@@ -2,12 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { getGymnasts } from "@/lib/data";
+import TrainingJournal from "@/components/TrainingJournal";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
-export default function TeamGymnastPicker({ title }: { title: string }) {
+export default function TeamGymnastPicker({
+  title,
+  programType,
+}: {
+  title: string;
+  programType: "TECHNIQUE" | "PHYSIQUE";
+}) {
   const [gymnasts, setGymnasts] = useState<Gymnast[] | null>(null);
   const [teamKey, setTeamKey] = useState("");
+  const [selectedGymnastId, setSelectedGymnastId] = useState<string | null>(null);
 
   useEffect(() => {
     getGymnasts().then(setGymnasts);
@@ -47,7 +55,10 @@ export default function TeamGymnastPicker({ title }: { title: string }) {
       ) : (
         <select
           value={teamKey}
-          onChange={(e) => setTeamKey(e.target.value)}
+          onChange={(e) => {
+            setTeamKey(e.target.value);
+            setSelectedGymnastId(null);
+          }}
           className="w-full max-w-xs rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
         >
           <option value="">Sélectionner une équipe…</option>
@@ -65,13 +76,20 @@ export default function TeamGymnastPicker({ title }: { title: string }) {
             <button
               key={g.id}
               type="button"
-              className="rounded-lg border border-border-strong bg-surface-alt px-3 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent-solid hover:text-white"
+              onClick={() => setSelectedGymnastId((cur) => (cur === g.id ? null : g.id))}
+              className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                selectedGymnastId === g.id
+                  ? "border-accent-solid bg-accent-from/10 text-white"
+                  : "border-border-strong bg-surface-alt text-foreground hover:border-accent-solid hover:text-white"
+              }`}
             >
               {g.firstName} {g.lastName}
             </button>
           ))}
         </div>
       )}
+
+      {selectedGymnastId && <TrainingJournal gymnastId={selectedGymnastId} type={programType} />}
     </div>
   );
 }

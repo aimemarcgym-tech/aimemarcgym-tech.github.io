@@ -10,7 +10,15 @@ import { getDb } from "@/lib/idb";
 // fichier de sauvegarde est donc leur seul moyen de transférer ces médias
 // d'un appareil à l'autre ou vers leur propre stockage personnel.
 
-const STORES = ["clubs", "gymnasts", "gymnastSkills", "movements", "movementElements", "movementSnapshots"] as const;
+const STORES = [
+  "clubs",
+  "gymnasts",
+  "gymnastSkills",
+  "movements",
+  "movementElements",
+  "movementSnapshots",
+  "trainingSessions",
+] as const;
 
 // Les musiques (Blob) ne sont pas sérialisables telles quelles en JSON :
 // elles sont converties en base64 à l'export, puis reconverties en Blob à
@@ -66,7 +74,7 @@ export interface BackupVideoEntry {
 }
 
 export interface BackupData {
-  version: 1 | 2 | 3 | 4 | 5;
+  version: 1 | 2 | 3 | 4 | 5 | 6;
   exportedAt: string;
   clubs: unknown[];
   gymnasts: unknown[];
@@ -74,6 +82,7 @@ export interface BackupData {
   movements: unknown[];
   movementElements: unknown[];
   movementSnapshots: unknown[];
+  trainingSessions?: unknown[];
   gymnastMusic?: BackupMusicEntry[];
   photoAlbums?: BackupPhotoAlbumEntry[];
   photos?: BackupPhotoEntry[];
@@ -194,7 +203,7 @@ export async function exportAll(): Promise<BackupData> {
   );
 
   return {
-    version: 5,
+    version: 6,
     exportedAt: new Date().toISOString(),
     ...data,
     gymnastMusic,
@@ -206,7 +215,7 @@ export async function exportAll(): Promise<BackupData> {
 }
 
 export async function importAll(data: BackupData): Promise<{ counts: Record<string, number> }> {
-  if (!data || ![1, 2, 3, 4, 5].includes(data.version)) {
+  if (!data || ![1, 2, 3, 4, 5, 6].includes(data.version)) {
     throw new Error("Fichier de sauvegarde invalide ou d'une version non prise en charge.");
   }
   const uid = getCurrentUid();

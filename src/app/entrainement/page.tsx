@@ -16,8 +16,8 @@ export default function EntrainementPage() {
       </header>
 
       <main className="mx-auto max-w-[1600px] px-6 py-10 space-y-8">
-        <TeamGymnastPicker title="Programme technique" />
-        <TeamGymnastPicker title="Programme physique" />
+        <TeamGymnastPicker title="Programme technique" programType="TECHNIQUE" />
+        <TeamGymnastPicker title="Programme physique" programType="PHYSIQUE" />
       </main>
     </div>
   );

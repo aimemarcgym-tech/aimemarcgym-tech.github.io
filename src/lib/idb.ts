@@ -123,6 +123,21 @@ export interface VideoRow {
   createdAt: string;
 }
 
+// Journal d'entraînement (onglet Entraînement) : une séance datée par
+// gymnaste, avec un contenu libre (exercices, objectifs, remarques).
+// Distinct par type ("TECHNIQUE" ou "PHYSIQUE") pour séparer les deux
+// programmes. Synchronisé via Firestore comme clubs/gymnastes/mouvements
+// (voir src/lib/data.ts), pas stocké localement — ce type sert juste de
+// forme partagée, comme MovementSnapshotRow.
+export interface TrainingSessionRow {
+  id: string;
+  gymnastId: string;
+  type: "TECHNIQUE" | "PHYSIQUE";
+  date: string;
+  content: string;
+  createdAt: string;
+}
+
 interface AppDB extends DBSchema {
   clubs: { key: string; value: ClubRow };
   gymnasts: { key: string; value: GymnastRow; indexes: { clubId: string } };
