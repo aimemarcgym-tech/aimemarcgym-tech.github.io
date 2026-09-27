@@ -7,6 +7,7 @@ import CustomAudioPlayer from "@/components/CustomAudioPlayer";
 import { shareFiles } from "@/lib/share";
 import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
+import { formatSize } from "@/lib/format";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
@@ -25,11 +26,6 @@ interface FileSystemFileHandleLike {
 
 function sanitizeFileName(name: string) {
   return name.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-zA-Z0-9._-]+/g, "_");
-}
-
-function formatSize(bytes: number) {
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} Ko`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
 }
 
 function GymnastMusicItem({

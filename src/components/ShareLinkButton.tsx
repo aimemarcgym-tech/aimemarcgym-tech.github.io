@@ -34,8 +34,8 @@ export default function ShareLinkButton({
     try {
       const path = await onCreate();
       setLink(`${window.location.origin}${path}`);
-    } catch {
-      setError("Échec de la création du lien.");
+    } catch (e) {
+      setError(e instanceof Error && e.message ? e.message : "Échec de la création du lien.");
     } finally {
       setBusy(false);
     }

@@ -11,6 +11,7 @@ import {
 import type { TrainingSessionRow } from "@/lib/idb";
 import { createShare } from "@/lib/shares";
 import ShareLinkButton from "@/components/ShareLinkButton";
+import { formatSize } from "@/lib/format";
 
 function todayIso() {
   return new Date().toISOString().slice(0, 10);
@@ -40,9 +41,78 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-function formatSize(bytes: number) {
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} Ko`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
+// Formulaire de séance (date + texte libre), partagé entre l'ajout et
+// l'édition — seuls le bouton de validation et la présence d'un "Annuler"
+// diffèrent entre les deux usages.
+function SessionForm({
+  date,
+  content,
+  onDateChange,
+  onContentChange,
+  onSubmit,
+  variant,
+  busy,
+  onCancel,
+}: {
+  date: string;
+  content: string;
+  onDateChange: (v: string) => void;
+  onContentChange: (v: string) => void;
+  onSubmit: (e: React.FormEvent) => void;
+  variant: "add" | "edit";
+  busy?: boolean;
+  onCancel?: () => void;
+}) {
+  const dateInput = (
+    <input
+      type="date"
+      value={date}
+      onChange={(e) => onDateChange(e.target.value)}
+      className="rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none"
+    />
+  );
+  const textarea = (
+    <textarea
+      value={content}
+      onChange={(e) => onContentChange(e.target.value)}
+      rows={3}
+      placeholder={variant === "add" ? "Exercices, objectifs, remarques pour cette séance…" : undefined}
+      className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
+    />
+  );
+
+  if (variant === "add") {
+    return (
+      <form onSubmit={onSubmit} className="mb-4 space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {dateInput}
+          <button
+            type="submit"
+            disabled={busy || !content.trim()}
+            className="rounded bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+          >
+            {busy ? "…" : "Ajouter la séance"}
+          </button>
+        </div>
+        {textarea}
+      </form>
+    );
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-2">
+      {dateInput}
+      {textarea}
+      <div className="flex gap-2">
+        <button type="submit" className="text-xs accent-gradient-text font-medium underline">
+          Enregistrer
+        </button>
+        <button type="button" onClick={onCancel} className="text-xs text-muted hover:text-foreground">
+          Annuler
+        </button>
+      </div>
+    </form>
+  );
 }
 
 export default function TrainingJournal({
@@ -109,12 +179,24 @@ export default function TrainingJournal({
           dataBase64: await fileToBase64(attachment),
         }
       : undefined;
-    const shareId = await createShare("trainingJournal", {
+    const payload = {
       targetLabel,
       programType: type,
       sessions: (sessions ?? []).map((s) => ({ date: s.date, content: s.content })),
       ...(attachmentPayload ? { attachment: attachmentPayload } : {}),
-    });
+    };
+    // Le plafond sur la pièce jointe seule (MAX_ATTACHMENT_BYTES) ne suffit
+    // pas : le document Firestore embarque aussi le texte de toutes les
+    // séances, qui peut être volumineux sur un long historique. On vérifie
+    // ici la taille réelle du document avant l'envoi, avec une marge sous la
+    // limite Firestore de 1 Mo par document.
+    const estimatedSize = new Blob([JSON.stringify(payload)]).size;
+    if (estimatedSize > 900 * 1024) {
+      throw new Error(
+        `Le lien serait trop volumineux (${formatSize(estimatedSize)}, max ~900 Ko) — retirez la pièce jointe ou raccourcissez l'historique des séances.`
+      );
+    }
+    const shareId = await createShare("trainingJournal", payload);
     return `/partage/programme/?id=${shareId}`;
   }
 
@@ -156,30 +238,15 @@ export default function TrainingJournal({
         <ShareLinkButton onCreate={handleShare} />
       </div>
       {attachmentError && <p className="mb-3 text-right text-xs text-danger">{attachmentError}</p>}
-      <form onSubmit={handleAdd} className="mb-4 space-y-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-          />
-          <button
-            type="submit"
-            disabled={saving || !content.trim()}
-            className="rounded bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
-          >
-            {saving ? "…" : "Ajouter la séance"}
-          </button>
-        </div>
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          rows={3}
-          placeholder="Exercices, objectifs, remarques pour cette séance…"
-          className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
-        />
-      </form>
+      <SessionForm
+        variant="add"
+        date={date}
+        content={content}
+        onDateChange={setDate}
+        onContentChange={setContent}
+        onSubmit={handleAdd}
+        busy={saving}
+      />
 
       {!sessions ? (
         <p className="text-sm text-muted">Chargement…</p>
@@ -190,32 +257,15 @@ export default function TrainingJournal({
           {sessions.map((s) => (
             <li key={s.id} className="rounded-lg border border-border-subtle bg-surface p-3">
               {editingId === s.id ? (
-                <form onSubmit={handleSaveEdit} className="space-y-2">
-                  <input
-                    type="date"
-                    value={editDate}
-                    onChange={(e) => setEditDate(e.target.value)}
-                    className="rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-                  />
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    rows={3}
-                    className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-                  />
-                  <div className="flex gap-2">
-                    <button type="submit" className="text-xs accent-gradient-text font-medium underline">
-                      Enregistrer
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditingId(null)}
-                      className="text-xs text-muted hover:text-foreground"
-                    >
-                      Annuler
-                    </button>
-                  </div>
-                </form>
+                <SessionForm
+                  variant="edit"
+                  date={editDate}
+                  content={editContent}
+                  onDateChange={setEditDate}
+                  onContentChange={setEditContent}
+                  onSubmit={handleSaveEdit}
+                  onCancel={() => setEditingId(null)}
+                />
               ) : (
                 <>
                   <div className="mb-1 flex items-center justify-between gap-2">

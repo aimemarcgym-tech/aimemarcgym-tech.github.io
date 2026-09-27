@@ -112,7 +112,15 @@ export default function SautBuilder({
     (materielOptions.trampoTremp && materielOptions.plus13ans ? 1 : 0) + (materielOptions.miniTrampoline ? 1 : 0);
   const noteFinale = Math.max(0, diagnostic.noteDepart - penaliteMateriel);
 
-  const elementByCode = useMemo(() => new Map(regulation.elements.map((e) => [e.code, e])), [regulation]);
+  // Premier élément trouvé pour un code gagne (même règle que getElement()
+  // dans loader.ts, utilisé par le moteur de notation) — voir MovementBuilder.tsx.
+  const elementByCode = useMemo(() => {
+    const map = new Map<string, (typeof regulation.elements)[number]>();
+    for (const e of regulation.elements) {
+      if (!map.has(e.code)) map.set(e.code, e);
+    }
+    return map;
+  }, [regulation]);
 
   const skillMap = useMemo(() => {
     const m = new Map<string, SkillStatus>();
@@ -216,7 +224,8 @@ export default function SautBuilder({
       apparatus: "SAUT",
       evolutionId,
       elements,
-      diagnostic,
+      // La page publique n'affiche jamais "suggestions" (assistant interne).
+      diagnostic: { ...diagnostic, suggestions: [] },
     });
     return `/partage/mouvement/?id=${shareId}`;
   }
@@ -293,7 +302,11 @@ export default function SautBuilder({
                       isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
                     }`}
                   >
-                    {sautGroups.length > 1 && <DragHandle {...handleProps(i)} className="mt-0.5" />}
+                    {/* Toujours monté, même à 1 saut : le démonter (ou le masquer par
+                        display:none) en cours de glissement — si un autre saut est
+                        retiré pendant le drag — couperait pointerup/pointercancel et
+                        laisserait la ligne bloquée en style "en cours de glissement". */}
+                    <DragHandle {...handleProps(i)} className="mt-0.5" />
                     <div className="flex-1">
                       <div className="mb-1 flex items-center justify-between gap-2">
                         <span className={`text-xs font-semibold ${s.horsPalierAutorise ? "text-danger" : "text-muted"}`}>

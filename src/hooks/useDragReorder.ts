@@ -13,8 +13,14 @@ import { useCallback, useRef, useState } from "react";
 // ses limites — plus besoin d'attacher des listeners sur window/document.
 export function useDragReorder(onReorder: (from: number, to: number) => void) {
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
-  const dragIndexRef = useRef<number | null>(null);
-  const overIndexRef = useRef<number | null>(null);
+  // Position verticale (centre) de chaque élément, mesurée une seule fois au
+  // début du glissement plutôt qu'à chaque pointermove : les éléments ne
+  // bougent pas réellement dans le DOM pendant le drag (seul leur style
+  // change, l'ordre du tableau n'est appliqué qu'au drop), donc ces mesures
+  // restent valables tout du long. Réutiliser un cache évite un
+  // getBoundingClientRect() par élément (= un reflow synchrone forcé) à
+  // chaque pointermove, qui peut se déclencher plus de 60 fois/seconde.
+  const dragStartMidpoints = useRef<(number | undefined)[]>([]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [overIndex, setOverIndex] = useState<number | null>(null);
 
@@ -28,10 +34,8 @@ export function useDragReorder(onReorder: (from: number, to: number) => void) {
   function findClosestIndex(y: number): number | null {
     let closest: number | null = null;
     let closestDist = Infinity;
-    itemRefs.current.forEach((el, idx) => {
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const mid = rect.top + rect.height / 2;
+    dragStartMidpoints.current.forEach((mid, idx) => {
+      if (mid === undefined) return;
       const dist = Math.abs(mid - y);
       if (dist < closestDist) {
         closestDist = dist;
@@ -42,11 +46,10 @@ export function useDragReorder(onReorder: (from: number, to: number) => void) {
   }
 
   function endDrag() {
-    if (dragIndexRef.current !== null && overIndexRef.current !== null && overIndexRef.current !== dragIndexRef.current) {
-      onReorder(dragIndexRef.current, overIndexRef.current);
+    if (dragIndex !== null && overIndex !== null && overIndex !== dragIndex) {
+      onReorder(dragIndex, overIndex);
     }
-    dragIndexRef.current = null;
-    overIndexRef.current = null;
+    dragStartMidpoints.current = [];
     setDragIndex(null);
     setOverIndex(null);
   }
@@ -55,17 +58,19 @@ export function useDragReorder(onReorder: (from: number, to: number) => void) {
     return {
       onPointerDown: (e: React.PointerEvent) => {
         e.preventDefault();
-        dragIndexRef.current = index;
-        overIndexRef.current = index;
+        dragStartMidpoints.current = itemRefs.current.map((el) => {
+          if (!el) return undefined;
+          const rect = el.getBoundingClientRect();
+          return rect.top + rect.height / 2;
+        });
         setDragIndex(index);
         setOverIndex(index);
         (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
       },
       onPointerMove: (e: React.PointerEvent) => {
-        if (dragIndexRef.current === null) return;
+        if (dragIndex === null) return;
         const closest = findClosestIndex(e.clientY);
-        if (closest !== null && closest !== overIndexRef.current) {
-          overIndexRef.current = closest;
+        if (closest !== null && closest !== overIndex) {
           setOverIndex(closest);
         }
       },

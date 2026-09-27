@@ -16,7 +16,7 @@ export default function BackupPanel() {
       const data = await exportAll();
       downloadBackup(data);
       setStatus(
-        `Sauvegarde téléchargée (${data.gymnasts.length} gymnaste(s), ${data.movements.length} mouvement(s), ${data.gymnastMusic?.length ?? 0} musique(s), ${data.photos?.length ?? 0} photo(s), ${data.videos?.length ?? 0} vidéo(s)).`
+        `Sauvegarde téléchargée (${data.gymnasts.length} gymnaste(s), ${data.movements.length} mouvement(s), ${data.trainingSessions?.length ?? 0} séance(s) d'entraînement, ${data.gymnastMusic?.length ?? 0} musique(s), ${data.photos?.length ?? 0} photo(s), ${data.videos?.length ?? 0} vidéo(s)).`
       );
     } catch (e) {
       setStatus(e instanceof Error ? e.message : "Échec de l'export.");
@@ -48,7 +48,7 @@ export default function BackupPanel() {
     try {
       const { counts } = await importAll(confirming);
       setStatus(
-        `Sauvegarde importée : ${counts.gymnasts} gymnaste(s), ${counts.movements} mouvement(s), ${counts.clubs} club(s), ${counts.gymnastMusic} musique(s), ${counts.photos ?? 0} photo(s), ${counts.videos ?? 0} vidéo(s). Les données précédentes de cet appareil ont été remplacées.`
+        `Sauvegarde importée : ${counts.gymnasts} gymnaste(s), ${counts.movements} mouvement(s), ${counts.clubs} club(s), ${counts.trainingSessions ?? 0} séance(s) d'entraînement, ${counts.gymnastMusic} musique(s), ${counts.photos ?? 0} photo(s), ${counts.videos ?? 0} vidéo(s). Les données précédentes de cet appareil ont été remplacées.`
       );
     } catch (e) {
       setStatus(e instanceof Error ? e.message : "Échec de l'import.");

@@ -12,14 +12,10 @@ import {
   deleteVideo,
 } from "@/lib/data";
 import { shareFiles } from "@/lib/share";
+import { formatSize } from "@/lib/format";
 
 type Album = Awaited<ReturnType<typeof getVideoAlbums>>[number];
 type Video = Awaited<ReturnType<typeof getVideosByAlbum>>[number];
-
-function formatSize(bytes: number) {
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} Ko`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
-}
 
 function VideoTagsEditor({ video, onChange }: { video: Video; onChange: () => void }) {
   const [value, setValue] = useState(video.tags.join(", "));

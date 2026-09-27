@@ -148,7 +148,18 @@ export default function MovementBuilder({
 
   const [revealedSuggestion, setRevealedSuggestion] = useState<string | null>(null);
 
-  const elementByCode = useMemo(() => new Map(regulation.elements.map((e) => [e.code, e])), [regulation]);
+  // Premier élément trouvé pour un code gagne (même règle que getElement()
+  // dans loader.ts, utilisé par le moteur de notation) : certains codes sont
+  // cross-listés (2 lignes JSON pour un même élément, ex. Sortie qui compte
+  // aussi comme Acro) — sans ça, cette Map et le moteur de notation pouvaient
+  // résoudre le même code vers 2 lignes différentes (branch/extraCategories).
+  const elementByCode = useMemo(() => {
+    const map = new Map<string, (typeof regulation.elements)[number]>();
+    for (const e of regulation.elements) {
+      if (!map.has(e.code)) map.set(e.code, e);
+    }
+    return map;
+  }, [regulation]);
   const archeByCode = useMemo(() => new Map(regulation.arches.map((a) => [a.id, a])), [regulation]);
 
   function categoryKeyOf(archeId: string, branch: string | null): string {
@@ -293,7 +304,10 @@ export default function MovementBuilder({
       apparatus,
       evolutionId,
       elements,
-      diagnostic,
+      // La page publique (/partage/mouvement) n'affiche jamais "suggestions"
+      // (assistant interne) — on l'exclut pour ne pas alourdir inutilement
+      // le document Firestore et ne pas exposer ces données en public.
+      diagnostic: { ...diagnostic, suggestions: [] },
     });
     return `/partage/mouvement/?id=${shareId}`;
   }

@@ -12,14 +12,10 @@ import {
   deletePhoto,
 } from "@/lib/data";
 import { shareFiles } from "@/lib/share";
+import { formatSize } from "@/lib/format";
 
 type Album = Awaited<ReturnType<typeof getPhotoAlbums>>[number];
 type Photo = Awaited<ReturnType<typeof getPhotosByAlbum>>[number];
-
-function formatSize(bytes: number) {
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} Ko`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} Mo`;
-}
 
 function PhotoTagsEditor({ photo, onChange }: { photo: Photo; onChange: () => void }) {
   const [value, setValue] = useState(photo.tags.join(", "));

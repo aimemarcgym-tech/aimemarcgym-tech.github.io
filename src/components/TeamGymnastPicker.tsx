@@ -123,7 +123,14 @@ export default function TeamGymnastPicker({
         </div>
       )}
 
-      {selection && <TrainingJournal target={selection.target} targetLabel={selection.label} type={programType} />}
+      {selection && (
+        <TrainingJournal
+          key={selection.target.kind === "gymnast" ? selection.target.id : selection.target.key}
+          target={selection.target}
+          targetLabel={selection.label}
+          type={programType}
+        />
+      )}
     </div>
   );
 }
