@@ -35,15 +35,25 @@ export default function BackupPanel() {
   function handleFileChosen(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setStatus(null);
+    setStatus("Lecture du fichier…");
     const reader = new FileReader();
     reader.onload = () => {
       try {
         const data = JSON.parse(String(reader.result)) as BackupData;
+        setStatus(null);
         setConfirming(data);
       } catch {
         setStatus("Fichier illisible : ce n'est pas un JSON de sauvegarde valide.");
       }
+    };
+    // Sans ce gestionnaire, un fichier choisi depuis un stockage cloud
+    // (Drive, OneDrive...) dont la lecture échoue (le navigateur mobile doit
+    // d'abord le télécharger depuis le cloud avant de pouvoir le lire) ne
+    // produisait aucun retour visible : ça semblait ne "rien faire" au clic.
+    reader.onerror = () => {
+      setStatus(
+        "Impossible de lire ce fichier — s'il vient de Drive/OneDrive/Dropbox, essayez de le télécharger d'abord dans le stockage de l'appareil (bouton « Télécharger » ou « Rendre disponible hors ligne » dans l'appli), puis réimportez-le depuis là."
+      );
     };
     reader.readAsText(file);
     e.target.value = "";
