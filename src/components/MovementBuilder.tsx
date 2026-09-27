@@ -162,7 +162,7 @@ export default function MovementBuilder({
     const arche = archeByCode.get(archeId);
     const base =
       (arche ? `${arche.name}${arche.subtitle ? " — " + arche.subtitle : ""}` : archeId) +
-      (isSortieElement(archeId) ? " (compte aussi comme Acro)" : "");
+      (archeId === "POUTRE-SORTIES" ? " (compte aussi comme Acro)" : "");
     if (branch === "avant") return `${base} — avant`;
     if (branch === "arriere") return `${base} — arrière`;
     if (branch === "maintien") return "Maintien";
