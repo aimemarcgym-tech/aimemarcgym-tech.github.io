@@ -14,9 +14,16 @@ export default function BackupPanel() {
     setStatus(null);
     try {
       const data = await exportAll();
-      downloadBackup(data);
+      const result = await downloadBackup(data);
+      if (result === "cancelled") {
+        setStatus(null);
+        return;
+      }
+      const counts = `${data.gymnasts.length} gymnaste(s), ${data.movements.length} mouvement(s), ${data.trainingSessions?.length ?? 0} séance(s) d'entraînement, ${data.gymnastMusic?.length ?? 0} musique(s), ${data.photos?.length ?? 0} photo(s), ${data.videos?.length ?? 0} vidéo(s)`;
       setStatus(
-        `Sauvegarde téléchargée (${data.gymnasts.length} gymnaste(s), ${data.movements.length} mouvement(s), ${data.trainingSessions?.length ?? 0} séance(s) d'entraînement, ${data.gymnastMusic?.length ?? 0} musique(s), ${data.photos?.length ?? 0} photo(s), ${data.videos?.length ?? 0} vidéo(s)).`
+        result === "picked"
+          ? `Sauvegarde enregistrée à l'emplacement choisi (${counts}).`
+          : `Sauvegarde téléchargée dans le dossier de téléchargements (${counts}). Votre navigateur ne permet pas de choisir l'emplacement — déplacez le fichier ensuite si besoin.`
       );
     } catch (e) {
       setStatus(e instanceof Error ? e.message : "Échec de l'export.");

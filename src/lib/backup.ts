@@ -300,13 +300,50 @@ export async function importAll(data: BackupData): Promise<{ counts: Record<stri
   return { counts };
 }
 
-export function downloadBackup(data: BackupData) {
+// File System Access API (showSaveFilePicker) : permet de choisir
+// l'emplacement exact du fichier (n'importe quel dossier du PC, y compris un
+// dossier synchronisé Google Drive/OneDrive/Dropbox local) au lieu du
+// dossier de téléchargements par défaut. Disponible sur Chrome/Edge/
+// Vivaldi/Opera desktop uniquement (pas Firefox/Safari, pas mobile) — repli
+// sur le téléchargement classique sinon, avec un message adapté.
+type SaveFilePickerWindow = Window & {
+  showSaveFilePicker?: (options?: {
+    suggestedName?: string;
+    types?: { description: string; accept: Record<string, string[]> }[];
+  }) => Promise<FileSystemFileHandleLike>;
+};
+interface FileSystemFileHandleLike {
+  createWritable(): Promise<{ write(data: Blob): Promise<void>; close(): Promise<void> }>;
+}
+
+export async function downloadBackup(data: BackupData): Promise<"picked" | "downloaded" | "cancelled"> {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const date = new Date().toISOString().slice(0, 10);
+  const fileName = `ufolep-gaf-sauvegarde-${date}.json`;
+
+  const picker = (window as SaveFilePickerWindow).showSaveFilePicker;
+  if (picker) {
+    try {
+      const handle = await picker({
+        suggestedName: fileName,
+        types: [{ description: "Sauvegarde JSON", accept: { "application/json": [".json"] } }],
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      return "picked";
+    } catch (e) {
+      // L'utilisateur a annulé la boîte de dialogue -> pas une erreur.
+      if (e instanceof Error && e.name === "AbortError") return "cancelled";
+      // Autre échec (rare) -> on retente avec le téléchargement classique.
+    }
+  }
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  const date = new Date().toISOString().slice(0, 10);
   a.href = url;
-  a.download = `ufolep-gaf-sauvegarde-${date}.json`;
+  a.download = fileName;
   a.click();
   URL.revokeObjectURL(url);
+  return "downloaded";
 }
