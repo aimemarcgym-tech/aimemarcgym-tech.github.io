@@ -686,7 +686,7 @@ export default function MovementBuilder({
                   const variant = isVariantElement(el.code, el.name);
                   return (
                     <button
-                      key={el.code}
+                      key={`${el.code}::${el.archeId}`}
                       onClick={() => addElement(el.code)}
                       className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10"
                     >
