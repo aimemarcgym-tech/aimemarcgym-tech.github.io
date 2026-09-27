@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { getGymnasts, setGymnastsPassageOrder } from "@/lib/data";
+import { createShare } from "@/lib/shares";
+import ShareLinkButton from "@/components/ShareLinkButton";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
@@ -138,6 +140,27 @@ export default function TeamPassageOrderManager() {
     refresh();
   }
 
+  const orderedForShare = useMemo(() => {
+    return [...members].sort((a, b) => {
+      const ao = a.passageOrder?.[apparatus] ?? Infinity;
+      const bo = b.passageOrder?.[apparatus] ?? Infinity;
+      return ao - bo;
+    });
+  }, [members, apparatus]);
+
+  async function handleShare() {
+    const selected = teams.find((t) => t.key === teamKey);
+    if (!selected) throw new Error("Équipe introuvable");
+    const shareId = await createShare("passageOrder", {
+      club: selected.club,
+      team: selected.team,
+      apparatus,
+      apparatusLabel: APPARATUS_LABELS[apparatus] ?? apparatus,
+      gymnasts: orderedForShare.map((g) => ({ firstName: g.firstName, lastName: g.lastName })),
+    });
+    return `/partage/ordre-passage/?id=${shareId}`;
+  }
+
   return (
     <div className="w-full max-w-4xl min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
       <h2 className="mb-3 text-sm font-semibold text-foreground">Ordres de passage par équipe</h2>
@@ -165,21 +188,24 @@ export default function TeamPassageOrderManager() {
 
       {teamKey && members.length > 0 && (
         <div className="mt-4 space-y-4">
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(APPARATUS_LABELS).map(([key, label]) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setApparatus(key)}
-                className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
-                  apparatus === key
-                    ? "border-border-strong bg-surface-alt text-white"
-                    : "border-transparent text-muted hover:text-foreground"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(APPARATUS_LABELS).map(([key, label]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setApparatus(key)}
+                  className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+                    apparatus === key
+                      ? "border-border-strong bg-surface-alt text-white"
+                      : "border-transparent text-muted hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <ShareLinkButton onCreate={handleShare} />
           </div>
           <ApparatusOrderList apparatus={apparatus} members={members} onReorder={handleReorder} />
         </div>

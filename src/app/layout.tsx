@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import TopTabs from "@/components/TopTabs";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AuthGate from "@/components/AuthGate";
@@ -39,10 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <ServiceWorkerRegister />
         <AuthProvider>
-          <AuthGate>
-            <TopTabs />
-            {children}
-          </AuthGate>
+          <AuthGate>{children}</AuthGate>
         </AuthProvider>
       </body>
     </html>

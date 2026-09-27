@@ -7,6 +7,8 @@ import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
+import ShareLinkButton from "@/components/ShareLinkButton";
+import { createShare } from "@/lib/shares";
 
 // Poutre : ces 3 exigences de tronc commun sont explicitement "1 sortie
 // (poutre mousse) : Acro Px (min.)" — contrairement aux autres exigences
@@ -50,6 +52,9 @@ export default function MovementBuilder({
   regulation,
   initialElements,
   gymnastSkills,
+  label,
+  gymnastFirstName,
+  gymnastLastName,
 }: {
   movementId: string;
   apparatus: string;
@@ -57,6 +62,9 @@ export default function MovementBuilder({
   regulation: ApparatusRegulation;
   initialElements: MovementElementRef[];
   gymnastSkills: { elementCode: string; status: string }[];
+  label: string;
+  gymnastFirstName: string;
+  gymnastLastName: string;
 }) {
   const [sequence, setSequence] = useState<MovementElementRef[]>(initialElements);
   // Lues une seule fois à l'initialisation (et non dans un useEffect séparé) :
@@ -271,6 +279,23 @@ export default function MovementBuilder({
     }
   }
 
+  async function handleShare() {
+    const elements = sequence
+      .map((s) => elementByCode.get(s.code))
+      .filter((e): e is NonNullable<typeof e> => !!e)
+      .map((e) => ({ code: e.code, name: e.name, palier: e.palier, branch: e.branch }));
+    const shareId = await createShare("movement", {
+      gymnastFirstName,
+      gymnastLastName,
+      label,
+      apparatus,
+      evolutionId,
+      elements,
+      diagnostic,
+    });
+    return `/partage/mouvement/?id=${shareId}`;
+  }
+
   function toggleManual(id: string) {
     setManualConfirmations((prev) => {
       const next = new Set(prev);
@@ -296,14 +321,17 @@ export default function MovementBuilder({
             {saving ? "· Enregistrement automatique…" : dirty ? "· Modifications non enregistrées" : "· ✓ Enregistré automatiquement"}
           </span>
         </div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          title="Enregistre un instantané dans l'historique de progression (la séquence, elle, est déjà sauvegardée automatiquement)"
-          className="rounded border border-border-strong px-4 py-2 text-sm font-medium text-foreground transition-transform hover:border-accent-solid/60 active:scale-95 active:bg-surface-alt disabled:opacity-50"
-        >
-          Enregistrer un instantané (historique)
-        </button>
+        <div className="flex items-center gap-2">
+          <ShareLinkButton onCreate={handleShare} />
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            title="Enregistre un instantané dans l'historique de progression (la séquence, elle, est déjà sauvegardée automatiquement)"
+            className="rounded border border-border-strong px-4 py-2 text-sm font-medium text-foreground transition-transform hover:border-accent-solid/60 active:scale-95 active:bg-surface-alt disabled:opacity-50"
+          >
+            Enregistrer un instantané (historique)
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]">

@@ -75,6 +75,9 @@ function MovementPageInner() {
           regulation={regulation}
           initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
           gymnastSkills={movement.gymnast.skills}
+          label={movement.label}
+          gymnastFirstName={movement.gymnast.firstName}
+          gymnastLastName={movement.gymnast.lastName}
         />
       ) : (
         <MovementBuilder
@@ -84,6 +87,9 @@ function MovementPageInner() {
           regulation={regulation}
           initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
           gymnastSkills={movement.gymnast.skills}
+          label={movement.label}
+          gymnastFirstName={movement.gymnast.firstName}
+          gymnastLastName={movement.gymnast.lastName}
         />
       )}
     </div>

@@ -6,6 +6,8 @@ import type { MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import ReferencePanel from "@/components/ReferencePanel";
+import ShareLinkButton from "@/components/ShareLinkButton";
+import { createShare } from "@/lib/shares";
 
 const PALIER_LABEL: Record<string, string> = {
   PREREQUIS: "Prérequis",
@@ -35,12 +37,18 @@ export default function SautBuilder({
   regulation,
   initialElements,
   gymnastSkills,
+  label,
+  gymnastFirstName,
+  gymnastLastName,
 }: {
   movementId: string;
   evolutionId: string;
   regulation: ApparatusRegulation;
   initialElements: MovementElementRef[];
   gymnastSkills: { elementCode: string; status: string }[];
+  label: string;
+  gymnastFirstName: string;
+  gymnastLastName: string;
 }) {
   const [sequence, setSequence] = useState<MovementElementRef[]>(initialElements);
   const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("suggestions");
@@ -198,6 +206,20 @@ export default function SautBuilder({
     }
   }
 
+  async function handleShare() {
+    const elements = diagnostic.sauts.map((s) => ({ code: s.code, name: s.name, palier: s.palier, branch: s.branch }));
+    const shareId = await createShare("movement", {
+      gymnastFirstName,
+      gymnastLastName,
+      label,
+      apparatus: "SAUT",
+      evolutionId,
+      elements,
+      diagnostic,
+    });
+    return `/partage/mouvement/?id=${shareId}`;
+  }
+
   const filteredLibrary = useMemo(() => {
     // Un saut déjà sélectionné reste affiché : il peut être choisi une 2e fois (doublé).
     return regulation.elements
@@ -238,13 +260,16 @@ export default function SautBuilder({
           {sequence.length}/{diagnostic.sautsRequired} saut(s) sélectionné(s)
           {dirty ? " · Modifications non enregistrées" : saving ? " · Enregistrement…" : " · ✓ Enregistré automatiquement"}
         </span>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground disabled:opacity-50"
-        >
-          Enregistrer un instantané (historique)
-        </button>
+        <div className="flex items-center gap-2">
+          <ShareLinkButton onCreate={handleShare} />
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground disabled:opacity-50"
+          >
+            Enregistrer un instantané (historique)
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
