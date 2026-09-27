@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Bouton générique "Partager" : appelle onCreate() (qui écrit un instantané
 // dans Firestore via src/lib/shares.ts et renvoie le chemin public), affiche
@@ -18,8 +18,16 @@ export default function ShareLinkButton({
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimer.current) clearTimeout(resetTimer.current);
+    };
+  }, []);
 
   async function handleClick() {
+    if (resetTimer.current) clearTimeout(resetTimer.current);
     setBusy(true);
     setCopied(false);
     setError(null);
@@ -38,6 +46,12 @@ export default function ShareLinkButton({
     try {
       await navigator.clipboard.writeText(link);
       setCopied(true);
+      // Une fois copié, on revient à l'état initial (bouton "Partager" seul)
+      // après un court délai, le temps de laisser voir la confirmation.
+      resetTimer.current = setTimeout(() => {
+        setLink(null);
+        setCopied(false);
+      }, 1500);
     } catch {
       setError("Impossible de copier automatiquement — sélectionnez le lien manuellement.");
     }
