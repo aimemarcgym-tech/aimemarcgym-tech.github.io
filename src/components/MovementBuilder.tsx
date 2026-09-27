@@ -8,6 +8,8 @@ import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
 import ShareLinkButton from "@/components/ShareLinkButton";
+import DragHandle from "@/components/DragHandle";
+import { useDragReorder } from "@/hooks/useDragReorder";
 import { createShare } from "@/lib/shares";
 
 // Poutre : ces 3 exigences de tronc commun sont explicitement "1 sortie
@@ -89,8 +91,6 @@ export default function MovementBuilder({
   const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("suggestions");
   const [category, setCategory] = useState<string>("ALL");
   const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [revealedActions, setRevealedActions] = useState<Set<number>>(new Set());
 
   const skillMap = useMemo(() => {
@@ -263,6 +263,8 @@ export default function MovementBuilder({
     setDirty(true);
   }
 
+  const { dragIndex, overIndex, setItemRef, handleProps } = useDragReorder(reorderTo);
+
   async function handleSave() {
     setSaving(true);
     try {
@@ -361,34 +363,11 @@ export default function MovementBuilder({
                 const el = elementByCode.get(s.code);
                 const arche = el ? archeByCode.get(el.archeId) : undefined;
                 const isDragging = dragIndex === i;
-                const isDragOver = dragOverIndex === i && dragIndex !== null && dragIndex !== i;
+                const isDragOver = overIndex === i && dragIndex !== null && dragIndex !== i;
                 return (
                   <li
                     key={`${s.code}-${i}`}
-                    draggable
-                    onDragStart={(e) => {
-                      e.dataTransfer.effectAllowed = "move";
-                      e.dataTransfer.setData("text/plain", String(i));
-                      setDragIndex(i);
-                    }}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      if (dragOverIndex !== i) setDragOverIndex(i);
-                    }}
-                    onDragLeave={() => {
-                      setDragOverIndex((cur) => (cur === i ? null : cur));
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      const from = dragIndex ?? Number(e.dataTransfer.getData("text/plain"));
-                      if (!Number.isNaN(from)) reorderTo(from, i);
-                      setDragIndex(null);
-                      setDragOverIndex(null);
-                    }}
-                    onDragEnd={() => {
-                      setDragIndex(null);
-                      setDragOverIndex(null);
-                    }}
+                    ref={setItemRef(i)}
                     onClick={() => toggleRevealed(i)}
                     className={`cursor-pointer rounded border p-2 transition ${
                       isDragging
@@ -400,12 +379,7 @@ export default function MovementBuilder({
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-start gap-2">
-                        <span
-                          className="mt-0.5 cursor-grab select-none text-muted active:cursor-grabbing"
-                          title="Glisser pour réordonner"
-                        >
-                          ⠿
-                        </span>
+                        <DragHandle {...handleProps(i)} onClick={(e) => e.stopPropagation()} className="mt-0.5" />
                         <div>
                           <div className="text-xs text-muted">
                             {i + 1}. {arche?.name} {el?.palier && el.palier !== "BASE" ? `· ${el.palier}` : ""}

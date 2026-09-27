@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { setGymnastsHomeOrder } from "@/lib/data";
 import GymnastRow from "@/components/GymnastRow";
+import DragHandle from "@/components/DragHandle";
+import { useDragReorder } from "@/hooks/useDragReorder";
 
 type Gymnast = {
   id: string;
@@ -27,9 +28,6 @@ export default function DraggableGymnastList<T extends Gymnast>({
     return ao - bo;
   });
 
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-
   async function reorderTo(from: number, to: number) {
     if (from === to) return;
     const next = [...sorted];
@@ -39,48 +37,22 @@ export default function DraggableGymnastList<T extends Gymnast>({
     onReordered();
   }
 
+  const { dragIndex, overIndex, setItemRef, handleProps } = useDragReorder(reorderTo);
+
   return (
     <ul className="space-y-2">
       {sorted.map((g, i) => {
         const isDragging = dragIndex === i;
-        const isDragOver = dragOverIndex === i && dragIndex !== null && dragIndex !== i;
+        const isDragOver = overIndex === i && dragIndex !== null && dragIndex !== i;
         return (
           <li
             key={g.id}
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.effectAllowed = "move";
-              e.dataTransfer.setData("text/plain", String(i));
-              setDragIndex(i);
-            }}
-            onDragOver={(e) => {
-              e.preventDefault();
-              if (dragOverIndex !== i) setDragOverIndex(i);
-            }}
-            onDragLeave={() => {
-              setDragOverIndex((cur) => (cur === i ? null : cur));
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              const from = dragIndex ?? Number(e.dataTransfer.getData("text/plain"));
-              if (!Number.isNaN(from)) reorderTo(from, i);
-              setDragIndex(null);
-              setDragOverIndex(null);
-            }}
-            onDragEnd={() => {
-              setDragIndex(null);
-              setDragOverIndex(null);
-            }}
+            ref={setItemRef(i)}
             className={`flex items-center gap-2 rounded-lg transition ${
               isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
             }`}
           >
-            <span
-              className="shrink-0 cursor-grab select-none px-1 text-muted active:cursor-grabbing"
-              title="Glisser pour réordonner"
-            >
-              ⠿
-            </span>
+            <DragHandle {...handleProps(i)} />
             <div className="flex-1">
               <GymnastRow
                 gymnastId={g.id}

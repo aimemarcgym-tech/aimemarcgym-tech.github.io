@@ -5,6 +5,8 @@ import { getGymnasts, getGymnastMusic, saveGymnastMusic, deleteGymnastMusic, set
 import type { GymnastMusicRow as GymnastMusicRecord } from "@/lib/idb";
 import CustomAudioPlayer from "@/components/CustomAudioPlayer";
 import { shareFiles } from "@/lib/share";
+import DragHandle from "@/components/DragHandle";
+import { useDragReorder } from "@/hooks/useDragReorder";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
@@ -35,15 +37,13 @@ function GymnastMusicItem({
   music,
   onChange,
   onExportOne,
-  onHandleDragStart,
-  onHandleDragEnd,
+  dragHandleProps,
 }: {
   gymnast: Gymnast;
   music: GymnastMusicRecord | undefined | null;
   onChange: () => void;
   onExportOne: (gymnast: Gymnast, music: GymnastMusicRecord) => void;
-  onHandleDragStart: (e: React.DragEvent) => void;
-  onHandleDragEnd: () => void;
+  dragHandleProps: React.ComponentProps<typeof DragHandle>;
 }) {
   const [busy, setBusy] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -88,18 +88,10 @@ function GymnastMusicItem({
     <div className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-          {/* Seule cette poignée est "draggable" (pas toute la ligne) : sinon
+          {/* Seule cette poignée réagit au drag (pas toute la ligne) : sinon
               le glisser-déposer capture aussi les interactions avec le
               curseur du lecteur audio (volume, avancer/reculer) plus bas. */}
-          <span
-            draggable
-            onDragStart={onHandleDragStart}
-            onDragEnd={onHandleDragEnd}
-            className="cursor-grab select-none text-muted active:cursor-grabbing"
-            title="Glisser pour réordonner"
-          >
-            ⠿
-          </span>
+          <DragHandle {...dragHandleProps} />
           {gymnast.firstName} {gymnast.lastName}
         </span>
         <div className="flex items-center gap-2">
@@ -209,9 +201,6 @@ export default function TeamMusicManager() {
     });
   }, [gymnasts, teamKey, teams]);
 
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-
   async function reorderTo(from: number, to: number) {
     if (from === to) return;
     const next = [...members];
@@ -220,6 +209,8 @@ export default function TeamMusicManager() {
     await setGymnastsMusicOrder(next.map((g) => g.id));
     refresh();
   }
+
+  const { dragIndex, overIndex, setItemRef, handleProps } = useDragReorder(reorderTo);
 
   async function reloadMusic() {
     const entries = await Promise.all(members.map(async (g) => [g.id, await getGymnastMusic(g.id)] as const));
@@ -337,28 +328,11 @@ export default function TeamMusicManager() {
           <div className="space-y-2">
             {members.map((g, i) => {
               const isDragging = dragIndex === i;
-              const isDragOver = dragOverIndex === i && dragIndex !== null && dragIndex !== i;
+              const isDragOver = overIndex === i && dragIndex !== null && dragIndex !== i;
               return (
                 <div
                   key={g.id}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    if (dragOverIndex !== i) setDragOverIndex(i);
-                  }}
-                  onDragLeave={() => {
-                    setDragOverIndex((cur) => (cur === i ? null : cur));
-                  }}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    const from = dragIndex ?? Number(e.dataTransfer.getData("text/plain"));
-                    if (!Number.isNaN(from)) reorderTo(from, i);
-                    setDragIndex(null);
-                    setDragOverIndex(null);
-                  }}
-                  onDragEnd={() => {
-                    setDragIndex(null);
-                    setDragOverIndex(null);
-                  }}
+                  ref={setItemRef(i)}
                   className={`rounded-lg transition ${
                     isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
                   }`}
@@ -368,15 +342,7 @@ export default function TeamMusicManager() {
                     music={musicByGymnast[g.id]}
                     onChange={reloadMusic}
                     onExportOne={handleExportOne}
-                    onHandleDragStart={(e) => {
-                      e.dataTransfer.effectAllowed = "move";
-                      e.dataTransfer.setData("text/plain", String(i));
-                      setDragIndex(i);
-                    }}
-                    onHandleDragEnd={() => {
-                      setDragIndex(null);
-                      setDragOverIndex(null);
-                    }}
+                    dragHandleProps={handleProps(i)}
                   />
                 </div>
               );

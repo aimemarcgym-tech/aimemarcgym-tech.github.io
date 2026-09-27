@@ -7,6 +7,8 @@ import type { ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements, saveSnapshot } from "@/lib/data";
 import ReferencePanel from "@/components/ReferencePanel";
 import ShareLinkButton from "@/components/ShareLinkButton";
+import DragHandle from "@/components/DragHandle";
+import { useDragReorder } from "@/hooks/useDragReorder";
 import { createShare } from "@/lib/shares";
 
 const PALIER_LABEL: Record<string, string> = {
@@ -166,9 +168,6 @@ export default function SautBuilder({
     });
   }
 
-  const [sautDragIndex, setSautDragIndex] = useState<number | null>(null);
-  const [sautDragOverIndex, setSautDragOverIndex] = useState<number | null>(null);
-
   const sautGroups = useMemo(() => {
     const order: string[] = [];
     const bySaut = new Map<string, typeof diagnostic.sauts>();
@@ -189,6 +188,8 @@ export default function SautBuilder({
     next.splice(to, 0, moved);
     setSequence(next.flatMap((g) => Array.from({ length: g.count }, () => ({ code: g.code, role: "ELEMENT" as const }))));
   }
+
+  const { dragIndex: sautDragIndex, overIndex: sautOverIndex, setItemRef, handleProps } = useDragReorder(reorderSautGroups);
 
   async function handleSave() {
     setSaving(true);
@@ -283,46 +284,16 @@ export default function SautBuilder({
               {sautGroups.map((g, i) => {
                 const s = g.saut;
                 const isDragging = sautDragIndex === i;
-                const isDragOver = sautDragOverIndex === i && sautDragIndex !== null && sautDragIndex !== i;
+                const isDragOver = sautOverIndex === i && sautDragIndex !== null && sautDragIndex !== i;
                 return (
                   <li
                     key={g.code}
-                    draggable={sautGroups.length > 1}
-                    onDragStart={(e) => {
-                      e.dataTransfer.effectAllowed = "move";
-                      e.dataTransfer.setData("text/plain", String(i));
-                      setSautDragIndex(i);
-                    }}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      if (sautDragOverIndex !== i) setSautDragOverIndex(i);
-                    }}
-                    onDragLeave={() => {
-                      setSautDragOverIndex((cur) => (cur === i ? null : cur));
-                    }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      const from = sautDragIndex ?? Number(e.dataTransfer.getData("text/plain"));
-                      if (!Number.isNaN(from)) reorderSautGroups(from, i);
-                      setSautDragIndex(null);
-                      setSautDragOverIndex(null);
-                    }}
-                    onDragEnd={() => {
-                      setSautDragIndex(null);
-                      setSautDragOverIndex(null);
-                    }}
+                    ref={setItemRef(i)}
                     className={`flex items-start gap-2 rounded-lg border border-border-subtle bg-surface-alt p-3 transition ${
                       isDragging ? "opacity-50" : isDragOver ? "ring-2 ring-accent-solid" : ""
                     }`}
                   >
-                    {sautGroups.length > 1 && (
-                      <span
-                        className="mt-0.5 shrink-0 cursor-grab select-none text-muted active:cursor-grabbing"
-                        title="Glisser pour réordonner"
-                      >
-                        ⠿
-                      </span>
-                    )}
+                    {sautGroups.length > 1 && <DragHandle {...handleProps(i)} className="mt-0.5" />}
                     <div className="flex-1">
                       <div className="mb-1 flex items-center justify-between gap-2">
                         <span className={`text-xs font-semibold ${s.horsPalierAutorise ? "text-danger" : "text-muted"}`}>
