@@ -525,10 +525,19 @@ export async function deleteVideo(videoId: string) {
 }
 
 // Journal d'entraînement (onglet Entraînement > Programme technique/physique) :
-// une séance datée par gymnaste et par type de programme.
-export async function getTrainingSessions(gymnastId: string, type: "TECHNIQUE" | "PHYSIQUE") {
+// une séance datée, soit pour une gymnaste précise, soit pour toute une
+// équipe (clé "club::équipe", même format que passageOrder ailleurs).
+export type TrainingTarget = { kind: "gymnast"; id: string } | { kind: "team"; key: string };
+
+function trainingTargetFilter(target: TrainingTarget) {
+  return target.kind === "gymnast"
+    ? where("gymnastId", "==", target.id)
+    : where("teamKey", "==", target.key);
+}
+
+export async function getTrainingSessions(target: TrainingTarget, type: "TECHNIQUE" | "PHYSIQUE") {
   const snap = await getDocs(
-    query(col("trainingSessions"), where("gymnastId", "==", gymnastId), where("type", "==", type))
+    query(col("trainingSessions"), trainingTargetFilter(target), where("type", "==", type))
   );
   const rows = snap.docs.map((d) => d.data() as TrainingSessionRow);
   rows.sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt));
@@ -536,14 +545,14 @@ export async function getTrainingSessions(gymnastId: string, type: "TECHNIQUE" |
 }
 
 export async function addTrainingSession(
-  gymnastId: string,
+  target: TrainingTarget,
   type: "TECHNIQUE" | "PHYSIQUE",
   date: string,
   content: string
 ) {
   const row: TrainingSessionRow = {
     id: crypto.randomUUID(),
-    gymnastId,
+    ...(target.kind === "gymnast" ? { gymnastId: target.id } : { teamKey: target.key }),
     type,
     date,
     content,

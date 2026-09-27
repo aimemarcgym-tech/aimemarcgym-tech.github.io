@@ -43,10 +43,19 @@ export interface PassageOrderAllShareData {
   }[];
 }
 
+// Journal d'entraînement (Programme technique/physique) : instantané des
+// séances au moment du partage, pour une gymnaste ou pour toute une équipe.
+export interface TrainingJournalShareData {
+  targetLabel: string;
+  programType: "TECHNIQUE" | "PHYSIQUE";
+  sessions: { date: string; content: string }[];
+}
+
 export type ShareDoc =
   | { type: "movement"; ownerUid: string; data: MovementShareData }
   | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
-  | { type: "passageOrderAll"; ownerUid: string; data: PassageOrderAllShareData };
+  | { type: "passageOrderAll"; ownerUid: string; data: PassageOrderAllShareData }
+  | { type: "trainingJournal"; ownerUid: string; data: TrainingJournalShareData };
 
 export async function createShare(
   type: "movement",
@@ -61,8 +70,12 @@ export async function createShare(
   data: PassageOrderAllShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder" | "passageOrderAll",
-  data: MovementShareData | PassageOrderShareData | PassageOrderAllShareData
+  type: "trainingJournal",
+  data: TrainingJournalShareData
+): Promise<string>;
+export async function createShare(
+  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal",
+  data: MovementShareData | PassageOrderShareData | PassageOrderAllShareData | TrainingJournalShareData
 ): Promise<string> {
   const ref = doc(collection(db, "shares"));
   await setDoc(ref, {

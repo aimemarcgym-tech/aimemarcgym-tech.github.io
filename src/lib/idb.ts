@@ -131,7 +131,10 @@ export interface VideoRow {
 // forme partagée, comme MovementSnapshotRow.
 export interface TrainingSessionRow {
   id: string;
-  gymnastId: string;
+  // L'une des deux seulement selon que la séance vise une gymnaste précise
+  // ou toute une équipe (clé "club::équipe", même format que passageOrder).
+  gymnastId?: string;
+  teamKey?: string;
   type: "TECHNIQUE" | "PHYSIQUE";
   date: string;
   content: string;

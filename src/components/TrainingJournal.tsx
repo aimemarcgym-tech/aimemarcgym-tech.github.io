@@ -6,8 +6,11 @@ import {
   addTrainingSession,
   updateTrainingSession,
   deleteTrainingSession,
+  type TrainingTarget,
 } from "@/lib/data";
 import type { TrainingSessionRow } from "@/lib/idb";
+import { createShare } from "@/lib/shares";
+import ShareLinkButton from "@/components/ShareLinkButton";
 
 function todayIso() {
   return new Date().toISOString().slice(0, 10);
@@ -20,10 +23,12 @@ function formatDate(iso: string) {
 }
 
 export default function TrainingJournal({
-  gymnastId,
+  target,
+  targetLabel,
   type,
 }: {
-  gymnastId: string;
+  target: TrainingTarget;
+  targetLabel: string;
   type: "TECHNIQUE" | "PHYSIQUE";
 }) {
   const [sessions, setSessions] = useState<TrainingSessionRow[] | null>(null);
@@ -35,26 +40,35 @@ export default function TrainingJournal({
   const [editContent, setEditContent] = useState("");
 
   function refresh() {
-    getTrainingSessions(gymnastId, type).then(setSessions);
+    getTrainingSessions(target, type).then(setSessions);
   }
 
   useEffect(() => {
     setSessions(null);
     refresh();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gymnastId, type]);
+  }, [target.kind === "gymnast" ? target.id : target.key, type]);
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
     if (!content.trim()) return;
     setSaving(true);
     try {
-      await addTrainingSession(gymnastId, type, date, content.trim());
+      await addTrainingSession(target, type, date, content.trim());
       setContent("");
       refresh();
     } finally {
       setSaving(false);
     }
+  }
+
+  async function handleShare() {
+    const shareId = await createShare("trainingJournal", {
+      targetLabel,
+      programType: type,
+      sessions: (sessions ?? []).map((s) => ({ date: s.date, content: s.content })),
+    });
+    return `/partage/programme/?id=${shareId}`;
   }
 
   function startEdit(s: TrainingSessionRow) {
@@ -78,6 +92,9 @@ export default function TrainingJournal({
 
   return (
     <div className="mt-4 rounded-lg border border-border-subtle bg-surface-alt/30 p-4">
+      <div className="mb-3 flex items-center justify-end">
+        <ShareLinkButton onCreate={handleShare} />
+      </div>
       <form onSubmit={handleAdd} className="mb-4 space-y-2">
         <div className="flex flex-wrap items-center gap-2">
           <input

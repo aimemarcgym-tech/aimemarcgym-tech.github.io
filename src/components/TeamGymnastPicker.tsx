@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getGymnasts } from "@/lib/data";
+import { getGymnasts, type TrainingTarget } from "@/lib/data";
 import TrainingJournal from "@/components/TrainingJournal";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
+type Selection = { target: TrainingTarget; label: string };
 
 export default function TeamGymnastPicker({
   title,
@@ -15,7 +16,7 @@ export default function TeamGymnastPicker({
 }) {
   const [gymnasts, setGymnasts] = useState<Gymnast[] | null>(null);
   const [teamKey, setTeamKey] = useState("");
-  const [selectedGymnastId, setSelectedGymnastId] = useState<string | null>(null);
+  const [selection, setSelection] = useState<Selection | null>(null);
 
   useEffect(() => {
     getGymnasts().then(setGymnasts);
@@ -57,7 +58,7 @@ export default function TeamGymnastPicker({
           value={teamKey}
           onChange={(e) => {
             setTeamKey(e.target.value);
-            setSelectedGymnastId(null);
+            setSelection(null);
           }}
           className="w-full max-w-xs rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
         >
@@ -72,24 +73,57 @@ export default function TeamGymnastPicker({
 
       {teamKey && (
         <div className="mt-4 flex flex-wrap gap-2">
-          {members.map((g) => (
-            <button
-              key={g.id}
-              type="button"
-              onClick={() => setSelectedGymnastId((cur) => (cur === g.id ? null : g.id))}
-              className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                selectedGymnastId === g.id
-                  ? "border-accent-solid bg-accent-from/10 text-white"
-                  : "border-border-strong bg-surface-alt text-foreground hover:border-accent-solid hover:text-white"
-              }`}
-            >
-              {g.firstName} {g.lastName}
-            </button>
-          ))}
+          {(() => {
+            const selectedTeam = teams.find((t) => t.key === teamKey);
+            const teamLabel = selectedTeam ? `Toute l'équipe ${selectedTeam.team} (${selectedTeam.club})` : "Toute l'équipe";
+            const isTeamSelected = selection?.target.kind === "team" && selection.target.key === teamKey;
+            return (
+              <button
+                type="button"
+                onClick={() =>
+                  setSelection((cur) =>
+                    cur?.target.kind === "team" && cur.target.key === teamKey
+                      ? null
+                      : { target: { kind: "team", key: teamKey }, label: teamLabel }
+                  )
+                }
+                className={`rounded-lg border px-3 py-2 text-sm font-semibold transition-colors ${
+                  isTeamSelected
+                    ? "border-accent-solid bg-accent-from/10 text-white"
+                    : "border-accent-solid/60 bg-surface-alt text-foreground hover:bg-accent-from/10"
+                }`}
+              >
+                ★ Toute l&apos;équipe
+              </button>
+            );
+          })()}
+          {members.map((g) => {
+            const isSelected = selection?.target.kind === "gymnast" && selection.target.id === g.id;
+            return (
+              <button
+                key={g.id}
+                type="button"
+                onClick={() =>
+                  setSelection((cur) =>
+                    cur?.target.kind === "gymnast" && cur.target.id === g.id
+                      ? null
+                      : { target: { kind: "gymnast", id: g.id }, label: `${g.firstName} ${g.lastName}` }
+                  )
+                }
+                className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                  isSelected
+                    ? "border-accent-solid bg-accent-from/10 text-white"
+                    : "border-border-strong bg-surface-alt text-foreground hover:border-accent-solid hover:text-white"
+                }`}
+              >
+                {g.firstName} {g.lastName}
+              </button>
+            );
+          })}
         </div>
       )}
 
-      {selectedGymnastId && <TrainingJournal gymnastId={selectedGymnastId} type={programType} />}
+      {selection && <TrainingJournal target={selection.target} targetLabel={selection.label} type={programType} />}
     </div>
   );
 }
