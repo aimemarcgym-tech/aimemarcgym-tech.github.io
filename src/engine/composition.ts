@@ -102,10 +102,16 @@ function findCategoryRuns(
 function evaluateCheck(
   apparatus: string,
   spec: CheckSpec,
-  elements: RegElement[]
+  elements: RegElement[],
+  context: "TRONC_COMMUN" | "VALORISATION"
 ): { ok: boolean; detail: string } {
-  // Les éléments NOMADE ne comptent jamais pour une valorisation (règle Généralités).
-  const usable = elements.filter((e) => e.palier !== "NOMADE");
+  // Les éléments NOMADE ne comptent jamais pour une valorisation (règle
+  // Généralités). Les éléments PREREQUIS peuvent valider une exigence de
+  // tronc commun, mais jamais une valorisation (règle confirmée par
+  // l'utilisateur) : exclus uniquement dans le contexte VALORISATION.
+  const usable = elements.filter(
+    (e) => e.palier !== "NOMADE" && !(context === "VALORISATION" && e.palier === "PREREQUIS")
+  );
 
   switch (spec.type) {
     case "CATEGORY_COUNT": {
@@ -191,7 +197,7 @@ export function analyzeMovement(
       const confirmed = manualConfirmations.has(ex.id);
       return { id: ex.id, label: ex.label, status: confirmed ? "OK" : "A_CONFIRMER", auto: false, confirmedManually: confirmed };
     }
-    const { ok } = evaluateCheck(apparatus, spec, elements);
+    const { ok } = evaluateCheck(apparatus, spec, elements, "TRONC_COMMUN");
     return { id: ex.id, label: ex.label, status: ok ? "OK" : "MANQUANT", auto: true };
   });
   const archesOk = archesUsed.length >= evolution.troncCommun.arches;
@@ -222,7 +228,7 @@ export function analyzeMovement(
         pondere: opt.pondere,
       };
     }
-    const { ok } = evaluateCheck(apparatus, spec, elements);
+    const { ok } = evaluateCheck(apparatus, spec, elements, "VALORISATION");
     return { id: opt.id, label: opt.label, status: ok ? "OK" : "MANQUANT", auto: true, points: opt.points, pondere: opt.pondere };
   });
   const validated = valoResults.filter((r) => r.status === "OK");
@@ -279,11 +285,14 @@ function computeSuggestions(
   if (missingTc.length === 0 && missingValo.length === 0 && !needsMoreArches) return [];
 
   const autorisesSet = new Set(evolution.paliersAutorises);
+  // Les éléments PREREQUIS restent suggérables (ils peuvent compléter le
+  // tronc commun, cf. evaluateCheck) — evaluateCheck se charge de ne jamais
+  // leur attribuer une valorisation, donc l'Assistant ne les proposera
+  // naturellement que pour ce que la règle autorise.
   const candidates = getRegulation(apparatus).elements.filter(
     (e) =>
       !currentCodes.has(e.code) &&
-      e.palier !== "PREREQUIS" &&
-      (e.palier === "NOMADE" || e.palier === "BASE" || autorisesSet.has(e.palier))
+      (e.palier === "NOMADE" || e.palier === "BASE" || e.palier === "PREREQUIS" || autorisesSet.has(e.palier))
   );
 
   const suggestions: Suggestion[] = [];
@@ -298,16 +307,16 @@ function computeSuggestions(
     for (const ex of missingTc) {
       const spec = getCheck(ex.id, apparatus);
       if (spec.type === "MANUAL") continue;
-      const before = evaluateCheck(apparatus, spec, currentElements).ok;
-      const after = evaluateCheck(apparatus, spec, hypothetical).ok;
+      const before = evaluateCheck(apparatus, spec, currentElements, "TRONC_COMMUN").ok;
+      const after = evaluateCheck(apparatus, spec, hypothetical, "TRONC_COMMUN").ok;
       if (!before && after) reasons.push(`complète l'exigence « ${ex.label} »`);
     }
 
     for (const v of missingValo) {
       const spec = getCheck(v.id, apparatus);
       if (spec.type === "MANUAL") continue;
-      const before = evaluateCheck(apparatus, spec, currentElements).ok;
-      const after = evaluateCheck(apparatus, spec, hypothetical).ok;
+      const before = evaluateCheck(apparatus, spec, currentElements, "VALORISATION").ok;
+      const after = evaluateCheck(apparatus, spec, hypothetical, "VALORISATION").ok;
       if (!before && after) reasons.push(`apporte la valorisation « ${v.label} » (+${v.points} pts)`);
     }
 
