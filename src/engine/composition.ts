@@ -1,5 +1,6 @@
 import { getArche, getElement, getRegulation } from "@/regulation/loader";
 import { getCheck } from "@/regulation/checks";
+import { isVariantElement } from "@/regulation/variants";
 import { PALIER_ORDER, palierRank, type CheckSpec, type Evolution, type Palier, type RegElement } from "@/regulation/types";
 
 export interface MovementElementRef {
@@ -32,6 +33,11 @@ export interface Diagnostic {
   };
   paliers: {
     horsAutorise: { code: string; palier: Palier }[]; // éléments dont le palier n'est pas autorisé au niveau
+  };
+  liaisons: {
+    // Dans une série d'éléments liés (LA/LG/LM), le dernier élément ne peut
+    // pas être une variante — seuls les éléments intermédiaires le peuvent.
+    dernierEnVariante: { code: string; name: string; category: string }[];
   };
   valorisations: {
     results: CheckResult[];
@@ -97,6 +103,31 @@ function findCategoryRuns(
   }
   if (current.length >= minLength) runs.push(current);
   return runs;
+}
+
+// Dans une liaison (série d'éléments de même catégorie enchaînés dans
+// l'ordre du mouvement — même proxy que findCategoryRuns pour LA/LG/LM),
+// seuls les éléments avant le dernier peuvent être des variantes : le
+// dernier élément de la série doit être la forme de base.
+function findVariantEndingViolations(
+  apparatus: string,
+  elements: RegElement[]
+): { code: string; name: string; category: string }[] {
+  const categories = new Set<string>();
+  for (const el of elements) {
+    for (const c of elementCategories(apparatus, el)) categories.add(c);
+  }
+  const violations: { code: string; name: string; category: string }[] = [];
+  for (const category of categories) {
+    const runs = findCategoryRuns(apparatus, elements, category, 2);
+    for (const run of runs) {
+      const last = run[run.length - 1];
+      if (isVariantElement(last.code, last.name)) {
+        violations.push({ code: last.code, name: last.name, category });
+      }
+    }
+  }
+  return violations;
 }
 
 function evaluateCheck(
@@ -260,6 +291,7 @@ export function analyzeMovement(
       points: troncCommunPoints,
     },
     paliers: { horsAutorise },
+    liaisons: { dernierEnVariante: findVariantEndingViolations(apparatus, elements) },
     valorisations: {
       results: valoResults,
       validatedCount: validated.length,

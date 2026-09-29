@@ -456,6 +456,22 @@ export default function MovementBuilder({
             )}
           </div>
 
+          {diagnostic.liaisons.dernierEnVariante.length > 0 && (
+            <div className="mb-4">
+              <div className="mb-1 flex items-center justify-between text-sm font-semibold text-foreground">
+                <span>Liaisons</span>
+              </div>
+              <ul className="space-y-1 text-xs text-danger">
+                {diagnostic.liaisons.dernierEnVariante.map((v) => (
+                  <li key={v.code}>
+                    ✕ {elementByCode.get(v.code)?.name ?? v.name} — ne peut pas terminer une liaison en variante (le dernier
+                    élément de la série doit être la forme de base)
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div className="mb-4">
             <div className="mb-1 flex items-center justify-between text-sm font-semibold text-foreground">
               <span>Valorisations</span>
