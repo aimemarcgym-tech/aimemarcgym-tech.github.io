@@ -8,7 +8,7 @@
       "troncCommun": {
         "arches": 4, "elementsMin": 6, "elementsMax": 8,
         "exigences": [
-          { "id": "A1-TC-1", "label": "1 souplesse" },
+          { "id": "A1-TC-1", "label": "1 élément de souplesse" },
           { "id": "A1-TC-2", "label": "2 acros" }
         ]
       },
@@ -17,7 +17,7 @@
       "valorisations": {
         "choisir": 4, "parmi": 4,
         "options": [
-          { "id": "A1-V1", "label": "1 ATR - Départ et retour en fente avec envol", "pondere": true, "points": 3 },
+          { "id": "A1-V1", "label": "1 ATR - Départ et retour en fente", "pondere": true, "points": 3 },
           { "id": "A1-V2", "label": "1 saut", "pondere": false, "points": 2 },
           { "id": "A1-V3", "label": "1 élément P2", "pondere": false, "points": 2 },
           { "id": "A1-V4", "label": "2 acros de sens différents", "pondere": false, "points": 2 }
@@ -38,10 +38,10 @@
       "valorisations": {
         "choisir": 4, "parmi": 4,
         "options": [
-          { "id": "A2-V1", "label": "1 ATR - Départ et retour en fente avec envol", "pondere": true, "points": 3 },
+          { "id": "A2-V1", "label": "1 ATR - Départ et retour en fente", "pondere": true, "points": 3 },
           { "id": "A2-V2", "label": "1 saut P2 (min.)", "pondere": false, "points": 2 },
           { "id": "A2-V3", "label": "Sursaut + fente + roue", "pondere": false, "points": 2 },
-          { "id": "A2-V4", "label": "2 acros de sens différents", "pondere": false, "points": 3 }
+          { "id": "A2-V4", "label": "2 acros de sens différents", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -50,6 +50,7 @@
       "troncCommun": {
         "arches": 4, "elementsMin": 6, "elementsMax": 8,
         "exigences": [
+          { "id": "B1-TC-2", "label": "1 PG ou 1 FORCE" },
           { "id": "B1-TC-1", "label": "1 LA" }
         ]
       },
@@ -118,7 +119,7 @@
         "exigences": [
           { "id": "C1-TC-1", "label": "1 PG ou 1 FORCE" },
           { "id": "C1-TC-2", "label": "2 LA distinctes" },
-          { "id": "C1-TC-3", "label": "1 élément P6 (min.)" }
+          { "id": "C1-TC-3", "label": "1 élément P5 (min.)" }
         ]
       },
       "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
@@ -126,9 +127,9 @@
       "valorisations": {
         "choisir": 4, "parmi": 6,
         "options": [
-          { "id": "C1-V1", "label": "1 salto position tendue", "pondere": true, "points": 3 },
+          { "id": "C1-V1", "label": "1 salto position tendue appel 2 pieds", "pondere": true, "points": 3 },
           { "id": "C1-V2", "label": "1 LAE de 3 éléments différents dont 1 P5 (min.)", "pondere": true, "points": 3 },
-          { "id": "C1-V3", "label": "1 FORCE ou 1 SAUT P5 (min.)", "pondere": false, "points": 2 },
+          { "id": "C1-V3", "label": "1 FORCE ou 1 SAUT P4 (min.)", "pondere": false, "points": 2 },
           { "id": "C1-V4", "label": "1 élément acro avec envol P5 (min.)", "pondere": false, "points": 2 },
           { "id": "C1-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 },
           { "id": "C1-V6", "label": "2 salti appel 2 pieds liés directement ou indirectement", "pondere": false, "points": 2 }
@@ -142,7 +143,7 @@
         "exigences": [
           { "id": "C2-TC-1", "label": "1 PG ou 1 FORCE" },
           { "id": "C2-TC-2", "label": "2 LA distinctes" },
-          { "id": "C2-TC-3", "label": "1 élément P5 (min.)" }
+          { "id": "C2-TC-3", "label": "1 élément P6 (min.)" }
         ]
       },
       "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
@@ -152,7 +153,7 @@
         "options": [
           { "id": "C2-V1", "label": "1 salto avec rotation longitudinale 360°", "pondere": true, "points": 3 },
           { "id": "C2-V2", "label": "1 LAE de 3 éléments différents dont 1 P5 (min.)", "pondere": true, "points": 3 },
-          { "id": "C2-V3", "label": "1 FORCE ou 1 SAUT P4 (min.)", "pondere": false, "points": 2 },
+          { "id": "C2-V3", "label": "1 FORCE ou 1 SAUT P5 (min.)", "pondere": false, "points": 2 },
           { "id": "C2-V4", "label": "1 élément acro P6 (min.)", "pondere": false, "points": 2 },
           { "id": "C2-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 },
           { "id": "C2-V6", "label": "2 salti appel 2 pieds liés directement ou indirectement", "pondere": false, "points": 2 }
