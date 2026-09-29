@@ -70,6 +70,7 @@ export const BARRES_ASYM_CHECKS: Record<string, CheckSpec> = {
   "BA-A1-TC-2": { type: "CATEGORY_COUNT", category: "BALANCES", min: 1 },
   "BA-A2-TC-2": { type: "CATEGORY_COUNT", category: "BALANCES", min: 1 },
   "BA-B1-TC-1": { type: "CATEGORY_COUNT", category: "BALANCES", min: 1 },
+  "BA-B1-TC-2": { type: "CATEGORY_COUNT", category: "VENIR_APPUI", min: 1 },
   "BA-B2-TC-2": { type: "CATEGORY_COUNT", category: "ELANS", min: 1 },
   "BA-B2-TC-3": { type: "CATEGORY_COUNT", category: "VENIR_APPUI", min: 1 },
   "BA-B3-TC-2": { type: "CATEGORY_COUNT", category: "BALANCES", min: 1 },

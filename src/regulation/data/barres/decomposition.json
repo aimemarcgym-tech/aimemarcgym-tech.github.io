@@ -50,7 +50,8 @@
       "troncCommun": {
         "arches": 4, "elementsMin": 6, "elementsMax": 8,
         "exigences": [
-          { "id": "BA-B1-TC-1", "label": "1 élément des arches des balancés" }
+          { "id": "BA-B1-TC-1", "label": "1 élément des arches des balancés" },
+          { "id": "BA-B1-TC-2", "label": "1 élément des arches venir à l'appui" }
         ]
       },
       "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
