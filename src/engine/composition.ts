@@ -103,15 +103,20 @@ function evaluateCheck(
   apparatus: string,
   spec: CheckSpec,
   elements: RegElement[],
-  context: "TRONC_COMMUN" | "VALORISATION"
+  context: "TRONC_COMMUN" | "VALORISATION",
+  paliersValorisables: Palier[]
 ): { ok: boolean; detail: string } {
-  // Les éléments NOMADE ne comptent jamais pour une valorisation (règle
-  // Généralités). Les éléments PREREQUIS peuvent valider une exigence de
-  // tronc commun, mais jamais une valorisation (règle confirmée par
-  // l'utilisateur) : exclus uniquement dans le contexte VALORISATION.
-  const usable = elements.filter(
-    (e) => e.palier !== "NOMADE" && !(context === "VALORISATION" && e.palier === "PREREQUIS")
-  );
+  // Prérequis, Base et Nomade peuvent valider une exigence de tronc commun,
+  // mais jamais une valorisation (règle confirmée par l'utilisateur) : en
+  // contexte VALORISATION, seuls les éléments dont le palier fait partie
+  // des "paliers valorisables" de l'évolution comptent — ce champ des
+  // données (déjà présent par évolution) exclut naturellement ces 3
+  // paliers puisqu'aucun d'eux n'y apparaît jamais, et respecte aussi la
+  // borne haute propre à chaque évolution (ex. un élément P7 ne doit pas
+  // valoriser une évolution dont les paliers valorisables s'arrêtent à P4).
+  const valorisableSet = new Set(paliersValorisables);
+  const usable =
+    context === "VALORISATION" ? elements.filter((e) => valorisableSet.has(e.palier)) : elements;
 
   switch (spec.type) {
     case "CATEGORY_COUNT": {
@@ -197,7 +202,7 @@ export function analyzeMovement(
       const confirmed = manualConfirmations.has(ex.id);
       return { id: ex.id, label: ex.label, status: confirmed ? "OK" : "A_CONFIRMER", auto: false, confirmedManually: confirmed };
     }
-    const { ok } = evaluateCheck(apparatus, spec, elements, "TRONC_COMMUN");
+    const { ok } = evaluateCheck(apparatus, spec, elements, "TRONC_COMMUN", evolution.paliersValorisables);
     return { id: ex.id, label: ex.label, status: ok ? "OK" : "MANQUANT", auto: true };
   });
   const archesOk = archesUsed.length >= evolution.troncCommun.arches;
@@ -228,7 +233,7 @@ export function analyzeMovement(
         pondere: opt.pondere,
       };
     }
-    const { ok } = evaluateCheck(apparatus, spec, elements, "VALORISATION");
+    const { ok } = evaluateCheck(apparatus, spec, elements, "VALORISATION", evolution.paliersValorisables);
     return { id: opt.id, label: opt.label, status: ok ? "OK" : "MANQUANT", auto: true, points: opt.points, pondere: opt.pondere };
   });
   const validated = valoResults.filter((r) => r.status === "OK");
@@ -307,16 +312,16 @@ function computeSuggestions(
     for (const ex of missingTc) {
       const spec = getCheck(ex.id, apparatus);
       if (spec.type === "MANUAL") continue;
-      const before = evaluateCheck(apparatus, spec, currentElements, "TRONC_COMMUN").ok;
-      const after = evaluateCheck(apparatus, spec, hypothetical, "TRONC_COMMUN").ok;
+      const before = evaluateCheck(apparatus, spec, currentElements, "TRONC_COMMUN", evolution.paliersValorisables).ok;
+      const after = evaluateCheck(apparatus, spec, hypothetical, "TRONC_COMMUN", evolution.paliersValorisables).ok;
       if (!before && after) reasons.push(`complète l'exigence « ${ex.label} »`);
     }
 
     for (const v of missingValo) {
       const spec = getCheck(v.id, apparatus);
       if (spec.type === "MANUAL") continue;
-      const before = evaluateCheck(apparatus, spec, currentElements, "VALORISATION").ok;
-      const after = evaluateCheck(apparatus, spec, hypothetical, "VALORISATION").ok;
+      const before = evaluateCheck(apparatus, spec, currentElements, "VALORISATION", evolution.paliersValorisables).ok;
+      const after = evaluateCheck(apparatus, spec, hypothetical, "VALORISATION", evolution.paliersValorisables).ok;
       if (!before && after) reasons.push(`apporte la valorisation « ${v.label} » (+${v.points} pts)`);
     }
 
