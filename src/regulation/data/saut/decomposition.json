@@ -11,8 +11,8 @@
       "valorisations": {
         "choisir": 1, "parmi": 2,
         "options": [
-          { "id": "SAUT-A1-V1", "label": "Saut à 1m", "pondere": false, "points": 0 },
-          { "id": "SAUT-A1-V2", "label": "Saut tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-A1-V1", "label": "Saut à 1m", "pondere": false, "points": 2 },
+          { "id": "SAUT-A1-V2", "label": "Saut tremplin", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -24,8 +24,8 @@
       "valorisations": {
         "choisir": 1, "parmi": 2,
         "options": [
-          { "id": "SAUT-A2-V1", "label": "Saut à 1m", "pondere": false, "points": 0 },
-          { "id": "SAUT-A2-V2", "label": "Saut tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-A2-V1", "label": "Saut à 1m", "pondere": false, "points": 2 },
+          { "id": "SAUT-A2-V2", "label": "Saut tremplin", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -37,8 +37,8 @@
       "valorisations": {
         "choisir": 1, "parmi": 2,
         "options": [
-          { "id": "SAUT-B1-V1", "label": "Saut tremplin", "pondere": false, "points": 0 },
-          { "id": "SAUT-B1-V2", "label": "2 sauts à 1.20 m (min.)", "pondere": false, "points": 0 }
+          { "id": "SAUT-B1-V1", "label": "Saut tremplin", "pondere": false, "points": 2 },
+          { "id": "SAUT-B1-V2", "label": "2 sauts à 1.20 m (min.)", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -50,9 +50,9 @@
       "valorisations": {
         "choisir": 1, "parmi": 3,
         "options": [
-          { "id": "SAUT-B2-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
-          { "id": "SAUT-B2-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
-          { "id": "SAUT-B2-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-B2-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 2 },
+          { "id": "SAUT-B2-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 2 },
+          { "id": "SAUT-B2-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -64,9 +64,9 @@
       "valorisations": {
         "choisir": 1, "parmi": 3,
         "options": [
-          { "id": "SAUT-B3-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
-          { "id": "SAUT-B3-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
-          { "id": "SAUT-B3-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-B3-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 2 },
+          { "id": "SAUT-B3-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 2 },
+          { "id": "SAUT-B3-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -78,9 +78,9 @@
       "valorisations": {
         "choisir": 1, "parmi": 3,
         "options": [
-          { "id": "SAUT-C1-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
-          { "id": "SAUT-C1-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
-          { "id": "SAUT-C1-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-C1-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 2 },
+          { "id": "SAUT-C1-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 2 },
+          { "id": "SAUT-C1-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -92,9 +92,9 @@
       "valorisations": {
         "choisir": 1, "parmi": 3,
         "options": [
-          { "id": "SAUT-C2-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
-          { "id": "SAUT-C2-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
-          { "id": "SAUT-C2-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-C2-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 2 },
+          { "id": "SAUT-C2-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 2 },
+          { "id": "SAUT-C2-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 2 }
         ]
       }
     },
@@ -106,9 +106,9 @@
       "valorisations": {
         "choisir": 1, "parmi": 3,
         "options": [
-          { "id": "SAUT-C3-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 0 },
-          { "id": "SAUT-C3-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 0 },
-          { "id": "SAUT-C3-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 0 }
+          { "id": "SAUT-C3-V1", "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables)", "pondere": false, "points": 2 },
+          { "id": "SAUT-C3-V2", "label": "Saut avec rotation longitudinale ou transversale", "pondere": false, "points": 2 },
+          { "id": "SAUT-C3-V3", "label": "Saut avec un élément sur le tremplin", "pondere": false, "points": 2 }
         ]
       }
     }

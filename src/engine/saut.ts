@@ -23,6 +23,7 @@ export interface SautValorisationResult {
   status: "OK" | "MANQUANT" | "A_CONFIRMER";
   auto: boolean;
   confirmedManually?: boolean;
+  points: number;
 }
 
 export interface SautSuggestion {
@@ -100,13 +101,19 @@ export function analyzeSaut(
   const valorisations: SautValorisationResult[] = evolution.valorisations.options.map((opt) => {
     if (opt.label.startsWith("2 sauts de 1er envol différents")) {
       const ok = sautsRequired >= 2 && sauts.length === sautsRequired && famillesDifferentes && auMoinsUnDansPaliersValorisables;
-      return { id: opt.id, label: opt.label, status: ok ? "OK" : "MANQUANT", auto: true };
+      return { id: opt.id, label: opt.label, status: ok ? "OK" : "MANQUANT", auto: true, points: opt.points };
     }
     const confirmed = manualConfirmations.has(opt.id);
-    return { id: opt.id, label: opt.label, status: confirmed ? "OK" : "A_CONFIRMER", auto: false, confirmedManually: confirmed };
+    return { id: opt.id, label: opt.label, status: confirmed ? "OK" : "A_CONFIRMER", auto: false, confirmedManually: confirmed, points: opt.points };
   });
 
-  const noteDepart = sauts.length > 0 ? Math.max(...sauts.map((s) => s.value)) : 0;
+  // Seules les "choisir" meilleures valorisations validées comptent (comme
+  // pour les autres agrès) — en pratique "choisir": 1 pour toutes les
+  // évolutions du Saut, donc une seule valorisation rapporte des points.
+  const sortedValidated = valorisations.filter((v) => v.status === "OK").sort((a, b) => b.points - a.points);
+  const valorisationsPoints = sortedValidated.slice(0, evolution.valorisations.choisir).reduce((sum, v) => sum + v.points, 0);
+
+  const noteDepart = (sauts.length > 0 ? Math.max(...sauts.map((s) => s.value)) : 0) + valorisationsPoints;
 
   const suggestions = computeSautSuggestions(evolutionId, sauts, sautsRequired);
 
