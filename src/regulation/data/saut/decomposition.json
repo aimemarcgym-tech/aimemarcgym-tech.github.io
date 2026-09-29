@@ -137,14 +137,8 @@
       ],
       "valorisations": {
         "choisir": 1,
-        "parmi": 3,
+        "parmi": 2,
         "options": [
-          {
-            "id": "SAUT-B2-V1",
-            "label": "2 sauts de 1er envol différents (1 des 2 sauts min. dans les paliers valorisables) hors nomades",
-            "pondere": false,
-            "points": 2
-          },
           {
             "id": "SAUT-B2-V2",
             "label": "Saut avec rotation longitudinale ou transversale",
