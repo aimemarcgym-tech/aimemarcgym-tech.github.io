@@ -17,7 +17,7 @@ export default function TeamGroup({
   onRenamed?: () => void;
   children: ReactNode;
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(teamName);
   const [pending, startTransition] = useTransition();
