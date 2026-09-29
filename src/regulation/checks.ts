@@ -127,15 +127,12 @@ export const POUTRE_CHECKS: Record<string, CheckSpec> = {
   "P-A2-TC-2": { type: "CATEGORY_COUNT", category: "SAUT_GYM", min: 2 },
   "P-B1-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 2 },
   "P-B1-TC-2": { type: "CATEGORY_COUNT", category: "SAUT_GYM", min: 2 },
-  "P-B1-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P2", category: "ACRO" },
   "P-B2-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 2 },
   "P-B2-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
   "P-B2-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3" },
-  "P-B2-TC-4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "ACRO" },
   "P-B3-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
   "P-B3-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
   "P-B3-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4" },
-  "P-B3-TC-4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ACRO" },
   "P-C1-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
   "P-C1-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
   "P-C1-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5" },
@@ -145,13 +142,15 @@ export const POUTRE_CHECKS: Record<string, CheckSpec> = {
   "P-C3-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
   "P-C3-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
   "P-C3-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P7" },
-  // P-A1-TC-3 "1 ATR (PR)", P-A2-TC-3 "Roue", P-C1/C2/C3-TC-4 "1 LA ..." :
-  // exigences "poutre mousse" (catégorie ACRO, arche Accro poutre mousse)
-  // non vérifiables précisément avec le système de vérification actuel
-  // (palier PR / élément nominatif / liaison chaînée) -> confirmation
-  // manuelle. Pour B1/B2/B3, la vérification par catégorie ACRO ci-dessus
-  // ne distingue pas l'arche Accro poutre mousse des autres arches ACRO
-  // (Acros 1/2) faute de filtrage par archeId dans le système actuel.
+  // P-A1-TC-3 "1 ATR (PR)", P-A2-TC-3 "Roue" : exigences "poutre mousse"
+  // (arche Accro poutre mousse) non vérifiables précisément avec le système
+  // de vérification actuel (palier PR / élément nominatif) -> confirmation
+  // manuelle. La 4e exigence "sortie (poutre mousse)" qui existait pour
+  // B1/B2/B3/C1/C2/C3 a été retirée (absente du Programme Technique GAF
+  // 2026-2030 officiel — confirmé par l'utilisateur, capture d'écran à
+  // l'appui) : ces niveaux n'ont que 3 exigences de tronc commun sur cet
+  // agrès. La sortie y reste une valorisation (voir P-B1-V4/P-B2-V4/
+  // P-B3-V4/P-C1-V5/P-C2-V5/P-C3-V5), jamais une exigence de tronc commun.
 
   // --- Valorisations ---
   "P-A1-V1": { type: "CATEGORY_COUNT", category: "PIVOT", min: 1 },

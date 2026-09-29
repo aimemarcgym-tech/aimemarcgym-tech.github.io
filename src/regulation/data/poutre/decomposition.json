@@ -50,8 +50,7 @@
         "arches": 4, "elementsMin": 6, "elementsMax": 8,
         "exigences": [
           { "id": "P-B1-TC-1", "label": "2 acros en poutre haute" },
-          { "id": "P-B1-TC-2", "label": "2 sauts" },
-          { "id": "P-B1-TC-3", "label": "1 sortie (poutre mousse) : Acro P2 (min.)" }
+          { "id": "P-B1-TC-2", "label": "2 sauts" }
         ]
       },
       "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
@@ -73,8 +72,7 @@
         "exigences": [
           { "id": "P-B2-TC-1", "label": "2 acros en poutre haute" },
           { "id": "P-B2-TC-2", "label": "1 pivots P4 (min.)" },
-          { "id": "P-B2-TC-3", "label": "1 élément P3" },
-          { "id": "P-B2-TC-4", "label": "1 sortie (poutre mousse) : Acro P3 (min.)" }
+          { "id": "P-B2-TC-3", "label": "1 élément P3" }
         ]
       },
       "paliersAutorises": ["PR", "P1", "P2", "P3", "P4", "P5"],
@@ -96,8 +94,7 @@
         "exigences": [
           { "id": "P-B3-TC-1", "label": "3 acros en poutre haute" },
           { "id": "P-B3-TC-2", "label": "1 pivots P4 (min.)" },
-          { "id": "P-B3-TC-3", "label": "1 élément P4" },
-          { "id": "P-B3-TC-4", "label": "1 sortie (poutre mousse) : Acro P4 (min.)" }
+          { "id": "P-B3-TC-3", "label": "1 élément P4" }
         ]
       },
       "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
@@ -119,8 +116,7 @@
         "exigences": [
           { "id": "P-C1-TC-1", "label": "3 acros en poutre haute" },
           { "id": "P-C1-TC-2", "label": "1 pivots P4 (min.)" },
-          { "id": "P-C1-TC-3", "label": "1 élément P5" },
-          { "id": "P-C1-TC-4", "label": "1 sortie (poutre mousse) : 1 LA dont 1 élément avec envol" }
+          { "id": "P-C1-TC-3", "label": "1 élément P5" }
         ]
       },
       "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
@@ -143,8 +139,7 @@
         "exigences": [
           { "id": "P-C2-TC-1", "label": "3 acros en poutre haute" },
           { "id": "P-C2-TC-2", "label": "1 pivots P4 (min.)" },
-          { "id": "P-C2-TC-3", "label": "1 élément P6" },
-          { "id": "P-C2-TC-4", "label": "1 sortie (poutre mousse) : 1 LA 2 éléments dont 1 salto" }
+          { "id": "P-C2-TC-3", "label": "1 élément P6" }
         ]
       },
       "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],
@@ -167,8 +162,7 @@
         "exigences": [
           { "id": "P-C3-TC-1", "label": "3 acros en poutre haute" },
           { "id": "P-C3-TC-2", "label": "1 pivots P4 (min.)" },
-          { "id": "P-C3-TC-3", "label": "1 élément P7" },
-          { "id": "P-C3-TC-4", "label": "1 sortie (poutre mousse) : 1 LA de 2 éléments avec envol dont 1 salto" }
+          { "id": "P-C3-TC-3", "label": "1 élément P7" }
         ]
       },
       "paliersAutorises": ["P3", "P4", "P5", "P6", "P7"],

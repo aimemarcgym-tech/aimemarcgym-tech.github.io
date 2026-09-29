@@ -12,20 +12,12 @@ import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
 import { createShare } from "@/lib/shares";
 
-// Poutre : ces 3 exigences de tronc commun sont explicitement "1 sortie
-// (poutre mousse) : Acro Px (min.)" — contrairement aux autres exigences
-// ACRO (ex. "3 acros en poutre haute"), elles ne doivent proposer QUE les
-// éléments de l'arche Accro poutre mousse, jamais ceux de poutre haute.
-const POUTRE_MOUSSE_ONLY_CHECKS = new Set(["P-B1-TC-3", "P-B2-TC-4", "P-B3-TC-4"]);
 const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
 
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
 // exigence/valorisation -> permet de proposer "voir dans la Bibliothèque".
 // Plusieurs catégories possibles (ex. FORCE ou PG = FORCE ou SAUT_GYM).
 function categoryForCheck(id: string, apparatus: string): string[] | null {
-  if (apparatus === "POUTRE" && POUTRE_MOUSSE_ONLY_CHECKS.has(id)) {
-    return [CAT_ACRO_MOUSSE];
-  }
   const spec = getCheck(id, apparatus);
   switch (spec.type) {
     case "CATEGORY_COUNT":
