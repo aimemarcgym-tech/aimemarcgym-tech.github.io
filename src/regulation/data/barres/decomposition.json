@@ -50,8 +50,7 @@
       "troncCommun": {
         "arches": 4, "elementsMin": 6, "elementsMax": 8,
         "exigences": [
-          { "id": "BA-B1-TC-1", "label": "1 élément des arches des balancés" },
-          { "id": "BA-B1-TC-2", "label": "1 élément des arches venir à l'appui" }
+          { "id": "BA-B1-TC-1", "label": "1 élément des arches des balancés" }
         ]
       },
       "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
@@ -166,7 +165,7 @@
       "troncCommun": {
         "arches": 4, "elementsMin": 8, "elementsMax": 10,
         "exigences": [
-          { "id": "BA-C3-TC-1", "label": "1 changement de barre BI-BS" },
+          { "id": "BA-C3-TC-1", "label": "1 changement de barre BI-BS ou BS-BI" },
           { "id": "BA-C3-TC-2", "label": "1 élément des arches des balancés" },
           { "id": "BA-C3-TC-3", "label": "2 éléments à l'ATR" }
         ]
