@@ -25,8 +25,8 @@ const MEDIA_ITEMS = [
 ];
 
 const LAST_TABS = [
-  { href: "/sauvegarde", label: "Sauvegarde" },
   { href: "/table", label: "Table" },
+  { href: "/sauvegarde", label: "Sauvegarde" },
 ];
 
 const tabClasses = (active: boolean) =>
