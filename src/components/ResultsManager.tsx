@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getGymnasts, getResultDocs, addResultDoc, deleteResultDoc, type TrainingTarget } from "@/lib/data";
+import {
+  getGymnasts,
+  getResultDocs,
+  addResultDoc,
+  updateResultDocDate,
+  deleteResultDoc,
+  type TrainingTarget,
+} from "@/lib/data";
 import type { ResultDocRow } from "@/lib/idb";
 import { shareFiles } from "@/lib/share";
 import { formatSize } from "@/lib/format";
@@ -11,7 +18,12 @@ type Selection = { target: TrainingTarget; label: string };
 
 function ResultDocItem({ doc, onChange }: { doc: ResultDocRow; onChange: () => void }) {
   const [busy, setBusy] = useState(false);
+  const [date, setDate] = useState(doc.date ?? "");
   const objectUrl = useMemo(() => URL.createObjectURL(doc.blob), [doc]);
+
+  useEffect(() => {
+    setDate(doc.date ?? "");
+  }, [doc.date]);
 
   useEffect(() => {
     return () => URL.revokeObjectURL(objectUrl);
@@ -35,13 +47,28 @@ function ResultDocItem({ doc, onChange }: { doc: ResultDocRow; onChange: () => v
     }
   }
 
+  async function handleDateChange(value: string) {
+    setDate(value);
+    await updateResultDocDate(doc.id, value);
+    onChange();
+  }
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
       <div className="min-w-0">
         <p className="truncate text-sm font-medium text-foreground" title={doc.fileName}>
           {doc.fileName}
         </p>
-        <p className="text-xs text-muted">{formatSize(doc.size)}</p>
+        <div className="mt-1 flex items-center gap-1.5">
+          <label className="text-xs text-muted">Date :</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => handleDateChange(e.target.value)}
+            className="rounded border border-border-strong bg-surface px-1.5 py-0.5 text-xs text-foreground focus:border-accent-solid focus:outline-none"
+          />
+        </div>
+        <p className="mt-1 text-xs text-muted">{formatSize(doc.size)}</p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
         <a
@@ -73,6 +100,7 @@ function ResultDocItem({ doc, onChange }: { doc: ResultDocRow; onChange: () => v
 
 function ResultDocsList({ target, targetLabel }: { target: TrainingTarget; targetLabel: string }) {
   const [docs, setDocs] = useState<ResultDocRow[] | null>(null);
+  const [uploadDate, setUploadDate] = useState("");
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -89,7 +117,7 @@ function ResultDocsList({ target, targetLabel }: { target: TrainingTarget; targe
     setUploading(true);
     try {
       for (const file of Array.from(files)) {
-        await addResultDoc(target, file);
+        await addResultDoc(target, file, uploadDate || null);
       }
       refresh();
     } finally {
@@ -101,7 +129,17 @@ function ResultDocsList({ target, targetLabel }: { target: TrainingTarget; targe
     <div className="mt-5 rounded-xl border border-border-subtle bg-surface-alt/30 p-4">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-foreground">Documents — {targetLabel}</h3>
-        <div>
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-muted" htmlFor="result-doc-date">
+            Date (optionnel) :
+          </label>
+          <input
+            id="result-doc-date"
+            type="date"
+            value={uploadDate}
+            onChange={(e) => setUploadDate(e.target.value)}
+            className="rounded border border-border-strong bg-surface px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none"
+          />
           <input
             ref={inputRef}
             type="file"
@@ -179,8 +217,8 @@ export default function ResultsManager() {
         <p className="text-sm text-muted">Aucune gymnaste enregistrée pour le moment.</p>
       ) : teams.length === 0 ? (
         <p className="text-sm text-muted">
-          Aucune équipe trouvée. Renseignez le champ « Équipe » sur une gymnaste depuis l&apos;accueil, ou choisissez
-          directement une gymnaste ci-dessous.
+          Aucune équipe trouvée. Renseignez le champ « Équipe » sur une gymnaste depuis l&apos;accueil pour la faire
+          apparaître ici (y compris pour une gymnaste individuelle).
         </p>
       ) : (
         <select
@@ -249,37 +287,6 @@ export default function ResultsManager() {
               </button>
             );
           })}
-        </div>
-      )}
-
-      {!teamKey && gymnasts && gymnasts.length > 0 && (
-        <div className="mt-4">
-          <p className="mb-2 text-xs font-medium text-muted">Ou directement une gymnaste (individuelle) :</p>
-          <div className="flex flex-wrap gap-2">
-            {gymnasts.map((g) => {
-              const isSelected = selection?.target.kind === "gymnast" && selection.target.id === g.id;
-              return (
-                <button
-                  key={g.id}
-                  type="button"
-                  onClick={() =>
-                    setSelection((cur) =>
-                      cur?.target.kind === "gymnast" && cur.target.id === g.id
-                        ? null
-                        : { target: { kind: "gymnast", id: g.id }, label: `${g.firstName} ${g.lastName} (individuelle)` }
-                    )
-                  }
-                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                    isSelected
-                      ? "border-accent-solid bg-accent-from/10 text-white"
-                      : "border-border-strong bg-surface-alt text-foreground hover:border-accent-solid hover:text-white"
-                  }`}
-                >
-                  {g.firstName} {g.lastName}
-                </button>
-              );
-            })}
-          </div>
         </div>
       )}
 

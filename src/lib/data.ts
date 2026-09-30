@@ -592,11 +592,11 @@ function resultDocTargetKey(target: TrainingTarget) {
 export async function getResultDocs(target: TrainingTarget) {
   const localDb = await getDb();
   const docs = await localDb.getAllFromIndex("resultDocs", "targetKey", resultDocTargetKey(target));
-  docs.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  docs.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? "") || b.createdAt.localeCompare(a.createdAt));
   return docs;
 }
 
-export async function addResultDoc(target: TrainingTarget, file: File): Promise<ResultDocRow> {
+export async function addResultDoc(target: TrainingTarget, file: File, date: string | null): Promise<ResultDocRow> {
   const localDb = await getDb();
   const row: ResultDocRow = {
     id: crypto.randomUUID(),
@@ -605,10 +605,19 @@ export async function addResultDoc(target: TrainingTarget, file: File): Promise<
     mimeType: file.type || "application/octet-stream",
     size: file.size,
     blob: file,
+    date: date || null,
     createdAt: nowIso(),
   };
   await localDb.put("resultDocs", row);
   return row;
+}
+
+export async function updateResultDocDate(docId: string, date: string | null) {
+  const localDb = await getDb();
+  const doc = await localDb.get("resultDocs", docId);
+  if (!doc) return;
+  doc.date = date || null;
+  await localDb.put("resultDocs", doc);
 }
 
 export async function deleteResultDoc(docId: string) {

@@ -153,6 +153,9 @@ export interface ResultDocRow {
   mimeType: string;
   size: number;
   blob: Blob;
+  // Date de la compétition/du résultat (libre, choisie par le coach à
+  // l'import), distincte de createdAt qui reste la date d'ajout technique.
+  date: string | null;
   createdAt: string;
 }
 
