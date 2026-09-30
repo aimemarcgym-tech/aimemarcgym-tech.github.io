@@ -141,6 +141,21 @@ export interface TrainingSessionRow {
   createdAt: string;
 }
 
+// Documents de résultats (feuilles de notes, classements... Word/PDF/etc.)
+// rattachés soit à une gymnaste précise, soit à toute une équipe. Onglet
+// Résultats. "targetKey" est "gymnast::<id>" ou "team::<club>::<équipe>" (même
+// format club::équipe que passageOrder/musicOrder ailleurs) pour pouvoir
+// indexer les deux cas dans un seul store.
+export interface ResultDocRow {
+  id: string;
+  targetKey: string;
+  fileName: string;
+  mimeType: string;
+  size: number;
+  blob: Blob;
+  createdAt: string;
+}
+
 interface AppDB extends DBSchema {
   clubs: { key: string; value: ClubRow };
   gymnasts: { key: string; value: GymnastRow; indexes: { clubId: string } };
@@ -157,10 +172,11 @@ interface AppDB extends DBSchema {
   photos: { key: string; value: PhotoRow; indexes: { albumId: string } };
   videoAlbums: { key: string; value: VideoAlbumRow };
   videos: { key: string; value: VideoRow; indexes: { albumId: string } };
+  resultDocs: { key: string; value: ResultDocRow; indexes: { targetKey: string } };
 }
 
 const DB_NAME = "ufolep-gaf";
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 
 let dbPromise: Promise<IDBPDatabase<AppDB>> | null = null;
 
@@ -222,6 +238,11 @@ export function getDb(): Promise<IDBPDatabase<AppDB>> {
         if (!db.objectStoreNames.contains("videos")) {
           const videos = db.createObjectStore("videos", { keyPath: "id" });
           videos.createIndex("albumId", "albumId");
+        }
+
+        if (!db.objectStoreNames.contains("resultDocs")) {
+          const resultDocs = db.createObjectStore("resultDocs", { keyPath: "id" });
+          resultDocs.createIndex("targetKey", "targetKey");
         }
       },
     });

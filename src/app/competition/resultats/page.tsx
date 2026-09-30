@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ResultsManager from "@/components/ResultsManager";
 
 export default function ResultatsPage() {
   return (
@@ -15,7 +16,7 @@ export default function ResultatsPage() {
       </header>
 
       <main className="mx-auto max-w-[1600px] px-6 py-10">
-        <p className="text-sm text-muted">En construction.</p>
+        <ResultsManager />
       </main>
     </div>
   );

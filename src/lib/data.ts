@@ -20,6 +20,7 @@ import {
   type MovementElementRow,
   type MovementSnapshotRow,
   type TrainingSessionRow,
+  type ResultDocRow,
 } from "@/lib/idb";
 import type { PhotoAlbumRow, PhotoRow } from "@/lib/idb";
 import { REGULATION_VERSION } from "@/regulation/loader";
@@ -578,4 +579,39 @@ export async function updateTrainingSession(sessionId: string, date: string, con
 
 export async function deleteTrainingSession(sessionId: string) {
   await deleteDoc(docRef("trainingSessions", sessionId));
+}
+
+// Documents de résultats (Word/PDF/etc.) — même logique cible "gymnaste
+// précise ou toute une équipe" que le journal d'entraînement, mais stockés
+// en local (IndexedDB) comme les musiques/photos/vidéos : ce sont des
+// fichiers binaires, hors périmètre de la synchro Firestore pour l'instant.
+function resultDocTargetKey(target: TrainingTarget) {
+  return target.kind === "gymnast" ? `gymnast::${target.id}` : `team::${target.key}`;
+}
+
+export async function getResultDocs(target: TrainingTarget) {
+  const localDb = await getDb();
+  const docs = await localDb.getAllFromIndex("resultDocs", "targetKey", resultDocTargetKey(target));
+  docs.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return docs;
+}
+
+export async function addResultDoc(target: TrainingTarget, file: File): Promise<ResultDocRow> {
+  const localDb = await getDb();
+  const row: ResultDocRow = {
+    id: crypto.randomUUID(),
+    targetKey: resultDocTargetKey(target),
+    fileName: file.name,
+    mimeType: file.type || "application/octet-stream",
+    size: file.size,
+    blob: file,
+    createdAt: nowIso(),
+  };
+  await localDb.put("resultDocs", row);
+  return row;
+}
+
+export async function deleteResultDoc(docId: string) {
+  const localDb = await getDb();
+  await localDb.delete("resultDocs", docId);
 }
