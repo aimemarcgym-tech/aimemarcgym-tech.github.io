@@ -120,6 +120,16 @@ export async function renameClub(clubId: string, newName: string) {
   await updateDoc(ref, { name: trimmed });
 }
 
+// Supprime un club : les gymnastes qui y étaient rattachées ne sont pas
+// supprimées, elles repassent simplement "sans club" (clubId à null).
+export async function deleteClub(clubId: string) {
+  const snap = await getDocs(query(col("gymnasts"), where("clubId", "==", clubId)));
+  const batch = writeBatch(db);
+  for (const d of snap.docs) batch.update(d.ref, { clubId: null });
+  batch.delete(docRef("clubs", clubId));
+  await batch.commit();
+}
+
 // Renomme une équipe pour toutes les gymnastes qui la partagent (le champ
 // "team" est un texte libre par gymnaste, pas une entité séparée -> on met
 // à jour chaque gymnaste du club dont le champ correspond à l'ancien nom).

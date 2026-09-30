@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition, type ReactNode } from "react";
-import { renameClub } from "@/lib/data";
+import { renameClub, deleteClub } from "@/lib/data";
 
 export default function ClubGroup({
   clubId,
@@ -18,6 +18,7 @@ export default function ClubGroup({
 }) {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [value, setValue] = useState(clubName);
   const [pending, startTransition] = useTransition();
 
@@ -67,13 +68,40 @@ export default function ClubGroup({
                 Annuler
               </button>
             </form>
+          ) : deleting ? (
+            <span className="flex items-center gap-2 text-xs">
+              <span className="text-muted">Supprimer {clubName} ?</span>
+              <button
+                disabled={pending}
+                onClick={() => {
+                  startTransition(async () => {
+                    await deleteClub(clubId);
+                    onRenamed?.();
+                  });
+                }}
+                className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground disabled:opacity-50"
+              >
+                {pending ? "…" : "Confirmer"}
+              </button>
+              <button onClick={() => setDeleting(false)} className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground">
+                Annuler
+              </button>
+            </span>
           ) : (
-            <button
-              onClick={() => setEditing(true)}
-              className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
-            >
-              Renommer
-            </button>
+            <>
+              <button
+                onClick={() => setEditing(true)}
+                className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+              >
+                Renommer
+              </button>
+              <button
+                onClick={() => setDeleting(true)}
+                className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+              >
+                Supprimer
+              </button>
+            </>
           ))}
       </div>
       {open && children}
