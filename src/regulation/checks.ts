@@ -22,6 +22,7 @@ export const SOL_CHECKS: Record<string, CheckSpec> = {
   "B1-TC-2": { type: "FORCE_OR_PG" },
   "B2-TC-1": { type: "LIAISON_ACRO", runMinLength: 2, runsNeeded: 2 },
   "B2-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4" },
+  "B2-TC-3": { type: "FORCE_OR_PG" },
   "B3-TC-1": { type: "FORCE_OR_PG" },
   "B3-TC-2": { type: "LIAISON_ACRO", runMinLength: 2, runsNeeded: 2 },
   "B3-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5" },
@@ -143,15 +144,11 @@ export const POUTRE_CHECKS: Record<string, CheckSpec> = {
   "P-C3-TC-1": { type: "CATEGORY_COUNT", category: "ACRO", min: 3 },
   "P-C3-TC-2": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "PIVOT" },
   "P-C3-TC-3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P7" },
-  // P-A1-TC-3 "1 ATR (PR)", P-A2-TC-3 "Roue" : exigences "poutre mousse"
-  // (arche Accro poutre mousse) non vérifiables précisément avec le système
-  // de vérification actuel (palier PR / élément nominatif) -> confirmation
-  // manuelle. La 4e exigence "sortie (poutre mousse)" qui existait pour
-  // B1/B2/B3/C1/C2/C3 a été retirée (absente du Programme Technique GAF
-  // 2026-2030 officiel — confirmé par l'utilisateur, capture d'écran à
-  // l'appui) : ces niveaux n'ont que 3 exigences de tronc commun sur cet
-  // agrès. La sortie y reste une valorisation (voir P-B1-V4/P-B2-V4/
-  // P-B3-V4/P-C1-V5/P-C2-V5/P-C3-V5), jamais une exigence de tronc commun.
+  // Aucune exigence "sortie (poutre mousse)" en tronc commun sur cet agrès,
+  // pour aucune évolution (A1 à C3) : absente du Programme Technique GAF
+  // 2026-2030 officiel. La poutre mousse y reste toujours une valorisation
+  // (voir P-A1-V4/P-A2-V4/P-B1-V5/P-B2-V5/P-B3-V5/P-C1-V6/P-C2-V6/P-C3-V6),
+  // jamais une exigence de tronc commun.
 
   // --- Valorisations ---
   "P-A1-V1": { type: "CATEGORY_COUNT", category: "PIVOT", min: 1 },

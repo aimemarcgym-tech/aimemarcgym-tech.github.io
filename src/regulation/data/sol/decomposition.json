@@ -55,7 +55,7 @@
         ]
       },
       "paliersAutorises": ["P1", "P2", "P3", "P4", "P5"],
-      "paliersValorisables": ["P2", "P3", "P4"],
+      "paliersValorisables": ["P1", "P2", "P3", "P4"],
       "valorisations": {
         "choisir": 4, "parmi": 5,
         "options": [
@@ -72,6 +72,7 @@
       "troncCommun": {
         "arches": 4, "elementsMin": 8, "elementsMax": 10,
         "exigences": [
+          { "id": "B2-TC-3", "label": "1 PG ou 1 FORCE" },
           { "id": "B2-TC-1", "label": "2 LA distinctes" },
           { "id": "B2-TC-2", "label": "1 élément P4" }
         ]
