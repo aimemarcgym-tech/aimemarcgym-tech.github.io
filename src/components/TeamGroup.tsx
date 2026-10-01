@@ -78,7 +78,7 @@ export default function TeamGroup({
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="rounded border border-border-strong px-1.5 py-0.5 text-[10px] text-muted hover:border-accent-solid/60 hover:text-foreground"
+              className="ml-2 rounded border border-border-strong px-1.5 py-0.5 text-[10px] text-muted hover:border-accent-solid/60 hover:text-foreground"
             >
               Renommer
             </button>
