@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type DragEvent } from "react";
 import SortieMp3 from "@/components/SortieMp3";
 import { QUALITES, decoderFichier, encoderMp3, nomMp3 } from "@/lib/audio";
-import { convertirLien, demarrerAide, etatAide, type EtatAide } from "@/lib/aide";
+import { convertirLien, demarrerAide, estMobile, etatAide, type EtatAide } from "@/lib/aide";
 import { formatSize } from "@/lib/format";
 import { champ, onglets, ongletBouton, panneau, titrePanneau } from "@/lib/styles";
 
@@ -81,6 +81,12 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
     const adresse = lien.trim();
     if (!adresse) return;
     if (PLATEFORMES.test(adresse)) {
+      if (estMobile()) {
+        setMessageLien(
+          "YouTube et les autres plateformes nécessitent l’aide locale, qui tourne uniquement sur un PC. Convertissez ce lien depuis votre ordinateur, puis envoyez le MP3 obtenu à la gymnaste.",
+        );
+        return;
+      }
       setMessageLien("Démarrage de l’aide…");
       const etat = await lancerAide();
       if (!etat?.ok) {
@@ -194,24 +200,34 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
           </button>
           {aideVisible && (
             <div className="space-y-1 rounded border border-border-subtle bg-surface-alt/40 p-2 text-xs text-muted">
-              <p className="flex flex-wrap items-center gap-2">
-                {aide === "verification"
-                  ? "Recherche de l’aide locale…"
-                  : aide?.ok
-                    ? "Aide locale détectée : YouTube et autres liens sont pris en charge."
-                    : aide
-                      ? "Aide locale lancée, mais yt-dlp ou ffmpeg est introuvable."
-                      : "Aide locale non lancée : elle est nécessaire pour YouTube et les autres plateformes."}
-                {aide !== "verification" && !aide?.ok && (
-                  <button type="button" onClick={lancerAide} className="accent-gradient-text font-medium underline">
-                    Démarrer l’aide
-                  </button>
-                )}
-                <button type="button" onClick={verifierAide} className="underline hover:text-foreground">
-                  Vérifier
-                </button>
-              </p>
-              <p>Les adresses directes de fichiers (.mp3, .wav, .mp4…) fonctionnent sans l’aide, si le site les autorise.</p>
+              {estMobile() ? (
+                <p>
+                  YouTube et les autres plateformes ne sont pas pris en charge sur mobile/tablette : l’aide locale doit
+                  tourner sur un PC (elle utilise des programmes installés dessus). Depuis votre ordinateur, utilisez
+                  cet onglet pour convertir le lien, puis envoyez le MP3 obtenu à la gymnaste.
+                </p>
+              ) : (
+                <>
+                  <p className="flex flex-wrap items-center gap-2">
+                    {aide === "verification"
+                      ? "Recherche de l’aide locale…"
+                      : aide?.ok
+                        ? "Aide locale détectée : YouTube et autres liens sont pris en charge."
+                        : aide
+                          ? "Aide locale lancée, mais yt-dlp ou ffmpeg est introuvable."
+                          : "Aide locale non lancée : elle est nécessaire pour YouTube et les autres plateformes."}
+                    {aide !== "verification" && !aide?.ok && (
+                      <button type="button" onClick={lancerAide} className="accent-gradient-text font-medium underline">
+                        Démarrer l’aide
+                      </button>
+                    )}
+                    <button type="button" onClick={verifierAide} className="underline hover:text-foreground">
+                      Vérifier
+                    </button>
+                  </p>
+                  <p>Les adresses directes de fichiers (.mp3, .wav, .mp4…) fonctionnent sans l’aide, si le site les autorise.</p>
+                </>
+              )}
             </div>
           )}
           {messageLien && <p className="rounded border border-border-strong bg-surface-alt p-2 text-xs text-foreground">{messageLien}</p>}

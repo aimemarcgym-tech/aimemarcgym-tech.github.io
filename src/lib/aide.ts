@@ -8,7 +8,18 @@ export interface EtatAide {
   ffmpeg: boolean;
 }
 
+// L'aide locale tourne sur un PC (elle lance yt-dlp/ffmpeg installés dessus),
+// jamais sur un téléphone ou une tablette. Sur mobile, essayer de contacter
+// 127.0.0.1 ne sert à rien (ça échoue toujours) et déclenche en plus la
+// demande d'autorisation « réseau local » du navigateur (Private Network
+// Access) pour rien : on évite complètement la requête dans ce cas.
+export function estMobile(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
 export async function etatAide(): Promise<EtatAide | null> {
+  if (estMobile()) return null;
   try {
     const r = await fetch(`${ADRESSE}/etat`, { signal: AbortSignal.timeout(1500) });
     return r.ok ? ((await r.json()) as EtatAide) : null;
@@ -19,6 +30,7 @@ export async function etatAide(): Promise<EtatAide | null> {
 
 // Demande à Windows de lancer l'aide via le lien ffg-aide:// (enregistré par Installer-aide-musique.bat), puis attend qu'elle réponde.
 export async function demarrerAide(attenteMax = 12000): Promise<EtatAide | null> {
+  if (estMobile()) return null;
   const a = document.createElement("a");
   a.href = "ffg-aide://demarrer";
   a.click();
