@@ -169,12 +169,11 @@ export const POUTRE_CHECKS: Record<string, CheckSpec> = {
   "P-B2-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "SORTIES" },
 
   "P-B3-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ACRO" },
-  "P-B3-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "SORTIES" },
 
   "P-C1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5", category: "ACRO" },
-  // P-C1-V5/P-C2-V5/P-C3-V5 "1 sortie avec liaison acro..." : condition de
-  // liaison acrobatique (chaînage de plusieurs éléments avec envol) non
-  // vérifiable automatiquement -> confirmation manuelle.
+  // P-B3-V4/P-C1-V5/P-C2-V5/P-C3-V5 "1 sortie avec liaison acro..." :
+  // condition de liaison acrobatique (chaînage de plusieurs éléments avec
+  // envol) non vérifiable automatiquement -> confirmation manuelle.
 };
 
 const CHECKS_BY_APPARATUS: Record<string, Record<string, CheckSpec>> = {
