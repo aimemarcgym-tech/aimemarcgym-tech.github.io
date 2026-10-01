@@ -8,6 +8,11 @@ import { useEffect, useRef, useState } from "react";
 // composant reconstruit lecture/pause, progression et volume nous-mêmes,
 // avec un rendu identique sur PC, tablette et mobile.
 
+// Un seul lecteur à la fois sur toute la page : quand l'un démarre, tous les
+// autres (CustomAudioPlayer ailleurs dans la même liste, ou sur une autre
+// page comme Faire ces musiques) se mettent en pause automatiquement.
+const lecteursMontes = new Set<HTMLAudioElement>();
+
 function formatTime(seconds: number) {
   if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
   const m = Math.floor(seconds / 60);
@@ -31,6 +36,23 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
     setCurrentTime(0);
     setDuration(0);
   }, [src]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    lecteursMontes.add(audio);
+    return () => {
+      lecteursMontes.delete(audio);
+    };
+  }, []);
+
+  function handlePlay() {
+    setPlaying(true);
+    const audio = audioRef.current;
+    for (const autre of lecteursMontes) {
+      if (autre !== audio) autre.pause();
+    }
+  }
 
   function togglePlay() {
     const audio = audioRef.current;
@@ -68,7 +90,7 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
       <audio
         ref={audioRef}
         src={src}
-        onPlay={() => setPlaying(true)}
+        onPlay={handlePlay}
         onPause={() => setPlaying(false)}
         onEnded={() => setPlaying(false)}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
