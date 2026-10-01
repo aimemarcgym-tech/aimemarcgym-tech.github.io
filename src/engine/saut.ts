@@ -43,6 +43,7 @@ export interface SautDiagnostic {
   auMoinsUnDansPaliersValorisables: boolean;
   valorisations: SautValorisationResult[];
   noteDepart: number;
+  noteDepartMax: number;
   suggestions: SautSuggestion[];
 }
 
@@ -63,16 +64,16 @@ export function analyzeSaut(
   }
   const sautsRequired = evolution.troncCommun.elementsMax;
 
+  const estAutorise = (palier: Palier) =>
+    palier === "BASE" ||
+    palier === "NOMADE" ||
+    evolution.paliersAutorises.some((p) => (PREREQUIS_TIER.includes(palier) ? PREREQUIS_TIER.includes(p) : p === palier));
+
   const sauts: SautResult[] = elements
     .map((e) => getElement("SAUT", e.code))
     .filter((el): el is NonNullable<typeof el> => !!el)
     .map((el) => {
-      const autorise =
-        el.palier === "BASE" ||
-        el.palier === "NOMADE" ||
-        evolution.paliersAutorises.some((p) =>
-          PREREQUIS_TIER.includes(el.palier) ? PREREQUIS_TIER.includes(p) : p === el.palier
-        );
+      const autorise = estAutorise(el.palier);
       return {
         code: el.code,
         name: el.name,
@@ -115,6 +116,22 @@ export function analyzeSaut(
 
   const noteDepart = (sauts.length > 0 ? Math.max(...sauts.map((s) => s.value)) : 0) + valorisationsPoints;
 
+  // Note maximale atteignable : le meilleur saut autorisé à ce niveau (le
+  // plus haut palier autorisé donne la valeur la plus élevée du barème) +
+  // les "choisir" valorisations les plus hautes parmi les options existantes.
+  const maxSautValue = Math.max(
+    0,
+    ...getRegulation("SAUT")
+      .elements.filter((el) => estAutorise(el.palier))
+      .map((el) => el.value ?? 0)
+  );
+  const maxValorisationsPoints = [...evolution.valorisations.options]
+    .map((o) => o.points)
+    .sort((a, b) => b - a)
+    .slice(0, evolution.valorisations.choisir)
+    .reduce((sum, p) => sum + p, 0);
+  const noteDepartMax = maxSautValue + maxValorisationsPoints;
+
   const suggestions = computeSautSuggestions(evolutionId, sauts, sautsRequired);
 
   return {
@@ -128,6 +145,7 @@ export function analyzeSaut(
     auMoinsUnDansPaliersValorisables,
     valorisations,
     noteDepart,
+    noteDepartMax,
     suggestions,
   };
 }

@@ -47,6 +47,7 @@ export interface Diagnostic {
     points: number;
   };
   noteDepart: number;
+  noteDepartMax: number;
   suggestions: Suggestion[];
 }
 
@@ -275,6 +276,19 @@ export function analyzeMovement(
 
   const noteDepart = troncCommunPoints + valorisationsPoints;
 
+  // Note maximale atteignable pour cette évolution : tronc commun entièrement
+  // validé (2 pts arches/nombre + 1 pt par exigence) + les "choisir" valeurs
+  // de valorisations les plus hautes parmi les options existantes (fixe par
+  // évolution, indépendant des éléments déjà posés dans ce mouvement précis).
+  const noteDepartMax =
+    2 +
+    evolution.troncCommun.exigences.length +
+    [...evolution.valorisations.options]
+      .map((o) => o.points)
+      .sort((a, b) => b - a)
+      .slice(0, evolution.valorisations.choisir)
+      .reduce((sum, p) => sum + p, 0);
+
   const suggestions = computeSuggestions(apparatus, evolution, elements, tcExigences, valoResults, archesUsed);
 
   return {
@@ -300,6 +314,7 @@ export function analyzeMovement(
       points: valorisationsPoints,
     },
     noteDepart,
+    noteDepartMax,
     suggestions,
   };
 }

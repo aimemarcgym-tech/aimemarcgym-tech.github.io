@@ -160,7 +160,12 @@ function MovementPartagePageInner() {
 
           <div className="mt-4 accent-gradient rounded px-4 py-3 text-white shadow-lg shadow-accent-from/20">
             <div className="text-xs uppercase text-white/70">Note de départ</div>
-            <div className="text-3xl font-bold">{diagnostic.noteDepart.toFixed(1)}</div>
+            <div className="text-3xl font-bold">
+              {diagnostic.noteDepart.toFixed(1)}
+              {typeof diagnostic.noteDepartMax === "number" && (
+                <span className="text-lg font-semibold text-white/70">/{diagnostic.noteDepartMax.toFixed(1)} max</span>
+              )}
+            </div>
           </div>
         </section>
 

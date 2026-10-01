@@ -410,7 +410,10 @@ export default function SautBuilder({
               <span>{penaliteMateriel > 0 ? "Note finale" : "Note de départ"}</span>
               <span className="normal-case text-white/60">Meilleur saut retenu</span>
             </div>
-            <div className="text-3xl font-bold">{noteFinale.toFixed(1)}</div>
+            <div className="text-3xl font-bold">
+              {noteFinale.toFixed(1)}
+              <span className="text-lg font-semibold text-white/70">/{diagnostic.noteDepartMax.toFixed(1)} max</span>
+            </div>
             {penaliteMateriel > 0 && (
               <div className="mt-1 text-xs text-white/80">
                 Note de départ {diagnostic.noteDepart.toFixed(1)} − {penaliteMateriel.toFixed(1)} (pénalité matériel)

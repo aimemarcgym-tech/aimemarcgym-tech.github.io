@@ -505,7 +505,10 @@ export default function MovementBuilder({
               <span>Note de départ</span>
               <span className="normal-case text-white/60">Tronc commun + Valorisations</span>
             </div>
-            <div className="text-3xl font-bold">{diagnostic.noteDepart.toFixed(1)}</div>
+            <div className="text-3xl font-bold">
+              {diagnostic.noteDepart.toFixed(1)}
+              <span className="text-lg font-semibold text-white/70">/{diagnostic.noteDepartMax.toFixed(1)} max</span>
+            </div>
             <button onClick={() => setShowDetail((v) => !v)} className="mt-1 text-xs text-white/90 underline">
               {showDetail ? "Masquer" : "Détail"} du calcul
             </button>
