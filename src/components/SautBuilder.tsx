@@ -53,7 +53,7 @@ export default function SautBuilder({
   gymnastLastName: string;
 }) {
   const [sequence, setSequence] = useState<MovementElementRef[]>(initialElements);
-  const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("suggestions");
+  const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("bibliotheque");
   const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
   const [manualConfirmations, setManualConfirmations] = useState<Set<string>>(() => {
     if (typeof window === "undefined") return new Set();

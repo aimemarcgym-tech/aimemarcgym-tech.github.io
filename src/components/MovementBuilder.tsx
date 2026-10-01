@@ -80,7 +80,7 @@ export default function MovementBuilder({
   const [showDetail, setShowDetail] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
-  const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("suggestions");
+  const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("bibliotheque");
   const [category, setCategory] = useState<string>("ALL");
   const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
   const [revealedActions, setRevealedActions] = useState<Set<number>>(new Set());
