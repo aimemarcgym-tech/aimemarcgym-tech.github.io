@@ -7,7 +7,7 @@ import { generateSW } from "workbox-build";
 
 const { count, size, warnings } = await generateSW({
   globDirectory: "out",
-  globPatterns: ["**/*.{html,js,css,json,webmanifest,svg,png,ico,woff,woff2}"],
+  globPatterns: ["**/*.{html,js,css,json,webmanifest,svg,png,ico,woff,woff2,mp3}"],
   swDest: "out/sw.js",
   cleanupOutdatedCaches: true,
   // IMPORTANT : pas de skipWaiting automatique. Le nouveau SW reste "en

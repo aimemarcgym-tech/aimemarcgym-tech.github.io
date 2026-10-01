@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AuthGate from "@/components/AuthGate";
+import { DialoguesProvider } from "@/components/Dialogues";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,9 +38,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <ServiceWorkerRegister />
-        <AuthProvider>
-          <AuthGate>{children}</AuthGate>
-        </AuthProvider>
+        <DialoguesProvider>
+          <AuthProvider>
+            <AuthGate>{children}</AuthGate>
+          </AuthProvider>
+        </DialoguesProvider>
       </body>
     </html>
   );

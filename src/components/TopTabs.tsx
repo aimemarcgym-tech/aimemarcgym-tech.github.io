@@ -229,6 +229,12 @@ export default function TopTabs() {
         Entraînement
       </Link>
       <TabDropdown pathname={pathname} label="Média" basePath="/media" items={MEDIA_ITEMS} />
+      <Link
+        href="/faire-musiques"
+        className={tabClasses(pathname.startsWith("/faire-musiques"))}
+      >
+        Faire ces musiques
+      </Link>
       {LAST_TABS.map((tab) => {
         const active = pathname.startsWith(tab.href);
         return (
