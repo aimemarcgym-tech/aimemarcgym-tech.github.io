@@ -24,10 +24,7 @@ const MEDIA_ITEMS = [
   { href: "/media/videos", label: "Vidéos" },
 ];
 
-const LAST_TABS = [
-  { href: "/table", label: "Table" },
-  { href: "/sauvegarde", label: "Sauvegarde" },
-];
+const LAST_TABS = [{ href: "/sauvegarde", label: "Sauvegarde" }];
 
 const tabClasses = (active: boolean) =>
   `shrink-0 whitespace-nowrap rounded-lg border px-4 py-2 text-sm transition-colors ${
@@ -222,6 +219,12 @@ export default function TopTabs() {
         );
       })}
       <TabDropdown pathname={pathname} label="Compétition" basePath="/competition" items={COMPETITION_ITEMS} />
+      <Link
+        href="/table"
+        className={tabClasses(pathname.startsWith("/table"))}
+      >
+        Table
+      </Link>
       <Link
         href="/entrainement"
         className={tabClasses(pathname.startsWith("/entrainement"))}
