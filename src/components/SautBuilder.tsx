@@ -434,7 +434,7 @@ export default function SautBuilder({
             )}
           </div>
 
-          <ul className="mt-3 space-y-1.5 text-xs text-muted">
+          <ul className="mt-3 space-y-1.5 text-sm text-muted">
             <li className="flex gap-1.5">
               <span className="shrink-0">💡</span>
               <span>

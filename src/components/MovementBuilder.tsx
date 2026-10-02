@@ -526,7 +526,7 @@ export default function MovementBuilder({
           </div>
 
           {getApparatusTips(apparatus).length > 0 && (
-            <ul className="mt-3 space-y-1.5 text-xs text-muted">
+            <ul className="mt-3 space-y-1.5 text-sm text-muted">
               {getApparatusTips(apparatus).map((tip, i) => (
                 <li key={i} className="flex gap-1.5">
                   <span className="shrink-0">💡</span>
