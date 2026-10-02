@@ -135,7 +135,6 @@ export default function TeamCategoryChecker() {
 
           {teamKey && (
             <div className="mt-4 space-y-4">
-              <ShareLinkButton onCreate={handleShare} label="Partager ce panneau" />
               <ul className="space-y-1 text-sm text-muted">
                 {members.map((g) => (
                   <li key={g.id} className="flex justify-between gap-2">
@@ -199,6 +198,12 @@ export default function TeamCategoryChecker() {
                   );
                 })
               )}
+
+              <ShareLinkButton
+                onCreate={handleShare}
+                label="Partager"
+                className="accent-gradient rounded px-4 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              />
             </div>
           )}
         </>
