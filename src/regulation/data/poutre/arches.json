@@ -42,7 +42,7 @@
       "id": "POUTRE-ACCRO-MOUSSE",
       "name": "Accro poutre mousse",
       "subtitle": null,
-      "category": "ACRO",
+      "category": "ACRO_MOUSSE",
       "sourcePage": 61,
       "baseElement": { "code": "152-26", "name": "Roue : renversement latéral sans envol arrivée 1 ou 2 pieds" },
       "branches": []
