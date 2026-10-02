@@ -433,6 +433,21 @@ export default function SautBuilder({
               </div>
             )}
           </div>
+
+          <ul className="mt-3 space-y-1.5 text-xs text-muted">
+            <li className="flex gap-1.5">
+              <span className="shrink-0">💡</span>
+              <span>
+                {diagnostic.sautsRequired === 1
+                  ? "Un seul type de saut est demandé à ce niveau : il peut être exécuté deux fois en compétition (meilleure note gardée), inutile de l'ajouter deux fois ici."
+                  : "2 sauts de familles de 1er envol différentes sont demandés à ce niveau : chacun compte pour sa meilleure note parmi ses essais en compétition."}
+              </span>
+            </li>
+            <li className="flex gap-1.5">
+              <span className="shrink-0">💡</span>
+              <span>Un saut nomade n&apos;est jamais valorisable, même s&apos;il obtient la meilleure note.</span>
+            </li>
+          </ul>
         </section>
 
         {/* ZONE 3 — SUGGESTIONS / BIBLIOTHÈQUE */}

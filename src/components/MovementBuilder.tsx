@@ -11,6 +11,7 @@ import ShareLinkButton from "@/components/ShareLinkButton";
 import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
 import { createShare } from "@/lib/shares";
+import { getApparatusTips } from "@/lib/tips";
 
 const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
 
@@ -523,6 +524,17 @@ export default function MovementBuilder({
               </div>
             )}
           </div>
+
+          {getApparatusTips(apparatus).length > 0 && (
+            <ul className="mt-3 space-y-1.5 text-xs text-muted">
+              {getApparatusTips(apparatus).map((tip, i) => (
+                <li key={i} className="flex gap-1.5">
+                  <span className="shrink-0">💡</span>
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
         {/* ZONE 3 — SUGGESTIONS / BIBLIOTHÈQUE */}
