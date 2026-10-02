@@ -62,14 +62,10 @@ export interface TrainingJournalShareData {
   attachment?: ShareAttachment;
 }
 
-export interface TechProfileShareData {
+export interface MovementsAllShareData {
   gymnastFirstName: string;
   gymnastLastName: string;
-  apparatuses: {
-    apparatus: string;
-    apparatusLabel: string;
-    masteredElements: { code: string; name: string }[];
-  }[];
+  movements: MovementShareData[];
 }
 
 export type ShareDoc =
@@ -77,7 +73,7 @@ export type ShareDoc =
   | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
   | { type: "passageOrderAll"; ownerUid: string; data: PassageOrderAllShareData }
   | { type: "trainingJournal"; ownerUid: string; data: TrainingJournalShareData }
-  | { type: "techProfile"; ownerUid: string; data: TechProfileShareData };
+  | { type: "movementsAll"; ownerUid: string; data: MovementsAllShareData };
 
 export async function createShare(
   type: "movement",
@@ -96,17 +92,17 @@ export async function createShare(
   data: TrainingJournalShareData
 ): Promise<string>;
 export async function createShare(
-  type: "techProfile",
-  data: TechProfileShareData
+  type: "movementsAll",
+  data: MovementsAllShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "techProfile",
+  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll",
   data:
     | MovementShareData
     | PassageOrderShareData
     | PassageOrderAllShareData
     | TrainingJournalShareData
-    | TechProfileShareData
+    | MovementsAllShareData
 ): Promise<string> {
   const ref = doc(collection(db, "shares"));
   await setDoc(ref, {

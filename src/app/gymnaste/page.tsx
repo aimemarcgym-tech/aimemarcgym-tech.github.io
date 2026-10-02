@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getGymnast, createMovement } from "@/lib/data";
+import { getGymnast, getMovement, createMovement } from "@/lib/data";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import Link from "next/link";
 import DeleteGymnastButton from "@/components/DeleteGymnastButton";
@@ -12,7 +12,9 @@ import GymnastHeaderEditor from "@/components/GymnastHeaderEditor";
 import NewMovementForm from "@/components/NewMovementForm";
 import ApparatusSkillsTabs from "@/components/ApparatusSkillsTabs";
 import ShareLinkButton from "@/components/ShareLinkButton";
-import { createShare } from "@/lib/shares";
+import { createShare, type MovementShareData } from "@/lib/shares";
+import { analyzeMovement } from "@/engine/composition";
+import { analyzeSaut } from "@/engine/saut";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -61,21 +63,45 @@ function GymnastPageInner() {
 
   async function handleShareProfile(): Promise<string> {
     if (!gymnast) throw new Error("Gymnaste introuvable.");
-    const mastered = new Set(
-      gymnast.skills.filter((s) => s.status === "MAITRISE").map((s) => s.elementCode)
+    const sorted = [...gymnast.movements].sort(
+      (a, b) => APPARATUS_ORDER.indexOf(a.apparatus) - APPARATUS_ORDER.indexOf(b.apparatus)
     );
-    const shareId = await createShare("techProfile", {
+    const movements: MovementShareData[] = [];
+    for (const m of sorted) {
+      const full = await getMovement(m.id);
+      if (!full) continue;
+      const refs = full.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }));
+      // Mêmes confirmations manuelles que dans le constructeur (stockées par mouvement).
+      let confirmations = new Set<string>();
+      try {
+        const raw = localStorage.getItem(`manual-confirm-${m.id}`);
+        if (raw) confirmations = new Set(JSON.parse(raw));
+      } catch {}
+      const diagnostic =
+        m.apparatus === "SAUT"
+          ? analyzeSaut(m.evolution, refs, confirmations)
+          : analyzeMovement(m.apparatus, m.evolution, refs, confirmations);
+      const byCode = new Map<string, (typeof regulations)[string]["elements"][number]>();
+      for (const e of regulations[m.apparatus].elements) if (!byCode.has(e.code)) byCode.set(e.code, e);
+      movements.push({
+        gymnastFirstName: gymnast.firstName,
+        gymnastLastName: gymnast.lastName,
+        label: m.label,
+        apparatus: m.apparatus,
+        evolutionId: m.evolution,
+        elements: refs
+          .map((r) => byCode.get(r.code))
+          .filter((e): e is NonNullable<typeof e> => !!e)
+          .map((e) => ({ code: e.code, name: e.name, palier: e.palier, branch: e.branch })),
+        diagnostic: { ...diagnostic, suggestions: [] },
+      });
+    }
+    const shareId = await createShare("movementsAll", {
       gymnastFirstName: gymnast.firstName,
       gymnastLastName: gymnast.lastName,
-      apparatuses: APPARATUS_ORDER.filter((a) => regulations[a]).map((a) => ({
-        apparatus: a,
-        apparatusLabel: APPARATUS_LABELS[a] ?? a,
-        masteredElements: regulations[a].elements
-          .filter((e) => mastered.has(e.code))
-          .map((e) => ({ code: e.code, name: e.name })),
-      })),
+      movements,
     });
-    return `/partage/profil/?id=${shareId}`;
+    return `/partage/mouvements/?id=${shareId}`;
   }
 
   if (!loaded) {
