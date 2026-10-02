@@ -13,6 +13,7 @@ import NewMovementForm from "@/components/NewMovementForm";
 import ApparatusSkillsTabs from "@/components/ApparatusSkillsTabs";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import { createShare, type MovementShareData } from "@/lib/shares";
+import { buildMovementShare, penaliteMaterielFromStorage } from "@/lib/movementShare";
 import { analyzeMovement } from "@/engine/composition";
 import { analyzeSaut } from "@/engine/saut";
 
@@ -81,20 +82,18 @@ function GymnastPageInner() {
         m.apparatus === "SAUT"
           ? analyzeSaut(m.evolution, refs, confirmations)
           : analyzeMovement(m.apparatus, m.evolution, refs, confirmations);
-      const byCode = new Map<string, (typeof regulations)[string]["elements"][number]>();
-      for (const e of regulations[m.apparatus].elements) if (!byCode.has(e.code)) byCode.set(e.code, e);
-      movements.push({
-        gymnastFirstName: gymnast.firstName,
-        gymnastLastName: gymnast.lastName,
-        label: m.label,
-        apparatus: m.apparatus,
-        evolutionId: m.evolution,
-        elements: refs
-          .map((r) => byCode.get(r.code))
-          .filter((e): e is NonNullable<typeof e> => !!e)
-          .map((e) => ({ code: e.code, name: e.name, palier: e.palier, branch: e.branch })),
-        diagnostic: { ...diagnostic, suggestions: [] },
-      });
+      movements.push(
+        buildMovementShare({
+          gymnastFirstName: gymnast.firstName,
+          gymnastLastName: gymnast.lastName,
+          label: m.label,
+          apparatus: m.apparatus,
+          evolutionId: m.evolution,
+          codes: refs.map((r) => r.code),
+          diagnostic,
+          penaliteMateriel: m.apparatus === "SAUT" ? penaliteMaterielFromStorage(m.id) : undefined,
+        })
+      );
     }
     const shareId = await createShare("movementsAll", {
       gymnastFirstName: gymnast.firstName,

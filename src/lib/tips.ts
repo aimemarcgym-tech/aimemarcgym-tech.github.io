@@ -3,6 +3,15 @@
 // quelques points par agrès (pas une liste exhaustive de la FAQ) pour
 // rester lisible et éviter un second corpus à maintenir en parallèle des
 // données réglementaires.
+export function getSautTips(sautsRequired: number): string[] {
+  return [
+    sautsRequired === 1
+      ? "Un seul type de saut est demandé à ce niveau : il peut être exécuté deux fois en compétition (meilleure note gardée), inutile de l'ajouter deux fois ici."
+      : "2 sauts de familles de 1er envol différentes sont demandés à ce niveau : chacun compte pour sa meilleure note parmi ses essais en compétition.",
+    "Un saut nomade n'est jamais valorisable, même s'il obtient la meilleure note.",
+  ];
+}
+
 export function getApparatusTips(apparatus: string): string[] {
   switch (apparatus) {
     case "POUTRE":

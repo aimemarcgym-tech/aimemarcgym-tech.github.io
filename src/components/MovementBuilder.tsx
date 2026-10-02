@@ -11,6 +11,7 @@ import ShareLinkButton from "@/components/ShareLinkButton";
 import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
 import { createShare } from "@/lib/shares";
+import { buildMovementShare } from "@/lib/movementShare";
 import { getApparatusTips } from "@/lib/tips";
 
 const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
@@ -284,22 +285,18 @@ export default function MovementBuilder({
   }
 
   async function handleShare() {
-    const elements = sequence
-      .map((s) => elementByCode.get(s.code))
-      .filter((e): e is NonNullable<typeof e> => !!e)
-      .map((e) => ({ code: e.code, name: e.name, palier: e.palier, branch: e.branch }));
-    const shareId = await createShare("movement", {
-      gymnastFirstName,
-      gymnastLastName,
-      label,
-      apparatus,
-      evolutionId,
-      elements,
-      // La page publique (/partage/mouvement) n'affiche jamais "suggestions"
-      // (assistant interne) — on l'exclut pour ne pas alourdir inutilement
-      // le document Firestore et ne pas exposer ces données en public.
-      diagnostic: { ...diagnostic, suggestions: [] },
-    });
+    const shareId = await createShare(
+      "movement",
+      buildMovementShare({
+        gymnastFirstName,
+        gymnastLastName,
+        label,
+        apparatus,
+        evolutionId,
+        codes: sequence.map((s) => s.code),
+        diagnostic,
+      })
+    );
     return `/partage/mouvement/?id=${shareId}`;
   }
 

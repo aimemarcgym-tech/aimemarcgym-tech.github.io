@@ -18,8 +18,11 @@ export interface MovementShareData {
   label: string;
   apparatus: string;
   evolutionId: string;
-  elements: { code: string; name: string; palier: string; branch: string | null }[];
+  elements: { code: string; name: string; palier: string; branch: string | null; archeName?: string }[];
   diagnostic: Diagnostic | SautDiagnostic;
+  // Optionnels : absents des liens créés avant l'affichage "comme le constructeur".
+  requirements?: { arches: number; elementsMin: number; elementsMax: number };
+  penaliteMateriel?: number;
 }
 
 export interface PassageOrderShareData {

@@ -10,6 +10,8 @@ import ShareLinkButton from "@/components/ShareLinkButton";
 import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
 import { createShare } from "@/lib/shares";
+import { buildMovementShare } from "@/lib/movementShare";
+import { getSautTips } from "@/lib/tips";
 
 const PALIER_LABEL: Record<string, string> = {
   PREREQUIS: "Prérequis",
@@ -216,17 +218,19 @@ export default function SautBuilder({
   }
 
   async function handleShare() {
-    const elements = diagnostic.sauts.map((s) => ({ code: s.code, name: s.name, palier: s.palier, branch: s.branch }));
-    const shareId = await createShare("movement", {
-      gymnastFirstName,
-      gymnastLastName,
-      label,
-      apparatus: "SAUT",
-      evolutionId,
-      elements,
-      // La page publique n'affiche jamais "suggestions" (assistant interne).
-      diagnostic: { ...diagnostic, suggestions: [] },
-    });
+    const shareId = await createShare(
+      "movement",
+      buildMovementShare({
+        gymnastFirstName,
+        gymnastLastName,
+        label,
+        apparatus: "SAUT",
+        evolutionId,
+        codes: sequence.map((s) => s.code),
+        diagnostic,
+        penaliteMateriel: penaliteMateriel,
+      })
+    );
     return `/partage/mouvement/?id=${shareId}`;
   }
 
@@ -435,18 +439,12 @@ export default function SautBuilder({
           </div>
 
           <ul className="mt-3 space-y-1.5 text-sm text-muted">
-            <li className="flex gap-1.5">
-              <span className="shrink-0">💡</span>
-              <span>
-                {diagnostic.sautsRequired === 1
-                  ? "Un seul type de saut est demandé à ce niveau : il peut être exécuté deux fois en compétition (meilleure note gardée), inutile de l'ajouter deux fois ici."
-                  : "2 sauts de familles de 1er envol différentes sont demandés à ce niveau : chacun compte pour sa meilleure note parmi ses essais en compétition."}
-              </span>
-            </li>
-            <li className="flex gap-1.5">
-              <span className="shrink-0">💡</span>
-              <span>Un saut nomade n&apos;est jamais valorisable, même s&apos;il obtient la meilleure note.</span>
-            </li>
+            {getSautTips(diagnostic.sautsRequired).map((tip, i) => (
+              <li key={i} className="flex gap-1.5">
+                <span className="shrink-0">💡</span>
+                <span>{tip}</span>
+              </li>
+            ))}
           </ul>
         </section>
 

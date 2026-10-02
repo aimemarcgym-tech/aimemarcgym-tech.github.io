@@ -22,7 +22,7 @@ function MovementPartagePageInner() {
 
   if (share === null) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm text-muted">Chargement…</p>
       </main>
     );
@@ -30,7 +30,7 @@ function MovementPartagePageInner() {
 
   if (share === "not-found") {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm text-muted">Ce lien de partage n&apos;existe pas ou plus.</p>
       </main>
     );
@@ -41,7 +41,7 @@ function MovementPartagePageInner() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
-        <div className="mx-auto max-w-3xl px-6 py-5">
+        <div className="mx-auto max-w-5xl px-6 py-5">
           <p className="text-sm text-muted">
             {data.gymnastFirstName} {data.gymnastLastName}
           </p>
@@ -52,7 +52,7 @@ function MovementPartagePageInner() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl space-y-6 px-6 py-8">
+      <main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
         <SharedMovementView data={data} />
         <p className="text-center text-xs text-muted">
           Lien de partage en lecture seule, généré depuis l&apos;application Gestion Compétitions &amp; Entraînements.

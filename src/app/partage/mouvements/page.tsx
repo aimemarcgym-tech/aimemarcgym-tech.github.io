@@ -23,7 +23,7 @@ function MouvementsPartagePageInner() {
 
   if (share === null) {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm text-muted">Chargement…</p>
       </main>
     );
@@ -31,7 +31,7 @@ function MouvementsPartagePageInner() {
 
   if (share === "not-found") {
     return (
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main className="mx-auto max-w-5xl px-6 py-10">
         <p className="text-sm text-muted">Ce lien de partage n&apos;existe pas ou plus.</p>
       </main>
     );
@@ -43,7 +43,7 @@ function MouvementsPartagePageInner() {
   return (
     <div className="min-h-screen">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
-        <div className="mx-auto max-w-3xl px-6 py-5">
+        <div className="mx-auto max-w-5xl px-6 py-5">
           <h1 className="text-xl font-bold text-foreground">
             <span className="accent-gradient-text">
               {data.gymnastFirstName} {data.gymnastLastName}
@@ -53,7 +53,7 @@ function MouvementsPartagePageInner() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl space-y-6 px-6 py-8">
+      <main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
         {data.movements.length === 0 ? (
           <p className="text-sm text-muted">Aucun mouvement.</p>
         ) : (
