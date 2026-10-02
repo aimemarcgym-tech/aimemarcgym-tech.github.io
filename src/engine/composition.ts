@@ -106,26 +106,43 @@ function findCategoryRuns(
   return runs;
 }
 
-// Dans une liaison (série d'éléments de même catégorie enchaînés dans
-// l'ordre du mouvement — même proxy que findCategoryRuns pour LA/LG/LM),
-// seuls les éléments avant le dernier peuvent être des variantes : le
-// dernier élément de la série doit être la forme de base.
+// Catégories pouvant composer une liaison au sens du lexique officiel :
+// LA = acros enchaînés (ACRO), LG = 2 éléments gymniques différents (PIVOT
+// et SAUT_GYM uniquement), LM = 1 élément gymnique (PIVOT/SAUT_GYM) + 1
+// acrobatique ou inversement. Les trois partagent donc un même ensemble de
+// catégories "enchaînables" : un run de 2+ éléments consécutifs dont CHACUN
+// appartient à cet ensemble (peu importe lequel exactement, pour couvrir
+// aussi les LM qui mélangent ACRO et PIVOT/SAUT_GYM) est une liaison
+// candidate.
+const LIAISON_CATEGORIES = ["ACRO", "PIVOT", "SAUT_GYM"];
+
+// Dans une liaison (série d'éléments enchaînables dans l'ordre du mouvement
+// — proxy pour LA/LG/LM), seuls les éléments avant le dernier peuvent être
+// des variantes : le dernier élément de la série doit être la forme de base.
 function findVariantEndingViolations(
   apparatus: string,
   elements: RegElement[]
 ): { code: string; name: string; category: string }[] {
-  const categories = new Set<string>();
+  const isLiaisonEligible = (el: RegElement) =>
+    elementCategories(apparatus, el).some((c) => LIAISON_CATEGORIES.includes(c));
+
+  const runs: RegElement[][] = [];
+  let current: RegElement[] = [];
   for (const el of elements) {
-    for (const c of elementCategories(apparatus, el)) categories.add(c);
+    if (isLiaisonEligible(el)) current.push(el);
+    else {
+      if (current.length >= 2) runs.push(current);
+      current = [];
+    }
   }
+  if (current.length >= 2) runs.push(current);
+
   const violations: { code: string; name: string; category: string }[] = [];
-  for (const category of categories) {
-    const runs = findCategoryRuns(apparatus, elements, category, 2);
-    for (const run of runs) {
-      const last = run[run.length - 1];
-      if (isVariantElement(last.code, last.name)) {
-        violations.push({ code: last.code, name: last.name, category });
-      }
+  for (const run of runs) {
+    const last = run[run.length - 1];
+    if (isVariantElement(last.code, last.name)) {
+      const category = elementCategories(apparatus, last).find((c) => LIAISON_CATEGORIES.includes(c)) ?? "";
+      violations.push({ code: last.code, name: last.name, category });
     }
   }
   return violations;
