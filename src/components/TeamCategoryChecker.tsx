@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { getGymnasts } from "@/lib/data";
 import categoriesData from "@/regulation/data/categories-age.json";
+import ShareLinkButton from "@/components/ShareLinkButton";
+import { createShare, type TeamCategoryShareData } from "@/lib/shares";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
@@ -30,6 +32,9 @@ function parseAnnees(annees: string): { min: number; max: number } {
 export default function TeamCategoryChecker() {
   const [gymnasts, setGymnasts] = useState<Gymnast[] | null>(null);
   const [teamKey, setTeamKey] = useState("");
+  // Catégorie choisie par évolution (index dans la liste des possibles) : un clic
+  // masque les autres, un second clic sur la même la désélectionne.
+  const [chosen, setChosen] = useState<Record<string, number>>({});
 
   useEffect(() => {
     getGymnasts().then(setGymnasts);
@@ -66,6 +71,37 @@ export default function TeamCategoryChecker() {
     return Array.from(counts.keys()).sort();
   }, [members]);
 
+  function matchesFor(evolution: string) {
+    const niveau = categoriesData.niveaux.find((n) => n.evolution === evolution);
+    if (!niveau) return null;
+    const all = niveau.categories
+      .map((cat, index) => ({ cat, index }))
+      .filter(({ cat }) => {
+        const { min, max } = parseAnnees(cat.annees);
+        return birthYears.every((y) => y >= min && y <= max);
+      });
+    const pick = chosen[evolution];
+    return pick === undefined ? all : all.filter((m) => m.index === pick);
+  }
+
+  async function handleShare(): Promise<string> {
+    const selected = teams.find((t) => t.key === teamKey);
+    if (!selected) throw new Error("Aucune équipe sélectionnée.");
+    const data: TeamCategoryShareData = {
+      club: selected.club,
+      team: selected.team,
+      members: members.map((g) => ({ firstName: g.firstName, lastName: g.lastName, birthYear: g.birthYear ?? null })),
+      evolutions: evolutions.flatMap((evolution) => {
+        const matches = matchesFor(evolution);
+        return matches
+          ? [{ evolution, categories: matches.map(({ cat }) => ({ ans: cat.ans, annees: cat.annees, filiere: cat.filiere })) }]
+          : [];
+      }),
+    };
+    const id = await createShare("teamCategory", data);
+    return `/partage/categorie-age/?id=${id}`;
+  }
+
   const birthYears = members.filter((g) => g.birthYear != null).map((g) => g.birthYear as number);
   const missingBirthYear = members.some((g) => g.birthYear == null);
 
@@ -83,7 +119,10 @@ export default function TeamCategoryChecker() {
         <>
           <select
             value={teamKey}
-            onChange={(e) => setTeamKey(e.target.value)}
+            onChange={(e) => {
+              setTeamKey(e.target.value);
+              setChosen({});
+            }}
             className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
           >
             <option value="">Sélectionner une équipe…</option>
@@ -96,6 +135,7 @@ export default function TeamCategoryChecker() {
 
           {teamKey && (
             <div className="mt-4 space-y-4">
+              <ShareLinkButton onCreate={handleShare} label="Partager ce panneau" />
               <ul className="space-y-1 text-sm text-muted">
                 {members.map((g) => (
                   <li key={g.id} className="flex justify-between gap-2">
@@ -121,12 +161,8 @@ export default function TeamCategoryChecker() {
                 <p className="text-sm text-muted">Aucune année de naissance renseignée pour cette équipe.</p>
               ) : (
                 evolutions.map((evolution) => {
-                  const niveau = categoriesData.niveaux.find((n) => n.evolution === evolution);
-                  if (!niveau) return null;
-                  const matches = niveau.categories.filter((cat) => {
-                    const { min, max } = parseAnnees(cat.annees);
-                    return birthYears.every((y) => y >= min && y <= max);
-                  });
+                  const matches = matchesFor(evolution);
+                  if (!matches) return null;
                   return (
                     <div key={evolution}>
                       <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted">
@@ -138,15 +174,24 @@ export default function TeamCategoryChecker() {
                         </p>
                       ) : (
                         <div className="flex flex-wrap gap-2">
-                          {matches.map((cat, i) => (
-                            <span
-                              key={i}
+                          {matches.map(({ cat, index }) => (
+                            <button
+                              type="button"
+                              key={index}
+                              onClick={() =>
+                                setChosen((c) => {
+                                  const next = { ...c };
+                                  if (next[evolution] === index) delete next[evolution];
+                                  else next[evolution] = index;
+                                  return next;
+                                })
+                              }
                               className={`rounded-lg border px-2.5 py-1.5 text-xs font-medium ${FILIERE_STYLE[cat.filiere]}`}
-                              title={FILIERE_LABEL[cat.filiere]}
+                              title={`${FILIERE_LABEL[cat.filiere]} — cliquer pour ${chosen[evolution] === index ? "réafficher les autres" : "ne garder que celle-ci"}`}
                             >
                               {cat.ans}
                               <span className="ml-1 opacity-70">({cat.annees})</span>
-                            </span>
+                            </button>
                           ))}
                         </div>
                       )}

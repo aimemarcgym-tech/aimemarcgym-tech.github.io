@@ -71,12 +71,24 @@ export interface MovementsAllShareData {
   movements: MovementShareData[];
 }
 
+// Panneau "Vérifier une équipe" (catégories d'âge) tel qu'affiché au moment du partage.
+export interface TeamCategoryShareData {
+  club: string;
+  team: string;
+  members: { firstName: string; lastName: string; birthYear: number | null }[];
+  evolutions: {
+    evolution: string;
+    categories: { ans: string; annees: string; filiere: string }[];
+  }[];
+}
+
 export type ShareDoc =
   | { type: "movement"; ownerUid: string; data: MovementShareData }
   | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
   | { type: "passageOrderAll"; ownerUid: string; data: PassageOrderAllShareData }
   | { type: "trainingJournal"; ownerUid: string; data: TrainingJournalShareData }
-  | { type: "movementsAll"; ownerUid: string; data: MovementsAllShareData };
+  | { type: "movementsAll"; ownerUid: string; data: MovementsAllShareData }
+  | { type: "teamCategory"; ownerUid: string; data: TeamCategoryShareData };
 
 export async function createShare(
   type: "movement",
@@ -99,13 +111,18 @@ export async function createShare(
   data: MovementsAllShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll",
+  type: "teamCategory",
+  data: TeamCategoryShareData
+): Promise<string>;
+export async function createShare(
+  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory",
   data:
     | MovementShareData
     | PassageOrderShareData
     | PassageOrderAllShareData
     | TrainingJournalShareData
     | MovementsAllShareData
+    | TeamCategoryShareData
 ): Promise<string> {
   const ref = doc(collection(db, "shares"));
   await setDoc(ref, {
