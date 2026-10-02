@@ -1,6 +1,6 @@
 import { getArche, getElement, getRegulation } from "@/regulation/loader";
 import { getCheck } from "@/regulation/checks";
-import { isVariantElement } from "@/regulation/variants";
+import { isVariantElement, isSortieElement } from "@/regulation/variants";
 import { PALIER_ORDER, palierRank, type CheckSpec, type Evolution, type Palier, type RegElement } from "@/regulation/types";
 
 export interface MovementElementRef {
@@ -164,6 +164,10 @@ function evaluateCheck(
       const needed = spec.min ?? 1;
       const matches = usable.filter((e) => {
         if (spec.category && !elementCategories(apparatus, e).includes(spec.category)) return false;
+        // Une sortie ne valide jamais une valorisation "acro sur poutre" (elle
+        // ne compte que pour le tronc commun et ses propres valorisations de
+        // sortie) : réception sur poutre requise, pas en bout de poutre.
+        if (spec.excludeSorties && isSortieElement(e.archeId, e.extraCategories)) return false;
         return palierRank(e.palier) >= minRank && minRank >= 0;
       });
       return { ok: matches.length >= needed, detail: matches.length > 0 ? `${matches.length}/${needed} — ex: ${matches[0].name}` : "aucun élément au palier requis" };

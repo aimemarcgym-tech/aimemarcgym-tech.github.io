@@ -160,17 +160,20 @@ export const POUTRE_CHECKS: Record<string, CheckSpec> = {
   // système de vérification actuel -> confirmation manuelle.
 
   "P-B1-V1": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "PIVOT" },
-  "P-B1-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P2", category: "ACRO" },
+  // "1 acro P... (min.)" : doit être reçu sur la poutre, une sortie ne
+  // valide pas cette valorisation même si elle compte comme ACRO pour le
+  // tronc commun (FAQ UFOLEP #61) -> excludeSorties.
+  "P-B1-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P2", category: "ACRO", excludeSorties: true },
   "P-B1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "SORTIES" },
   // P-B1-V2 "1 saut P3 (min.)" : catégorie SAUT_GYM commune aux 2 arches de
   // sauts, palier P3 pas atteint dans les données actuelles -> manuel.
 
-  "P-B2-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "ACRO" },
+  "P-B2-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "ACRO", excludeSorties: true },
   "P-B2-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P3", category: "SORTIES" },
 
-  "P-B3-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ACRO" },
+  "P-B3-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ACRO", excludeSorties: true },
 
-  "P-C1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5", category: "ACRO" },
+  "P-C1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5", category: "ACRO", excludeSorties: true },
   // P-B3-V4/P-C1-V5/P-C2-V5/P-C3-V5 "1 sortie avec liaison acro..." :
   // condition de liaison acrobatique (chaînage de plusieurs éléments avec
   // envol) non vérifiable automatiquement -> confirmation manuelle.

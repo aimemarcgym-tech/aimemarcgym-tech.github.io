@@ -44,7 +44,7 @@
     { "code": "8", "name": "Départ fente ATR. ATR ou ATR écart", "archeId": "SOL-ACROS2", "branch": null, "palier": "BASE", "sourcePage": 66, "verified": true },
     { "code": "151", "name": "Souplesse avant. Renversement avant sans envol", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P2", "sourcePage": 66, "verified": true },
     { "code": "149", "name": "Souplesse arrière. Renversement arrière sans envol", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P2", "sourcePage": 66, "verified": true },
-    { "code": "152", "name": "Tic-Tac. Renversement avant-arrière sans envol", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P3", "sourcePage": 66, "verified": true },
+    { "code": "152", "name": "Tic-Tac. Renversement avant-arrière sans envol", "archeId": "SOL-ACROS2", "branch": "avant", "palier": "P3", "sourcePage": 66, "verified": true },
     { "code": "175", "name": "Salto tempo. Renversement arrière libre", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P5", "sourcePage": 66, "verified": true },
     { "code": "153", "name": "Saut de mains 1 pied. Renversement avant avec envol appel 1 pied et réception 1 pied", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P3", "sourcePage": 66, "verified": true },
     { "code": "195+", "name": "Flic-Flac. Renversement arrière avec envol départ et réception libre (variante)", "archeId": "SOL-ACROS2", "branch": "arriere", "palier": "P4", "sourcePage": 66, "verified": true },

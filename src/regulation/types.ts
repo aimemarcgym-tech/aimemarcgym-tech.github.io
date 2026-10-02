@@ -100,7 +100,7 @@ export interface ApparatusRegulation {
 // Type de vérification automatique applicable à une exigence / valorisation.
 export type CheckSpec =
   | { type: "CATEGORY_COUNT"; category: string; min: number; branch?: string }
-  | { type: "ELEMENT_AT_PALIER_MIN"; palierMin: Palier; category?: string; min?: number }
+  | { type: "ELEMENT_AT_PALIER_MIN"; palierMin: Palier; category?: string; min?: number; excludeSorties?: boolean }
   | { type: "SALTO_AT_PALIER_MIN"; palierMin: Palier }
   | { type: "TWO_ACRO_DIFFERENT_DIRECTIONS" }
   | { type: "LIAISON_ACRO"; runMinLength: number; runsNeeded: number }
