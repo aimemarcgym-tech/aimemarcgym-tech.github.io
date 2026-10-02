@@ -426,8 +426,9 @@ export default function SautBuilder({
               <div className="mt-2 space-y-1 text-xs text-white/85">
                 <div>Barème "Valeur des sauts" (palier du saut retenu).</div>
                 <div className="text-white/60">
-                  ⚠ Le barème chiffré de la valorisation du Saut n&apos;est pas publié par l&apos;UFOLEP à ce jour — elle
-                  n&apos;est donc pas ajoutée au calcul (uniquement affichée pour suivi de conformité).
+                  La valorisation des 2 sauts différents est appliquée si les 2 sauts sont reconnus et que l&apos;un
+                  des deux se trouve dans les paliers valorisables. Si le meilleur saut est un nomade, alors les
+                  nomades n&apos;étant pas valorisables, pas de valorisation.
                 </div>
               </div>
             )}
