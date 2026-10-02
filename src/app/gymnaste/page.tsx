@@ -11,6 +11,8 @@ import TeamEditor from "@/components/TeamEditor";
 import GymnastHeaderEditor from "@/components/GymnastHeaderEditor";
 import NewMovementForm from "@/components/NewMovementForm";
 import ApparatusSkillsTabs from "@/components/ApparatusSkillsTabs";
+import ShareLinkButton from "@/components/ShareLinkButton";
+import { createShare } from "@/lib/shares";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -55,6 +57,25 @@ function GymnastPageInner() {
     const label = String(formData.get("label") || `${APPARATUS_LABELS[apparatus] ?? apparatus} — ${evolution}`);
     const movement = await createMovement(gymnast.id, apparatus, evolution, label);
     router.push(`/mouvement?id=${movement.id}`);
+  }
+
+  async function handleShareProfile(): Promise<string> {
+    if (!gymnast) throw new Error("Gymnaste introuvable.");
+    const mastered = new Set(
+      gymnast.skills.filter((s) => s.status === "MAITRISE").map((s) => s.elementCode)
+    );
+    const shareId = await createShare("techProfile", {
+      gymnastFirstName: gymnast.firstName,
+      gymnastLastName: gymnast.lastName,
+      apparatuses: APPARATUS_ORDER.filter((a) => regulations[a]).map((a) => ({
+        apparatus: a,
+        apparatusLabel: APPARATUS_LABELS[a] ?? a,
+        masteredElements: regulations[a].elements
+          .filter((e) => mastered.has(e.code))
+          .map((e) => ({ code: e.code, name: e.name })),
+      })),
+    });
+    return `/partage/profil/?id=${shareId}`;
   }
 
   if (!loaded) {
@@ -113,7 +134,14 @@ function GymnastPageInner() {
 
       <main className="mx-auto max-w-5xl px-6 py-10 space-y-10">
         <section>
-          <h2 className="mb-4 text-lg font-semibold text-foreground">Mouvements</h2>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-foreground">Mouvements</h2>
+            <ShareLinkButton
+              onCreate={handleShareProfile}
+              label="Partager les 4 agrès"
+              className="rounded bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+            />
+          </div>
           <div className="mb-4 flex flex-wrap items-center gap-3">
             {[...gymnast.movements]
               .sort((a, b) => APPARATUS_ORDER.indexOf(a.apparatus) - APPARATUS_ORDER.indexOf(b.apparatus))
