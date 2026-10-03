@@ -473,7 +473,7 @@ export default function MovementBuilder({
           <div className="mb-4">
             <div className="mb-1 flex items-center justify-between text-sm font-semibold text-foreground">
               <span>Valorisations</span>
-              <span className="text-xs text-muted">
+              <span className={`text-xs ${diagnostic.valorisations.validatedCount >= diagnostic.valorisations.choisir ? "font-semibold text-success" : "text-muted"}`}>
                 retenues : {Math.min(diagnostic.valorisations.validatedCount, diagnostic.valorisations.choisir)}/{diagnostic.valorisations.choisir} (parmi {diagnostic.valorisations.parmi})
               </span>
             </div>
