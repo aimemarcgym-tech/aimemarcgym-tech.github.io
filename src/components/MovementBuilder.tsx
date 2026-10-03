@@ -187,9 +187,7 @@ export default function MovementBuilder({
   }, [regulation, archeByCode]);
 
   const filteredLibrary = useMemo(() => {
-    const inSeq = new Set(sequence.map((s) => s.code));
     return regulation.elements
-      .filter((e) => !inSeq.has(e.code))
       .filter((e) => {
         if (category === "ALL") return true;
         // "CAT:X,Y" (venant de "voir dans la Bibliothèque" sur une exigence qui
@@ -224,7 +222,11 @@ export default function MovementBuilder({
         return skillMap.get(e.code) === "MAITRISE";
       })
       .sort((a, b) => palierRank(a.palier) - palierRank(b.palier) || a.name.localeCompare(b.name));
-  }, [regulation, sequence, search, onlyMastered, skillMap, archeByCode, category]);
+  }, [regulation, search, onlyMastered, skillMap, archeByCode, category]);
+
+  // Les éléments déjà dans le mouvement restent listés (grisés) : les masquer
+  // donnait l'impression que le référentiel était incomplet.
+  const inSequence = useMemo(() => new Set(sequence.map((s) => s.code)), [sequence]);
 
   function addElement(code: string) {
     setSequence((s) => [...s, { code, role: "ELEMENT" }]);
@@ -690,11 +692,16 @@ export default function MovementBuilder({
                   const mastery = skillMap.get(el.code);
                   const mousse = isMousseElement(el.archeId);
                   const variant = isVariantElement(el.code, el.name);
+                  const already = inSequence.has(el.code);
                   return (
                     <button
                       key={`${el.code}::${el.archeId}`}
                       onClick={() => addElement(el.code)}
-                      className="flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left hover:border-accent-solid/60 hover:bg-accent-from/10"
+                      disabled={already}
+                      title={already ? "Déjà dans le mouvement" : undefined}
+                      className={`flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left ${
+                        already ? "cursor-default opacity-50" : "hover:border-accent-solid/60 hover:bg-accent-from/10"
+                      }`}
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="flex flex-wrap items-center gap-1">
@@ -723,8 +730,14 @@ export default function MovementBuilder({
                             </span>
                           )}
                         </span>
-                        {mastery === "MAITRISE" && <span className="text-xs text-success">✓</span>}
-                        {mastery === "EN_APPRENTISSAGE" && <span className="text-xs text-warning">○</span>}
+                        {already ? (
+                          <span className="text-[10px] text-muted">Déjà ajouté</span>
+                        ) : (
+                          <>
+                            {mastery === "MAITRISE" && <span className="text-xs text-success">✓</span>}
+                            {mastery === "EN_APPRENTISSAGE" && <span className="text-xs text-warning">○</span>}
+                          </>
+                        )}
                       </div>
                       <span className="text-xs leading-snug text-foreground">{el.name}</span>
                     </button>
