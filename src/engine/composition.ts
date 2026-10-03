@@ -153,7 +153,8 @@ function evaluateCheck(
   spec: CheckSpec,
   elements: RegElement[],
   context: "TRONC_COMMUN" | "VALORISATION",
-  paliersValorisables: Palier[]
+  paliersValorisables: Palier[],
+  paliersAutorises: Palier[] = []
 ): { ok: boolean; detail: string } {
   // Prérequis, Base et Nomade peuvent valider une exigence de tronc commun,
   // mais jamais une valorisation (règle confirmée par l'utilisateur) : en
@@ -172,6 +173,19 @@ function evaluateCheck(
       const matches = usable.filter((e) => {
         if (!elementCategories(apparatus, e).includes(spec.category)) return false;
         if (spec.branch && e.branch !== spec.branch) return false;
+        // FAQ #145 : en poutre, une sortie ne compte comme acro en poutre haute
+        // (tronc commun) que si son palier est autorisé au niveau.
+        if (
+          apparatus === "POUTRE" &&
+          context === "TRONC_COMMUN" &&
+          spec.category === "ACRO" &&
+          paliersAutorises.length > 0 &&
+          isSortieElement(e.archeId, e.extraCategories) &&
+          !["PREREQUIS", "NOMADE", "BASE"].includes(e.palier) &&
+          !paliersAutorises.includes(e.palier)
+        ) {
+          return false;
+        }
         return true;
       });
       return { ok: matches.length >= spec.min, detail: `${matches.length}/${spec.min} trouvé(s)` };
@@ -255,7 +269,7 @@ export function analyzeMovement(
       const confirmed = manualConfirmations.has(ex.id);
       return { id: ex.id, label: ex.label, status: confirmed ? "OK" : "A_CONFIRMER", auto: false, confirmedManually: confirmed };
     }
-    const { ok } = evaluateCheck(apparatus, spec, elements, "TRONC_COMMUN", evolution.paliersValorisables);
+    const { ok } = evaluateCheck(apparatus, spec, elements, "TRONC_COMMUN", evolution.paliersValorisables, evolution.paliersAutorises);
     return { id: ex.id, label: ex.label, status: ok ? "OK" : "MANQUANT", auto: true };
   });
   const archesOk = archesUsed.length >= evolution.troncCommun.arches;
@@ -383,8 +397,8 @@ function computeSuggestions(
     for (const ex of missingTc) {
       const spec = getCheck(ex.id, apparatus);
       if (spec.type === "MANUAL") continue;
-      const before = evaluateCheck(apparatus, spec, currentElements, "TRONC_COMMUN", evolution.paliersValorisables).ok;
-      const after = evaluateCheck(apparatus, spec, hypothetical, "TRONC_COMMUN", evolution.paliersValorisables).ok;
+      const before = evaluateCheck(apparatus, spec, currentElements, "TRONC_COMMUN", evolution.paliersValorisables, evolution.paliersAutorises).ok;
+      const after = evaluateCheck(apparatus, spec, hypothetical, "TRONC_COMMUN", evolution.paliersValorisables, evolution.paliersAutorises).ok;
       if (!before && after) reasons.push(`complète l'exigence « ${ex.label} »`);
     }
 
