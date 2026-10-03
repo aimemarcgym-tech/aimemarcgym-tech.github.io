@@ -100,10 +100,6 @@ export function analyzeSaut(
   const auMoinsUnDansPaliersValorisables = sauts.some((s) => estValorisable(s.palier));
 
   const valorisations: SautValorisationResult[] = evolution.valorisations.options.map((opt) => {
-    if (opt.label.startsWith("2 sauts de 1er envol différents")) {
-      const ok = sautsRequired >= 2 && sauts.length === sautsRequired && famillesDifferentes && auMoinsUnDansPaliersValorisables;
-      return { id: opt.id, label: opt.label, status: ok ? "OK" : "MANQUANT", auto: true, points: opt.points };
-    }
     const confirmed = manualConfirmations.has(opt.id);
     return { id: opt.id, label: opt.label, status: confirmed ? "OK" : "A_CONFIRMER", auto: false, confirmedManually: confirmed, points: opt.points };
   });

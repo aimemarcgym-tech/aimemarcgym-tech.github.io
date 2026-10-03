@@ -271,23 +271,26 @@ export function analyzeMovement(
     .filter((e) => !NON_RANKED_PALIERS.includes(e.palier) && !autorisesSet.has(e.palier))
     .map((e) => ({ code: e.code, palier: e.palier }));
 
-  // Valorisations
+  // Valorisations : toujours confirmées à la main par l'entraîneur (jamais
+  // validées automatiquement). Le moteur continue pourtant d'évaluer celles qu'il
+  // sait vérifier, uniquement pour alimenter l'Assistant (valoriser en priorité).
+  const valoAutoMissing = new Set<string>();
   const valoResults: CheckResult[] = evolution.valorisations.options.map((opt) => {
     const spec = getCheck(opt.id, apparatus);
-    if (spec.type === "MANUAL") {
-      const confirmed = manualConfirmations.has(opt.id);
-      return {
-        id: opt.id,
-        label: opt.label,
-        status: confirmed ? "OK" : "A_CONFIRMER",
-        auto: false,
-        confirmedManually: confirmed,
-        points: opt.points,
-        pondere: opt.pondere,
-      };
+    const confirmed = manualConfirmations.has(opt.id);
+    if (spec.type !== "MANUAL" && !confirmed) {
+      const { ok } = evaluateCheck(apparatus, spec, elements, "VALORISATION", evolution.paliersValorisables);
+      if (!ok) valoAutoMissing.add(opt.id);
     }
-    const { ok } = evaluateCheck(apparatus, spec, elements, "VALORISATION", evolution.paliersValorisables);
-    return { id: opt.id, label: opt.label, status: ok ? "OK" : "MANQUANT", auto: true, points: opt.points, pondere: opt.pondere };
+    return {
+      id: opt.id,
+      label: opt.label,
+      status: confirmed ? "OK" : "A_CONFIRMER",
+      auto: false,
+      confirmedManually: confirmed,
+      points: opt.points,
+      pondere: opt.pondere,
+    };
   });
   const validated = valoResults.filter((r) => r.status === "OK");
   // On ne compte que les "choisir" meilleures valorisations validées (priorité aux pondérées)
@@ -310,7 +313,7 @@ export function analyzeMovement(
       .slice(0, evolution.valorisations.choisir)
       .reduce((sum, p) => sum + p, 0);
 
-  const suggestions = computeSuggestions(apparatus, evolution, elements, tcExigences, valoResults, archesUsed);
+  const suggestions = computeSuggestions(apparatus, evolution, elements, tcExigences, valoResults.filter((r) => valoAutoMissing.has(r.id)), archesUsed);
 
   return {
     apparatus,
@@ -352,7 +355,7 @@ function computeSuggestions(
 ): Suggestion[] {
   const currentCodes = new Set(currentElements.map((e) => e.code));
   const missingTc = tcExigences.filter((r) => r.status === "MANQUANT");
-  const missingValo = valoResults.filter((r) => r.status === "MANQUANT" && r.auto);
+  const missingValo = valoResults;
   const needsMoreArches = archesUsed.length < evolution.troncCommun.arches;
 
   if (missingTc.length === 0 && missingValo.length === 0 && !needsMoreArches) return [];
