@@ -55,7 +55,9 @@ export const SOL_CHECKS: Record<string, CheckSpec> = {
   "B3-V4": { type: "SALTO_AT_PALIER_MIN", palierMin: "P5" },
   "B3-V5": { type: "TWO_ACRO_DIFFERENT_DIRECTIONS" },
 
-  "C1-V1": { type: "SALTO_AT_PALIER_MIN", palierMin: "P1" }, // "position tendue" non vérifiable -> confirmer manuellement le "tendu"
+  // C1-V1 (salto position tendue appel 2 pieds) : volontairement absent => MANUAL.
+  // La position (tendue) et l'appel 2 pieds ne sont pas déductibles des données ;
+  // un SALTO_AT_PALIER_MIN validait n'importe quel salto (ex. groupé ou carpé).
   "C1-V5": { type: "TWO_ACRO_DIFFERENT_DIRECTIONS" },
 
   "C2-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P6", category: "ACRO" },
