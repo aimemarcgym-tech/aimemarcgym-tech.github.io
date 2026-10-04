@@ -54,12 +54,36 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
     return etat;
   }
 
+  // Après le clic sur « Installer » du gestionnaire de paquets, l'aide est lancée par le bouton ci-dessous :
+  // ici on la démarre via le lien enregistré par l'installation (sans fermer la session).
+  async function demarrerApresInstallation() {
+    setAide("verification");
+    const etat = (await etatAide()) ?? (await demarrerAide());
+    setAide(etat);
+    if (!etat) {
+      setMessageLien(
+        "L’aide ne répond pas encore. Vérifiez que l’installation est terminée, puis réessayez ; sinon fermez puis rouvrez votre session une fois.",
+      );
+    } else {
+      setMessageLien(null);
+    }
+  }
+
   useEffect(() => {
     if (source !== "lien") return;
     let vivant = true;
     etatAide().then((e) => vivant && setAide(e));
+    // Tant que l'aide ne répond pas, on re-vérifie toutes les 3 s : dès qu'elle est installée et lancée, l'écran se met à jour tout seul.
+    const minuteur = setInterval(() => {
+      etatAide().then((e) => {
+        if (!vivant || !e) return;
+        setAide(e);
+        clearInterval(minuteur);
+      });
+    }, 3000);
     return () => {
       vivant = false;
+      clearInterval(minuteur);
     };
   }, [source]);
 
@@ -240,17 +264,34 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
           {messageLien && <p className="rounded border border-border-strong bg-surface-alt p-2 text-xs text-foreground">{messageLien}</p>}
           {aide !== "verification" && !aide?.ok && enLinux && (
             <div className="space-y-1.5 rounded border border-border-subtle bg-surface-alt/40 p-2 text-xs text-muted">
-              <a
-                href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/ffg-aide-musique.deb`}
-                download
-                className="accent-gradient inline-block rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
-              >
-                Télécharger l’aide (Deepin, Ubuntu, Debian, Mint)
-              </a>
-              <p>
-                Double-cliquez ensuite sur le fichier téléchargé : le gestionnaire de paquets s’ouvre, cliquez sur « Installer »
-                (mot de passe demandé). Tout le reste est automatique, puis rouvrez cet onglet.
-              </p>
+              <p className="font-medium text-foreground">Pour convertir YouTube et les autres sites, installez l’aide (une seule fois) :</p>
+              <ol className="list-inside list-decimal space-y-1.5">
+                <li>
+                  Téléchargez le fichier :{" "}
+                  <a
+                    href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/ffg-aide-musique.deb`}
+                    download
+                    className="accent-gradient inline-block rounded px-3 py-1 text-xs font-medium text-white hover:opacity-90"
+                  >
+                    Télécharger l’aide (Deepin, Ubuntu, Debian, Mint)
+                  </a>
+                </li>
+                <li>
+                  Double-cliquez sur le fichier téléchargé (dossier Téléchargements) : le gestionnaire de paquets s’ouvre,
+                  cliquez sur « Installer » et saisissez votre mot de passe.
+                </li>
+                <li>
+                  Une fois l’installation terminée, cliquez ici :{" "}
+                  <button
+                    type="button"
+                    onClick={demarrerApresInstallation}
+                    className="rounded border border-border-strong px-2.5 py-1 text-xs font-medium text-foreground hover:border-accent-solid/60"
+                  >
+                    J’ai installé l’aide, la démarrer
+                  </button>
+                </li>
+              </ol>
+              <p>Cet écran se met à jour tout seul dès que l’aide est prête.</p>
               <p>
                 Autre distribution :{" "}
                 <a
