@@ -18,11 +18,28 @@ export function estMobile(): boolean {
   return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
+// L'aide a déjà répondu sur cet appareil : on sait qu'elle est installée, donc on peut la relancer
+// toute seule sans fenêtre d'erreur du système (« aucune application » sur Linux).
+const CLE_INSTALLEE = "aide-musique-installee";
+export function aideDejaInstallee(): boolean {
+  try {
+    return localStorage.getItem(CLE_INSTALLEE) === "1";
+  } catch {
+    return false;
+  }
+}
+
 export async function etatAide(): Promise<EtatAide | null> {
   if (estMobile()) return null;
   try {
     const r = await fetch(`${ADRESSE}/etat`, { signal: AbortSignal.timeout(1500) });
-    return r.ok ? ((await r.json()) as EtatAide) : null;
+    if (!r.ok) return null;
+    try {
+      localStorage.setItem(CLE_INSTALLEE, "1");
+    } catch {
+      // stockage indisponible : sans conséquence
+    }
+    return (await r.json()) as EtatAide;
   } catch {
     return null;
   }

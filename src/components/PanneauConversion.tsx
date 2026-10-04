@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type DragEvent } from "react";
 import SortieMp3 from "@/components/SortieMp3";
 import { QUALITES, decoderFichier, encoderMp3, nomMp3 } from "@/lib/audio";
-import { convertirLien, demarrerAide, estMobile, etatAide, type EtatAide } from "@/lib/aide";
+import { aideDejaInstallee, convertirLien, demarrerAide, estMobile, etatAide, type EtatAide } from "@/lib/aide";
 import { formatSize } from "@/lib/format";
 import { champ, onglets, ongletBouton, panneau, titrePanneau } from "@/lib/styles";
 
@@ -33,6 +33,12 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
   const champFichiers = useRef<HTMLInputElement>(null);
   const [aide, setAide] = useState<EtatAide | null | "verification">("verification");
   const [aideVisible, setAideVisible] = useState(false);
+  // Linux de bureau (pas Android) : on propose le paquet d'installation de l'aide.
+  const [enLinux, setEnLinux] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEnLinux(/Linux|X11/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent));
+  }, []);
 
   async function verifierAide() {
     setAide("verification");
@@ -42,7 +48,8 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
   // Lance l'aide toute seule (si elle a été installée), sinon explique l'installation.
   async function lancerAide(): Promise<EtatAide | null> {
     setAide("verification");
-    const etat = (await etatAide()) ?? (await demarrerAide());
+    // Lancement automatique seulement si l'aide est déjà installée ici : sinon le système affiche une fenêtre « aucune application ».
+    const etat = (await etatAide()) ?? (aideDejaInstallee() ? await demarrerAide() : null);
     setAide(etat);
     return etat;
   }
@@ -92,8 +99,8 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
       if (!etat?.ok) {
         setMessageLien(
           etat
-            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (winget install yt-dlp, winget install ffmpeg) puis cliquez de nouveau sur Convertir."
-            : "L’aide ne démarre pas toute seule. Installez-la une fois : double-cliquez sur « Installer-aide-musique.bat » (dans le dossier de l’appli). Elle se lancera ensuite automatiquement avec Windows, puis cliquez de nouveau sur Convertir.",
+            ? "L’aide est lancée mais yt-dlp ou ffmpeg est introuvable sur cet ordinateur : installez-les (Windows : winget install yt-dlp, winget install ffmpeg ; Linux : relancez l’installateur de l’aide) puis cliquez de nouveau sur Convertir."
+            : "L’aide ne démarre pas toute seule. Installez-la une fois : sous Linux, avec le bouton « Télécharger l’aide » ci-dessous ; sous Windows, en double-cliquant sur « Installer-aide-musique.bat » (dans le dossier de l’appli). Elle se lancera ensuite automatiquement, puis cliquez de nouveau sur Convertir.",
         );
         return;
       }
@@ -231,6 +238,32 @@ export default function PanneauConversion({ onCouper }: { onCouper?: (fichier: F
             </div>
           )}
           {messageLien && <p className="rounded border border-border-strong bg-surface-alt p-2 text-xs text-foreground">{messageLien}</p>}
+          {aide !== "verification" && !aide?.ok && enLinux && (
+            <div className="space-y-1.5 rounded border border-border-subtle bg-surface-alt/40 p-2 text-xs text-muted">
+              <a
+                href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/ffg-aide-musique.deb`}
+                download
+                className="accent-gradient inline-block rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+              >
+                Télécharger l’aide (Deepin, Ubuntu, Debian, Mint)
+              </a>
+              <p>
+                Double-cliquez ensuite sur le fichier téléchargé : le gestionnaire de paquets s’ouvre, cliquez sur « Installer »
+                (mot de passe demandé). Tout le reste est automatique, puis rouvrez cet onglet.
+              </p>
+              <p>
+                Autre distribution :{" "}
+                <a
+                  href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/aide/Installer-aide-musique-linux.sh`}
+                  download
+                  className="underline hover:text-foreground"
+                >
+                  installateur générique
+                </a>
+                .
+              </p>
+            </div>
+          )}
         </div>
       )}
 
