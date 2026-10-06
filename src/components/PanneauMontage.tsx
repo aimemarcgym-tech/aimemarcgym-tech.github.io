@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SortieMp3 from "@/components/SortieMp3";
 import { QUALITES, chargerBip, decoderFichier, encoderMp3, formaterTemps, fusionner, lireTemps, nomMp3, passagesConserves, pics, type Segment } from "@/lib/audio";
 import { champ, panneau, titrePanneau } from "@/lib/styles";
+import { getGymnasts, getGymnastMusic } from "@/lib/data";
 
 const HAUTEUR = 96;
 const bouton = "rounded-md border border-border-strong px-3 py-1.5 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50";
@@ -64,6 +65,31 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
       setChargement(false);
     }
   }, []);
+
+  // Gymnastes qui ont une musique (onglet Compétitions › Musiques) : on peut la reprendre ici pour la retravailler.
+  const [avecMusique, setAvecMusique] = useState<{ id: string; firstName: string; lastName: string; team: string | null }[]>([]);
+  const chargerListeGymnastes = useCallback(async () => {
+    const toutes = await getGymnasts();
+    const liste = await Promise.all(toutes.map(async (g) => ((await getGymnastMusic(g.id)) ? g : null)));
+    setAvecMusique(
+      liste
+        .filter((g): g is NonNullable<typeof g> => g !== null)
+        .map((g) => ({ id: g.id, firstName: g.firstName, lastName: g.lastName, team: g.team ?? null }))
+    );
+  }, []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void chargerListeGymnastes();
+  }, [chargerListeGymnastes]);
+
+  async function reprendreMusique(gymnastId: string) {
+    const musique = await getGymnastMusic(gymnastId);
+    if (!musique) {
+      void chargerListeGymnastes();
+      return;
+    }
+    await choisir(new File([musique.blob], musique.fileName, { type: musique.mimeType }));
+  }
 
   // Musique envoyée depuis le panneau de conversion : elle est chargée ici, prête à être coupée.
   useEffect(() => {
@@ -297,6 +323,30 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
         <button type="button" disabled={!fichier} onClick={reinitialiser} className={bouton} title="Efface le morceau et toute la sélection">
           ↺ Reset
         </button>
+      </div>
+
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <select
+          value=""
+          onFocus={chargerListeGymnastes}
+          onChange={(e) => e.target.value && void reprendreMusique(e.target.value)}
+          aria-label="Reprendre la musique d’une gymnaste"
+          className="min-w-0 max-w-full rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none"
+        >
+          <option value="">{avecMusique.length === 0 ? "Reprendre la musique d’une gymnaste… (aucune pour le moment)" : "Reprendre la musique d’une gymnaste…"}</option>
+          {Array.from(new Set(avecMusique.map((g) => g.team || "Sans équipe"))).map((equipe) => (
+            <optgroup key={equipe} label={equipe}>
+              {avecMusique
+                .filter((g) => (g.team || "Sans équipe") === equipe)
+                .map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.firstName} {g.lastName}
+                  </option>
+                ))}
+            </optgroup>
+          ))}
+        </select>
+        <span className="text-xs text-muted">Les musiques de l’onglet Compétitions › Musiques.</span>
       </div>
 
       {chargement && <p className="text-sm text-muted">Analyse du fichier…</p>}
