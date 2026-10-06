@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getGymnasts } from "@/lib/data";
 import categoriesData from "@/regulation/data/categories-age.json";
 import ShareLinkButton from "@/components/ShareLinkButton";
+import { parseAnnees } from "@/lib/teamShare";
 import { createShare, type TeamCategoryShareData } from "@/lib/shares";
 
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
@@ -19,15 +20,6 @@ const FILIERE_STYLE: Record<string, string> = {
   groupe: "bg-orange-400/15 text-orange-300 border-orange-400/40",
   nationale: "bg-sky-400/15 text-sky-300 border-sky-400/40",
 };
-
-// "2019/2017" -> {min: 2017, max: 2019} ; "2015 et avant" -> {min: -Infinity, max: 2015}
-function parseAnnees(annees: string): { min: number; max: number } {
-  if (annees.includes("et avant")) {
-    return { min: -Infinity, max: parseInt(annees, 10) };
-  }
-  const parts = annees.split("/").map((s) => parseInt(s.trim(), 10));
-  return { min: Math.min(...parts), max: Math.max(...parts) };
-}
 
 export default function TeamCategoryChecker() {
   const [gymnasts, setGymnasts] = useState<Gymnast[] | null>(null);

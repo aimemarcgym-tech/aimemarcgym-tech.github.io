@@ -3,6 +3,8 @@
 import { useState, useTransition, type ReactNode } from "react";
 import { teamColor } from "@/lib/teamColor";
 import { renameTeam } from "@/lib/data";
+import ShareLinkButton from "@/components/ShareLinkButton";
+import { createTeamShare } from "@/lib/teamShare";
 
 export default function TeamGroup({
   clubId,
@@ -83,6 +85,13 @@ export default function TeamGroup({
               Renommer
             </button>
           ))}
+        {!isUnassigned && !editing && (
+          <ShareLinkButton
+            onCreate={() => createTeamShare(clubId, teamName)}
+            label="Partager l’équipe"
+            className="accent-gradient rounded px-2 py-0.5 text-[10px] font-semibold text-white hover:opacity-90 disabled:opacity-50"
+          />
+        )}
       </div>
       {open && children}
     </div>

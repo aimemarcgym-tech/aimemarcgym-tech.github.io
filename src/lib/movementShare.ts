@@ -2,6 +2,9 @@ import { getRegulation } from "@/regulation/loader";
 import type { Diagnostic } from "@/engine/composition";
 import type { SautDiagnostic } from "@/engine/saut";
 import type { MovementShareData } from "@/lib/shares";
+import { getMovement } from "@/lib/data";
+import { analyzeMovement } from "@/engine/composition";
+import { analyzeSaut } from "@/engine/saut";
 
 // Construit l'instantané d'un mouvement tel qu'il s'affiche dans le constructeur
 // (éléments + analyse + note), pour les liens de partage.
@@ -72,4 +75,46 @@ export function penaliteMaterielFromStorage(movementId: string): number {
   } catch {
     return 0;
   }
+}
+
+const APPARATUS_ORDER = ["SAUT", "BARRES_ASYM", "POUTRE", "SOL"];
+
+// Instantané de tous les mouvements d'une gymnaste (ordre officiel de rotation), avec les mêmes
+// confirmations manuelles et pénalités matériel que dans le constructeur (stockées par appareil).
+export async function buildGymnastMovementShares(gymnast: {
+  firstName: string;
+  lastName: string;
+  movements: { id: string; apparatus: string; evolution: string; label: string }[];
+}): Promise<MovementShareData[]> {
+  const sorted = [...gymnast.movements].sort(
+    (a, b) => APPARATUS_ORDER.indexOf(a.apparatus) - APPARATUS_ORDER.indexOf(b.apparatus)
+  );
+  const out: MovementShareData[] = [];
+  for (const m of sorted) {
+    const full = await getMovement(m.id);
+    if (!full) continue;
+    const refs = full.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }));
+    let confirmations = new Set<string>();
+    try {
+      const raw = localStorage.getItem(`manual-confirm-${m.id}`);
+      if (raw) confirmations = new Set(JSON.parse(raw));
+    } catch {}
+    const diagnostic =
+      m.apparatus === "SAUT"
+        ? analyzeSaut(m.evolution, refs, confirmations)
+        : analyzeMovement(m.apparatus, m.evolution, refs, confirmations);
+    out.push(
+      buildMovementShare({
+        gymnastFirstName: gymnast.firstName,
+        gymnastLastName: gymnast.lastName,
+        label: m.label,
+        apparatus: m.apparatus,
+        evolutionId: m.evolution,
+        codes: refs.map((r) => r.code),
+        diagnostic,
+        penaliteMateriel: m.apparatus === "SAUT" ? penaliteMaterielFromStorage(m.id) : undefined,
+      })
+    );
+  }
+  return out;
 }

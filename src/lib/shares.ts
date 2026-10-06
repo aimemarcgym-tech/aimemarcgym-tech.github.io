@@ -82,13 +82,23 @@ export interface TeamCategoryShareData {
   }[];
 }
 
+// Tout ce qui concerne une équipe en un seul lien : ordres de passage, catégories d'âge, mouvements de chaque gymnaste.
+export interface TeamAllShareData {
+  club: string;
+  team: string;
+  passageOrder: PassageOrderAllShareData;
+  category: TeamCategoryShareData;
+  gymnasts: MovementsAllShareData[];
+}
+
 export type ShareDoc =
   | { type: "movement"; ownerUid: string; data: MovementShareData }
   | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
   | { type: "passageOrderAll"; ownerUid: string; data: PassageOrderAllShareData }
   | { type: "trainingJournal"; ownerUid: string; data: TrainingJournalShareData }
   | { type: "movementsAll"; ownerUid: string; data: MovementsAllShareData }
-  | { type: "teamCategory"; ownerUid: string; data: TeamCategoryShareData };
+  | { type: "teamCategory"; ownerUid: string; data: TeamCategoryShareData }
+  | { type: "teamAll"; ownerUid: string; data: TeamAllShareData };
 
 export async function createShare(
   type: "movement",
@@ -115,7 +125,11 @@ export async function createShare(
   data: TeamCategoryShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory",
+  type: "teamAll",
+  data: TeamAllShareData
+): Promise<string>;
+export async function createShare(
+  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory" | "teamAll",
   data:
     | MovementShareData
     | PassageOrderShareData
@@ -123,6 +137,7 @@ export async function createShare(
     | TrainingJournalShareData
     | MovementsAllShareData
     | TeamCategoryShareData
+    | TeamAllShareData
 ): Promise<string> {
   const ref = doc(collection(db, "shares"));
   await setDoc(ref, {

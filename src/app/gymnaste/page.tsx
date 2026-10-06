@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getGymnast, getMovement, createMovement } from "@/lib/data";
+import { getGymnast, createMovement } from "@/lib/data";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import Link from "next/link";
 import DeleteGymnastButton from "@/components/DeleteGymnastButton";
@@ -12,10 +12,8 @@ import GymnastHeaderEditor from "@/components/GymnastHeaderEditor";
 import NewMovementForm from "@/components/NewMovementForm";
 import ApparatusSkillsTabs from "@/components/ApparatusSkillsTabs";
 import ShareLinkButton from "@/components/ShareLinkButton";
-import { createShare, type MovementShareData } from "@/lib/shares";
-import { buildMovementShare, penaliteMaterielFromStorage } from "@/lib/movementShare";
-import { analyzeMovement } from "@/engine/composition";
-import { analyzeSaut } from "@/engine/saut";
+import { createShare } from "@/lib/shares";
+import { buildGymnastMovementShares } from "@/lib/movementShare";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -64,37 +62,7 @@ function GymnastPageInner() {
 
   async function handleShareProfile(): Promise<string> {
     if (!gymnast) throw new Error("Gymnaste introuvable.");
-    const sorted = [...gymnast.movements].sort(
-      (a, b) => APPARATUS_ORDER.indexOf(a.apparatus) - APPARATUS_ORDER.indexOf(b.apparatus)
-    );
-    const movements: MovementShareData[] = [];
-    for (const m of sorted) {
-      const full = await getMovement(m.id);
-      if (!full) continue;
-      const refs = full.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }));
-      // Mêmes confirmations manuelles que dans le constructeur (stockées par mouvement).
-      let confirmations = new Set<string>();
-      try {
-        const raw = localStorage.getItem(`manual-confirm-${m.id}`);
-        if (raw) confirmations = new Set(JSON.parse(raw));
-      } catch {}
-      const diagnostic =
-        m.apparatus === "SAUT"
-          ? analyzeSaut(m.evolution, refs, confirmations)
-          : analyzeMovement(m.apparatus, m.evolution, refs, confirmations);
-      movements.push(
-        buildMovementShare({
-          gymnastFirstName: gymnast.firstName,
-          gymnastLastName: gymnast.lastName,
-          label: m.label,
-          apparatus: m.apparatus,
-          evolutionId: m.evolution,
-          codes: refs.map((r) => r.code),
-          diagnostic,
-          penaliteMateriel: m.apparatus === "SAUT" ? penaliteMaterielFromStorage(m.id) : undefined,
-        })
-      );
-    }
+    const movements = await buildGymnastMovementShares(gymnast);
     const shareId = await createShare("movementsAll", {
       gymnastFirstName: gymnast.firstName,
       gymnastLastName: gymnast.lastName,
