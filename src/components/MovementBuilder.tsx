@@ -186,6 +186,16 @@ export default function MovementBuilder({
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [regulation, archeByCode]);
 
+  function elementInCats(e: (typeof regulation.elements)[number], cats: string[]): boolean {
+    if (cats.includes(CAT_ACRO_MOUSSE)) return isMousseElement(e.archeId);
+    // Les exigences ACRO génériques (ex. "3 acros en poutre haute") ne
+    // doivent jamais proposer les éléments de l'arche Accro poutre
+    // mousse : ce sont deux agrès/contextes différents.
+    if (isMousseElement(e.archeId)) return false;
+    const elCats = [archeByCode.get(e.archeId)?.category, ...(e.extraCategories ?? [])];
+    return cats.some((c) => elCats.includes(c));
+  }
+
   const filteredLibrary = useMemo(() => {
     return regulation.elements
       .filter((e) => {
@@ -193,16 +203,7 @@ export default function MovementBuilder({
         // "CAT:X,Y" (venant de "voir dans la Bibliothèque" sur une exigence qui
         // couvre plusieurs catégories d'arches, ex. FORCE ou PG) -> toute arche
         // dont la catégorie fait partie de la liste.
-        if (category.startsWith("CAT:")) {
-          const cats = category.slice(4).split(",");
-          if (cats.includes(CAT_ACRO_MOUSSE)) return isMousseElement(e.archeId);
-          // Les exigences ACRO génériques (ex. "3 acros en poutre haute") ne
-          // doivent jamais proposer les éléments de l'arche Accro poutre
-          // mousse : ce sont deux agrès/contextes différents.
-          if (isMousseElement(e.archeId)) return false;
-          const elCats = [archeByCode.get(e.archeId)?.category, ...(e.extraCategories ?? [])];
-          return cats.some((c) => elCats.includes(c));
-        }
+        if (category.startsWith("CAT:")) return elementInCats(e, category.slice(4).split(","));
         // Une catégorie sans ":" (ex. sélectionnée via "voir dans la Bibliothèque"
         // depuis une exigence générique) doit inclure toutes les branches de l'arche.
         if (category.includes(":")) return categoryKeyOf(e.archeId, e.branch) === category;
@@ -221,7 +222,13 @@ export default function MovementBuilder({
         if (!onlyMastered) return true;
         return skillMap.get(e.code) === "MAITRISE";
       })
-      .sort((a, b) => palierRank(a.palier) - palierRank(b.palier) || a.name.localeCompare(b.name));
+      .sort((a, b) => palierRank(a.palier) - palierRank(b.palier) || a.name.localeCompare(b.name))
+      .filter((e, i, list) => {
+        // Un filtre par famille (Acro, Sorties…) regroupe plusieurs arches : un même élément
+        // présent dans deux arches ne doit apparaître qu'une fois.
+        if (!category.startsWith("CAT:")) return true;
+        return list.findIndex((x) => x.code === e.code) === i;
+      });
   }, [regulation, search, onlyMastered, skillMap, archeByCode, category]);
 
   // Les éléments déjà dans le mouvement restent listés (grisés) : les masquer
@@ -325,6 +332,19 @@ export default function MovementBuilder({
     const cats = value.slice(4).split(",");
     return `Filtre : ${cats.map((c) => CAT_LABELS[c] ?? c).join(" ou ")}`;
   }
+
+  // Filtres rapides (Acro, Sorties, Force…) : uniquement les familles qui existent pour cet agrès,
+  // avec le nombre d'éléments de la famille déjà placés dans le mouvement.
+  const quickFilters = useMemo(() => {
+    const order = ["ACRO", "SORTIES", "FORCE", "SAUT_GYM", "PIVOT", "ENTREE", "ATR_MAINTIEN", CAT_ACRO_MOUSSE];
+    return order
+      .map((c) => {
+        const codes = new Set(regulation.elements.filter((e) => elementInCats(e, [c])).map((e) => e.code));
+        return { value: `CAT:${c}`, label: CAT_LABELS[c], codes };
+      })
+      .filter((f) => f.codes.size > 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [regulation, archeByCode]);
 
   function exploreCategory(checkId: string) {
     const cats = categoryForCheck(checkId, apparatus);
@@ -652,6 +672,28 @@ export default function MovementBuilder({
           ) : (
             <>
               <p className="mb-2 text-xs text-muted">Tout le référentiel — cherchez et ajoutez librement n&apos;importe quel élément.</p>
+              <div className="mb-2 flex flex-wrap gap-1.5">
+                {quickFilters.map((f) => {
+                  const active = category === f.value;
+                  const added = [...f.codes].filter((c) => inSequence.has(c)).length;
+                  return (
+                    <button
+                      key={f.value}
+                      type="button"
+                      onClick={() => setCategory(active ? "ALL" : f.value)}
+                      aria-pressed={active}
+                      title={`${added} élément(s) de cette famille déjà dans le mouvement, sur ${f.codes.size}`}
+                      className={`rounded-full border px-2.5 py-1 text-xs font-medium ${
+                        active
+                          ? "accent-gradient border-transparent text-white"
+                          : "border-border-strong text-foreground hover:border-accent-solid/60"
+                      }`}
+                    >
+                      {f.label} <span className={active ? "text-white/80" : "text-muted"}>{added}/{f.codes.size}</span>
+                    </button>
+                  );
+                })}
+              </div>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
