@@ -82,12 +82,11 @@ export interface TeamCategoryShareData {
   }[];
 }
 
-// Tout ce qui concerne une équipe en un seul lien : ordres de passage, catégories d'âge, mouvements de chaque gymnaste.
+// Tout ce qui concerne une équipe en un seul lien : ordres de passage et mouvements de chaque gymnaste.
 export interface TeamAllShareData {
   club: string;
   team: string;
   passageOrder: PassageOrderAllShareData;
-  category: TeamCategoryShareData;
   gymnasts: MovementsAllShareData[];
 }
 
