@@ -24,6 +24,8 @@ function formatTime(seconds: number) {
 
 export default function CustomAudioPlayer({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const seekRef = useRef<HTMLInputElement>(null);
+  const volumeRef = useRef<HTMLInputElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -77,6 +79,42 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
     }
   }
 
+  // Molette de la souris sur la barre de progression (±5 s par cran) et sur le volume (±5 %).
+  // Écouteurs natifs non passifs : sinon la page défile en même temps.
+  useEffect(() => {
+    const brancher = (el: HTMLInputElement | null, pas: number, appliquer: (delta: number) => void) => {
+      if (!el) return () => undefined;
+      const onWheel = (e: WheelEvent) => {
+        e.preventDefault();
+        const px = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY;
+        const crans = Math.max(-2, Math.min(2, -px / 100));
+        appliquer(crans * pas);
+      };
+      el.addEventListener("wheel", onWheel, { passive: false });
+      return () => el.removeEventListener("wheel", onWheel);
+    };
+    const retraitProgression = brancher(seekRef.current, 5, (delta) => {
+      const audio = audioRef.current;
+      if (!audio || !Number.isFinite(audio.duration)) return;
+      const t = Math.max(0, Math.min(audio.duration, audio.currentTime + delta));
+      audio.currentTime = t;
+      setCurrentTime(t);
+    });
+    const retraitVolume = brancher(volumeRef.current, 0.05, (delta) => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      const v = Math.max(0, Math.min(1, (audio.muted ? 0 : audio.volume) + delta));
+      audio.volume = v;
+      audio.muted = v === 0;
+      setVolume(v);
+      setMuted(v === 0);
+    });
+    return () => {
+      retraitProgression();
+      retraitVolume();
+    };
+  }, []);
+
   function toggleMute() {
     const audio = audioRef.current;
     const next = !muted;
@@ -106,6 +144,8 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
       </button>
       <span className="w-8 shrink-0 text-right text-[10px] tabular-nums text-muted">{formatTime(currentTime)}</span>
       <input
+        ref={seekRef}
+        title="Molette de la souris : avancer / reculer de 5 s"
         type="range"
         min={0}
         max={duration || 0}
@@ -124,6 +164,8 @@ export default function CustomAudioPlayer({ src }: { src: string }) {
         {muted || volume === 0 ? "🔇" : "🔊"}
       </button>
       <input
+        ref={volumeRef}
+        title="Molette de la souris : volume"
         type="range"
         min={0}
         max={1}
