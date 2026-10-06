@@ -28,6 +28,9 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
   const [progression, setProgression] = useState(0);
   const [resultat, setResultat] = useState<Blob | null>(null);
   const [largeur, setLargeur] = useState(600);
+  const [volume, setVolume] = useState(1);
+  const [muet, setMuet] = useState(false);
+  const volumeCurseur = useRef<HTMLInputElement>(null);
 
   const audio = useRef<HTMLAudioElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -35,6 +38,24 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
   const champFichier = useRef<HTMLInputElement>(null);
   const conteneurPanneau = useRef<HTMLElement>(null);
   const glissant = useRef<"A" | "B" | "L" | null>(null);
+
+  function reglerVolume(v: number) {
+    const el = audio.current;
+    const borne = Math.max(0, Math.min(1, v));
+    setVolume(borne);
+    setMuet(borne === 0);
+    if (el) {
+      el.volume = borne;
+      el.muted = borne === 0;
+    }
+  }
+  function basculerMuet() {
+    const el = audio.current;
+    const suivant = !muet;
+    setMuet(suivant);
+    if (el) el.muted = suivant;
+  }
+
   const duree = buffer?.duration ?? 0;
   const fusion = useMemo(() => fusionner(retraits), [retraits]);
   const conserves = useMemo(() => passagesConserves(duree, retraits), [duree, retraits]);
@@ -134,6 +155,50 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
     return () => observer.disconnect();
   }, [buffer]);
 
+  // Le réglage de volume est conservé quand on charge une autre musique (nouvel élément audio).
+  useEffect(() => {
+    const el = audio.current;
+    if (!el) return;
+    el.volume = volume;
+    el.muted = muet;
+  }, [buffer, url, volume, muet]);
+
+  // Molette de la souris : sur la forme d'onde elle déplace la position de lecture de 2 s par cran,
+  // sur le curseur de volume elle règle le volume de 5 %. Écouteurs natifs non passifs : la page ne défile pas.
+  useEffect(() => {
+    const c = canvas.current;
+    const v = volumeCurseur.current;
+    if (!c && !v) return;
+    const crans = (e: WheelEvent) => {
+      const px = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY;
+      return Math.max(-2, Math.min(2, -px / 100));
+    };
+    const surForme = (e: WheelEvent) => {
+      e.preventDefault();
+      const el = audio.current;
+      if (!el || !Number.isFinite(el.duration)) return;
+      const t = Math.max(0, Math.min(el.duration, el.currentTime + crans(e) * 2));
+      el.currentTime = t;
+      setPosition(t);
+    };
+    const surVolume = (e: WheelEvent) => {
+      e.preventDefault();
+      const el = audio.current;
+      if (!el) return;
+      const nouveau = Math.max(0, Math.min(1, (el.muted ? 0 : el.volume) + crans(e) * 0.05));
+      el.volume = nouveau;
+      el.muted = nouveau === 0;
+      setVolume(nouveau);
+      setMuet(nouveau === 0);
+    };
+    c?.addEventListener("wheel", surForme, { passive: false });
+    v?.addEventListener("wheel", surVolume, { passive: false });
+    return () => {
+      c?.removeEventListener("wheel", surForme);
+      v?.removeEventListener("wheel", surVolume);
+    };
+  }, [buffer, url]);
+
   // Lecture de l'aperçu : les passages retirés sont sautés, comme dans le montage final.
   useEffect(() => {
     if (!lecture) return;
@@ -203,7 +268,8 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
   }, [forme, fusion, duree, largeur, a, b, position, curseurVisible]);
 
   function aller(t: number) {
-    if (audio.current) audio.current.currentTime = t;
+    const el = audio.current;
+    if (el) el.currentTime = t;
     setPosition(t);
   }
 
@@ -365,7 +431,8 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
               onPointerCancel={lacherForme}
               style={{ width: "100%", height: HAUTEUR, touchAction: "none" }}
               className="cursor-pointer rounded border border-border-subtle bg-surface-alt"
-              aria-label="Forme d’onde : cliquez pour vous placer, glissez les repères A et B pour les déplacer"
+              aria-label="Forme d’onde : cliquez pour vous placer, glissez les repères A et B pour les déplacer, molette de la souris pour avancer ou reculer de 2 s"
+              title="Molette de la souris : avancer / reculer de 2 s"
             />
             <div className="mt-1 flex justify-between text-[10px] text-muted">
               <span>0:00</span>
@@ -378,6 +445,21 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
               {lecture ? "❚❚" : "▶"}
             </button>
             <span className="text-xs text-muted">Position : {formaterTemps(position)}</span>
+            <button type="button" onClick={basculerMuet} title={muet ? "Réactiver le son" : "Couper le son"} className="shrink-0 text-sm text-muted hover:text-foreground">
+              {muet || volume === 0 ? "🔇" : "🔊"}
+            </button>
+            <input
+              ref={volumeCurseur}
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={muet ? 0 : volume}
+              onChange={(e) => reglerVolume(Number(e.target.value))}
+              title="Volume (molette de la souris : ±5 %)"
+              aria-label="Volume"
+              className="accent-gradient-range w-20 shrink-0"
+            />
             <button type="button" onClick={() => setA(formaterTemps(position))} className={bouton}>
               ⇤ Marquer A
             </button>
