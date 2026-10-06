@@ -342,6 +342,13 @@ export async function saveGymnastMusic(gymnastId: string, file: File) {
   return row;
 }
 
+export async function renameGymnastMusic(gymnastId: string, fileName: string) {
+  const localDb = await getDb();
+  const existing = await localDb.getFromIndex("gymnastMusic", "gymnastId", gymnastId);
+  if (!existing) return;
+  await localDb.put("gymnastMusic", { ...existing, fileName, updatedAt: nowIso() });
+}
+
 export async function deleteGymnastMusic(gymnastId: string) {
   const localDb = await getDb();
   const existing = await localDb.getFromIndex("gymnastMusic", "gymnastId", gymnastId);

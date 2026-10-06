@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { getGymnasts, getGymnastMusic, saveGymnastMusic, deleteGymnastMusic, setGymnastsMusicOrder } from "@/lib/data";
+import {
+  getGymnasts,
+  getGymnastMusic,
+  saveGymnastMusic,
+  deleteGymnastMusic,
+  renameGymnastMusic,
+  setGymnastsMusicOrder,
+} from "@/lib/data";
 import type { GymnastMusicRow as GymnastMusicRecord } from "@/lib/idb";
 import CustomAudioPlayer from "@/components/CustomAudioPlayer";
 import { shareFiles } from "@/lib/share";
@@ -42,6 +49,8 @@ function GymnastMusicItem({
   dragHandleProps: React.ComponentProps<typeof DragHandle>;
 }) {
   const [busy, setBusy] = useState(false);
+  const [renaming, setRenaming] = useState(false);
+  const [draftName, setDraftName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const objectUrl = useMemo(() => (music ? URL.createObjectURL(music.blob) : null), [music]);
 
@@ -55,6 +64,30 @@ function GymnastMusicItem({
     setBusy(true);
     try {
       await saveGymnastMusic(gymnast.id, file);
+      onChange();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  // On renomme la partie avant l'extension : l'extension (.mp3…) reste celle du fichier.
+  function startRename() {
+    if (!music) return;
+    const dot = music.fileName.lastIndexOf(".");
+    setDraftName(dot > 0 ? music.fileName.slice(0, dot) : music.fileName);
+    setRenaming(true);
+  }
+
+  async function handleRename() {
+    if (!music) return;
+    const dot = music.fileName.lastIndexOf(".");
+    const ext = dot > 0 ? music.fileName.slice(dot) : "";
+    const base = draftName.replace(/[\\/:*?"<>|]+/g, " ").trim();
+    if (!base) return;
+    setBusy(true);
+    try {
+      await renameGymnastMusic(gymnast.id, `${base}${ext}`);
+      setRenaming(false);
       onChange();
     } finally {
       setBusy(false);
@@ -102,6 +135,16 @@ function GymnastMusicItem({
               e.target.value = "";
             }}
           />
+          {music && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={startRename}
+              className="rounded-md border border-border-strong bg-surface px-2.5 py-1 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50"
+            >
+              Renommer
+            </button>
+          )}
           <button
             type="button"
             disabled={busy}
@@ -142,9 +185,42 @@ function GymnastMusicItem({
       </div>
       {music && objectUrl ? (
         <div className="mt-2 space-y-1.5">
-          <p className="text-xs text-muted">
-            {music.fileName} · {formatSize(music.size)}
-          </p>
+          {renaming ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleRename();
+              }}
+              className="flex flex-wrap items-center gap-2"
+            >
+              <input
+                autoFocus
+                value={draftName}
+                onChange={(e) => setDraftName(e.target.value)}
+                onKeyDown={(e) => e.key === "Escape" && setRenaming(false)}
+                aria-label="Nouveau nom de la musique"
+                className="min-w-0 flex-1 rounded border border-border-strong bg-surface-alt px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={busy || draftName.trim() === ""}
+                className="rounded-md bg-accent-solid px-2.5 py-1 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              >
+                Enregistrer
+              </button>
+              <button
+                type="button"
+                onClick={() => setRenaming(false)}
+                className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:text-foreground"
+              >
+                Annuler
+              </button>
+            </form>
+          ) : (
+            <p className="text-xs text-muted">
+              {music.fileName} · {formatSize(music.size)}
+            </p>
+          )}
           <CustomAudioPlayer src={objectUrl} />
         </div>
       ) : (
