@@ -50,6 +50,7 @@ function GymnastMusicItem({
 }) {
   const [busy, setBusy] = useState(false);
   const [renaming, setRenaming] = useState(false);
+  const [actionsOpen, setActionsOpen] = useState(false);
   const [draftName, setDraftName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const objectUrl = useMemo(() => (music ? URL.createObjectURL(music.blob) : null), [music]);
@@ -121,9 +122,18 @@ function GymnastMusicItem({
               le glisser-déposer capture aussi les interactions avec le
               curseur du lecteur audio (volume, avancer/reculer) plus bas. */}
           <DragHandle {...dragHandleProps} />
-          {gymnast.firstName} {gymnast.lastName}
+          {/* Sur mobile, les boutons d'action ne s'affichent qu'au toucher du nom (sur ordinateur ils sont toujours visibles). */}
+          <button
+            type="button"
+            onClick={() => setActionsOpen((v) => !v)}
+            aria-expanded={actionsOpen}
+            className="flex items-center gap-1 text-left sm:cursor-default"
+          >
+            {gymnast.firstName} {gymnast.lastName}
+            <span className="text-xs text-muted sm:hidden">{actionsOpen ? "▴" : "▾"}</span>
+          </button>
         </span>
-        <div className="flex items-center gap-2">
+        <div className={`${actionsOpen ? "flex" : "hidden"} w-full flex-wrap items-center gap-2 sm:flex sm:w-auto`}>
           <input
             ref={inputRef}
             type="file"
@@ -175,7 +185,7 @@ function GymnastMusicItem({
                 type="button"
                 disabled={busy}
                 onClick={handleDelete}
-                className="rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:border-red-400 hover:text-red-400 disabled:opacity-50"
+                className="w-full rounded-md border border-border-strong px-2.5 py-1 text-xs font-medium text-muted hover:border-red-400 hover:text-red-400 disabled:opacity-50 sm:w-auto"
               >
                 Supprimer
               </button>
