@@ -16,6 +16,11 @@ import { getApparatusTips } from "@/lib/tips";
 
 const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
 
+// Éléments qu'on peut placer plusieurs fois dans un même mouvement (les autres ne se placent qu'une fois).
+const ELEMENTS_REPETABLES: Record<string, string[]> = {
+  BARRES_ASYM: ["117bb", "116-26"], // Balancé avant à l'horizontale, Balancé arrière (P2)
+};
+
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
 // exigence/valorisation -> permet de proposer "voir dans la Bibliothèque".
 // Plusieurs catégories possibles (ex. FORCE ou PG = FORCE ou SAUT_GYM).
@@ -234,6 +239,11 @@ export default function MovementBuilder({
   // Les éléments déjà dans le mouvement restent listés (grisés) : les masquer
   // donnait l'impression que le référentiel était incomplet.
   const inSequence = useMemo(() => new Set(sequence.map((s) => s.code)), [sequence]);
+  const countInSequence = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const s of sequence) m.set(s.code, (m.get(s.code) ?? 0) + 1);
+    return m;
+  }, [sequence]);
 
   function addElement(code: string) {
     setSequence((s) => [...s, { code, role: "ELEMENT" }]);
@@ -734,13 +744,15 @@ export default function MovementBuilder({
                   const mastery = skillMap.get(el.code);
                   const mousse = isMousseElement(el.archeId);
                   const variant = isVariantElement(el.code, el.name);
-                  const already = inSequence.has(el.code);
+                  const repetable = ELEMENTS_REPETABLES[apparatus]?.includes(el.code) ?? false;
+                  const nb = countInSequence.get(el.code) ?? 0;
+                  const already = inSequence.has(el.code) && !repetable;
                   return (
                     <button
                       key={`${el.code}::${el.archeId}`}
                       onClick={() => addElement(el.code)}
                       disabled={already}
-                      title={already ? "Déjà dans le mouvement" : undefined}
+                      title={already ? "Déjà dans le mouvement" : repetable ? "Peut être ajouté plusieurs fois" : undefined}
                       className={`flex flex-col items-start gap-1 rounded border border-border-subtle bg-surface-alt p-2 text-left ${
                         already ? "cursor-default opacity-50" : "hover:border-accent-solid/60 hover:bg-accent-from/10"
                       }`}
@@ -776,6 +788,7 @@ export default function MovementBuilder({
                           <span className="text-[10px] text-muted">Déjà ajouté</span>
                         ) : (
                           <>
+                            {repetable && nb > 0 && <span className="text-[10px] font-semibold text-muted">×{nb} déjà</span>}
                             {mastery === "MAITRISE" && <span className="text-xs text-success">✓</span>}
                             {mastery === "EN_APPRENTISSAGE" && <span className="text-xs text-warning">○</span>}
                           </>
