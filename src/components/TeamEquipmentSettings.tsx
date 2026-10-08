@@ -55,6 +55,21 @@ export default function TeamEquipmentSettings() {
     await setGymnastEquipment(g.id, { [key]: value });
   }
 
+  // Une même valeur pour toute l'équipe : écrite chez chaque gymnaste (elles restent modifiables une à une).
+  async function changeAll(key: keyof EquipmentSettings, value: string) {
+    const ids = new Set(members.map((g) => g.id));
+    setGymnasts((list) =>
+      list ? list.map((x) => (ids.has(x.id) ? { ...x, reglages: { ...x.reglages, [key]: value } } : x)) : list
+    );
+    await Promise.all(members.map((g) => setGymnastEquipment(g.id, { [key]: value })));
+  }
+
+  // Valeur commune à toute l'équipe, vide si les gymnastes diffèrent.
+  function commonValue(key: keyof EquipmentSettings) {
+    const first = members[0]?.reglages?.[key] ?? "";
+    return members.every((g) => (g.reglages?.[key] ?? "") === first) ? first : "";
+  }
+
   async function share() {
     if (!selected) throw new Error("Équipe introuvable");
     const id = await createShare("equipment", {
@@ -90,6 +105,32 @@ export default function TeamEquipmentSettings() {
 
       {selected && members.length > 0 && (
         <div className="mt-4 space-y-3">
+          <div className="rounded-lg border border-accent-solid/50 bg-accent-from/10 p-3">
+            <div className="mb-2 text-sm font-medium text-foreground">Toute l&apos;équipe</div>
+            <div className="grid grid-cols-3 gap-2">
+              {FIELDS.map((f) => {
+                const common = commonValue(f.key);
+                const mixed = common === "" && members.some((g) => (g.reglages?.[f.key] ?? "") !== "");
+                return (
+                  <label key={f.key} className="block">
+                    <span className="mb-1 block text-[11px] font-medium text-muted">
+                      {f.label} ({f.unit})
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={common}
+                      onChange={(e) => void changeAll(f.key, e.target.value)}
+                      placeholder={mixed ? "différents" : f.hint}
+                      aria-label={`${f.label} en ${f.unit} — toute l'équipe`}
+                      className={`${champ} !px-2 !py-1.5`}
+                    />
+                  </label>
+                );
+              })}
+            </div>
+            <p className="mt-2 text-xs text-muted">Une valeur saisie ici est appliquée à toutes les gymnastes de l&apos;équipe.</p>
+          </div>
           {members.map((g) => (
             <div key={g.id} className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
               <div className="mb-2 text-sm font-medium text-foreground">
