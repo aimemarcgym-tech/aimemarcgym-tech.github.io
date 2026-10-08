@@ -80,7 +80,8 @@ const MAX_SNAPSHOTS_SHARED = 10;
 // Les instantanés de l'historique, au format du lien : on garde l'analyse enregistrée au moment de
 // l'instantané ; si elle est absente ou d'un ancien format, on la recalcule à partir des éléments.
 export function snapshotShares(apparatus: string, evolutionId: string, rows: MovementSnapshotRow[]): SnapshotShareData[] {
-  const recent = [...rows].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, MAX_SNAPSHOTS_SHARED);
+  // Les plus récents (10 au maximum), présentés dans l'ordre de création comme dans l'historique.
+  const recent = [...rows].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, MAX_SNAPSHOTS_SHARED).reverse();
   const out: SnapshotShareData[] = [];
   for (const row of recent) {
     try {

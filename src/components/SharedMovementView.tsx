@@ -329,62 +329,37 @@ function SharedMovementBody({ data }: { data: MovementShareData }) {
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
 
-// Mouvement partagé + son historique en lecture seule : le destinataire peut ouvrir chaque instantané
-// pour voir le mouvement tel qu'il était à ce moment-là, sans rien pouvoir modifier.
+// Mouvement partagé + ses versions enregistrées (instantanés) en lecture seule : en haut, la rangée
+// « Mouvements créés » permet d'afficher la version actuelle ou n'importe quelle version précédente.
 export default function SharedMovementView({ data }: { data: MovementShareData }) {
-  const [viewing, setViewing] = useState<number | null>(null);
+  const [version, setVersion] = useState<number | null>(null);
   const snapshots = data.snapshots ?? [];
-  const snapshot = viewing !== null ? snapshots[viewing] : null;
+  const snapshot = version !== null ? snapshots[version] : null;
   const shown = snapshot ? { ...data, elements: snapshot.elements, diagnostic: snapshot.diagnostic } : data;
+  const chip = (active: boolean) =>
+    `rounded border px-3 py-1.5 text-xs font-medium ${
+      active ? "border-accent-solid text-white" : "border-border-strong text-muted hover:text-foreground"
+    }`;
 
   return (
     <div className="space-y-6">
-      {snapshot && (
-        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-accent-solid bg-surface-alt px-4 py-2 text-sm">
-          <span className="text-foreground">
-            Version enregistrée : <span className="font-semibold">{snapshot.name || formatDate(snapshot.createdAt)}</span>
-            {snapshot.name && <span className="text-muted"> · {formatDate(snapshot.createdAt)}</span>}
-          </span>
-          <button type="button" onClick={() => setViewing(null)} className="accent-gradient-text font-medium underline">
-            Revenir au mouvement actuel
-          </button>
+      {snapshots.length > 0 && (
+        <div>
+          <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-muted">Mouvements créés</p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => setVersion(null)} className={chip(version === null)}>
+              Version actuelle
+            </button>
+            {snapshots.map((s, i) => (
+              <button key={i} type="button" onClick={() => setVersion(i)} className={chip(version === i)}>
+                {s.name || formatDate(s.createdAt)} · Note {s.noteDepart.toFixed(1).replace(".", ",")}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
-      <SharedMovementBody data={shown} />
-
-      {snapshots.length > 0 && (
-        <section className="rounded-lg border border-border-subtle bg-surface p-4">
-          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Historique</h2>
-          <ul className="space-y-1.5">
-            {snapshots.map((s, i) => (
-              <li
-                key={i}
-                className={`flex flex-wrap items-center gap-x-2 gap-y-1 rounded border bg-surface-alt px-3 py-2 text-xs ${
-                  viewing === i ? "border-accent-solid" : "border-border-subtle"
-                }`}
-              >
-                <span className="min-w-0 flex-1">
-                  {s.name && <span className="block truncate text-sm font-medium text-foreground">{s.name}</span>}
-                  <span className="block text-muted">
-                    {formatDate(s.createdAt)} · Note {s.noteDepart.toFixed(1)}
-                  </span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setViewing(viewing === i ? null : i);
-                    if (viewing !== i) window.scrollTo({ top: 0, behavior: "smooth" });
-                  }}
-                  className="accent-gradient-text underline"
-                >
-                  {viewing === i ? "Masquer" : "Voir"}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <SharedMovementBody key={version ?? -1} data={shown} />
     </div>
   );
 }
