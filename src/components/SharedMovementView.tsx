@@ -192,7 +192,7 @@ function SharedMovementBody({ data }: { data: MovementShareData }) {
             </div>
           </NoteCard>
 
-          <Tips tips={getSautTips(diagnostic.sautsRequired)} />
+          <Tips tips={getSautTips(diagnostic.sautsRequired, data.evolutionId)} />
         </section>
       </div>
     );

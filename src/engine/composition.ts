@@ -168,9 +168,13 @@ function evaluateCheck(
   const usable =
     context === "VALORISATION" ? elements.filter((e) => valorisableSet.has(e.palier)) : elements;
 
+  // FAQ #160 : un même élément réalisé plusieurs fois ne compte qu'une fois (pour les exigences et les
+  // valorisations) ; seules les liaisons gardent la séquence complète, répétitions comprises.
+  const uniq = usable.filter((e, k) => usable.findIndex((x) => x.code === e.code) === k);
+
   switch (spec.type) {
     case "CATEGORY_COUNT": {
-      const matches = usable.filter((e) => {
+      const matches = uniq.filter((e) => {
         if (!elementCategories(apparatus, e).includes(spec.category)) return false;
         if (spec.branch && e.branch !== spec.branch) return false;
         // FAQ #145 : en poutre, une sortie ne compte comme acro en poutre haute
@@ -193,7 +197,7 @@ function evaluateCheck(
     case "ELEMENT_AT_PALIER_MIN": {
       const minRank = palierRank(spec.palierMin);
       const needed = spec.min ?? 1;
-      const matches = usable.filter((e) => {
+      const matches = uniq.filter((e) => {
         if (spec.category && !elementCategories(apparatus, e).includes(spec.category)) return false;
         // Une sortie ne valide jamais une valorisation "acro sur poutre" (elle
         // ne compte que pour le tronc commun et ses propres valorisations de
@@ -205,11 +209,11 @@ function evaluateCheck(
     }
     case "SALTO_AT_PALIER_MIN": {
       const minRank = palierRank(spec.palierMin);
-      const matches = usable.filter((e) => isSalto(e.name) && palierRank(e.palier) >= minRank);
+      const matches = uniq.filter((e) => isSalto(e.name) && palierRank(e.palier) >= minRank);
       return { ok: matches.length > 0, detail: matches.length > 0 ? `ex: ${matches[0].name}` : "aucun salto au palier requis" };
     }
     case "TWO_ACRO_DIFFERENT_DIRECTIONS": {
-      const acros = usable.filter((e) => elementCategories(apparatus, e).includes("ACRO"));
+      const acros = uniq.filter((e) => elementCategories(apparatus, e).includes("ACRO"));
       const hasAvant = acros.some((e) => e.branch === "avant");
       const hasArriere = acros.some((e) => e.branch === "arriere");
       return { ok: hasAvant && hasArriere, detail: hasAvant && hasArriere ? "avant + arrière présents" : "il manque un sens (avant ou arrière)" };
@@ -226,7 +230,7 @@ function evaluateCheck(
       };
     }
     case "FORCE_OR_PG": {
-      const hasForce = usable.some((e) => elementCategories(apparatus, e).includes("FORCE"));
+      const hasForce = uniq.some((e) => elementCategories(apparatus, e).includes("FORCE"));
       // PG (Passage Gymnique) = "Enchaînement de 2 sauts minimum différents
       // liés directement OU INDIRECTEMENT avec des pas courus, petits sauts,
       // pas chassés, tour chorégraphique... etc" (Généralités, lexique). Les
@@ -235,13 +239,13 @@ function evaluateCheck(
       // les 2 sauts dans la séquence saisie -> on vérifie juste la présence
       // de 2 sauts gymniques différents (peu importe l'appel 1 ou 2 pieds,
       // la catégorie SAUT_GYM regroupe déjà les deux arches).
-      const sauts = usable.filter((e) => elementCategories(apparatus, e).includes("SAUT_GYM"));
+      const sauts = uniq.filter((e) => elementCategories(apparatus, e).includes("SAUT_GYM"));
       const hasPG = new Set(sauts.map((e) => e.code)).size >= 2;
       return { ok: hasForce || hasPG, detail: hasForce ? "1 élément FORCE présent" : hasPG ? "passage gymnique (2 sauts différents) détecté" : "ni FORCE ni PG détecté" };
     }
     case "NAME_CONTAINS_ALL": {
       const min = spec.min ?? 1;
-      const matches = usable.filter((e) => spec.terms.every((t) => e.name.toLowerCase().includes(t)));
+      const matches = uniq.filter((e) => spec.terms.every((t) => e.name.toLowerCase().includes(t)));
       return { ok: matches.length >= min, detail: matches.length > 0 ? `${matches.length}/${min} — ex: ${matches[0].name}` : "élément correspondant non trouvé" };
     }
     case "MANUAL":
@@ -273,7 +277,9 @@ export function analyzeMovement(
     return { id: ex.id, label: ex.label, status: ok ? "OK" : "MANQUANT", auto: true };
   });
   const archesOk = archesUsed.length >= evolution.troncCommun.arches;
-  const countOk = elements.length >= evolution.troncCommun.elementsMin && elements.length <= evolution.troncCommun.elementsMax;
+  // FAQ #160 : les répétitions d'un même élément ne comptent qu'une fois dans le nombre d'éléments.
+  const distinctCount = new Set(elements.map((e) => e.code)).size;
+  const countOk = distinctCount >= evolution.troncCommun.elementsMin && distinctCount <= evolution.troncCommun.elementsMax;
   const tcExigencesOk = tcExigences.every((r) => r.status === "OK");
   const troncCommunComplete = archesOk && countOk && tcExigencesOk;
   const troncCommunPoints = (archesOk ? 1 : 0) + (countOk ? 1 : 0) + tcExigences.filter((r) => r.status === "OK").length;
@@ -332,7 +338,7 @@ export function analyzeMovement(
   return {
     apparatus,
     evolutionId,
-    elementCount: elements.length,
+    elementCount: distinctCount,
     archesUsed,
     archesCount: archesUsed.length,
     troncCommun: {

@@ -468,7 +468,7 @@ export default function SautBuilder({
           </div>
 
           <ul className="mt-3 space-y-1.5 text-sm text-muted">
-            {getSautTips(diagnostic.sautsRequired).map((tip, i) => (
+            {getSautTips(diagnostic.sautsRequired, evolutionId).map((tip, i) => (
               <li key={i} className="flex gap-1.5">
                 <span className="shrink-0">💡</span>
                 <span>{tip}</span>
