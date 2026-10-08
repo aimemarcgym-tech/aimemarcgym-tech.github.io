@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import { palierRank, type ApparatusRegulation } from "@/regulation/types";
-import { saveMovementElements, saveSnapshot } from "@/lib/data";
+import { saveMovementElements } from "@/lib/data";
+import SnapshotHistory, { useSnapshotHistory } from "@/components/SnapshotHistory";
 import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
@@ -68,6 +69,7 @@ export default function MovementBuilder({
   gymnastLastName: string;
 }) {
   const [sequence, setSequence] = useState<MovementElementRef[]>(initialElements);
+  const history = useSnapshotHistory(movementId);
   // Lues une seule fois à l'initialisation (et non dans un useEffect séparé) :
   // avec deux effets distincts (lecture puis écriture), le second écrasait la
   // valeur tout juste chargée au montage (surtout visible en StrictMode, qui
@@ -291,8 +293,7 @@ export default function MovementBuilder({
     setSaving(true);
     try {
       await saveMovementElements(movementId, sequence);
-      await saveSnapshot(
-        movementId,
+      await history.create(
         sequence.map((s) => s.code),
         diagnostic.noteDepart,
         diagnostic
@@ -386,7 +387,8 @@ export default function MovementBuilder({
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr_1fr_0.9fr]">
-        {/* ZONE 1 — MON MOUVEMENT */}
+        {/* ZONE 1 — MON MOUVEMENT (+ historique des instantanés) */}
+        <div className="space-y-6">
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Mon mouvement</h2>
           {sequence.length === 0 ? (
@@ -437,6 +439,15 @@ export default function MovementBuilder({
             </ol>
           )}
         </section>
+        <SnapshotHistory
+          history={history}
+          onRestore={(codes) => {
+            setSequence(codes.map((code) => ({ code, role: "ELEMENT" as const })));
+            setRevealedActions(new Set());
+            setDirty(true);
+          }}
+        />
+        </div>
 
         {/* ZONE 2 — ANALYSE */}
         <section className="rounded-lg border border-border-subtle bg-surface p-4">

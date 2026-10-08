@@ -66,6 +66,8 @@ export interface MovementSnapshotRow {
   elementCodes: string;
   noteDepart: number;
   detailJson: string;
+  // Nom donné à l'instantané (facultatif : sans nom, seule la date s'affiche).
+  name?: string;
 }
 
 export interface GymnastMusicRow {

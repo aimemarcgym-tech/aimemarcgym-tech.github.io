@@ -296,6 +296,15 @@ export async function saveSnapshot(movementId: string, elementCodes: string[], n
     detailJson: JSON.stringify(detail),
   };
   await setDoc(docRef("movementSnapshots", id), row);
+  return row;
+}
+
+export async function renameSnapshot(snapshotId: string, name: string) {
+  await updateDoc(docRef("movementSnapshots", snapshotId), { name });
+}
+
+export async function deleteSnapshot(snapshotId: string) {
+  await deleteDoc(docRef("movementSnapshots", snapshotId));
 }
 
 export async function getSnapshots(movementId: string) {

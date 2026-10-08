@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { analyzeSaut } from "@/engine/saut";
 import type { MovementElementRef } from "@/engine/composition";
 import type { ApparatusRegulation } from "@/regulation/types";
-import { saveMovementElements, saveSnapshot } from "@/lib/data";
+import { saveMovementElements } from "@/lib/data";
+import SnapshotHistory, { useSnapshotHistory } from "@/components/SnapshotHistory";
 import ReferencePanel from "@/components/ReferencePanel";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import DragHandle from "@/components/DragHandle";
@@ -55,6 +56,7 @@ export default function SautBuilder({
   gymnastLastName: string;
 }) {
   const [sequence, setSequence] = useState<MovementElementRef[]>(initialElements);
+  const history = useSnapshotHistory(movementId);
   const [rightTab, setRightTab] = useState<"suggestions" | "bibliotheque">("bibliotheque");
   const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
   const [manualConfirmations, setManualConfirmations] = useState<Set<string>>(() => {
@@ -205,8 +207,7 @@ export default function SautBuilder({
     setSaving(true);
     try {
       await saveMovementElements(movementId, sequence);
-      await saveSnapshot(
-        movementId,
+      await history.create(
         sequence.map((e) => e.code),
         diagnostic.noteDepart,
         diagnostic
@@ -287,7 +288,8 @@ export default function SautBuilder({
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {/* ZONE 1 — MES SAUTS */}
+        {/* ZONE 1 — MES SAUTS (+ historique des instantanés) */}
+        <div className="space-y-4">
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Mon/mes saut(s)</h2>
           {sautGroups.length === 0 ? (
@@ -364,6 +366,14 @@ export default function SautBuilder({
             </p>
           </div>
         </section>
+        <SnapshotHistory
+          history={history}
+          onRestore={(codes) => {
+            setSequence(codes.slice(-diagnostic.sautsRequired).map((code) => ({ code, role: "ELEMENT" as const })));
+            setDirty(true);
+          }}
+        />
+        </div>
 
         {/* ZONE 2 — ANALYSE */}
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
