@@ -65,6 +65,8 @@ export interface MovementElementRow {
   elementCode: string;
   position: number;
   role: string;
+  // Pastille de série (Sol et Poutre) : MIXTE, GYMNIQUE ou ACRO ; absent si aucune.
+  serie?: string;
 }
 
 export interface MovementSnapshotRow {
@@ -74,6 +76,8 @@ export interface MovementSnapshotRow {
   elementCodes: string;
   noteDepart: number;
   detailJson: string;
+  // Pastilles de série de chaque élément, dans l'ordre de elementCodes (null : aucune).
+  series?: (string | null)[];
   // Nom donné à l'instantané (facultatif : sans nom, seule la date s'affiche).
   name?: string;
 }

@@ -23,8 +23,8 @@ export function useSnapshotHistory(movementId: string) {
 
   // Enregistre une version et ouvre tout de suite le champ de nom (Échap ou champ vide : on garde la date seule).
   const create = useCallback(
-    async (elementCodes: string[], noteDepart: number, detail: unknown) => {
-      const row = await saveSnapshot(movementId, elementCodes, noteDepart, detail);
+    async (elementCodes: string[], noteDepart: number, detail: unknown, series?: (string | null)[]) => {
+      const row = await saveSnapshot(movementId, elementCodes, noteDepart, detail, series);
       setSnapshots((l) => [...l, row]);
       setRenamingId(row.id);
     },
@@ -44,13 +44,19 @@ export function useSnapshotHistory(movementId: string) {
   }, []);
 
   const update = useCallback(
-    async (elementCodes: string[], noteDepart: number, detail: unknown) => {
+    async (elementCodes: string[], noteDepart: number, detail: unknown, series?: (string | null)[]) => {
       if (!editingId) return;
-      await updateSnapshot(editingId, elementCodes, noteDepart, detail);
+      await updateSnapshot(editingId, elementCodes, noteDepart, detail, series);
       setSnapshots((l) =>
         l.map((s) =>
           s.id === editingId
-            ? { ...s, elementCodes: JSON.stringify(elementCodes), noteDepart, detailJson: JSON.stringify(detail) }
+            ? {
+                ...s,
+                elementCodes: JSON.stringify(elementCodes),
+                noteDepart,
+                detailJson: JSON.stringify(detail),
+                series: series && series.some(Boolean) ? series : undefined,
+              }
             : s
         )
       );
@@ -70,8 +76,8 @@ export default function SnapshotHistory({
   onEdit,
 }: {
   history: ReturnType<typeof useSnapshotHistory>;
-  onRestore: (elementCodes: string[]) => void;
-  onEdit: (elementCodes: string[]) => void;
+  onRestore: (elementCodes: string[], series?: (string | null)[]) => void;
+  onEdit: (elementCodes: string[], series?: (string | null)[]) => void;
 }) {
   const { snapshots, renamingId, setRenamingId, editingId, setEditingId, rename, remove } = history;
   const [restoredId, setRestoredId] = useState<string | null>(null);
@@ -113,7 +119,7 @@ export default function SnapshotHistory({
               type="button"
               onClick={() => {
                 try {
-                  onEdit(JSON.parse(s.elementCodes) as string[]);
+                  onEdit(JSON.parse(s.elementCodes) as string[], s.series);
                   setEditingId(s.id);
                   setRestoredId(null);
                 } catch {
@@ -129,7 +135,7 @@ export default function SnapshotHistory({
               type="button"
               onClick={() => {
                 try {
-                  onRestore(JSON.parse(s.elementCodes) as string[]);
+                  onRestore(JSON.parse(s.elementCodes) as string[], s.series);
                   setRestoredId(s.id);
                   setEditingId(null);
                 } catch {

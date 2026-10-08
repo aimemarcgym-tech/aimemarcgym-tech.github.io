@@ -73,7 +73,7 @@ function MovementPageInner() {
           movementId={movement.id}
           evolutionId={movement.evolution}
           regulation={regulation}
-          initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
+          initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE", ...(e.serie ? { serie: e.serie as "MIXTE" | "GYMNIQUE" | "ACRO" } : {}) }))}
           gymnastSkills={movement.gymnast.skills}
           label={movement.label}
           gymnastFirstName={movement.gymnast.firstName}
@@ -85,7 +85,7 @@ function MovementPageInner() {
           apparatus={movement.apparatus}
           evolutionId={movement.evolution}
           regulation={regulation}
-          initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }))}
+          initialElements={movement.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE", ...(e.serie ? { serie: e.serie as "MIXTE" | "GYMNIQUE" | "ACRO" } : {}) }))}
           gymnastSkills={movement.gymnast.skills}
           label={movement.label}
           gymnastFirstName={movement.gymnast.firstName}

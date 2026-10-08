@@ -5,6 +5,7 @@ import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
 import { palierRank, type ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements } from "@/lib/data";
 import SnapshotHistory, { useSnapshotHistory } from "@/components/SnapshotHistory";
+import { APPAREILS_AVEC_SERIES, SERIES, serieDe, type SerieType } from "@/lib/series";
 import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
 import ReferencePanel from "@/components/ReferencePanel";
@@ -269,6 +270,19 @@ export default function MovementBuilder({
     setRevealedActions(new Set());
     setDirty(true);
   }
+  // Pastille de série (Sol et Poutre) : un clic pointe la série, un second clic la retire.
+  function setSerie(index: number, type: SerieType | null) {
+    setSequence((s) =>
+      s.map((x, k) => {
+        if (k !== index) return x;
+        if (type) return { ...x, serie: type };
+        const { serie, ...rest } = x;
+        void serie;
+        return rest;
+      })
+    );
+    setDirty(true);
+  }
   function toggleRevealed(index: number) {
     setRevealedActions((prev) => {
       const next = new Set(prev);
@@ -298,7 +312,8 @@ export default function MovementBuilder({
       await history.create(
         sequence.map((s) => s.code),
         diagnostic.noteDepart,
-        diagnostic
+        diagnostic,
+        sequence.map((s) => s.serie ?? null)
       );
       setDirty(false);
     } finally {
@@ -318,6 +333,7 @@ export default function MovementBuilder({
         codes: sequence.map((s) => s.code),
         diagnostic,
         snapshots: history.snapshots,
+        series: sequence.map((s) => s.serie ?? null),
       })
     );
     return `/partage/mouvement/?id=${shareId}`;
@@ -384,7 +400,8 @@ export default function MovementBuilder({
                 void history.update(
                   sequence.map((s) => s.code),
                   diagnostic.noteDepart,
-                  diagnostic
+                  diagnostic,
+                  sequence.map((s) => s.serie ?? null)
                 )
               }
               className="accent-gradient rounded px-4 py-2 text-sm font-medium text-white hover:opacity-90"
@@ -440,7 +457,7 @@ export default function MovementBuilder({
                           <div className="text-sm font-medium text-foreground">{el?.name ?? s.code}</div>
                         </div>
                       </div>
-                      <div className="flex flex-col items-end gap-1" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex shrink-0 flex-col items-end justify-between gap-2.5 self-stretch" onClick={(e) => e.stopPropagation()}>
                         <div className="flex gap-1">
                           <button onClick={() => moveElement(i, -1)} className="rounded border border-border-strong px-1.5 text-xs text-foreground hover:border-accent-solid/60">↑</button>
                           <button onClick={() => moveElement(i, 1)} className="rounded border border-border-strong px-1.5 text-xs text-foreground hover:border-accent-solid/60">↓</button>
@@ -448,6 +465,29 @@ export default function MovementBuilder({
                             <button onClick={() => removeElement(i)} className="rounded border border-danger/40 px-1.5 text-xs text-danger hover:bg-danger/10">✕</button>
                           )}
                         </div>
+                        {APPAREILS_AVEC_SERIES.includes(apparatus) && (revealedActions.has(i) || s.serie) && (
+                          <div className="-mr-[18px] -mb-[18px] flex items-center">
+                            {SERIES.filter((t) => !s.serie || s.serie === t.id).map((t) => {
+                              const actif = s.serie === t.id;
+                              return (
+                                <button
+                                  key={t.id}
+                                  type="button"
+                                  onClick={() => setSerie(i, actif ? null : t.id)}
+                                  className="p-[18px]"
+                                  title={actif ? `Retirer de la ${t.label.toLowerCase()}` : `Pointer : ${t.label.toLowerCase()}`}
+                                  aria-pressed={actif}
+                                >
+                                  <span
+                                    style={{ boxShadow: actif ? `0 0 3px 1px ${t.lueur}` : `0 0 2px 0 ${t.lueur}` }}
+                                    className={`block h-[6px] w-[6px] rounded-full transition ${t.plein} ${actif ? "scale-125 ring-1 ring-white" : "opacity-50"}`}
+                                  />
+                                </button>
+                              );
+                            })}
+                            {s.serie && <span className="mr-[18px] text-[11px] text-muted">{serieDe(s.serie)?.label}</span>}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </li>
@@ -458,13 +498,13 @@ export default function MovementBuilder({
         </section>
         <SnapshotHistory
           history={history}
-          onRestore={(codes) => {
-            setSequence(codes.map((code) => ({ code, role: "ELEMENT" as const })));
+          onRestore={(codes, series) => {
+            setSequence(codes.map((code, i) => ({ code, role: "ELEMENT" as const, ...(series?.[i] ? { serie: series[i] as SerieType } : {}) })));
             setRevealedActions(new Set());
             setDirty(true);
           }}
-          onEdit={(codes) => {
-            setSequence(codes.map((code) => ({ code, role: "ELEMENT" as const })));
+          onEdit={(codes, series) => {
+            setSequence(codes.map((code, i) => ({ code, role: "ELEMENT" as const, ...(series?.[i] ? { serie: series[i] as SerieType } : {}) })));
             setRevealedActions(new Set());
             setDirty(true);
           }}

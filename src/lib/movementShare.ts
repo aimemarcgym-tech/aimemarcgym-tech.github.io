@@ -19,10 +19,12 @@ export function buildMovementShare(args: {
   diagnostic: Diagnostic | SautDiagnostic;
   penaliteMateriel?: number;
   snapshots?: MovementSnapshotRow[];
+  // Pastilles de série de chaque élément, dans l'ordre de codes (Sol et Poutre).
+  series?: (string | null)[];
 }): MovementShareData {
   const regulation = getRegulation(args.apparatus);
   const evolution = regulation.evolutions.find((e) => e.id === args.evolutionId);
-  const elements = shareElements(args.apparatus, args.codes, args.diagnostic);
+  const elements = shareElements(args.apparatus, args.codes, args.diagnostic, args.series);
   const snapshots = snapshotShares(args.apparatus, args.evolutionId, args.snapshots ?? []);
 
   return {
@@ -49,7 +51,7 @@ export function buildMovementShare(args: {
 }
 
 // Éléments affichables (nom, palier, arche) d'une liste de codes ; au Saut, ce sont les sauts du diagnostic.
-function shareElements(apparatus: string, codes: string[], diagnostic: Diagnostic | SautDiagnostic) {
+function shareElements(apparatus: string, codes: string[], diagnostic: Diagnostic | SautDiagnostic, series?: (string | null)[]) {
   const regulation = getRegulation(apparatus);
   const byCode = new Map<string, (typeof regulation.elements)[number]>();
   for (const e of regulation.elements) if (!byCode.has(e.code)) byCode.set(e.code, e);
@@ -64,14 +66,15 @@ function shareElements(apparatus: string, codes: string[], diagnostic: Diagnosti
     }));
   }
   return codes
-    .map((c) => byCode.get(c))
-    .filter((e): e is NonNullable<typeof e> => !!e)
-    .map((e) => ({
+    .map((c, i) => ({ e: byCode.get(c), serie: series?.[i] ?? null }))
+    .filter((x): x is { e: NonNullable<typeof x.e>; serie: string | null } => !!x.e)
+    .map(({ e, serie }) => ({
       code: e.code,
       name: e.name,
       palier: e.palier,
       branch: e.branch,
       archeName: archeName.get(e.archeId),
+      ...(serie ? { serie } : {}),
     }));
 }
 
@@ -100,7 +103,7 @@ export function snapshotShares(apparatus: string, evolutionId: string, rows: Mov
         ...(row.name ? { name: row.name } : {}),
         createdAt: row.createdAt,
         noteDepart: row.noteDepart,
-        elements: shareElements(apparatus, codes, diagnostic),
+        elements: shareElements(apparatus, codes, diagnostic, row.series),
         diagnostic: { ...diagnostic, suggestions: [] },
       });
     } catch {
@@ -138,6 +141,7 @@ export async function buildGymnastMovementShares(gymnast: {
     const full = await getMovement(m.id);
     if (!full) continue;
     const refs = full.elements.map((e) => ({ code: e.elementCode, role: e.role as "ENTREE" | "ELEMENT" | "SORTIE" }));
+    const seriesList = full.elements.map((e) => e.serie ?? null);
     let confirmations = new Set<string>();
     try {
       const raw = localStorage.getItem(`manual-confirm-${m.id}`);
@@ -155,6 +159,7 @@ export async function buildGymnastMovementShares(gymnast: {
         apparatus: m.apparatus,
         evolutionId: m.evolution,
         codes: refs.map((r) => r.code),
+        series: seriesList,
         diagnostic,
         penaliteMateriel: m.apparatus === "SAUT" ? penaliteMaterielFromStorage(m.id) : undefined,
         snapshots: await getSnapshots(m.id),

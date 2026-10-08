@@ -6,6 +6,8 @@ import { PALIER_ORDER, palierRank, type CheckSpec, type Evolution, type Palier, 
 export interface MovementElementRef {
   code: string;
   role: "ENTREE" | "ELEMENT" | "SORTIE";
+  // Pastille de série posée sur l'élément (Sol et Poutre) : simple annotation, sans effet sur le calcul.
+  serie?: "MIXTE" | "GYMNIQUE" | "ACRO";
 }
 
 export interface CheckResult {

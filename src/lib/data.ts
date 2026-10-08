@@ -1,6 +1,7 @@
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -273,20 +274,26 @@ export async function getMovement(id: string) {
   return { ...movement, elements, gymnast: gymnastWithSkills };
 }
 
-export async function saveMovementElements(movementId: string, elements: { code: string; role: string }[]) {
+export async function saveMovementElements(movementId: string, elements: { code: string; role: string; serie?: string }[]) {
   const existingSnap = await getDocs(query(col("movementElements"), where("movementId", "==", movementId)));
   const batch = writeBatch(db);
   for (const d of existingSnap.docs) batch.delete(d.ref);
   elements.forEach((e, i) => {
     const id = crypto.randomUUID();
-    const row: MovementElementRow = { id, movementId, elementCode: e.code, role: e.role, position: i };
+    const row: MovementElementRow = { id, movementId, elementCode: e.code, role: e.role, position: i, ...(e.serie ? { serie: e.serie } : {}) };
     batch.set(docRef("movementElements", id), row);
   });
   batch.update(docRef("movements", movementId), { updatedAt: nowIso() });
   await batch.commit();
 }
 
-export async function saveSnapshot(movementId: string, elementCodes: string[], noteDepart: number, detail: unknown) {
+export async function saveSnapshot(
+  movementId: string,
+  elementCodes: string[],
+  noteDepart: number,
+  detail: unknown,
+  series?: (string | null)[]
+) {
   const id = crypto.randomUUID();
   const row: MovementSnapshotRow = {
     id,
@@ -295,16 +302,24 @@ export async function saveSnapshot(movementId: string, elementCodes: string[], n
     elementCodes: JSON.stringify(elementCodes),
     noteDepart,
     detailJson: JSON.stringify(detail),
+    ...(series && series.some(Boolean) ? { series } : {}),
   };
   await setDoc(docRef("movementSnapshots", id), row);
   return row;
 }
 
-export async function updateSnapshot(snapshotId: string, elementCodes: string[], noteDepart: number, detail: unknown) {
+export async function updateSnapshot(
+  snapshotId: string,
+  elementCodes: string[],
+  noteDepart: number,
+  detail: unknown,
+  series?: (string | null)[]
+) {
   await updateDoc(docRef("movementSnapshots", snapshotId), {
     elementCodes: JSON.stringify(elementCodes),
     noteDepart,
     detailJson: JSON.stringify(detail),
+    series: series && series.some(Boolean) ? series : deleteField(),
   });
 }
 

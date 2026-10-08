@@ -5,6 +5,7 @@ import type { MovementShareData } from "@/lib/shares";
 import type { Diagnostic } from "@/engine/composition";
 import type { SautDiagnostic } from "@/engine/saut";
 import { getApparatusTips, getSautTips } from "@/lib/tips";
+import { serieDe } from "@/lib/series";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -220,6 +221,15 @@ function SharedMovementBody({ data }: { data: MovementShareData }) {
                   {i + 1}. {el.archeName} {el.palier && el.palier !== "BASE" ? `· ${el.palier}` : ""}
                 </div>
                 <div className="text-sm font-medium text-foreground">{el.name}</div>
+                {serieDe(el.serie) && (
+                  <div className="mt-1 flex items-center gap-1 text-[11px] text-muted">
+                    <span
+                      style={{ boxShadow: `0 0 3px 0 ${serieDe(el.serie)!.lueur}` }}
+                      className={`inline-block h-[6px] w-[6px] rounded-full ${serieDe(el.serie)!.plein}`}
+                    />
+                    {serieDe(el.serie)!.label}
+                  </div>
+                )}
               </li>
             ))}
           </ol>
