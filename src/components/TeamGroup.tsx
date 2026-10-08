@@ -31,13 +31,13 @@ export default function TeamGroup({
       <div className="mb-2 flex w-full flex-wrap items-center gap-x-2.5 gap-y-1.5">
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-2.5 text-left text-sm font-medium text-muted hover:text-foreground"
+          className="flex items-center gap-2.5 text-left text-base font-medium text-muted hover:text-foreground"
         >
           <span className={`transition-transform ${open ? "rotate-90" : ""}`}>▶</span>
           {!isUnassigned && <span className={`h-2.5 w-2.5 rounded-full ${color.dot}`} />}
           {!editing && <span className={isUnassigned ? "" : color.text}>{teamName}</span>}
           <span
-            className={`rounded-full border px-2 py-0.5 text-xs ${
+            className={`rounded-full border px-2 py-0.5 text-sm ${
               isUnassigned ? "border-border-strong text-muted" : `${color.border} ${color.bg} ${color.text}`
             }`}
           >
@@ -80,7 +80,7 @@ export default function TeamGroup({
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="ml-2 rounded border border-border-strong px-1.5 py-0.5 text-[10px] text-muted hover:border-accent-solid/60 hover:text-foreground"
+              className="ml-2 rounded border border-border-strong px-1.5 py-0.5 text-[11px] text-muted hover:border-accent-solid/60 hover:text-foreground"
             >
               Renommer
             </button>
@@ -89,7 +89,7 @@ export default function TeamGroup({
           <ShareLinkButton
             onCreate={() => createTeamShare(clubId, teamName)}
             label="Partager l’équipe"
-            className="accent-gradient rounded px-2 py-0.5 text-[10px] font-semibold text-white hover:opacity-90 disabled:opacity-50"
+            className="accent-gradient rounded px-2 py-0.5 text-[11px] font-semibold text-white hover:opacity-90 disabled:opacity-50"
           />
         )}
       </div>

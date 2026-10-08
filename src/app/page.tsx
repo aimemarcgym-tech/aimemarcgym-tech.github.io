@@ -150,15 +150,19 @@ export default function Home() {
                       {hasTeams ? (
                         <div className="space-y-3">
                           {groupByTeam(members).map(([teamName, teamMembers]) => (
-                            <TeamGroup
+                            <div
                               key={teamName}
-                              clubId={clubId}
-                              teamName={teamName}
-                              memberCount={teamMembers.length}
-                              onRenamed={refresh}
+                              className="border-b border-dashed border-border-strong pb-4 last:border-b-0 last:pb-0"
                             >
-                              <DraggableGymnastList members={teamMembers} onReordered={refresh} onDeleted={refresh} />
-                            </TeamGroup>
+                              <TeamGroup
+                                clubId={clubId}
+                                teamName={teamName}
+                                memberCount={teamMembers.length}
+                                onRenamed={refresh}
+                              >
+                                <DraggableGymnastList members={teamMembers} onReordered={refresh} onDeleted={refresh} />
+                              </TeamGroup>
+                            </div>
                           ))}
                         </div>
                       ) : (
