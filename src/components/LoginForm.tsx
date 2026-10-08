@@ -63,55 +63,82 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-6 pt-16 pb-10">
-      <h1 className="mb-1 text-xl font-bold text-foreground">
-        <span className="accent-gradient-text">Gestion Compétitions &amp; Entraînements</span>
-      </h1>
-      <p className="mb-6 text-sm text-muted">
-        {mode === "connexion" ? "Connectez-vous pour accéder à vos données." : "Créez un compte pour synchroniser vos données entre vos appareils."}
-      </p>
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-6 pt-12 pb-10">
+        <h1 className="mb-5 text-xl font-bold text-foreground">
+          <span className="accent-gradient-text">Gestion Compétitions &amp; Entraînements</span>
+        </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-3 rounded-lg border border-border-subtle bg-surface p-4 shadow-sm">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-muted">Email</label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
-          />
+        <div role="tablist" aria-label="Connexion ou création de compte" className="mb-4 flex gap-1 rounded-lg border border-border-subtle bg-surface-alt p-1">
+          {(
+            [
+              ["connexion", "Se connecter"],
+              ["inscription", "Créer un compte"],
+            ] as const
+          ).map(([m, label]) => (
+            <button
+              key={m}
+              type="button"
+              role="tab"
+              aria-selected={mode === m}
+              onClick={() => {
+                setError(null);
+                setMode(m);
+              }}
+              className={`flex-1 rounded px-3 py-2 text-sm font-semibold transition-colors ${
+                mode === m ? "accent-gradient text-white shadow" : "text-muted hover:text-foreground"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-muted">Mot de passe</label>
-          <input
-            type="password"
-            required
-            minLength={6}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
-          />
-        </div>
-        {error && <p className="text-sm text-danger">{error}</p>}
-        <button
-          type="submit"
-          disabled={pending}
-          className="accent-gradient w-full rounded px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90 disabled:opacity-50"
+
+        <form
+          onSubmit={handleSubmit}
+          className={`space-y-3 rounded-lg border p-4 shadow-sm ${
+            mode === "connexion" ? "border-border-subtle bg-surface" : "border-accent-solid/70 bg-surface-alt"
+          }`}
         >
-          {pending ? "…" : mode === "connexion" ? "Se connecter" : "Créer mon compte"}
-        </button>
-      </form>
-
-      <button
-        onClick={() => {
-          setError(null);
-          setMode((m) => (m === "connexion" ? "inscription" : "connexion"));
-        }}
-        className="mt-4 text-center text-sm accent-gradient-text font-medium"
-      >
-        {mode === "connexion" ? "Pas encore de compte ? Créer un compte" : "Déjà un compte ? Se connecter"}
-      </button>
+          <div>
+            <h2 className="text-base font-semibold text-foreground">{mode === "connexion" ? "Connexion" : "Nouveau compte"}</h2>
+            <p className="mt-0.5 text-sm text-muted">
+              {mode === "connexion"
+                ? "Vous avez déjà un compte : connectez-vous pour accéder à vos données."
+                : "Première visite : créez votre compte pour synchroniser vos données entre vos appareils."}
+            </p>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-muted">Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-muted">
+              {mode === "connexion" ? "Mot de passe" : "Choisissez un mot de passe (6 caractères minimum)"}
+            </label>
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
+            />
+          </div>
+          {error && <p className="text-sm text-danger">{error}</p>}
+          <button
+            type="submit"
+            disabled={pending}
+            className="accent-gradient w-full rounded px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90 disabled:opacity-50"
+          >
+            {pending ? "…" : mode === "connexion" ? "Se connecter" : "Créer mon compte"}
+          </button>
+        </form>
       </main>
     </div>
   );
