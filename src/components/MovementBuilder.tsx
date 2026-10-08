@@ -164,6 +164,8 @@ export default function MovementBuilder({
   const archeByCode = useMemo(() => new Map(regulation.arches.map((a) => [a.id, a])), [regulation]);
 
   function categoryKeyOf(archeId: string, branch: string | null): string {
+    // Acros : une seule ligne par arche (Acros 1, Acros 2), avant, arrière et sans sens regroupés.
+    if (archeByCode.get(archeId)?.category === "ACRO") return archeId;
     if (branch === "avant" || branch === "arriere" || branch === "maintien" || branch === "souplesse" || branch === "atr") {
       return `${archeId}:${branch}`;
     }

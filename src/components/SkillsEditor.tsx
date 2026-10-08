@@ -42,6 +42,8 @@ export default function SkillsEditor({
   }, [regulation]);
 
   function categoryKeyOf(archeId: string, branch: string | null): string {
+    // Acros : une seule ligne par arche (Acros 1, Acros 2), avant, arrière et sans sens regroupés.
+    if (archeById.get(archeId)?.category === "ACRO") return archeId;
     if (
       branch === "avant" ||
       branch === "arriere" ||
