@@ -11,8 +11,16 @@ export interface ClubRow {
   createdAt: string;
 }
 
+// Réglages du matériel d'une gymnaste, saisis en texte libre (à transmettre à un autre entraîneur).
+export interface EquipmentSettings {
+  ecartBarres?: string;
+  tremplinCm?: string;
+  tremplinPas?: string;
+}
+
 export interface GymnastRow {
   id: string;
+  reglages?: EquipmentSettings;
   firstName: string;
   lastName: string;
   clubId: string | null;

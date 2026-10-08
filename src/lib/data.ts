@@ -19,6 +19,7 @@ import {
   type MovementRow,
   type MovementElementRow,
   type MovementSnapshotRow,
+  type EquipmentSettings,
   type TrainingSessionRow,
   type ResultDocRow,
 } from "@/lib/idb";
@@ -386,6 +387,11 @@ export async function setGymnastsHomeOrder(orderedGymnastIds: string[]) {
     batch.update(docRef("gymnasts", id), { homeOrder: index });
   });
   await batch.commit();
+}
+
+export async function setGymnastEquipment(gymnastId: string, patch: Partial<Record<keyof EquipmentSettings, string>>) {
+  const fields = Object.fromEntries(Object.entries(patch).map(([k, v]) => [`reglages.${k}`, v]));
+  await updateDoc(docRef("gymnasts", gymnastId), fields);
 }
 
 export async function setGymnastsPassageOrder(apparatus: string, orderedGymnastIds: string[]) {

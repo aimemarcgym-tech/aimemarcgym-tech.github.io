@@ -5,6 +5,7 @@ import { getGymnasts, setGymnastsPassageOrder } from "@/lib/data";
 import { createShare } from "@/lib/shares";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import TeamStartNotesPanel from "@/components/TeamStartNotesPanel";
+import TeamEquipmentSettings from "@/components/TeamEquipmentSettings";
 import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
 
@@ -215,7 +216,10 @@ export default function TeamPassageOrderManager() {
         </div>
       )}
     </div>
-    <TeamStartNotesPanel teamName={teams.find((t) => t.key === teamKey)?.team ?? null} members={members} />
+    <div className="space-y-8">
+      <TeamStartNotesPanel teamName={teams.find((t) => t.key === teamKey)?.team ?? null} members={members} />
+      <TeamEquipmentSettings />
+    </div>
     </div>
   );
 }

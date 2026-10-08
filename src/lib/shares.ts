@@ -101,6 +101,13 @@ export interface TeamAllShareData {
   gymnasts: MovementsAllShareData[];
 }
 
+// Réglages du matériel de chaque gymnaste d'une équipe, à transmettre à un autre entraîneur.
+export interface EquipmentShareData {
+  club: string;
+  team: string;
+  gymnasts: { name: string; settings: { ecartBarres?: string; tremplinCm?: string; tremplinPas?: string } }[];
+}
+
 export type ShareDoc =
   | { type: "movement"; ownerUid: string; data: MovementShareData }
   | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
@@ -108,7 +115,8 @@ export type ShareDoc =
   | { type: "trainingJournal"; ownerUid: string; data: TrainingJournalShareData }
   | { type: "movementsAll"; ownerUid: string; data: MovementsAllShareData }
   | { type: "teamCategory"; ownerUid: string; data: TeamCategoryShareData }
-  | { type: "teamAll"; ownerUid: string; data: TeamAllShareData };
+  | { type: "teamAll"; ownerUid: string; data: TeamAllShareData }
+  | { type: "equipment"; ownerUid: string; data: EquipmentShareData };
 
 export async function createShare(
   type: "movement",
@@ -139,8 +147,13 @@ export async function createShare(
   data: TeamAllShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory" | "teamAll",
+  type: "equipment",
+  data: EquipmentShareData
+): Promise<string>;
+export async function createShare(
+  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory" | "teamAll" | "equipment",
   data:
+    | EquipmentShareData
     | MovementShareData
     | PassageOrderShareData
     | PassageOrderAllShareData
