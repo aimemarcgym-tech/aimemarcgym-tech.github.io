@@ -315,6 +315,7 @@ export default function MovementBuilder({
         evolutionId,
         codes: sequence.map((s) => s.code),
         diagnostic,
+        snapshots: history.snapshots,
       })
     );
     return `/partage/mouvement/?id=${shareId}`;

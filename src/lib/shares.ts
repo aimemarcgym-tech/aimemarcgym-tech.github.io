@@ -23,6 +23,17 @@ export interface MovementShareData {
   // Optionnels : absents des liens créés avant l'affichage "comme le constructeur".
   requirements?: { arches: number; elementsMin: number; elementsMax: number };
   penaliteMateriel?: number;
+  // Instantanés enregistrés dans l'historique du mouvement (lecture seule dans le lien).
+  snapshots?: SnapshotShareData[];
+}
+
+// Une version enregistrée du mouvement : de quoi l'afficher comme le mouvement actuel.
+export interface SnapshotShareData {
+  name?: string;
+  createdAt: string;
+  noteDepart: number;
+  elements: MovementShareData["elements"];
+  diagnostic: Diagnostic | SautDiagnostic;
 }
 
 export interface PassageOrderShareData {

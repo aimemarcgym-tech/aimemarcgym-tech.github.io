@@ -1,8 +1,9 @@
 import { getRegulation } from "@/regulation/loader";
 import type { Diagnostic } from "@/engine/composition";
 import type { SautDiagnostic } from "@/engine/saut";
-import type { MovementShareData } from "@/lib/shares";
-import { getMovement } from "@/lib/data";
+import type { MovementShareData, SnapshotShareData } from "@/lib/shares";
+import type { MovementSnapshotRow } from "@/lib/idb";
+import { getMovement, getSnapshots } from "@/lib/data";
 import { analyzeMovement } from "@/engine/composition";
 import { analyzeSaut } from "@/engine/saut";
 
@@ -17,32 +18,12 @@ export function buildMovementShare(args: {
   codes: string[];
   diagnostic: Diagnostic | SautDiagnostic;
   penaliteMateriel?: number;
+  snapshots?: MovementSnapshotRow[];
 }): MovementShareData {
   const regulation = getRegulation(args.apparatus);
-  const byCode = new Map<string, (typeof regulation.elements)[number]>();
-  for (const e of regulation.elements) if (!byCode.has(e.code)) byCode.set(e.code, e);
-  const archeName = new Map(regulation.arches.map((a) => [a.id, a.name]));
   const evolution = regulation.evolutions.find((e) => e.id === args.evolutionId);
-
-  const elements =
-    "sautsRequired" in args.diagnostic
-      ? args.diagnostic.sauts.map((s) => ({
-          code: s.code,
-          name: s.name,
-          palier: s.palier,
-          branch: s.branch,
-          archeName: archeName.get(s.archeId),
-        }))
-      : args.codes
-          .map((c) => byCode.get(c))
-          .filter((e): e is NonNullable<typeof e> => !!e)
-          .map((e) => ({
-            code: e.code,
-            name: e.name,
-            palier: e.palier,
-            branch: e.branch,
-            archeName: archeName.get(e.archeId),
-          }));
+  const elements = shareElements(args.apparatus, args.codes, args.diagnostic);
+  const snapshots = snapshotShares(args.apparatus, args.evolutionId, args.snapshots ?? []);
 
   return {
     gymnastFirstName: args.gymnastFirstName,
@@ -63,7 +44,69 @@ export function buildMovementShare(args: {
         }
       : {}),
     ...(args.penaliteMateriel ? { penaliteMateriel: args.penaliteMateriel } : {}),
+    ...(snapshots.length > 0 ? { snapshots } : {}),
   };
+}
+
+// Éléments affichables (nom, palier, arche) d'une liste de codes ; au Saut, ce sont les sauts du diagnostic.
+function shareElements(apparatus: string, codes: string[], diagnostic: Diagnostic | SautDiagnostic) {
+  const regulation = getRegulation(apparatus);
+  const byCode = new Map<string, (typeof regulation.elements)[number]>();
+  for (const e of regulation.elements) if (!byCode.has(e.code)) byCode.set(e.code, e);
+  const archeName = new Map(regulation.arches.map((a) => [a.id, a.name]));
+  if ("sautsRequired" in diagnostic) {
+    return diagnostic.sauts.map((s) => ({
+      code: s.code,
+      name: s.name,
+      palier: s.palier,
+      branch: s.branch,
+      archeName: archeName.get(s.archeId),
+    }));
+  }
+  return codes
+    .map((c) => byCode.get(c))
+    .filter((e): e is NonNullable<typeof e> => !!e)
+    .map((e) => ({
+      code: e.code,
+      name: e.name,
+      palier: e.palier,
+      branch: e.branch,
+      archeName: archeName.get(e.archeId),
+    }));
+}
+
+const MAX_SNAPSHOTS_SHARED = 10;
+
+// Les instantanés de l'historique, au format du lien : on garde l'analyse enregistrée au moment de
+// l'instantané ; si elle est absente ou d'un ancien format, on la recalcule à partir des éléments.
+export function snapshotShares(apparatus: string, evolutionId: string, rows: MovementSnapshotRow[]): SnapshotShareData[] {
+  const recent = [...rows].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, MAX_SNAPSHOTS_SHARED);
+  const out: SnapshotShareData[] = [];
+  for (const row of recent) {
+    try {
+      const codes = JSON.parse(row.elementCodes) as string[];
+      let diagnostic: Diagnostic | SautDiagnostic | null = null;
+      try {
+        const stored = JSON.parse(row.detailJson) as Diagnostic | SautDiagnostic;
+        const valide = apparatus === "SAUT" ? "sautsRequired" in stored : "troncCommun" in stored && "valorisations" in stored;
+        if (valide) diagnostic = stored;
+      } catch {}
+      if (!diagnostic) {
+        const refs = codes.map((code) => ({ code, role: "ELEMENT" as const }));
+        diagnostic = apparatus === "SAUT" ? analyzeSaut(evolutionId, refs, new Set()) : analyzeMovement(apparatus, evolutionId, refs, new Set());
+      }
+      out.push({
+        ...(row.name ? { name: row.name } : {}),
+        createdAt: row.createdAt,
+        noteDepart: row.noteDepart,
+        elements: shareElements(apparatus, codes, diagnostic),
+        diagnostic: { ...diagnostic, suggestions: [] },
+      });
+    } catch {
+      // instantané illisible : on l'ignore plutôt que de bloquer le partage
+    }
+  }
+  return out;
 }
 
 export function penaliteMaterielFromStorage(movementId: string): number {
@@ -113,6 +156,7 @@ export async function buildGymnastMovementShares(gymnast: {
         codes: refs.map((r) => r.code),
         diagnostic,
         penaliteMateriel: m.apparatus === "SAUT" ? penaliteMaterielFromStorage(m.id) : undefined,
+        snapshots: await getSnapshots(m.id),
       })
     );
   }

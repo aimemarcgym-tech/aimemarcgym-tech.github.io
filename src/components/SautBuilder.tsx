@@ -230,6 +230,7 @@ export default function SautBuilder({
         codes: sequence.map((s) => s.code),
         diagnostic,
         penaliteMateriel: penaliteMateriel,
+        snapshots: history.snapshots,
       })
     );
     return `/partage/mouvement/?id=${shareId}`;
