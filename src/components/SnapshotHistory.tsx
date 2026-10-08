@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { deleteSnapshot, getSnapshots, renameSnapshot, saveSnapshot } from "@/lib/data";
+import { deleteSnapshot, getSnapshots, renameSnapshot, saveSnapshot, updateSnapshot } from "@/lib/data";
 import type { MovementSnapshotRow } from "@/lib/idb";
 import { RenommerEnLigne } from "@/components/EnLigne";
 
@@ -10,6 +10,8 @@ import { RenommerEnLigne } from "@/components/EnLigne";
 export function useSnapshotHistory(movementId: string) {
   const [snapshots, setSnapshots] = useState<MovementSnapshotRow[]>([]);
   const [renamingId, setRenamingId] = useState<string | null>(null);
+  // Instantané en cours de modification : chargé dans l'éditeur, puis mis à jour avec « Enregistrer les modifications ».
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -38,19 +40,40 @@ export function useSnapshotHistory(movementId: string) {
   const remove = useCallback(async (id: string) => {
     await deleteSnapshot(id);
     setSnapshots((l) => l.filter((s) => s.id !== id));
+    setEditingId((cur) => (cur === id ? null : cur));
   }, []);
 
-  return { snapshots, renamingId, setRenamingId, create, rename, remove };
+  const update = useCallback(
+    async (elementCodes: string[], noteDepart: number, detail: unknown) => {
+      if (!editingId) return;
+      await updateSnapshot(editingId, elementCodes, noteDepart, detail);
+      setSnapshots((l) =>
+        l.map((s) =>
+          s.id === editingId
+            ? { ...s, elementCodes: JSON.stringify(elementCodes), noteDepart, detailJson: JSON.stringify(detail) }
+            : s
+        )
+      );
+      setEditingId(null);
+    },
+    [editingId]
+  );
+
+  const editingName = snapshots.find((s) => s.id === editingId)?.name;
+
+  return { snapshots, renamingId, setRenamingId, editingId, setEditingId, editingName, create, rename, remove, update };
 }
 
 export default function SnapshotHistory({
   history,
   onRestore,
+  onEdit,
 }: {
   history: ReturnType<typeof useSnapshotHistory>;
   onRestore: (elementCodes: string[]) => void;
+  onEdit: (elementCodes: string[]) => void;
 }) {
-  const { snapshots, renamingId, setRenamingId, rename, remove } = history;
+  const { snapshots, renamingId, setRenamingId, editingId, setEditingId, rename, remove } = history;
   const [restoredId, setRestoredId] = useState<string | null>(null);
   if (snapshots.length === 0) return null;
 
@@ -61,7 +84,7 @@ export default function SnapshotHistory({
         {[...snapshots].reverse().map((s) => (
           <li
             key={s.id}
-            className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded border border-border-subtle bg-surface-alt px-3 py-2 text-xs"
+            className={`flex flex-wrap items-center gap-x-2 gap-y-1 rounded border bg-surface-alt px-3 py-2 text-xs ${editingId === s.id ? "border-accent-solid" : "border-border-subtle"}`}
           >
             <span className="min-w-0 flex-1">
               {renamingId === s.id ? (
@@ -90,8 +113,25 @@ export default function SnapshotHistory({
               type="button"
               onClick={() => {
                 try {
+                  onEdit(JSON.parse(s.elementCodes) as string[]);
+                  setEditingId(s.id);
+                  setRestoredId(null);
+                } catch {
+                  setEditingId(null);
+                }
+              }}
+              className="text-muted underline hover:text-foreground"
+              title="Charge cette version dans l'éditeur ; modifiez-la puis cliquez sur « Enregistrer les modifications »"
+            >
+              {editingId === s.id ? "En cours de modification" : "Modifier"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                try {
                   onRestore(JSON.parse(s.elementCodes) as string[]);
                   setRestoredId(s.id);
+                  setEditingId(null);
                 } catch {
                   setRestoredId(null);
                 }

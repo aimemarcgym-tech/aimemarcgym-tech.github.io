@@ -277,6 +277,20 @@ export default function SautBuilder({
         </span>
         <div className="flex items-center gap-2">
           <ShareLinkButton onCreate={handleShare} />
+          {history.editingId && (
+            <button
+              onClick={() =>
+                void history.update(
+                  sequence.map((e) => e.code),
+                  diagnostic.noteDepart,
+                  diagnostic
+                )
+              }
+              className="accent-gradient rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90"
+            >
+              Enregistrer les modifications de « {history.editingName || "l’instantané"} »
+            </button>
+          )}
           <button
             onClick={handleSave}
             disabled={saving}
@@ -369,6 +383,10 @@ export default function SautBuilder({
         <SnapshotHistory
           history={history}
           onRestore={(codes) => {
+            setSequence(codes.slice(-diagnostic.sautsRequired).map((code) => ({ code, role: "ELEMENT" as const })));
+            setDirty(true);
+          }}
+          onEdit={(codes) => {
             setSequence(codes.slice(-diagnostic.sautsRequired).map((code) => ({ code, role: "ELEMENT" as const })));
             setDirty(true);
           }}

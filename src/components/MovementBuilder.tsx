@@ -375,6 +375,20 @@ export default function MovementBuilder({
         </div>
         <div className="flex items-center gap-2">
           <ShareLinkButton onCreate={handleShare} />
+          {history.editingId && (
+            <button
+              onClick={() =>
+                void history.update(
+                  sequence.map((s) => s.code),
+                  diagnostic.noteDepart,
+                  diagnostic
+                )
+              }
+              className="accent-gradient rounded px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+            >
+              Enregistrer les modifications de « {history.editingName || "l’instantané"} »
+            </button>
+          )}
           <button
             onClick={handleSave}
             disabled={saving}
@@ -442,6 +456,11 @@ export default function MovementBuilder({
         <SnapshotHistory
           history={history}
           onRestore={(codes) => {
+            setSequence(codes.map((code) => ({ code, role: "ELEMENT" as const })));
+            setRevealedActions(new Set());
+            setDirty(true);
+          }}
+          onEdit={(codes) => {
             setSequence(codes.map((code) => ({ code, role: "ELEMENT" as const })));
             setRevealedActions(new Set());
             setDirty(true);
