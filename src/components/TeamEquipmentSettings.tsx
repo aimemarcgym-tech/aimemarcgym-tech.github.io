@@ -112,8 +112,8 @@ export default function TeamEquipmentSettings() {
                 const common = commonValue(f.key);
                 const mixed = common === "" && members.some((g) => (g.reglages?.[f.key] ?? "") !== "");
                 return (
-                  <label key={f.key} className="block">
-                    <span className="mb-1 block text-[11px] font-medium text-muted">
+                  <label key={f.key} className="flex flex-col">
+                    <span className="mb-1 block flex-1 text-[11px] font-medium text-muted">
                       {f.label} ({f.unit})
                     </span>
                     <input
@@ -138,8 +138,8 @@ export default function TeamEquipmentSettings() {
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {FIELDS.map((f) => (
-                  <label key={f.key} className="block">
-                    <span className="mb-1 block text-[11px] font-medium text-muted">
+                  <label key={f.key} className="flex flex-col">
+                    <span className="mb-1 block flex-1 text-[11px] font-medium text-muted">
                       {f.label} ({f.unit})
                     </span>
                     <input
