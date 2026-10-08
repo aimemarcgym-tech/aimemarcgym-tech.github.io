@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getGymnasts, setGymnastsPassageOrder } from "@/lib/data";
 import { createShare } from "@/lib/shares";
 import ShareLinkButton from "@/components/ShareLinkButton";
+import TeamStartNotesPanel from "@/components/TeamStartNotesPanel";
 import DragHandle from "@/components/DragHandle";
 import { useDragReorder } from "@/hooks/useDragReorder";
 
@@ -157,7 +158,8 @@ export default function TeamPassageOrderManager() {
   }
 
   return (
-    <div className="w-full max-w-4xl min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
+    <div className="grid w-full max-w-[1400px] items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+    <div className="w-full min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
       <h2 className="mb-3 text-sm font-semibold text-foreground">Ordres de passage par équipe</h2>
 
       {!gymnasts ? (
@@ -212,6 +214,8 @@ export default function TeamPassageOrderManager() {
           <ApparatusOrderList apparatus={apparatus} members={members} onReorder={handleReorder} />
         </div>
       )}
+    </div>
+    <TeamStartNotesPanel teamName={teams.find((t) => t.key === teamKey)?.team ?? null} members={members} />
     </div>
   );
 }
