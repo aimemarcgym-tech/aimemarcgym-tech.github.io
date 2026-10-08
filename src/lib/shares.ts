@@ -108,6 +108,21 @@ export interface EquipmentShareData {
   gymnasts: { name: string; settings: { ecartBarres?: string; tremplinCm?: string; tremplinPas?: string } }[];
 }
 
+// Les trois panneaux de l'onglet Ordres de passage d'une équipe en un seul lien.
+export interface TeamPanelsShareData {
+  club: string;
+  team: string;
+  passageOrder: PassageOrderAllShareData;
+  // Absent si l'évolution de l'équipe est indéterminée.
+  notes: {
+    evolution: string;
+    nbCompte: number;
+    gymnasts: { id: string; name: string; notes: (number | null)[] }[];
+    maxPerApparatus: number[];
+  } | null;
+  equipment: EquipmentShareData;
+}
+
 export type ShareDoc =
   | { type: "movement"; ownerUid: string; data: MovementShareData }
   | { type: "passageOrder"; ownerUid: string; data: PassageOrderShareData }
@@ -116,7 +131,8 @@ export type ShareDoc =
   | { type: "movementsAll"; ownerUid: string; data: MovementsAllShareData }
   | { type: "teamCategory"; ownerUid: string; data: TeamCategoryShareData }
   | { type: "teamAll"; ownerUid: string; data: TeamAllShareData }
-  | { type: "equipment"; ownerUid: string; data: EquipmentShareData };
+  | { type: "equipment"; ownerUid: string; data: EquipmentShareData }
+  | { type: "teamPanels"; ownerUid: string; data: TeamPanelsShareData };
 
 export async function createShare(
   type: "movement",
@@ -151,8 +167,13 @@ export async function createShare(
   data: EquipmentShareData
 ): Promise<string>;
 export async function createShare(
-  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory" | "teamAll" | "equipment",
+  type: "teamPanels",
+  data: TeamPanelsShareData
+): Promise<string>;
+export async function createShare(
+  type: "movement" | "passageOrder" | "passageOrderAll" | "trainingJournal" | "movementsAll" | "teamCategory" | "teamAll" | "equipment" | "teamPanels",
   data:
+    | TeamPanelsShareData
     | EquipmentShareData
     | MovementShareData
     | PassageOrderShareData

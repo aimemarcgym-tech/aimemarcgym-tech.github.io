@@ -100,3 +100,26 @@ export async function computeTeamStartNotes(teamName: string, members: MemberLik
 
   return { evolution, nbCompte, gymnasts, maxPerApparatus };
 }
+
+// Notes retenues par agrès (les nbCompte meilleures), totaux d'équipe et totaux max : partagé entre le panneau et la page publique.
+export function summarizeTeamNotes(data: TeamStartNotes) {
+  const kept = NOTES_APPARATUS.map((_, a) => {
+    const ranked = data.gymnasts
+      .map((g) => ({ id: g.id, n: g.notes[a] }))
+      .filter((x): x is { id: string; n: number } => x.n !== null)
+      .sort((x, y) => y.n - x.n)
+      .slice(0, data.nbCompte);
+    return new Set(ranked.map((x) => x.id));
+  });
+  const teamPerApparatus = NOTES_APPARATUS.map((_, a) =>
+    data.gymnasts.reduce((t, g) => t + (kept[a].has(g.id) ? (g.notes[a] ?? 0) : 0), 0)
+  );
+  const maxPerApparatus = data.maxPerApparatus.map((m) => m * data.nbCompte);
+  return {
+    kept,
+    teamPerApparatus,
+    maxPerApparatus,
+    teamTotal: teamPerApparatus.reduce((t, n) => t + n, 0),
+    maxTotal: maxPerApparatus.reduce((t, n) => t + n, 0),
+  };
+}

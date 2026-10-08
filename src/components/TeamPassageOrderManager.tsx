@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getGymnasts, setGymnastsPassageOrder } from "@/lib/data";
 import { createShare } from "@/lib/shares";
+import { computeTeamStartNotes } from "@/lib/teamNotes";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import TeamStartNotesPanel from "@/components/TeamStartNotesPanel";
 import TeamEquipmentSettings from "@/components/TeamEquipmentSettings";
@@ -158,6 +159,40 @@ export default function TeamPassageOrderManager() {
     return `/partage/ordres-passage/?id=${shareId}`;
   }
 
+  // Les trois panneaux d'un coup : ordres des 4 agrès, notes de départ avec totaux, réglages du matériel.
+  async function handleSharePanels() {
+    const selected = teams.find((t) => t.key === teamKey);
+    if (!selected) throw new Error("Équipe introuvable");
+    // Relecture : les réglages sont saisis dans un autre panneau, qui a pu les modifier depuis le chargement.
+    const fresh = await getGymnasts();
+    const team = fresh.filter((g) => (g.club?.name ?? "Sans club") === selected.club && g.team === selected.team);
+    const order = (key: string) =>
+      [...team].sort((a, b) => (a.passageOrder?.[key] ?? Infinity) - (b.passageOrder?.[key] ?? Infinity));
+    const notes = await computeTeamStartNotes(selected.team, team);
+    const shareId = await createShare("teamPanels", {
+      club: selected.club,
+      team: selected.team,
+      passageOrder: {
+        club: selected.club,
+        team: selected.team,
+        apparatuses: Object.entries(APPARATUS_LABELS).map(([key, label]) => ({
+          apparatus: key,
+          apparatusLabel: label,
+          gymnasts: order(key).map((g) => ({ firstName: g.firstName, lastName: g.lastName })),
+        })),
+      },
+      notes: notes.evolution
+        ? { evolution: notes.evolution, nbCompte: notes.nbCompte, gymnasts: notes.gymnasts, maxPerApparatus: notes.maxPerApparatus }
+        : null,
+      equipment: {
+        club: selected.club,
+        team: selected.team,
+        gymnasts: team.map((g) => ({ name: `${g.firstName} ${g.lastName}`, settings: g.reglages ?? {} })),
+      },
+    });
+    return `/partage/panneaux/?id=${shareId}`;
+  }
+
   return (
     <div className="grid w-full max-w-[1400px] items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
     <div className="w-full min-w-[320px] rounded-xl border border-border-subtle bg-surface p-4">
@@ -209,6 +244,11 @@ export default function TeamPassageOrderManager() {
                 onCreate={handleShareAll}
                 label="Partager tous les agrès"
                 className="rounded bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
+              />
+              <ShareLinkButton
+                onCreate={handleSharePanels}
+                label="Partager les 3 panneaux"
+                className="accent-gradient rounded px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
               />
             </div>
           </div>
