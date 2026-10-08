@@ -25,7 +25,7 @@ export default function MovementChip({
         {label} <span className="text-muted">· {apparatus} {evolution}</span>
       </button>
       <div className="flex items-center gap-3">
-        <Link href={`/mouvement?id=${movementId}`} className="text-sm accent-gradient-text font-medium">
+        <Link href={`/mouvement/?id=${movementId}`} className="text-sm accent-gradient-text font-medium">
           Ouvrir →
         </Link>
         {revealed && <DeleteMovementButton movementId={movementId} movementLabel={label} onDeleted={onDeleted} />}

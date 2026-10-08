@@ -57,7 +57,7 @@ function GymnastPageInner() {
     const evolution = String(formData.get("evolution"));
     const label = String(formData.get("label") || `${APPARATUS_LABELS[apparatus] ?? apparatus} — ${evolution}`);
     const movement = await createMovement(gymnast.id, apparatus, evolution, label);
-    router.push(`/mouvement?id=${movement.id}`);
+    router.push(`/mouvement/?id=${movement.id}`);
   }
 
   async function handleShareProfile(): Promise<string> {

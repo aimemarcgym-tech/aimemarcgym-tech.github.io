@@ -58,7 +58,7 @@ function MovementPageInner() {
     <div className="min-h-screen">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-7xl px-6 py-4">
-          <Link href={`/gymnaste?id=${movement.gymnastId}`} className="text-sm accent-gradient-text font-medium">
+          <Link href={`/gymnaste/?id=${movement.gymnastId}`} className="text-sm accent-gradient-text font-medium">
             ← {movement.gymnast.firstName} {movement.gymnast.lastName}
           </Link>
           <h1 className="mt-1 text-xl font-bold text-foreground">{movement.label}</h1>

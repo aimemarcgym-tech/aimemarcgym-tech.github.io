@@ -22,6 +22,8 @@ const { count, size, warnings } = await generateSW({
   // ne pose pas le même problème : il ne joue qu'au moment de l'activation,
   // qui reste déclenchée explicitement par le clic, jamais en silence.
   clientsClaim: true,
+  // Redirige les navigations sans "/" final vers la page précachée (voir public/sw-extra.js).
+  importScripts: ["sw-extra.js"],
   // SPA en export statique : toute navigation non trouvée dans le cache
   // retombe sur la page d'accueil précachée (fonctionne hors-ligne).
   navigateFallback: "/index.html",
