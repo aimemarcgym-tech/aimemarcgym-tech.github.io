@@ -36,3 +36,17 @@ export function isMousseElement(archeId: string) {
 export function isSortieElement(archeId: string, extraCategories?: string[]) {
   return archeId === "POUTRE-SORTIES" || archeId === "BARRES-SORTIES" || (extraCategories?.includes("SORTIES") ?? false);
 }
+
+// Sol : l'élément de base et sa version « (variante) » comptent pour un seul élément dans le nombre
+// d'éléments du mouvement (décision de l'entraîneur : rondade, flic-flac arrière, flic-flac avant).
+// Clé : code de la variante -> code de l'élément de base. Les exigences et valorisations, elles,
+// continuent de distinguer les deux (paliers différents).
+const SOL_VARIANTE_COMPTEE_AVEC_BASE: Record<string, string> = {
+  "148+": "148",
+  "195+": "155",
+  "158+": "158",
+};
+
+export function countingKey(apparatus: string, code: string) {
+  return apparatus === "SOL" ? (SOL_VARIANTE_COMPTEE_AVEC_BASE[code] ?? code) : code;
+}
