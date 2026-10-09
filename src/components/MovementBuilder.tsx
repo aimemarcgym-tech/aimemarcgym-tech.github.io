@@ -369,6 +369,16 @@ export default function MovementBuilder({
   // Filtres rapides (Acro, Sorties, Force…) : uniquement les familles qui existent pour cet agrès,
   // avec le nombre d'éléments de la famille déjà placés dans le mouvement.
   const quickFilters = useMemo(() => {
+    // Barres : les familles ci-dessous (Acro, Force…) n'existent pas, les arches (Balancés, Rotations…) servent de filtres.
+    if (apparatus === "BARRES_ASYM") {
+      return regulation.arches
+        .map((a) => ({
+          value: a.id,
+          label: a.name,
+          codes: new Set(regulation.elements.filter((e) => e.archeId === a.id).map((e) => e.code)),
+        }))
+        .filter((f) => f.codes.size > 0);
+    }
     const order = ["ACRO", "SORTIES", "FORCE", "SAUT_GYM", "PIVOT", "ENTREE", "ATR_MAINTIEN", CAT_ACRO_MOUSSE];
     return order
       .map((c) => {
@@ -787,6 +797,9 @@ export default function MovementBuilder({
               >
                 <option value="ALL">Toutes les catégories</option>
                 {category.startsWith("CAT:") && <option value={category}>{catFilterLabel(category)}</option>}
+                {category !== "ALL" && !category.startsWith("CAT:") && !categories.some((c) => c.key === category) && (
+                  <option value={category}>{archeByCode.get(category)?.name ?? category}</option>
+                )}
                 {categories.map((c) => (
                   <option key={c.key} value={c.key}>
                     {c.label}
