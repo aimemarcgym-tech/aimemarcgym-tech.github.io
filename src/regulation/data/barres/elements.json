@@ -71,7 +71,7 @@
     { "code": "103rot", "name": "Passement filé. Tour d'appui arrière libre à l'ATR", "archeId": "BARRES-ROTATIONS", "branch": "A", "palier": "P6", "sourcePage": 56, "verified": true },
     { "code": "11new-rot", "name": "Shaposhnikova", "archeId": "BARRES-ROTATIONS", "branch": "A", "palier": "P7", "sourcePage": 56, "verified": true },
     { "code": "121rot", "name": "Depuis un élément codifié de l'appui facial BS filé avant à la suspension", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P2", "sourcePage": 56, "verified": true },
-    { "code": "150-26", "name": "De l'appui facial, sortie filée BI ou BS", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P2", "sourcePage": 56, "verified": true },
+    { "code": "150-26", "name": "De l'appui facial, sortie filée BI ou BS", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P2", "extraCategories": ["SORTIES"], "sourcePage": 56, "verified": true },
     { "code": "10new-rot", "name": "Elan circulaire groupé en avant (mains en supination)", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P4", "sourcePage": 56, "verified": true },
     { "code": "4new-rot", "name": "Du filé ou du pieds-mains, élan par-dessous BI, contre mouvement avec envol arrivée à la suspension avant la verticale de la barre", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P5", "sourcePage": 56, "verified": true },
     { "code": "106rot", "name": "Elan circulaire carpé ou groupé en arrière à l'ATR", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P6", "sourcePage": 56, "verified": true },
