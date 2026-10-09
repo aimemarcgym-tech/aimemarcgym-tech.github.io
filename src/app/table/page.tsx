@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import { palierRank, type Palier } from "@/regulation/types";
 import { isVariantElement, isMousseElement } from "@/regulation/variants";
+import DecompositionNote from "@/components/DecompositionNote";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SOL: "Sol",
@@ -39,6 +40,7 @@ function palierBadgeClasses(p: Palier) {
 export default function TablePage() {
   const apparatuses = getAvailableApparatuses();
   const [apparatus, setApparatus] = useState(apparatuses[0]);
+  const [vue, setVue] = useState<"elements" | "decomposition">("elements");
 
   const regulation = useMemo(() => getRegulation(apparatus), [apparatus]);
 
@@ -89,6 +91,27 @@ export default function TablePage() {
       </header>
 
       <main className="mx-auto max-w-[1600px] px-6 py-10 space-y-6">
+        <div className="flex flex-wrap gap-2 border-b border-border-subtle pb-3" role="tablist">
+          {(
+            [
+              ["elements", "Éléments par arche"],
+              ["decomposition", "Décomposition de la note"],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={vue === id}
+              onClick={() => setVue(id)}
+              className={`rounded-full px-4 py-1.5 text-sm font-semibold transition-colors ${
+                vue === id ? "accent-gradient text-white" : "border border-border-strong text-muted hover:text-foreground"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <div className="flex flex-wrap gap-2">
           {apparatuses.map((a) => (
             <button
@@ -106,7 +129,9 @@ export default function TablePage() {
           ))}
         </div>
 
-        <div className="space-y-8">
+        {vue === "decomposition" && <DecompositionNote apparatus={apparatus} />}
+
+        <div className={`space-y-8 ${vue === "decomposition" ? "hidden" : ""}`}>
           {archesWithElements.map(({ arche, elements }) => (
             <section key={arche.id} className="mx-auto w-fit max-w-full overflow-hidden rounded-xl border border-border-subtle">
               <div className="border-b border-border-subtle bg-surface-alt/50 px-4 py-3">
