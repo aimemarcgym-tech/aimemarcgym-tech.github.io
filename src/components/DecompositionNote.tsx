@@ -24,13 +24,13 @@ const norm = (p: string) => (p === "PREREQUIS" ? "PR" : p);
 
 function Barre({ couleur, children }: { couleur: string; children: React.ReactNode }) {
   return (
-    <div className="px-1 py-1 text-center text-[11px] font-bold text-white" style={{ background: couleur }}>
+    <div className="px-1 py-1 text-center text-[12px] font-bold text-white" style={{ background: couleur }}>
       {children}
     </div>
   );
 }
 
-const cellule = "h-[2.6rem] border-b border-r border-border-subtle px-1.5 py-1 text-center align-middle text-[11px] leading-tight text-foreground last:border-r-0";
+const cellule = "h-[2.8rem] border-b border-r border-border-subtle px-1.5 py-1 text-center align-middle text-[12px] leading-tight text-foreground last:border-r-0";
 
 // Ligne de titre colorée (une case par évolution).
 function LigneBarre({ evolutions, children }: { evolutions: Evolution[]; children: React.ReactNode }) {
@@ -70,7 +70,7 @@ function GrillePaliers({ actifs, couleur }: { actifs: string[]; couleur: string 
         return (
           <span
             key={p}
-            className="flex h-5 items-center justify-center text-[10px] font-semibold"
+            className="flex h-5 items-center justify-center text-[11px] font-semibold"
             style={
               ok
                 ? { background: couleur, color: "#fff" }
@@ -156,13 +156,13 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
               {parEvolution.map(({ e }) => (
                 <td key={e.id} className="border-r border-border-subtle py-3 text-center last:border-r-0">
                   <span
-                    className="mx-auto flex h-16 w-16 flex-col items-center justify-center rounded-full border-4 text-center text-[11px] font-bold leading-tight text-foreground"
+                    className="mx-auto flex h-16 w-16 flex-col items-center justify-center rounded-full border-4 text-center text-[12px] font-bold leading-tight text-foreground"
                     style={{ borderColor: COULEURS[e.id] ?? "#888" }}
                   >
                     <span>Évolution</span>
-                    <span className="text-base">{e.id}</span>
+                    <span className="text-[17px]">{e.id}</span>
                   </span>
-                  <span className="mt-1 block text-[10px] text-muted">{e.genre}</span>
+                  <span className="mt-1 block text-[11px] text-muted">{e.genre}</span>
                 </td>
               ))}
             </tr>
@@ -224,7 +224,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
                 {evolutions.map((e) => (
                   <td
                     key={e.id}
-                    className="px-1 py-1.5 text-center text-[10px] font-semibold uppercase tracking-wide text-muted"
+                    className="px-1 py-1.5 text-center text-[11px] font-semibold uppercase tracking-wide text-muted"
                   >
                     {e.valorisations.choisir === 4 && e.valorisations.parmi > 4
                       ? `Choisir ${e.valorisations.choisir} valorisations parmi les ${e.valorisations.parmi}`
@@ -237,7 +237,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
         </table>
       </div>
 
-      <p className="text-xs text-muted">
+      <p className="text-[13px] text-muted">
         (*) Valorisation pondérée. Les cases hachurées ne sont pas concernées par l&apos;évolution. Source : programme technique
         GAF 2026-2030, « Décomposition de la note ».
       </p>
@@ -245,9 +245,9 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
       {saut && (
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border-subtle p-4">
-            <h2 className="mb-2 text-sm font-semibold text-foreground">Pile de tapis (en filière jeune uniquement)</h2>
+            <h2 className="mb-2 text-[15px] font-semibold text-foreground">Pile de tapis (en filière jeune uniquement)</h2>
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[420px] border-collapse text-xs">
+              <table className="w-full min-w-[420px] border-collapse text-[13px]">
                 <thead>
                   <tr className="text-left text-muted">
                     {Object.keys(PILE_DE_TAPIS).map((id) => (
@@ -276,9 +276,9 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
           </section>
 
           <section className="rounded-xl border border-border-subtle p-4">
-            <h2 className="mb-2 text-sm font-semibold text-foreground">Valeur des sauts</h2>
+            <h2 className="mb-2 text-[15px] font-semibold text-foreground">Valeur des sauts</h2>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-center text-xs">
+              <table className="w-full border-collapse text-center text-[13px]">
                 <thead>
                   <tr className="bg-surface-alt text-muted">
                     <th className="px-2 py-1 text-left font-semibold">Paliers</th>
@@ -301,8 +301,8 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
                 </tbody>
               </table>
             </div>
-            <h3 className="mb-1 mt-4 text-sm font-semibold text-foreground">Précisions</h3>
-            <ul className="list-disc space-y-1 pl-5 text-xs text-muted">
+            <h3 className="mb-1 mt-4 text-[15px] font-semibold text-foreground">Précisions</h3>
+            <ul className="list-disc space-y-1 pl-5 text-[13px] text-muted">
               <li>
                 Je note chaque saut, puis j&apos;applique les fautes, je calcule la note finale PUIS j&apos;ajoute la valorisation
                 sur la meilleure des deux notes.
@@ -310,7 +310,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
               <li>À partir de 13 ans, trampo-tremp autorisé avec déduction d&apos;un point.</li>
               <li>Mini trampoline autorisé pour la saison 2026-2027 avec une pénalité de 1 point.</li>
             </ul>
-            <p className="mt-2 text-xs italic text-muted">Le tremplin-trampoline = tremplin pour les moins de 13 ans.</p>
+            <p className="mt-2 text-[13px] italic text-muted">Le tremplin-trampoline = tremplin pour les moins de 13 ans.</p>
           </section>
         </div>
       )}
