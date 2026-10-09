@@ -218,7 +218,7 @@ function SharedMovementBody({ data }: { data: MovementShareData }) {
             {data.elements.map((el, i) => (
               <li key={`${el.code}-${i}`} className="rounded border border-border-subtle bg-surface-alt p-2">
                 <div className="text-xs text-muted">
-                  {i + 1}. {el.archeName} {el.palier && el.palier !== "BASE" ? `· ${el.palier}` : ""}
+                  {i + 1}. {el.archeName} {el.palier ? `· ${PALIER_LABEL[el.palier] ?? el.palier}` : ""}
                 </div>
                 <div className="text-sm font-medium text-foreground">{el.name}</div>
                 {serieDe(el.serie) && (

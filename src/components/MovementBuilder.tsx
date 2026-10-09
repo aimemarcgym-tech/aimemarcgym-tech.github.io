@@ -48,6 +48,9 @@ function categoryForCheck(id: string, apparatus: string): string[] | null {
 
 type SkillStatus = "MAITRISE" | "EN_APPRENTISSAGE" | "NON_DISPONIBLE";
 
+// Paliers sans numéro, affichés en toutes lettres dans la séquence (Base, Nomade, Prérequis).
+const PALIER_NOMME: Record<string, string> = { BASE: "Base", NOMADE: "Nomade", PREREQUIS: "Prérequis" };
+
 export default function MovementBuilder({
   movementId,
   apparatus,
@@ -452,7 +455,7 @@ export default function MovementBuilder({
                         <DragHandle {...handleProps(i)} onClick={(e) => e.stopPropagation()} className="mt-0.5" />
                         <div>
                           <div className="text-xs text-muted">
-                            {i + 1}. {arche?.name} {el?.palier && el.palier !== "BASE" ? `· ${el.palier}` : ""}
+                            {i + 1}. {arche?.name} {el?.palier ? `· ${PALIER_NOMME[el.palier] ?? el.palier}` : ""}
                           </div>
                           <div className="text-sm font-medium text-foreground">{el?.name ?? s.code}</div>
                         </div>
