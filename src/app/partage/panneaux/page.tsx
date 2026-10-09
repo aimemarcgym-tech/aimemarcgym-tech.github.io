@@ -4,6 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getShare, type EquipmentShareData, type ShareDoc, type TeamPanelsShareData } from "@/lib/shares";
 import { summarizeTeamNotes } from "@/lib/teamNotes";
+import PassageOrderTabs from "@/components/PassageOrderTabs";
 import TeamNotesTable from "@/components/TeamNotesTable";
 
 function Reglages({ settings }: { settings: EquipmentShareData["gymnasts"][number]["settings"] }) {
@@ -34,25 +35,7 @@ function Contenu({ data }: { data: TeamPanelsShareData }) {
     <main className="mx-auto max-w-2xl space-y-6 px-6 py-8">
       <section className={section}>
         <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Ordres de passage</h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {data.passageOrder.apparatuses.map((a) => (
-            <div key={a.apparatus}>
-              <h3 className="mb-1.5 text-sm font-semibold text-foreground">{a.apparatusLabel}</h3>
-              <ol className="space-y-1.5">
-                {a.gymnasts.map((g, i) => (
-                  <li key={i} className="flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-alt/40 p-2 text-sm">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-solid text-[11px] font-semibold text-white">
-                      {i + 1}
-                    </span>
-                    <span className="text-foreground">
-                      {g.firstName} {g.lastName}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ))}
-        </div>
+        <PassageOrderTabs apparatuses={data.passageOrder.apparatuses} />
       </section>
 
       <section className={section}>

@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import PassageOrderTabs from "@/components/PassageOrderTabs";
 import { getShare, type PassageOrderAllShareData, type ShareDoc } from "@/lib/shares";
 
 function OrdresPassagePartagePageInner() {
@@ -51,30 +52,9 @@ function OrdresPassagePartagePageInner() {
       </header>
 
       <main className="mx-auto max-w-2xl space-y-6 px-6 py-8">
-        {data.apparatuses.map((a) => (
-          <section key={a.apparatus} className="rounded-lg border border-border-subtle bg-surface p-4">
-            <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">{a.apparatusLabel}</h2>
-            {a.gymnasts.length === 0 ? (
-              <p className="text-sm text-muted">Aucune gymnaste dans cette équipe.</p>
-            ) : (
-              <ol className="space-y-1.5">
-                {a.gymnasts.map((g, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center gap-2 rounded-lg border border-border-subtle bg-surface-alt/40 p-2 text-sm"
-                  >
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent-solid text-[11px] font-semibold text-white">
-                      {i + 1}
-                    </span>
-                    <span className="text-foreground">
-                      {g.firstName} {g.lastName}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </section>
-        ))}
+        <section className="rounded-lg border border-border-subtle bg-surface p-4">
+          <PassageOrderTabs apparatuses={data.apparatuses} />
+        </section>
 
         <p className="mt-6 text-center text-xs text-muted">
           Lien de partage en lecture seule, généré depuis l&apos;application Gestion Compétitions &amp; Entraînements.
