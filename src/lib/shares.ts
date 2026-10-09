@@ -105,6 +105,8 @@ export interface TeamAllShareData {
 export interface EquipmentShareData {
   club: string;
   team: string;
+  // Réglages communs de la carte « Toute l'équipe » (absents si non renseignés).
+  wholeTeam?: { ecartBarres?: string; tremplinCm?: string; tremplinPas?: string };
   gymnasts: { name: string; settings: { ecartBarres?: string; tremplinCm?: string; tremplinPas?: string } }[];
 }
 

@@ -72,6 +72,7 @@ function ReglagesPartagePageInner() {
         </div>
       </header>
       <main className="mx-auto max-w-2xl space-y-3 px-6 py-8">
+        {data.wholeTeam && <Card title="Toute l&apos;équipe" settings={data.wholeTeam} />}
         {data.gymnasts.map((g, i) => (
           <Card key={i} title={g.name} settings={g.settings} />
         ))}

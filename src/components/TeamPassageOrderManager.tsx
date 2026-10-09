@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getGymnasts, setGymnastsPassageOrder } from "@/lib/data";
+import { getGymnasts, getTeamEquipment, setGymnastsPassageOrder } from "@/lib/data";
+import { buildEquipmentShare } from "@/lib/equipmentShare";
 import { createShare } from "@/lib/shares";
 import { computeTeamStartNotes } from "@/lib/teamNotes";
 import ShareLinkButton from "@/components/ShareLinkButton";
@@ -184,11 +185,7 @@ export default function TeamPassageOrderManager() {
       notes: notes.evolution
         ? { evolution: notes.evolution, nbCompte: notes.nbCompte, gymnasts: notes.gymnasts, maxPerApparatus: notes.maxPerApparatus }
         : null,
-      equipment: {
-        club: selected.club,
-        team: selected.team,
-        gymnasts: team.map((g) => ({ name: `${g.firstName} ${g.lastName}`, settings: g.reglages ?? {} })),
-      },
+      equipment: buildEquipmentShare(selected.club, selected.team, await getTeamEquipment(teamKey), team),
     });
     return `/partage/panneaux/?id=${shareId}`;
   }

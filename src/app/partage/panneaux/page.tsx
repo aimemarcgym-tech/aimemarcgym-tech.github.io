@@ -67,7 +67,7 @@ function Contenu({ data }: { data: TeamPanelsShareData }) {
       <section className={section}>
         <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Réglages du matériel</h2>
         <div className="space-y-3">
-          {data.equipment.gymnasts.map((g, i) => (
+          {[...(data.equipment.wholeTeam ? [{ name: "Toute l’équipe", settings: data.equipment.wholeTeam }] : []), ...data.equipment.gymnasts].map((g, i) => (
             <div key={i} className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
               <div className="mb-2 text-sm font-medium text-foreground">{g.name}</div>
               <Reglages settings={g.settings} />

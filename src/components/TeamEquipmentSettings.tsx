@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getGymnasts, setGymnastEquipment } from "@/lib/data";
+import { getGymnasts, getTeamEquipment, setGymnastEquipment, setTeamEquipment } from "@/lib/data";
+import { buildEquipmentShare } from "@/lib/equipmentShare";
 import type { EquipmentSettings } from "@/lib/idb";
 import { createShare } from "@/lib/shares";
 import ShareLinkButton from "@/components/ShareLinkButton";
@@ -55,28 +56,30 @@ export default function TeamEquipmentSettings() {
     await setGymnastEquipment(g.id, { [key]: value });
   }
 
-  // Une même valeur pour toute l'équipe : écrite chez chaque gymnaste (elles restent modifiables une à une).
-  async function changeAll(key: keyof EquipmentSettings, value: string) {
-    const ids = new Set(members.map((g) => g.id));
-    setGymnasts((list) =>
-      list ? list.map((x) => (ids.has(x.id) ? { ...x, reglages: { ...x.reglages, [key]: value } } : x)) : list
-    );
-    await Promise.all(members.map((g) => setGymnastEquipment(g.id, { [key]: value })));
-  }
+  // Carte « Toute l'équipe » : réglages propres à l'équipe, sans toucher à ceux des gymnastes.
+  const [teamSettings, setTeamSettings] = useState<EquipmentSettings>({});
 
-  // Valeur commune à toute l'équipe, vide si les gymnastes diffèrent.
-  function commonValue(key: keyof EquipmentSettings) {
-    const first = members[0]?.reglages?.[key] ?? "";
-    return members.every((g) => (g.reglages?.[key] ?? "") === first) ? first : "";
+  useEffect(() => {
+    if (!teamKey) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTeamSettings({});
+      return;
+    }
+    let alive = true;
+    getTeamEquipment(teamKey).then((r) => alive && setTeamSettings(r));
+    return () => {
+      alive = false;
+    };
+  }, [teamKey]);
+
+  async function changeTeam(key: keyof EquipmentSettings, value: string) {
+    setTeamSettings((r) => ({ ...r, [key]: value }));
+    await setTeamEquipment(teamKey, { [key]: value });
   }
 
   async function share() {
     if (!selected) throw new Error("Équipe introuvable");
-    const id = await createShare("equipment", {
-      club: selected.club,
-      team: selected.team,
-      gymnasts: members.map((g) => ({ name: `${g.firstName} ${g.lastName}`, settings: g.reglages ?? {} })),
-    });
+    const id = await createShare("equipment", buildEquipmentShare(selected.club, selected.team, teamSettings, members));
     return `/partage/reglages/?id=${id}`;
   }
 
@@ -108,28 +111,24 @@ export default function TeamEquipmentSettings() {
           <div className="rounded-lg border border-accent-solid/50 bg-accent-from/10 p-3">
             <div className="mb-2 text-sm font-medium text-foreground">Toute l&apos;équipe</div>
             <div className="grid grid-cols-3 gap-2">
-              {FIELDS.map((f) => {
-                const common = commonValue(f.key);
-                const mixed = common === "" && members.some((g) => (g.reglages?.[f.key] ?? "") !== "");
-                return (
-                  <label key={f.key} className="flex flex-col">
-                    <span className="mb-1 block flex-1 text-[11px] font-medium text-muted">
-                      {f.label} ({f.unit})
-                    </span>
-                    <input
-                      type="text"
-                      inputMode="decimal"
-                      value={common}
-                      onChange={(e) => void changeAll(f.key, e.target.value)}
-                      placeholder={mixed ? "différents" : f.hint}
-                      aria-label={`${f.label} en ${f.unit} — toute l'équipe`}
-                      className={`${champ} !px-2 !py-1.5`}
-                    />
-                  </label>
-                );
-              })}
+              {FIELDS.map((f) => (
+                <label key={f.key} className="flex flex-col">
+                  <span className="mb-1 block flex-1 text-[11px] font-medium text-muted">
+                    {f.label} ({f.unit})
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={teamSettings[f.key] ?? ""}
+                    onChange={(e) => void changeTeam(f.key, e.target.value)}
+                    placeholder={f.hint}
+                    aria-label={`${f.label} en ${f.unit} — toute l'équipe`}
+                    className={`${champ} !px-2 !py-1.5`}
+                  />
+                </label>
+              ))}
             </div>
-            <p className="mt-2 text-xs text-muted">Une valeur saisie ici est appliquée à toutes les gymnastes de l&apos;équipe.</p>
+            <p className="mt-2 text-xs text-muted">Réglages communs à toute l&apos;équipe, sans effet sur les cartes ci-dessous. Le lien partagé n&apos;affiche que les cartes remplies.</p>
           </div>
           {members.map((g) => (
             <div key={g.id} className="rounded-lg border border-border-subtle bg-surface-alt/40 p-3">

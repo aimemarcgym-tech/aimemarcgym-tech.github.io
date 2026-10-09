@@ -669,3 +669,14 @@ export async function deleteResultDoc(docId: string) {
   const localDb = await getDb();
   await localDb.delete("resultDocs", docId);
 }
+
+// Réglages du matériel valables pour toute une équipe (carte « Toute l'équipe »), propres à l'équipe :
+// ils ne modifient pas ceux des gymnastes. Clé d'équipe « club::équipe ».
+export async function getTeamEquipment(teamKey: string): Promise<EquipmentSettings> {
+  const snap = await getDoc(docRef("teamEquipment", encodeURIComponent(teamKey)));
+  return snap.exists() ? ((snap.data().reglages as EquipmentSettings) ?? {}) : {};
+}
+
+export async function setTeamEquipment(teamKey: string, patch: Partial<Record<keyof EquipmentSettings, string>>) {
+  await setDoc(docRef("teamEquipment", encodeURIComponent(teamKey)), { reglages: patch }, { merge: true });
+}
