@@ -30,7 +30,7 @@ const doux = (c: string, pct: number) => `color-mix(in srgb, ${c} ${pct}%, trans
 
 function Barre({ couleur, children }: { couleur: string; children: React.ReactNode }) {
   return (
-    <div className="px-1 py-1 text-center text-[12px] font-semibold text-foreground" style={{ background: doux(couleur, 26), borderTop: `2px solid ${doux(couleur, 70)}` }}>
+    <div className="px-1 py-1 text-center text-[12px] font-semibold text-foreground" style={{ background: doux(couleur, 14), borderTop: `2px solid ${doux(couleur, 45)}` }}>
       {children}
     </div>
   );
@@ -79,7 +79,7 @@ function GrillePaliers({ actifs, couleur }: { actifs: string[]; couleur: string 
             className="flex h-5 items-center justify-center text-[11px] font-semibold"
             style={
               ok
-                ? { background: doux(couleur, 38), color: "var(--foreground)" }
+                ? { background: doux(couleur, 22), color: "var(--foreground)" }
                 : {
                     background: "repeating-linear-gradient(45deg, transparent 0 3px, var(--color-border-strong, #555) 3px 4px)",
                     color: "transparent",
