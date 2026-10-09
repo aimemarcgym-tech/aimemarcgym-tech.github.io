@@ -22,9 +22,12 @@ const PALIERS_GRILLE = ["PR", "P1", "P2", "P3", "P4", "P5", "P6", "P7"] as const
 
 const norm = (p: string) => (p === "PREREQUIS" ? "PR" : p);
 
+// Version adoucie d'une couleur d'évolution (translucide sur le fond sombre).
+const doux = (c: string, pct: number) => `color-mix(in srgb, ${c} ${pct}%, transparent)`;
+
 function Barre({ couleur, children }: { couleur: string; children: React.ReactNode }) {
   return (
-    <div className="px-1 py-1 text-center text-[12px] font-bold text-white" style={{ background: couleur }}>
+    <div className="px-1 py-1 text-center text-[12px] font-semibold text-foreground" style={{ background: doux(couleur, 38), borderTop: `2px solid ${doux(couleur, 80)}` }}>
       {children}
     </div>
   );
@@ -73,7 +76,7 @@ function GrillePaliers({ actifs, couleur }: { actifs: string[]; couleur: string 
             className="flex h-5 items-center justify-center text-[11px] font-semibold"
             style={
               ok
-                ? { background: couleur, color: "#fff" }
+                ? { background: doux(couleur, 45), color: "var(--color-foreground, #fff)" }
                 : {
                     background: "repeating-linear-gradient(45deg, transparent 0 3px, var(--color-border-strong, #555) 3px 4px)",
                     color: "transparent",
@@ -156,8 +159,8 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
               {parEvolution.map(({ e }) => (
                 <td key={e.id} className="border-r border-border-subtle py-3 text-center last:border-r-0">
                   <span
-                    className="mx-auto flex h-16 w-16 flex-col items-center justify-center rounded-full border-4 text-center text-[12px] font-bold leading-tight text-foreground"
-                    style={{ borderColor: COULEURS[e.id] ?? "#888" }}
+                    className="mx-auto flex h-[4.5rem] w-[4.5rem] flex-col items-center justify-center rounded-full border-4 text-center text-[12px] font-bold leading-tight text-foreground"
+                    style={{ borderColor: doux(COULEURS[e.id] ?? "#888", 70) }}
                   >
                     <span>Évolution</span>
                     <span className="text-[17px]">{e.id}</span>
