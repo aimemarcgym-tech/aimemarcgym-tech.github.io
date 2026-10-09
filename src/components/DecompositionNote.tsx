@@ -7,8 +7,19 @@ import type { Evolution } from "@/regulation/types";
 // avec le tronc commun, les paliers autorisés et valorisables, puis les valorisations. Tout vient des
 // données réglementaires de l'appli (src/regulation/data/*/decomposition.json).
 
-// Couleur d'accent de l'application, commune à toutes les évolutions.
-const ACCENT = "var(--accent-solid)";
+// Une teinte par évolution, prise dans la palette de l'application (bleu ciel, turquoise, vert, jaune,
+// orange, rose, violets) : dégradé du plus doux (A1) au plus soutenu (C3).
+const COULEURS: Record<string, string> = {
+  A1: "#38bdf8",
+  A2: "#2dd4bf",
+  B1: "#34d399",
+  B2: "#fbbf24",
+  B3: "#fb923c",
+  C1: "#ec4899",
+  C2: "#a855f7",
+  C3: "#8b5cf6",
+};
+const couleurDe = (id: string) => COULEURS[id] ?? "#a855f7";
 
 const PALIERS_GRILLE = ["PR", "P1", "P2", "P3", "P4", "P5", "P6", "P7"] as const;
 
@@ -19,7 +30,7 @@ const doux = (c: string, pct: number) => `color-mix(in srgb, ${c} ${pct}%, trans
 
 function Barre({ couleur, children }: { couleur: string; children: React.ReactNode }) {
   return (
-    <div className="px-1 py-1 text-center text-[12px] font-semibold text-foreground" style={{ background: doux(couleur, 22), borderTop: `2px solid ${doux(couleur, 70)}` }}>
+    <div className="px-1 py-1 text-center text-[12px] font-semibold text-foreground" style={{ background: doux(couleur, 26), borderTop: `2px solid ${doux(couleur, 70)}` }}>
       {children}
     </div>
   );
@@ -33,7 +44,7 @@ function LigneBarre({ evolutions, children }: { evolutions: Evolution[]; childre
     <tr>
       {evolutions.map((e) => (
         <td key={e.id} className="p-0">
-          <Barre couleur={ACCENT}>{children}</Barre>
+          <Barre couleur={couleurDe(e.id)}>{children}</Barre>
         </td>
       ))}
     </tr>
@@ -68,7 +79,7 @@ function GrillePaliers({ actifs, couleur }: { actifs: string[]; couleur: string 
             className="flex h-5 items-center justify-center text-[11px] font-semibold"
             style={
               ok
-                ? { background: doux(couleur, 35), color: "var(--foreground)" }
+                ? { background: doux(couleur, 38), color: "var(--foreground)" }
                 : {
                     background: "repeating-linear-gradient(45deg, transparent 0 3px, var(--color-border-strong, #555) 3px 4px)",
                     color: "transparent",
@@ -152,7 +163,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
                 <td key={e.id} className="border-r border-border-subtle py-3 text-center last:border-r-0">
                   <span
                     className="mx-auto flex h-[4.5rem] w-[4.5rem] flex-col items-center justify-center rounded-full border-4 text-center text-[12px] font-bold leading-tight text-foreground"
-                    style={{ borderColor: doux(ACCENT, 70) }}
+                    style={{ borderColor: doux(couleurDe(e.id), 70) }}
                   >
                     <span>Évolution</span>
                     <span className="text-[17px]">{e.id}</span>
@@ -180,7 +191,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
             <tr>
               {evolutions.map((e) => (
                 <td key={e.id} className="border-r border-border-subtle last:border-r-0">
-                  <GrillePaliers actifs={e.paliersAutorises} couleur={ACCENT} />
+                  <GrillePaliers actifs={e.paliersAutorises} couleur={couleurDe(e.id)} />
                 </td>
               ))}
             </tr>
@@ -188,7 +199,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
             <tr>
               {evolutions.map((e) => (
                 <td key={e.id} className="border-r border-border-subtle last:border-r-0">
-                  <GrillePaliers actifs={e.paliersValorisables} couleur={ACCENT} />
+                  <GrillePaliers actifs={e.paliersValorisables} couleur={couleurDe(e.id)} />
                 </td>
               ))}
             </tr>
@@ -246,7 +257,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
                 <thead>
                   <tr className="text-left text-muted">
                     {Object.keys(PILE_DE_TAPIS).map((id) => (
-                      <th key={id} className="px-2 py-1 font-semibold" style={{ color: ACCENT }}>
+                      <th key={id} className="px-2 py-1 font-semibold" style={{ color: couleurDe(id) }}>
                         {id} — détails des PR
                       </th>
                     ))}
