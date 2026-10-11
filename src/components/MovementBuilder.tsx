@@ -170,6 +170,8 @@ export default function MovementBuilder({
   function categoryKeyOf(archeId: string, branch: string | null): string {
     // Acros : une seule ligne par arche (Acros 1, Acros 2), avant, arrière et sans sens regroupés.
     if (archeByCode.get(archeId)?.category === "ACRO") return archeId;
+    // Barres : une seule ligne par arche (Balancés avant et arrière regroupés).
+    if (apparatus === "BARRES_ASYM") return archeId;
     if (branch === "avant" || branch === "arriere" || branch === "maintien" || branch === "souplesse" || branch === "atr") {
       return `${archeId}:${branch}`;
     }
