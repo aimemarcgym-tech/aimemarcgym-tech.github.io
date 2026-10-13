@@ -75,7 +75,7 @@
     { "code": "10new-rot", "name": "Elan circulaire groupé en avant (mains en supination)", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P4", "sourcePage": 56, "verified": true },
     { "code": "4new-rot", "name": "Du filé ou du pieds-mains, élan par-dessous BI, contre mouvement avec envol arrivée à la suspension avant la verticale de la barre", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P5", "sourcePage": 56, "verified": true },
     { "code": "106rot", "name": "Elan circulaire carpé ou groupé en arrière à l'ATR", "archeId": "BARRES-ROTATIONS", "branch": "B", "palier": "P6", "sourcePage": 56, "verified": true },
-    { "code": "156-26", "name": "De l'appui facial, sortie filée 1/2 tour (180°) BI ou BS", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P3", "rotationDeg": 180, "sourcePage": 56, "verified": true },
+    { "code": "156-26", "name": "De l'appui facial, sortie filée 1/2 tour (180°) BI ou BS", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P3", "rotationDeg": 180, "extraCategories": ["ROTATIONS"], "sourcePage": 56, "verified": true },
     { "code": "164-26", "name": "Départ libre, sortie pieds mains ou filée salto avant", "archeId": "BARRES-SORTIES", "branch": null, "palier": "NOMADE", "sourcePage": 56, "verified": true },
     { "code": "167-26", "name": "Pieds/mains filée salto avant avec demi-tour", "archeId": "BARRES-SORTIES", "branch": null, "palier": "NOMADE", "sourcePage": 56, "verified": true },
     { "code": "86-26", "name": "Roulade avant contrôlée", "archeId": "BARRES-ROTATIONS", "branch": null, "palier": "PREREQUIS", "sourcePage": 56, "verified": true },

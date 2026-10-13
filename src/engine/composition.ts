@@ -1,6 +1,6 @@
 import { getArche, getElement, getRegulation } from "@/regulation/loader";
 import { getCheck } from "@/regulation/checks";
-import { isVariantElement, isSortieElement, countingKey } from "@/regulation/variants";
+import { isVariantElement, isSortieElement } from "@/regulation/variants";
 import { PALIER_ORDER, palierRank, type CheckSpec, type Evolution, type Palier, type RegElement } from "@/regulation/types";
 
 export interface MovementElementRef {
@@ -280,8 +280,8 @@ export function analyzeMovement(
   });
   const archesOk = archesUsed.length >= evolution.troncCommun.arches;
   // FAQ #160 : les répétitions d'un même élément ne comptent qu'une fois dans le nombre d'éléments.
-  // Sol : rondade, flic-flac arrière et avant comptent pour un seul élément avec leur variante.
-  const distinctCount = new Set(elements.map((e) => countingKey(apparatus, e.code))).size;
+  // FAQ #100/#172/#193/#205 : un élément « + » et l'élément normal sont deux éléments différents (comptés séparément).
+  const distinctCount = new Set(elements.map((e) => e.code)).size;
   const countOk = distinctCount >= evolution.troncCommun.elementsMin && distinctCount <= evolution.troncCommun.elementsMax;
   const tcExigencesOk = tcExigences.every((r) => r.status === "OK");
   const troncCommunComplete = archesOk && countOk && tcExigencesOk;
