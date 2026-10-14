@@ -21,10 +21,10 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "28"
       },
       {
-        "code": "146"
+        "code": "73"
       },
       {
-        "code": "73"
+        "code": "146"
       }
     ],
     "confirmations": [
