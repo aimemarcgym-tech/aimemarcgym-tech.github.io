@@ -21,6 +21,8 @@ const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
 // Éléments qu'on peut placer plusieurs fois dans un même mouvement (les autres ne se placent qu'une fois).
 const ELEMENTS_REPETABLES: Record<string, string[]> = {
   BARRES_ASYM: ["117bb", "116-26"], // Balancé avant à l'horizontale, Balancé arrière (P2)
+  // Sol : rondade, flip et saut de mains sont répétables dans les LAE mais comptés une seule fois (brochure, FAQ #222).
+  SOL: ["148", "148+", "155", "195+", "153", "154", "154+"], // Rondade, Flic-Flac arrière, Saut de mains 1 pied / 2 pieds (+ variantes)
 };
 
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
