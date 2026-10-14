@@ -183,86 +183,79 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "B2",
-    "titre": "Sol B2 — mouvement à la note maximale",
+    "titre": "Sol B2 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
       {
         "code": "9pivot"
       },
       {
-        "code": "154",
-        "serie": "ACRO"
+        "code": "148+"
       },
       {
-        "code": "148",
-        "serie": "ACRO"
+        "code": "195+"
       },
       {
-        "code": "128biche",
+        "code": "169"
+      },
+      {
+        "code": "45enjambe",
         "serie": "GYMNIQUE"
       },
       {
-        "code": "27chat",
+        "code": "39chat",
         "serie": "GYMNIQUE"
       },
       {
-        "code": "19pivot"
+        "code": "153"
       },
       {
-        "code": "148+",
-        "serie": "ACRO"
-      },
-      {
-        "code": "169",
-        "serie": "ACRO"
+        "code": "154"
       }
     ],
     "confirmations": [
       "B2-V1",
       "B2-V2",
       "B2-V3",
-      "B2-V4",
-      "B2-V5"
+      "B2-V4"
     ],
     "validations": {
       "B2-TC-1": [
-        "154",
-        "148",
         "148+",
-        "169"
+        "195+",
+        "169",
+        "153",
+        "154"
       ],
       "B2-TC-2": [
         "148+",
+        "195+",
         "169",
-        "19pivot"
+        "45enjambe",
+        "39chat"
       ],
       "B2-TC-3": [
-        "128biche",
-        "27chat"
+        "45enjambe",
+        "39chat"
       ],
       "B2-V1": [
-        "154",
-        "148"
+        "153",
+        "154"
       ],
       "B2-V2": [
         "148+",
-        "169"
+        "195+"
       ],
       "B2-V3": [
-        "128biche"
+        "45enjambe"
       ],
       "B2-V4": [
-        "169"
-      ],
-      "B2-V5": [
-        "154",
-        "148",
-        "148+",
         "169"
       ]
     },
     "remarques": [
-      "Deux LAE distinctes : saut de mains-rondade, puis rondade « + »-salto arrière groupé (FAQ #172, #222).",
-      "« 2 acros de sens différents dans les LAE » : une liaison vers l'avant (saut de mains-rondade) et une vers l'arrière (rondade-salto). Le sens d'une liaison est celui de son élément de liaison (FAQ #190) : à confirmer."
+      "Deux LAE distinctes : rondade « + », flic-flac « + », salto arrière groupé ou carpé ; puis saut de mains 1 pied, saut de mains 2 pieds.",
+      "« 1 LAE dont 1 acro avec appui manuel » est validée par la LAE de saut de mains (153, 154), « 1 LAE dont 1 élément P4 » par la LAE rondade-flic-flac « + » : chaque valorisation a ses propres éléments.",
+      "« 2 acros de sens différents dans les LAE » n'est pas confirmée : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
   },
   {
