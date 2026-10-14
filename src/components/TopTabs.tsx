@@ -226,6 +226,12 @@ export default function TopTabs() {
         Table
       </Link>
       <Link
+        href="/exemples"
+        className={tabClasses(pathname.startsWith("/exemples"))}
+      >
+        Exemples
+      </Link>
+      <Link
         href="/entrainement"
         className={tabClasses(pathname.startsWith("/entrainement"))}
       >
