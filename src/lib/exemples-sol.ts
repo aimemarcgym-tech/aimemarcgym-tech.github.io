@@ -6,31 +6,25 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "A1",
-    "titre": "Sol A1 — mouvement à la note maximale",
+    "titre": "Sol A1 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
-      {
-        "code": "4pivot"
-      },
-      {
-        "code": "103",
-        "serie": "ACRO"
-      },
-      {
-        "code": "99",
-        "serie": "ACRO"
-      },
-      {
-        "code": "27chat"
-      },
       {
         "code": "2"
       },
       {
-        "code": "73"
+        "code": "4pivot"
       },
       {
-        "code": "149",
-        "serie": "ACRO"
+        "code": "82new"
+      },
+      {
+        "code": "28"
+      },
+      {
+        "code": "146"
+      },
+      {
+        "code": "73"
       }
     ],
     "confirmations": [
@@ -44,27 +38,26 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "73"
       ],
       "A1-TC-2": [
-        "103",
-        "99",
-        "149"
+        "82new",
+        "146"
       ],
       "A1-V1": [
         "2"
       ],
       "A1-V2": [
-        "27chat"
+        "28"
       ],
       "A1-V3": [
-        "99"
+        "73"
       ],
       "A1-V4": [
-        "103",
-        "99"
+        "82new",
+        "146"
       ]
     },
     "remarques": [
-      "« 1 élément P2 » est validé par la roulade arrière (99), distincte de l'ATR (2) et du saut (27chat).",
-      "« 2 acros de sens différents » : roulade avant (103) et roulade arrière (99)."
+      "« 2 acros de sens différents » : roulade arrière (82new, arrière) et roue (146, avant).",
+      "« 1 élément P2 » est validé par le grand écart antéro-postérieur (73), distinct de l'ATR (2) et du saut (28)."
     ]
   },
   {
