@@ -43,6 +43,8 @@ export interface Diagnostic {
   };
   valorisations: {
     results: CheckResult[];
+    // Avertissements (jamais bloquants) : un même élément ne peut valider qu'une seule valorisation (FAQ #214, #45, #47).
+    avertissements?: string[];
     validatedCount: number;
     choisir: number;
     parmi: number;
@@ -256,6 +258,92 @@ function evaluateCheck(
   }
 }
 
+// Avertit quand des valorisations confirmées s'appuient sur les mêmes éléments (FAQ #214 : un élément ne valide
+// qu'une seule valorisation ; FAQ #45/#47 : une sortie avec liaison acro utilise aussi l'acro qui la précède).
+// Ne juge que ce que le moteur sait identifier (valorisations à critère d'élément, « sortie avec liaison acro » à
+// la Poutre) ; les autres, vérifiées à la main, ne déclenchent rien. « 2 acros de sens différents » est exemptée.
+function findValorisationOverlaps(
+  apparatus: string,
+  evolution: Evolution,
+  elements: RegElement[],
+  confirmed: Set<string>
+): string[] {
+  const valorisable = new Set(evolution.paliersValorisables);
+  const distinct = elements.filter((e, k) => elements.findIndex((x) => x.code === e.code) === k);
+  const warnings: string[] = [];
+
+  // Éléments utilisés par une « sortie avec liaison acro » : la sortie finale et l'acro qui la précède.
+  const reserved = new Map<string, string>(); // code -> libellé de la valorisation
+  const last = elements[elements.length - 1];
+  const before = elements[elements.length - 2];
+  const slots: { label: string; candidates: string[]; need: number }[] = [];
+
+  for (const opt of evolution.valorisations.options) {
+    if (!confirmed.has(opt.id)) continue;
+    const spec = getCheck(opt.id, apparatus);
+    if (apparatus === "POUTRE" && /sortie avec liaison acro/i.test(opt.label)) {
+      if (last && isSortieElement(last.archeId, last.extraCategories)) {
+        reserved.set(last.code, opt.label);
+        if (before && elementCategories(apparatus, before).includes("ACRO")) reserved.set(before.code, opt.label);
+      }
+      continue;
+    }
+    let candidates: RegElement[] | null = null;
+    let need = 1;
+    if (spec.type === "ELEMENT_AT_PALIER_MIN") {
+      const minRank = palierRank(spec.palierMin);
+      need = spec.min ?? 1;
+      candidates = distinct.filter(
+        (e) =>
+          valorisable.has(e.palier) &&
+          (!spec.category || elementCategories(apparatus, e).includes(spec.category)) &&
+          !(spec.excludeSorties && isSortieElement(e.archeId, e.extraCategories)) &&
+          palierRank(e.palier) >= minRank &&
+          minRank >= 0
+      );
+    } else if (spec.type === "SALTO_AT_PALIER_MIN") {
+      const minRank = palierRank(spec.palierMin);
+      candidates = distinct.filter((e) => valorisable.has(e.palier) && isSalto(e.name) && palierRank(e.palier) >= minRank);
+    } else if (spec.type === "NAME_CONTAINS_ALL") {
+      need = spec.min ?? 1;
+      candidates = distinct.filter((e) => valorisable.has(e.palier) && spec.terms.every((t) => e.name.toLowerCase().includes(t)));
+    }
+    if (candidates) slots.push({ label: opt.label, candidates: candidates.map((c) => c.code), need });
+  }
+
+  // Affectation : chaque valorisation doit trouver `need` éléments distincts, hors éléments réservés par une liaison.
+  const owner = new Map<string, number>(); // code -> index du slot
+  function assign(i: number, seen: Set<string>): boolean {
+    for (const code of slots[i].candidates) {
+      if (reserved.has(code) || seen.has(code)) continue;
+      seen.add(code);
+      const o = owner.get(code);
+      if (o === undefined || assign(o, seen)) {
+        owner.set(code, i);
+        return true;
+      }
+    }
+    return false;
+  }
+  slots.forEach((slot, i) => {
+    for (let n = 0; n < slot.need; n++) {
+      if (assign(i, new Set())) continue;
+      const taken = slot.candidates.filter((c) => reserved.has(c));
+      if (slot.candidates.length === 0) {
+        warnings.push(`« ${slot.label} » est confirmée, mais aucun élément du mouvement ne la remplit.`);
+      } else if (taken.length > 0) {
+        warnings.push(
+          `« ${slot.label} » s'appuie sur un élément déjà utilisé par « ${reserved.get(taken[0])} » : un élément ne valide qu'une seule valorisation (FAQ #45, #214).`
+        );
+      } else {
+        warnings.push(`« ${slot.label} » s'appuie sur des éléments déjà utilisés par une autre valorisation : un élément ne valide qu'une seule valorisation (FAQ #214).`);
+      }
+      return;
+    }
+  });
+  return Array.from(new Set(warnings));
+}
+
 export function analyzeMovement(
   apparatus: string,
   evolutionId: string,
@@ -355,6 +443,7 @@ export function analyzeMovement(
     liaisons: { dernierEnVariante: findVariantEndingViolations(apparatus, elements) },
     valorisations: {
       results: valoResults,
+      avertissements: findValorisationOverlaps(apparatus, evolution, elements, manualConfirmations),
       validatedCount: validated.length,
       choisir: evolution.valorisations.choisir,
       parmi: evolution.valorisations.parmi,

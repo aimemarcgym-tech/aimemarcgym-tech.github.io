@@ -618,6 +618,13 @@ export default function MovementBuilder({
                 />
               ))}
             </ul>
+            {(diagnostic.valorisations.avertissements?.length ?? 0) > 0 && (
+              <ul className="mt-2 space-y-1 rounded border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning">
+                {diagnostic.valorisations.avertissements!.map((w) => (
+                  <li key={w}>⚠ {w}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="accent-gradient rounded px-4 py-3 text-white shadow-lg shadow-accent-from/20">
