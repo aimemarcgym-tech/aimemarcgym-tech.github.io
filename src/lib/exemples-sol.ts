@@ -121,33 +121,27 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "B1",
-    "titre": "Sol B1 — mouvement à la note maximale",
+    "titre": "Sol B1 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
       {
         "code": "9pivot"
       },
       {
-        "code": "148",
-        "serie": "ACRO"
+        "code": "148+"
       },
       {
-        "code": "155",
-        "serie": "ACRO"
-      },
-      {
-        "code": "128biche",
-        "serie": "GYMNIQUE"
+        "code": "155"
       },
       {
         "code": "27chat",
         "serie": "GYMNIQUE"
       },
       {
-        "code": "127"
+        "code": "37saut",
+        "serie": "GYMNIQUE"
       },
       {
-        "code": "154",
-        "serie": "ACRO"
+        "code": "153"
       }
     ],
     "confirmations": [
@@ -158,32 +152,32 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
     ],
     "validations": {
       "B1-TC-1": [
-        "148",
+        "148+",
         "155"
       ],
       "B1-TC-2": [
-        "128biche",
-        "27chat"
+        "27chat",
+        "37saut"
       ],
       "B1-V2": [
-        "148",
+        "148+",
         "155"
       ],
       "B1-V3": [
-        "128biche"
+        "37saut"
       ],
       "B1-V4": [
-        "154"
+        "153"
       ],
       "B1-V5": [
-        "154",
-        "155"
+        "155",
+        "153"
       ]
     },
     "remarques": [
-      "LAE : rondade (148) puis flic-flac (155), le flic-flac est en P3.",
-      "« 2 acros de sens différents » : saut de mains (154, avant) et flic-flac (155, arrière). Le sens d'une liaison est celui de son élément de liaison (FAQ #190) : à confirmer.",
-      "La valorisation « ATR tenu 2'' départ et retour en fente » n'est pas utilisée : les quatre autres suffisent pour atteindre la note maximale (4 retenues sur 5)."
+      "LAE : rondade « + » (P4) puis flic-flac (P3).",
+      "« 1 ATR tenu 2'' départ et retour en fente » n'est pas utilisée : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5).",
+      "« 2 acros de sens différents » : flic-flac (arrière) et saut de mains (avant) : à confirmer."
     ]
   },
   {
