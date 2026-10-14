@@ -63,29 +63,25 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "A2",
-    "titre": "Sol A2 — mouvement à la note maximale",
+    "titre": "Sol A2 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
-      {
-        "code": "86new"
-      },
-      {
-        "code": "27chat",
-        "serie": "GYMNIQUE"
-      },
-      {
-        "code": "28",
-        "serie": "GYMNIQUE"
-      },
       {
         "code": "2"
       },
       {
-        "code": "146",
-        "serie": "ACRO"
+        "code": "9pivot"
       },
       {
-        "code": "149",
-        "serie": "ACRO"
+        "code": "146"
+      },
+      {
+        "code": "28"
+      },
+      {
+        "code": "103"
+      },
+      {
+        "code": "149"
       }
     ],
     "confirmations": [
@@ -96,11 +92,11 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
     ],
     "validations": {
       "A2-TC-1": [
-        "27chat",
         "28"
       ],
       "A2-TC-2": [
         "146",
+        "103",
         "149"
       ],
       "A2-V1": [
@@ -118,8 +114,8 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ]
     },
     "remarques": [
-      "« Sursaut + fente + roue » : le sursaut et la fente (non codifiés) précèdent la roue (146), qui suit l'ATR départ et retour en fente (2).",
-      "« 2 acros de sens différents » : roue (avant) et souplesse arrière (149)."
+      "« Sursaut + fente + roue » : validée par la roue (146), précédée du sursaut et de la fente (non codifiés). À confirmer.",
+      "« 2 acros de sens différents » : roue (avant) et souplesse arrière (arrière)."
     ]
   },
   {
