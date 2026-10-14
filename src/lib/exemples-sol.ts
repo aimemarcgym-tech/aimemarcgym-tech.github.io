@@ -154,7 +154,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "serie": "GYMNIQUE"
       },
       {
-        "code": "2"
+        "code": "127"
       },
       {
         "code": "154",
@@ -162,7 +162,6 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       }
     ],
     "confirmations": [
-      "B1-V1",
       "B1-V2",
       "B1-V3",
       "B1-V4",
@@ -176,9 +175,6 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       "B1-TC-2": [
         "128biche",
         "27chat"
-      ],
-      "B1-V1": [
-        "2"
       ],
       "B1-V2": [
         "148",
@@ -198,7 +194,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
     "remarques": [
       "LAE : rondade (148) puis flic-flac (155), le flic-flac est en P3.",
       "« 2 acros de sens différents » : saut de mains (154, avant) et flic-flac (155, arrière). Le sens d'une liaison est celui de son élément de liaison (FAQ #190) : à confirmer.",
-      "Quatre valorisations sont retenues sur cinq : toutes les cinq sont remplies, avec des éléments distincts."
+      "La valorisation « ATR tenu 2'' départ et retour en fente » n'est pas utilisée : les quatre autres suffisent pour atteindre la note maximale (4 retenues sur 5)."
     ]
   },
   {
@@ -289,44 +285,35 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "B3",
-    "titre": "Sol B3 — mouvement à la note maximale",
+    "titre": "Sol B3 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
       {
-        "code": "9pivot"
-      },
-      {
-        "code": "148",
+        "code": "148+",
         "serie": "ACRO"
       },
       {
-        "code": "155",
+        "code": "195+",
         "serie": "ACRO"
-      },
-      {
-        "code": "169",
-        "serie": "ACRO"
-      },
-      {
-        "code": "45enjambe",
-        "serie": "GYMNIQUE"
-      },
-      {
-        "code": "19pivot"
-      },
-      {
-        "code": "154",
-        "serie": "ACRO"
-      },
-      {
-        "code": "158",
-        "serie": "ACRO"
-      },
-      {
-        "code": "128biche",
-        "serie": "GYMNIQUE"
       },
       {
         "code": "172",
+        "serie": "ACRO"
+      },
+      {
+        "code": "10pivot"
+      },
+      {
+        "code": "51enjambe"
+      },
+      {
+        "code": "44saut"
+      },
+      {
+        "code": "154+",
+        "serie": "ACRO"
+      },
+      {
+        "code": "170",
         "serie": "ACRO"
       }
     ],
@@ -334,48 +321,46 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       "B3-V1",
       "B3-V2",
       "B3-V3",
-      "B3-V4",
       "B3-V5"
     ],
     "validations": {
       "B3-TC-1": [
-        "45enjambe",
-        "128biche"
+        "51enjambe",
+        "44saut"
       ],
       "B3-TC-2": [
-        "148",
-        "155",
-        "169",
-        "154",
-        "158"
+        "148+",
+        "195+",
+        "172",
+        "154+",
+        "170"
       ],
       "B3-TC-3": [
-        "158",
-        "172"
+        "172",
+        "51enjambe"
       ],
       "B3-V1": [
-        "169"
+        "154+",
+        "170"
       ],
       "B3-V2": [
-        "154",
-        "158"
-      ],
-      "B3-V3": [
-        "45enjambe"
-      ],
-      "B3-V4": [
+        "148+",
+        "195+",
         "172"
       ],
+      "B3-V3": [
+        "51enjambe"
+      ],
       "B3-V5": [
-        "155",
-        "154",
-        "158"
+        "195+",
+        "154+",
+        "170"
       ]
     },
     "remarques": [
-      "LAE 1 : rondade, flic-flac, salto arrière groupé (appel 2 pieds). LAE 2 : saut de mains, flic-flac avant (P5).",
-      "Le salto tendu (172) est réalisé seul en fin de mouvement : il valide « 1 salto en P5 » sans réutiliser le P5 de la LAE 2.",
-      "« 2 acros de sens différents » : LAE vers l'arrière puis LAE vers l'avant : à confirmer."
+      "LAE 1 : rondade « + », flic-flac « + », salto arrière tendu (P5). LAE 2 : saut de mains « + », salto avant groupé ou carpé (appel 2 pieds).",
+      "« 1 salto en P5 » n'est pas confirmée : le salto tendu (P5) sert déjà à « 1 LAE dont 1 élément P5 » (un élément ne valide qu'une seule valorisation). Les quatre autres valorisations suffisent pour la note maximale.",
+      "« 2 acros de sens différents » : LAE vers l'arrière (rondade-flic-flac-salto) puis LAE vers l'avant (saut de mains-salto avant) : à confirmer."
     ]
   },
   {
