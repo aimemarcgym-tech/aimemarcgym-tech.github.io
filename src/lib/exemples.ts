@@ -1,3 +1,5 @@
+import { EXEMPLES_SOL } from "@/lib/exemples-sol";
+
 // Mouvements d'exemple, un par agrès et par niveau, construits pour viser la note de départ maximale.
 // Chaque exemple pointe vers des codes d'éléments du référentiel (src/regulation/data/*) ; le moteur calcule
 // la note et les validations, rien d'autre n'est stocké ici. Pour l'instant la liste est vide (architecture).
@@ -16,7 +18,7 @@ export interface ExempleMouvement {
   remarques?: string[];
 }
 
-export const EXEMPLES: ExempleMouvement[] = [];
+export const EXEMPLES: ExempleMouvement[] = [...EXEMPLES_SOL];
 
 export function getExemple(apparatus: string, evolutionId: string): ExempleMouvement | undefined {
   return EXEMPLES.find((e) => e.apparatus === apparatus && e.evolutionId === evolutionId);
