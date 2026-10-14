@@ -23,15 +23,24 @@ export function getApparatusTips(apparatus: string): string[] {
       return [
         "Les sorties comptent pour le tronc commun (« X acros en poutre haute ») mais jamais pour une valorisation « acro sur la poutre » : il faut un élément avec réception sur la poutre, pas une sortie en bout de poutre.",
         "Les éléments de l'arche des Entrées ne valident jamais une exigence ou valorisation acro, même ceux qui y ressemblent (roue, flip, salto).",
+        "Liaison mixte (LM) : un élément gymnique (pivot ou saut uniquement) + un acro, et les deux doivent être dans les paliers valorisables. Ex. en B3, saut de chat (P2) + roue ne valide pas la LM.",
+        "Un élément de l'arche ATR ne valide pas « acro en poutre haute » : il faut un élément des arches Acros 1 ou 2. Le saut droit (Acros 1) peut valider un acro, mais pas un acro et un saut en même temps.",
+        "Un élément « + » est un élément à part entière, enchaîné directement à un autre élément (rondade « + » = rondade suivie d'un élément). Une LAE est par défaut une LA.",
       ];
     case "SOL":
       return [
         "« 2 acros de sens différents » est la seule valorisation qui peut réutiliser des éléments déjà comptés dans une autre valorisation — pour toutes les autres, il faut des éléments distincts.",
+        "Rondade, flip et saut de mains sont répétables dans les LAE mais comptés une seule fois dans le nombre d'éléments. L'élément « + » et l'élément normal sont deux éléments différents.",
+        "Le sens d'une liaison est celui de l'élément de liaison, pas celui de la rondade : rondade-flip et rondade-salto sont deux liaisons arrière.",
+        "Un élément dont le palier n'est pas valorisable ne valorise jamais (il ne peut pas être « déclassé »), mais il compte pour le tronc commun si son palier est autorisé. Une LAE de 3 éléments reste valide avec 4.",
       ];
     case "BARRES_ASYM":
       return [
         "Un même élément réalisé plusieurs fois (ex. un balancé) ne compte qu'une seule fois dans le nombre d'éléments et pour les valorisations.",
         "Un même élément ne peut valider qu'une seule valorisation à la fois : s'il remplit plusieurs critères (ex. rotation P4 et élément P4), il ne compte que pour l'une des deux, pas les deux en même temps.",
+        "Changement de barre : les mains changent de barre entre 2 éléments des paliers autorisés, sans chute, même si ces éléments servent à une autre valorisation. Une pose de pied suivie d'un balancé valide à la fois l'arche des élans et le changement de barre.",
+        "Un balancé arrière arrêté par un repoussé n'est pas reconnu : il doit être enchaîné à un élément codifié. La sortie filée 1/2 tour compte comme rotation (arche Rotations).",
+        "Un même élément peut valider plusieurs exigences du tronc commun, mais jamais plusieurs valorisations.",
       ];
     default:
       return [];
