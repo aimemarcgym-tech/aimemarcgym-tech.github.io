@@ -266,5 +266,71 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "« 1 rotation P3 minimum » est validée par la pose des pieds puis élan circulaire (98-26, P3), « 1 élément P3 minimum » par la sortie (P3), « bascule prise d'élan à l'horizontale » par la bascule (P4) précédée de la prise d'élan : chaque valorisation a ses propres éléments (FAQ #214).",
       "« 1 sortie P3 minimum » n'est pas confirmée : la sortie sert déjà à « 1 élément P3 minimum ». Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
+  },
+  {
+    "apparatus": "BARRES_ASYM",
+    "evolutionId": "B3",
+    "titre": "Barres asymétriques B3 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "15-26"
+      },
+      {
+        "code": "98-26"
+      },
+      {
+        "code": "46-26"
+      },
+      {
+        "code": "70elan"
+      },
+      {
+        "code": "91rot"
+      },
+      {
+        "code": "121rot"
+      },
+      {
+        "code": "116-26"
+      },
+      {
+        "code": "154-26"
+      }
+    ],
+    "confirmations": [
+      "BA-B3-TC-1",
+      "BA-B3-V1",
+      "BA-B3-V2",
+      "BA-B3-V3",
+      "BA-B3-V4"
+    ],
+    "validations": {
+      "BA-B3-TC-2": [
+        "116-26"
+      ],
+      "BA-B3-TC-3": [
+        "15-26",
+        "46-26"
+      ],
+      "BA-B3-V1": [
+        "116-26"
+      ],
+      "BA-B3-V2": [
+        "154-26",
+        "15-26"
+      ],
+      "BA-B3-V3": [
+        "98-26"
+      ],
+      "BA-B3-V4": [
+        "46-26",
+        "70elan"
+      ]
+    },
+    "remarques": [
+      "Venir à l'appui (bascule, bascule BS), rotation, prise d'élan, tour d'appui, balancé arrière, puis la sortie en dernier.",
+      "À vérifier : « 1 élément en balancé avant ou arrière (hors sortie) » repose sur le balancé arrière, qui est en P2, alors que les paliers valorisables de B3 sont P3 à P5. Un élément de palier non valorisable ne valorise pas (FAQ #204, #207) : en toute rigueur, cette valorisation (+3) ne serait pas validée (note de 12 au lieu de 15), sauf avec un balancé en P3 ou plus (grande culbute, grand rétablissement).",
+      "« 1 sortie P4 minimum » n'est pas confirmée : la sortie est en P3. Elle sert à « 2 éléments P3 minimum »."
+    ]
   }
 ];
