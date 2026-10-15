@@ -152,6 +152,10 @@
     {
       "acronym": "Élan à vide",
       "definition": "Se divise en reprise d'élan et balancé intermédiaire. Une seule pénalité d'élan à vide est comptée pour un balancé avant-arrière."
+    },
+    {
+      "acronym": "Base (palier)",
+      "definition": "Élément de base d'une arche : il équivaut au P1. Il est valorisable quand P1 fait partie des paliers valorisables de l'évolution (A1, A2, B1), et jamais à partir de B2. Information de l'entraîneur, à confirmer officiellement."
     }
   ],
   "agres": [

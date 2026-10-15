@@ -107,3 +107,9 @@ export type CheckSpec =
   | { type: "FORCE_OR_PG" }
   | { type: "NAME_CONTAINS_ALL"; terms: string[]; min?: number }
   | { type: "MANUAL" }; // ne peut pas être vérifié automatiquement -> confirmation entraîneur
+
+// Un élément de palier « Base » est un P1 (précision de l'entraîneur) : il est valorisable quand P1 fait partie
+// des paliers valorisables de l'évolution (A1, A2, B1). Prérequis et nomades ne le sont jamais.
+export function estPalierValorisable(palier: Palier, paliersValorisables: Palier[]): boolean {
+  return palier === "BASE" ? paliersValorisables.includes("P1") : paliersValorisables.includes(palier);
+}

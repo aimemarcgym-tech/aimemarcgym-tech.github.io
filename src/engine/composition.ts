@@ -1,7 +1,7 @@
 import { getArche, getElement, getRegulation } from "@/regulation/loader";
 import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isSortieElement } from "@/regulation/variants";
-import { PALIER_ORDER, palierRank, type CheckSpec, type Evolution, type Palier, type RegElement } from "@/regulation/types";
+import { PALIER_ORDER, palierRank, estPalierValorisable, type CheckSpec, type Evolution, type Palier, type RegElement } from "@/regulation/types";
 
 export interface MovementElementRef {
   code: string;
@@ -168,9 +168,8 @@ function evaluateCheck(
   // paliers puisqu'aucun d'eux n'y apparaît jamais, et respecte aussi la
   // borne haute propre à chaque évolution (ex. un élément P7 ne doit pas
   // valoriser une évolution dont les paliers valorisables s'arrêtent à P4).
-  const valorisableSet = new Set(paliersValorisables);
   const usable =
-    context === "VALORISATION" ? elements.filter((e) => valorisableSet.has(e.palier)) : elements;
+    context === "VALORISATION" ? elements.filter((e) => estPalierValorisable(e.palier, paliersValorisables)) : elements;
 
   // FAQ #160 : un même élément réalisé plusieurs fois ne compte qu'une fois (pour les exigences et les
   // valorisations) ; seules les liaisons gardent la séquence complète, répétitions comprises.
@@ -268,7 +267,7 @@ function findValorisationOverlaps(
   elements: RegElement[],
   confirmed: Set<string>
 ): string[] {
-  const valorisable = new Set(evolution.paliersValorisables);
+  const valorisable = (e: RegElement) => estPalierValorisable(e.palier, evolution.paliersValorisables);
   const distinct = elements.filter((e, k) => elements.findIndex((x) => x.code === e.code) === k);
   const warnings: string[] = [];
 
@@ -295,7 +294,7 @@ function findValorisationOverlaps(
       need = spec.min ?? 1;
       candidates = distinct.filter(
         (e) =>
-          valorisable.has(e.palier) &&
+          valorisable(e) &&
           (!spec.category || elementCategories(apparatus, e).includes(spec.category)) &&
           !(spec.excludeSorties && isSortieElement(e.archeId, e.extraCategories)) &&
           palierRank(e.palier) >= minRank &&
@@ -303,10 +302,10 @@ function findValorisationOverlaps(
       );
     } else if (spec.type === "SALTO_AT_PALIER_MIN") {
       const minRank = palierRank(spec.palierMin);
-      candidates = distinct.filter((e) => valorisable.has(e.palier) && isSalto(e.name) && palierRank(e.palier) >= minRank);
+      candidates = distinct.filter((e) => valorisable(e) && isSalto(e.name) && palierRank(e.palier) >= minRank);
     } else if (spec.type === "NAME_CONTAINS_ALL") {
       need = spec.min ?? 1;
-      candidates = distinct.filter((e) => valorisable.has(e.palier) && spec.terms.every((t) => e.name.toLowerCase().includes(t)));
+      candidates = distinct.filter((e) => valorisable(e) && spec.terms.every((t) => e.name.toLowerCase().includes(t)));
     }
     if (candidates) slots.push({ label: opt.label, candidates: candidates.map((c) => c.code), need });
   }

@@ -22,7 +22,7 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
     },
     "remarques": [
       "Saut de valeur 12 (Base) sur la table à 1 m : avec « Saut à 1 m » (+2), la note de départ est de 14, le maximum du niveau.",
-      "À confirmer : on ne sait pas si un saut Base peut recevoir la valorisation (la FAQ ne parle que des nomades). Sans valorisation, la note est de 12."
+      "La lune arrivée debout est un élément Base, équivalent du P1 : valorisable en A1, A2 et B1, où P1 fait partie des paliers valorisables."
     ]
   },
   {
@@ -81,7 +81,7 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
     },
     "remarques": [
       "Saut de valeur 12 (Base) sur la table à 1 m : avec « Saut à 1 m » (+2), la note de départ est de 14, le maximum du niveau.",
-      "À confirmer : on ne sait pas si un saut Base peut recevoir la valorisation (la FAQ ne parle que des nomades). Sans valorisation, la note est de 12."
+      "La lune arrivée debout est un élément Base, équivalent du P1 : valorisable en A1, A2 et B1, où P1 fait partie des paliers valorisables."
     ]
   },
   {

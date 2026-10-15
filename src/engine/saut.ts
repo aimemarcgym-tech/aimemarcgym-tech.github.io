@@ -1,5 +1,5 @@
 import { getElement, getEvolution, getRegulation } from "@/regulation/loader";
-import type { Palier } from "@/regulation/types";
+import { estPalierValorisable, type Palier } from "@/regulation/types";
 import type { MovementElementRef } from "@/engine/composition";
 
 // Le Saut ne fonctionne pas comme les autres agrès : pas de tronc commun
@@ -96,7 +96,7 @@ export function analyzeSaut(
   const uniqueArches = new Set(sauts.map((s) => s.archeId));
   const famillesDifferentes = sautsRequired < 2 || (sauts.length === 2 && uniqueArches.size === 2);
 
-  const estValorisable = (p: Palier) => evolution.paliersValorisables.includes(p);
+  const estValorisable = (p: Palier) => estPalierValorisable(p, evolution.paliersValorisables);
   const auMoinsUnDansPaliersValorisables = sauts.some((s) => estValorisable(s.palier));
 
   const valorisations: SautValorisationResult[] = evolution.valorisations.options.map((opt) => {
@@ -158,7 +158,7 @@ function computeSautSuggestions(evolutionId: string, sauts: SautResult[], sautsR
 
   const chosenCodes = new Set(sauts.map((s) => s.code));
   const chosenArches = new Set(sauts.map((s) => s.archeId));
-  const estValorisable = (p: Palier) => evolution.paliersValorisables.includes(p);
+  const estValorisable = (p: Palier) => estPalierValorisable(p, evolution.paliersValorisables);
 
   const candidates = getRegulation("SAUT").elements.filter((el) => !chosenCodes.has(el.code));
 
