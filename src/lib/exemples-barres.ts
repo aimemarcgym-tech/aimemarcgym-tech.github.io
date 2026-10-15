@@ -465,5 +465,71 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "« 1 grand tour » est validée par le grand tour en arrière 360° (soleil, P5), « 1 élément P5 minimum » par la bascule faciale (P5), « 1 rotation P4 minimum » par le tour d'appui arrière libre (P4), « bascule avec un élément fini à l'ATR » par la bascule suivie de l'élan en arrière à l'ATR (P5) : chaque valorisation a ses propres éléments (FAQ #214).",
       "« 1 lâcher » et « 1 sortie P5 minimum » ne sont pas confirmées : le mouvement ne contient pas de lâcher et la sortie (salto arrière tendu) est en P4. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
+  },
+  {
+    "apparatus": "BARRES_ASYM",
+    "evolutionId": "C3",
+    "titre": "Barres asymétriques C3 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "15-26"
+      },
+      {
+        "code": "76elan"
+      },
+      {
+        "code": "103rot"
+      },
+      {
+        "code": "51-26"
+      },
+      {
+        "code": "4new-rot"
+      },
+      {
+        "code": "46-26"
+      },
+      {
+        "code": "73-26"
+      },
+      {
+        "code": "130-26"
+      },
+      {
+        "code": "166-26"
+      }
+    ],
+    "confirmations": [
+      "BA-C3-TC-1",
+      "BA-C3-V1",
+      "BA-C3-V2",
+      "BA-C3-V5",
+      "BA-C3-V6"
+    ],
+    "validations": {
+      "BA-C3-TC-2": [
+        "130-26"
+      ],
+      "BA-C3-TC-3": [
+        "76elan",
+        "73-26"
+      ],
+      "BA-C3-V1": [
+        "4new-rot"
+      ],
+      "BA-C3-V2": [
+        "130-26"
+      ],
+      "BA-C3-V6": [
+        "130-26",
+        "166-26"
+      ]
+    },
+    "remarques": [
+      "Venir à l'appui (bascules), élans à l'ATR, rotations, grand tour arrière, puis la sortie (double salto arrière) en dernier.",
+      "« 1 lâcher P5 minimum » est validée par l'élément avec envol arrivée à la suspension (4new-rot, P5). « 1 ATR ou grand tour avec rotation 180° » est confirmée à la main.",
+      "À vérifier : le grand tour arrière (P7) sert à la fois à « 1 élément en balancé P5 minimum » et d'élément d'amenée à « 1 sortie P5 minimum amenée d'un élément P5 minimum ». Un élément ne valide qu'une seule valorisation (FAQ #214, #45) : en toute rigueur, l'une des deux (+2) ne serait pas retenue (note de 13 au lieu de 15), sauf avec un deuxième élément P5 ou plus avant la sortie ou un autre balancé P5 minimum.",
+      "« 1 élément P5 minimum » et « 1 rotation P6 minimum » ne sont pas confirmées."
+    ]
   }
 ];
