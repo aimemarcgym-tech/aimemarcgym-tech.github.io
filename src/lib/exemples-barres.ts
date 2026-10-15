@@ -285,13 +285,13 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
         "code": "70elan"
       },
       {
-        "code": "91rot"
-      },
-      {
         "code": "121rot"
       },
       {
-        "code": "116-26"
+        "code": "52-26"
+      },
+      {
+        "code": "91rot"
       },
       {
         "code": "154-26"
@@ -306,14 +306,14 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     ],
     "validations": {
       "BA-B3-TC-2": [
-        "116-26"
+        "52-26"
       ],
       "BA-B3-TC-3": [
         "15-26",
         "46-26"
       ],
       "BA-B3-V1": [
-        "116-26"
+        "52-26"
       ],
       "BA-B3-V2": [
         "154-26",
@@ -328,9 +328,9 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       ]
     },
     "remarques": [
-      "Venir à l'appui (bascule, bascule BS), rotation, prise d'élan, tour d'appui, balancé arrière, puis la sortie en dernier.",
-      "À vérifier : « 1 élément en balancé avant ou arrière (hors sortie) » repose sur le balancé arrière, qui est en P2, alors que les paliers valorisables de B3 sont P3 à P5. Un élément de palier non valorisable ne valorise pas (FAQ #204, #207) : en toute rigueur, cette valorisation (+3) ne serait pas validée (note de 12 au lieu de 15), sauf avec un balancé en P3 ou plus (grande culbute, grand rétablissement).",
-      "« 1 sortie P4 minimum » n'est pas confirmée : la sortie est en P3. Elle sert à « 2 éléments P3 minimum »."
+      "Venir à l'appui (bascule, bascule BS), rotation, prise d'élan, grand rétablissement, tour d'appui, puis la sortie en dernier.",
+      "« 1 élément en balancé avant ou arrière (hors sortie) » est validée par le grand rétablissement (P3, arche Balancés), valorisable en B3. « 1 rotation P3 minimum » par la pose des pieds puis élan circulaire (P3), « 2 éléments P3 minimum » par la sortie et la bascule, « bascule prise d'élan » par la bascule BS précédée de la prise d'élan : chaque valorisation a ses propres éléments (FAQ #214).",
+      "« 1 sortie P4 minimum » n'est pas confirmée : la sortie est en P3. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
   }
 ];
