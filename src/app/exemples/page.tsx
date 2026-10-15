@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getAvailableApparatuses, getElement, getArche, getRegulation } from "@/regulation/loader";
 import { analyzeMovement, type CheckResult } from "@/engine/composition";
-import { CHRONOLOGIE, getExemple, type ExempleMouvement } from "@/lib/exemples";
+import { getExemple, type ExempleMouvement } from "@/lib/exemples";
 import { serieDe } from "@/lib/series";
 import { champ } from "@/lib/styles";
 
@@ -172,7 +172,6 @@ export default function ExemplesPage() {
   const evolutions = useMemo(() => [...getRegulation(apparatus).evolutions].sort((a, b) => a.ordre - b.ordre), [apparatus]);
   const [evolutionId, setEvolutionId] = useState("A1");
   const exemple = getExemple(apparatus, evolutionId);
-  const chronologie = CHRONOLOGIE[apparatus] ?? [];
 
   return (
     <div className="min-h-screen">
@@ -213,19 +212,6 @@ export default function ExemplesPage() {
             </select>
           </label>
         </div>
-
-        {chronologie.length > 0 && (
-          <section className="rounded-xl border border-border-subtle bg-surface p-4">
-            <h2 className="mb-1 text-sm font-semibold text-foreground">
-              Chronologie d&apos;un mouvement — {APPARATUS_LABELS[apparatus]}
-            </h2>
-            <ul className="list-disc space-y-0.5 pl-5 text-xs text-muted">
-              {chronologie.map((c) => (
-                <li key={c}>{c}</li>
-              ))}
-            </ul>
-          </section>
-        )}
 
         {exemple ? (
           <Exemple key={`${apparatus}-${evolutionId}`} exemple={exemple} />
