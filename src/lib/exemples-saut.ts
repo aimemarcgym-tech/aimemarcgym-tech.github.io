@@ -289,5 +289,30 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
       "Deux sauts de familles de 1er envol différentes : Tsukahara (arche Renversement latéral) et Yurchenko (arche Rondade). Le meilleur saut, le Yurchenko carpé, vaut 14.",
       "Avec « saut avec un élément sur le tremplin » (+2) sur le meilleur saut (Yurchenko : appel en rondade sur le tremplin), la note de départ est de 16, le maximum du niveau."
     ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "C2",
+    "titre": "Yurchenko carpé (P5) et Tsukahara groupé (P3)",
+    "elements": [
+      {
+        "code": "50-26"
+      },
+      {
+        "code": "44-26"
+      }
+    ],
+    "confirmations": [
+      "SAUT-C2-V3"
+    ],
+    "validations": {
+      "SAUT-C2-V3": [
+        "50-26"
+      ]
+    },
+    "remarques": [
+      "Deux sauts de familles de 1er envol différentes : Yurchenko (arche Rondade) et Tsukahara (arche Renversement latéral). Le meilleur saut, le Yurchenko carpé, vaut 14.",
+      "Avec « saut avec un élément sur le tremplin » (+2) sur le meilleur saut (Yurchenko : appel en rondade sur le tremplin), la note de départ est de 16, le maximum du niveau."
+    ]
   }
 ];
