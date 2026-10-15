@@ -164,5 +164,55 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
       "Saut de valeur 13 (P3, arche Renversement latéral) ; avec « 2 sauts à 1,20 m » (+2), la note de départ est de 15, le maximum du niveau.",
       "« 2 sauts à 1,20 m » : il n'est pas précisé 2 sauts différents, on peut donc présenter deux fois le même saut (FAQ #196)."
     ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "B2",
+    "titre": "Lune vrille (P2) ×2",
+    "elements": [
+      {
+        "code": "19-26"
+      },
+      {
+        "code": "19-26"
+      }
+    ],
+    "confirmations": [
+      "SAUT-B2-V2"
+    ],
+    "validations": {
+      "SAUT-B2-V2": [
+        "19-26"
+      ]
+    },
+    "remarques": [
+      "Le même saut est présenté deux fois (arche Renversement avant), de valeur 12 : avec « saut avec rotation longitudinale ou transversale » (+2), la note de départ est de 14 sur 15.",
+      "Au tronc commun B2, deux sauts sont demandés : le tronc commun est conforme. La valorisation « 2 sauts de familles de 1er envol différentes » n'existe pas à ce niveau (FAQ #113)."
+    ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "B2",
+    "titre": "Tsukahara groupé (P3) ×2",
+    "elements": [
+      {
+        "code": "44-26"
+      },
+      {
+        "code": "44-26"
+      }
+    ],
+    "confirmations": [
+      "SAUT-B2-V2"
+    ],
+    "validations": {
+      "SAUT-B2-V2": [
+        "44-26"
+      ]
+    },
+    "remarques": [
+      "Le même saut est présenté deux fois (arche Renversement latéral), de valeur 13 : avec « saut avec rotation longitudinale ou transversale » (+2), la note de départ est de 15, le maximum du niveau.",
+      "Au tronc commun B2, deux sauts sont demandés : le tronc commun est conforme. La valorisation « 2 sauts de familles de 1er envol différentes » n'existe pas à ce niveau (FAQ #113)."
+    ]
   }
 ];

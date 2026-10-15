@@ -185,8 +185,8 @@ function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold text-foreground">{exemple.titre}</h2>
-          {d.sauts.map((s) => (
-            <p key={s.code} className="mt-1 text-xs text-muted">
+          {d.sauts.map((s, i) => (
+            <p key={`${s.code}-${i}`} className="mt-1 text-xs text-muted">
               {s.name} · {s.palier} · valeur {s.value}
             </p>
           ))}
@@ -204,7 +204,7 @@ function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
         <div>
           <h3 className="mb-2 text-sm font-semibold text-foreground">Validé dans le tronc commun</h3>
           <ul className="space-y-2">
-            <Ligne apparatus={apparatus} ok={d.troncCommunOk} label={d.troncCommunMessage} codes={exemple.elements.map((e) => e.code)} />
+            <Ligne apparatus={apparatus} ok={d.troncCommunOk} label={d.troncCommunMessage} codes={Array.from(new Set(exemple.elements.map((e) => e.code)))} />
           </ul>
         </div>
         <div>
