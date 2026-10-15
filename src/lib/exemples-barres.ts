@@ -502,7 +502,7 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     "confirmations": [
       "BA-C3-TC-1",
       "BA-C3-V1",
-      "BA-C3-V2",
+      "BA-C3-V3",
       "BA-C3-V5",
       "BA-C3-V6"
     ],
@@ -517,8 +517,8 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "BA-C3-V1": [
         "4new-rot"
       ],
-      "BA-C3-V2": [
-        "130-26"
+      "BA-C3-V3": [
+        "51-26"
       ],
       "BA-C3-V6": [
         "130-26",
@@ -527,9 +527,8 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     },
     "remarques": [
       "Venir à l'appui (bascules), élans à l'ATR, rotations, grand tour arrière, puis la sortie (double salto arrière) en dernier.",
-      "« 1 lâcher P5 minimum » est validée par l'élément avec envol arrivée à la suspension (4new-rot, P5). « 1 ATR ou grand tour avec rotation 180° » est confirmée à la main.",
-      "À vérifier : le grand tour arrière (P7) sert à la fois à « 1 élément en balancé P5 minimum » et d'élément d'amenée à « 1 sortie P5 minimum amenée d'un élément P5 minimum ». Un élément ne valide qu'une seule valorisation (FAQ #214, #45) : en toute rigueur, l'une des deux (+2) ne serait pas retenue (note de 13 au lieu de 15), sauf avec un deuxième élément P5 ou plus avant la sortie ou un autre balancé P5 minimum.",
-      "« 1 élément P5 minimum » et « 1 rotation P6 minimum » ne sont pas confirmées."
+      "« 1 lâcher P5 minimum » est validée par l'élément avec envol arrivée à la suspension (P5), « 1 élément P5 minimum » par la bascule faciale (P5), « 1 sortie P5 minimum amenée d'un élément P5 minimum » par le grand tour arrière puis le double salto : chaque valorisation a ses propres éléments (FAQ #214, #45). « 1 ATR ou grand tour avec rotation 180° » est confirmée à la main.",
+      "« 1 élément en balancé P5 minimum » et « 1 rotation P6 minimum » ne sont pas confirmées : le grand tour arrière, seul balancé du mouvement, sert déjà d'élément d'amenée à la sortie. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
   }
 ];
