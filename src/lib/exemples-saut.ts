@@ -214,5 +214,55 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
       "Le même saut est présenté deux fois (arche Renversement latéral), de valeur 13 : avec « saut avec rotation longitudinale ou transversale » (+2), la note de départ est de 15, le maximum du niveau.",
       "Au tronc commun B2, deux sauts sont demandés : le tronc commun est conforme. La valorisation « 2 sauts de familles de 1er envol différentes » n'existe pas à ce niveau (FAQ #113)."
     ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "B3",
+    "titre": "Rondade tremplin ½ tour et lune (P3) ×2",
+    "elements": [
+      {
+        "code": "54-26"
+      },
+      {
+        "code": "54-26"
+      }
+    ],
+    "confirmations": [
+      "SAUT-B3-V3"
+    ],
+    "validations": {
+      "SAUT-B3-V3": [
+        "54-26"
+      ]
+    },
+    "remarques": [
+      "Le même saut est présenté deux fois (arche Rondade et saut de mains), de valeur 13 : avec « saut avec un élément sur le tremplin » (+2), la note de départ est de 15 sur 16.",
+      "« 2 sauts de 1er envol différents » n'est pas validée : il s'agit du même saut présenté deux fois. Le tronc commun reste conforme."
+    ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "B3",
+    "titre": "Yurchenko carpé (P5) et Tsukahara groupé (P3)",
+    "elements": [
+      {
+        "code": "50-26"
+      },
+      {
+        "code": "44-26"
+      }
+    ],
+    "confirmations": [
+      "SAUT-B3-V3"
+    ],
+    "validations": {
+      "SAUT-B3-V3": [
+        "50-26"
+      ]
+    },
+    "remarques": [
+      "Deux sauts de familles de 1er envol différentes : Yurchenko (arche Rondade) et Tsukahara (arche Renversement latéral). Le meilleur saut, le Yurchenko carpé, vaut 14.",
+      "Avec « saut avec un élément sur le tremplin » (+2) sur le meilleur saut (Yurchenko : appel en rondade sur le tremplin), la note de départ est de 16, le maximum du niveau."
+    ]
   }
 ];
