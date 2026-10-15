@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type ReactNode } from "react";
 import { teamColor } from "@/lib/teamColor";
-import { renameTeam } from "@/lib/data";
+import { renameTeam, updateGymnastTeam } from "@/lib/data";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import { createTeamShare } from "@/lib/teamShare";
 
@@ -11,12 +11,17 @@ export default function TeamGroup({
   teamName,
   memberCount,
   onRenamed,
+  available = [],
+  onAdded,
   children,
 }: {
   clubId: string | null;
   teamName: string;
   memberCount: number;
   onRenamed?: () => void;
+  // Gymnastes du club qui ne sont pas dans cette équipe : proposées dans « Ajouter une gymnaste… ».
+  available?: { id: string; label: string }[];
+  onAdded?: () => void;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -93,7 +98,31 @@ export default function TeamGroup({
           />
         )}
       </div>
-      {open && children}
+      {open && (
+        <>
+          {children}
+          {!isUnassigned && available.length > 0 && (
+            <select
+              value=""
+              onChange={async (e) => {
+                const id = e.target.value;
+                if (!id) return;
+                await updateGymnastTeam(id, teamName);
+                onAdded?.();
+              }}
+              aria-label="Ajouter une gymnaste"
+              className="mt-3 w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none sm:w-72"
+            >
+              <option value="">Ajouter une gymnaste…</option>
+              {available.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.label}
+                </option>
+              ))}
+            </select>
+          )}
+        </>
+      )}
     </div>
   );
 }

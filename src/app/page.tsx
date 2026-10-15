@@ -159,6 +159,13 @@ export default function Home() {
                                 teamName={teamName}
                                 memberCount={teamMembers.length}
                                 onRenamed={refresh}
+                                available={members
+                                  .filter((g) => g.team !== (teamName === "Sans équipe" ? null : teamName))
+                                  .map((g) => ({
+                                    id: g.id,
+                                    label: `${g.firstName} ${g.lastName}${g.birthYear ? ` (${g.birthYear})` : ""}${g.team ? ` — ${g.team}` : ""}`,
+                                  }))}
+                                onAdded={refresh}
                               >
                                 <DraggableGymnastList members={teamMembers} onReordered={refresh} onDeleted={refresh} />
                               </TeamGroup>
