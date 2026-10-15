@@ -236,5 +236,80 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       "« 2 éléments gymniques P3 minimum dans le mouvement » est validée par le saut en extension ½ tour et le saut antéro-postérieur (P3). « 1 élément acro sur la poutre P3 minimum » par la souplesse arrière : la sortie ne compte que pour le tronc commun (FAQ #145).",
       "« 1 saut avec écart antéro » n'est pas confirmée : le saut antéro-postérieur sert déjà aux deux éléments gymniques. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
+  },
+  {
+    "apparatus": "POUTRE",
+    "evolutionId": "B3",
+    "titre": "Poutre B3 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "1"
+      },
+      {
+        "code": "82-26"
+      },
+      {
+        "code": "152"
+      },
+      {
+        "code": "62",
+        "serie": "GYMNIQUE"
+      },
+      {
+        "code": "57",
+        "serie": "GYMNIQUE"
+      },
+      {
+        "code": "159-26"
+      },
+      {
+        "code": "202-26"
+      },
+      {
+        "code": "23new"
+      }
+    ],
+    "confirmations": [
+      "P-B3-V1",
+      "P-B3-V2",
+      "P-B3-V3",
+      "P-B3-V5"
+    ],
+    "validations": {
+      "P-B3-TC-1": [
+        "152",
+        "159-26",
+        "202-26"
+      ],
+      "P-B3-TC-2": [
+        "82-26"
+      ],
+      "P-B3-TC-3": [
+        "82-26",
+        "62",
+        "57",
+        "159-26",
+        "202-26"
+      ],
+      "P-B3-V1": [
+        "62",
+        "57"
+      ],
+      "P-B3-V2": [
+        "62"
+      ],
+      "P-B3-V3": [
+        "159-26"
+      ],
+      "P-B3-V5": [
+        "23new"
+      ]
+    },
+    "remarques": [
+      "Entrée en bout de poutre, puis pivot, roue, série gymnique (saut enjambé, saut de cosaque), souplesse avant, la sortie, et un acro sur la poutre mousse.",
+      "« 1 LG ou LM » est validée par la série gymnique (saut enjambé et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5). « 1 acro sur la poutre P4 minimum » par la souplesse avant (P4) : la sortie ne compte que pour le tronc commun (FAQ #145).",
+      "À vérifier : le saut enjambé (62) sert à la fois à « 1 LG ou LM » (comme élément de la série) et à « 1 saut avec écart antéro ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, l'une des deux ne serait pas retenue (note de 12 ou 13 au lieu de 15), sauf avec un autre saut à écart ou une autre liaison.",
+      "« 1 sortie avec liaison acro » n'est pas confirmée."
+    ]
   }
 ];
