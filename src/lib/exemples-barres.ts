@@ -129,5 +129,74 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "Enchaînement de balancés : balancé avant à l'horizontale puis balancé arrière, répétés deux fois (les balancés répétés ne comptent qu'une fois dans le nombre d'éléments).",
       "« 1 élément de l'arche des élans » est validée par la prise d'élan corps aligné (70) et « 1 pose de pieds à la station debout puis sortie en saut droit vers l'avant » par la pose des pieds jambes groupées (68-26) : chaque valorisation a son propre élément (FAQ #214)."
     ]
+  },
+  {
+    "apparatus": "BARRES_ASYM",
+    "evolutionId": "B1",
+    "titre": "Barres asymétriques B1 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "2new-va"
+      },
+      {
+        "code": "1bisnew"
+      },
+      {
+        "code": "70elan"
+      },
+      {
+        "code": "91rot"
+      },
+      {
+        "code": "68-26"
+      },
+      {
+        "code": "117bb"
+      },
+      {
+        "code": "116-26"
+      },
+      {
+        "code": "117bb"
+      },
+      {
+        "code": "116-26"
+      },
+      {
+        "code": "154-26"
+      }
+    ],
+    "confirmations": [
+      "BA-B1-V1",
+      "BA-B1-V2",
+      "BA-B1-V3",
+      "BA-B1-V4"
+    ],
+    "validations": {
+      "BA-B1-TC-1": [
+        "117bb",
+        "116-26"
+      ],
+      "BA-B1-TC-2": [
+        "2new-va",
+        "1bisnew"
+      ],
+      "BA-B1-V1": [
+        "117bb",
+        "116-26"
+      ],
+      "BA-B1-V2": [
+        "68-26"
+      ],
+      "BA-B1-V3": [
+        "70elan",
+        "91rot"
+      ]
+    },
+    "remarques": [
+      "Enchaînement de balancés : balancé avant à l'horizontale puis balancé arrière, répétés deux fois (les balancés répétés ne comptent qu'une fois dans le nombre d'éléments). La sortie (élan vers l'avant et salto arrière) vient en dernier.",
+      "« 1 sortie amenée du balancé arrière » n'est pas confirmée : la sortie est un salto arrière depuis un élan avant, pas une sortie amenée d'un balancé arrière. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5).",
+      "« 1 changement de barre BI-BS » est confirmée à la main."
+    ]
   }
 ];
