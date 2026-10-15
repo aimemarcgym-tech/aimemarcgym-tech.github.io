@@ -165,5 +165,76 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       "La sortie compte comme acro en poutre haute pour le tronc commun seulement (FAQ #145) : elle valide en revanche « 1 sortie P3 minimum », et la roue seule valide « 1 acro P2 minimum ».",
       "« Poutre mousse : acro P2 minimum » n'est pas confirmée : quatre valorisations sur cinq sont retenues (4 retenues sur 5)."
     ]
+  },
+  {
+    "apparatus": "POUTRE",
+    "evolutionId": "B2",
+    "titre": "Poutre B2 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "1"
+      },
+      {
+        "code": "104"
+      },
+      {
+        "code": "82-26"
+      },
+      {
+        "code": "52"
+      },
+      {
+        "code": "153-26"
+      },
+      {
+        "code": "49-26"
+      },
+      {
+        "code": "201-26"
+      },
+      {
+        "code": "19new"
+      }
+    ],
+    "confirmations": [
+      "P-B2-V1",
+      "P-B2-V3",
+      "P-B2-V4",
+      "P-B2-V5"
+    ],
+    "validations": {
+      "P-B2-TC-1": [
+        "153-26",
+        "201-26"
+      ],
+      "P-B2-TC-2": [
+        "82-26"
+      ],
+      "P-B2-TC-3": [
+        "104",
+        "52",
+        "153-26",
+        "49-26",
+        "201-26"
+      ],
+      "P-B2-V1": [
+        "52",
+        "49-26"
+      ],
+      "P-B2-V3": [
+        "153-26"
+      ],
+      "P-B2-V4": [
+        "201-26"
+      ],
+      "P-B2-V5": [
+        "19new"
+      ]
+    },
+    "remarques": [
+      "Entrée en bout de poutre, puis maintien, pivot, saut, acro, saut, la sortie, et un acro sur la poutre mousse.",
+      "« 2 éléments gymniques P3 minimum dans le mouvement » est validée par le saut en extension ½ tour et le saut antéro-postérieur (P3). « 1 élément acro sur la poutre P3 minimum » par la souplesse arrière : la sortie ne compte que pour le tronc commun (FAQ #145).",
+      "« 1 saut avec écart antéro » n'est pas confirmée : le saut antéro-postérieur sert déjà aux deux éléments gymniques. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
+    ]
   }
 ];
