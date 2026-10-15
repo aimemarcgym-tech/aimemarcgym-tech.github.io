@@ -342,95 +342,81 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "C1",
-    "titre": "Sol C1 — mouvement à la note maximale",
+    "titre": "Sol C1 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
-      {
-        "code": "17"
-      },
-      {
-        "code": "148",
-        "serie": "ACRO"
-      },
-      {
-        "code": "155",
-        "serie": "ACRO"
-      },
-      {
-        "code": "172",
-        "serie": "ACRO"
-      },
-      {
-        "code": "45enjambe",
-        "serie": "GYMNIQUE"
-      },
       {
         "code": "13pivot"
       },
       {
-        "code": "154",
-        "serie": "ACRO"
+        "code": "148+"
       },
       {
-        "code": "180",
-        "serie": "ACRO"
+        "code": "195+"
       },
       {
-        "code": "128biche",
+        "code": "172"
+      },
+      {
+        "code": "51enjambe",
         "serie": "GYMNIQUE"
       },
       {
-        "code": "182",
-        "serie": "ACRO"
+        "code": "42cosaque",
+        "serie": "GYMNIQUE"
+      },
+      {
+        "code": "154+"
+      },
+      {
+        "code": "180"
       }
     ],
     "confirmations": [
       "C1-V1",
       "C1-V2",
       "C1-V3",
-      "C1-V4",
       "C1-V5"
     ],
     "validations": {
       "C1-TC-1": [
-        "45enjambe",
-        "128biche"
+        "51enjambe",
+        "42cosaque"
       ],
       "C1-TC-2": [
-        "148",
-        "155",
+        "148+",
+        "195+",
         "172",
-        "154",
+        "154+",
         "180"
       ],
       "C1-TC-3": [
+        "13pivot",
         "172",
-        "180",
-        "182"
+        "51enjambe",
+        "180"
       ],
       "C1-V1": [
         "180"
       ],
       "C1-V2": [
-        "148",
-        "155",
+        "148+",
+        "195+",
         "172"
       ],
       "C1-V3": [
-        "45enjambe"
-      ],
-      "C1-V4": [
-        "182"
+        "42cosaque"
       ],
       "C1-V5": [
-        "155",
-        "154",
+        "195+",
+        "172",
+        "154+",
         "180"
       ]
     },
     "remarques": [
-      "LAE de 3 éléments différents : rondade, flic-flac, salto arrière tendu (P5).",
-      "« 1 salto position tendue appel 2 pieds » : salto avant tendu (180) après le saut de mains.",
-      "La valorisation « 2 salti liés » n'est pas utilisée : ses salti servent déjà à d'autres valorisations."
+      "LAE 1 de 3 éléments différents : rondade « + », flic-flac « + », salto arrière tendu (P5). LAE 2 : saut de mains « + », salto avant tendu (appel 2 pieds).",
+      "« 1 élément acro avec envol P5 » et « 2 salti appel 2 pieds liés » ne sont pas confirmées : les deux saltos servent déjà à d'autres valorisations (un élément ne valide qu'une seule valorisation). Les quatre autres suffisent pour la note maximale.",
+      "« 2 acros de sens différents dans les LAE » : une LAE vers l'arrière, une vers l'avant : à confirmer."
     ]
   },
   {
