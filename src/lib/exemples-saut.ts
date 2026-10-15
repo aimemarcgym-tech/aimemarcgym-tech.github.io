@@ -124,7 +124,7 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
   {
     "apparatus": "SAUT",
     "evolutionId": "B1",
-    "titre": "Lune arrivée debout (Base) — d'après le lien partagé",
+    "titre": "Lune arrivée debout (Base)",
     "elements": [
       {
         "code": "1new"
@@ -146,7 +146,7 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
   {
     "apparatus": "SAUT",
     "evolutionId": "B1",
-    "titre": "Tsukahara groupé (P3) — d'après le lien partagé",
+    "titre": "Tsukahara groupé (P3)",
     "elements": [
       {
         "code": "44-26"

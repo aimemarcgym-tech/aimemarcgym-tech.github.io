@@ -6,7 +6,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "A1",
-    "titre": "Sol A1 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol A1 — mouvement à la note maximale",
     "elements": [
       {
         "code": "2"
@@ -63,7 +63,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "A2",
-    "titre": "Sol A2 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol A2 — mouvement à la note maximale",
     "elements": [
       {
         "code": "2"
@@ -121,7 +121,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "B1",
-    "titre": "Sol B1 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol B1 — mouvement à la note maximale",
     "elements": [
       {
         "code": "9pivot"
@@ -183,7 +183,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "B2",
-    "titre": "Sol B2 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol B2 — mouvement à la note maximale",
     "elements": [
       {
         "code": "9pivot"
@@ -261,7 +261,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "B3",
-    "titre": "Sol B3 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol B3 — mouvement à la note maximale",
     "elements": [
       {
         "code": "148+",
@@ -342,7 +342,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "C1",
-    "titre": "Sol C1 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol C1 — mouvement à la note maximale",
     "elements": [
       {
         "code": "13pivot"
@@ -422,7 +422,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "C2",
-    "titre": "Sol C2 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol C2 — mouvement à la note maximale",
     "elements": [
       {
         "code": "13pivot"
@@ -496,7 +496,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "C3",
-    "titre": "Sol C3 — mouvement à la note maximale (d'après le lien partagé)",
+    "titre": "Sol C3 — mouvement à la note maximale",
     "elements": [
       {
         "code": "9pivot"
