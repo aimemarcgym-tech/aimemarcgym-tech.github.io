@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AuthGate from "@/components/AuthGate";
+import ScrollToTop from "@/components/ScrollToTop";
 import { DialoguesProvider } from "@/components/Dialogues";
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <ServiceWorkerRegister />
+        <ScrollToTop />
         <DialoguesProvider>
           <AuthProvider>
             <AuthGate>{children}</AuthGate>
