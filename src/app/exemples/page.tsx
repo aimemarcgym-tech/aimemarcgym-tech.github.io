@@ -247,7 +247,7 @@ function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
       </ul>
 
       {exemple.remarques && exemple.remarques.length > 0 && (
-        <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-muted">
+        <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm text-muted">
           {exemple.remarques.map((r) => (
             <li key={r}>{r}</li>
           ))}
