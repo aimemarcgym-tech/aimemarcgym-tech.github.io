@@ -240,7 +240,7 @@ function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
         </p>
       </div>
 
-      <ul className="mt-4 space-y-1.5 text-xs text-muted">
+      <ul className="mt-4 space-y-2 text-sm text-muted">
         {getSautTips(d.sautsRequired, evolutionId).map((t) => (
           <li key={t}>💡 {t}</li>
         ))}
