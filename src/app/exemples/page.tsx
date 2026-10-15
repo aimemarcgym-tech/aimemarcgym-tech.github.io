@@ -6,6 +6,7 @@ import { getAvailableApparatuses, getElement, getArche, getRegulation } from "@/
 import { analyzeMovement, type CheckResult } from "@/engine/composition";
 import { analyzeSaut } from "@/engine/saut";
 import { getExemples, type ExempleMouvement } from "@/lib/exemples";
+import { getSautTips } from "@/lib/tips";
 import { serieDe } from "@/lib/series";
 import { champ } from "@/lib/styles";
 
@@ -207,7 +208,10 @@ function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
           </ul>
         </div>
         <div>
-          <h3 className="mb-2 text-sm font-semibold text-foreground">Validé dans les valorisations</h3>
+          <div className="mb-2 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-foreground">Validé dans les valorisations</h3>
+            <span className="text-xs text-muted">1 seule possible</span>
+          </div>
           <ul className="space-y-2">
             {d.valorisations.map((v) => (
               <Ligne
@@ -222,6 +226,25 @@ function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
           </ul>
         </div>
       </div>
+
+      <div className="mt-4 rounded-lg border border-border-subtle bg-surface-alt/40 p-3">
+        <h3 className="mb-1 text-sm font-semibold text-foreground">Matériel / pénalités (pour info)</h3>
+        <ul className="mb-1 space-y-0.5 text-xs text-foreground">
+          <li>☐ Trampo-tremp utilisé</li>
+          <li>☐ Mini trampoline utilisé</li>
+          <li>☐ Gymnaste de 13 ans ou plus</li>
+        </ul>
+        <p className="text-xs text-muted">
+          À partir de 13 ans, le trampo-tremp entraîne -1 point. Le mini trampoline entraîne -1 point quel que soit l&apos;âge
+          (saison 2026-2027).
+        </p>
+      </div>
+
+      <ul className="mt-4 space-y-1.5 text-xs text-muted">
+        {getSautTips(d.sautsRequired, evolutionId).map((t) => (
+          <li key={t}>💡 {t}</li>
+        ))}
+      </ul>
 
       {exemple.remarques && exemple.remarques.length > 0 && (
         <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-muted">

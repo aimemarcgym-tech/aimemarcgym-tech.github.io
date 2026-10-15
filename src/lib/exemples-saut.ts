@@ -120,5 +120,49 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
     "remarques": [
       "Saut de valeur 10. Le PR2 « lune plat dos » est autorisé en A2 mais non valorisable : note de départ de 10, sans valorisation."
     ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "B1",
+    "titre": "Lune arrivée debout (Base) — d'après le lien partagé",
+    "elements": [
+      {
+        "code": "1new"
+      }
+    ],
+    "confirmations": [
+      "SAUT-B1-V2"
+    ],
+    "validations": {
+      "SAUT-B1-V2": [
+        "1new"
+      ]
+    },
+    "remarques": [
+      "Saut de valeur 12 (Base) ; avec « 2 sauts à 1,20 m » (+2), la note de départ est de 14 sur 15.",
+      "« 2 sauts à 1,20 m » : il n'est pas précisé 2 sauts différents, on peut donc présenter deux fois le même saut (FAQ #196)."
+    ]
+  },
+  {
+    "apparatus": "SAUT",
+    "evolutionId": "B1",
+    "titre": "Tsukahara groupé (P3) — d'après le lien partagé",
+    "elements": [
+      {
+        "code": "44-26"
+      }
+    ],
+    "confirmations": [
+      "SAUT-B1-V2"
+    ],
+    "validations": {
+      "SAUT-B1-V2": [
+        "44-26"
+      ]
+    },
+    "remarques": [
+      "Saut de valeur 13 (P3, arche Renversement latéral) ; avec « 2 sauts à 1,20 m » (+2), la note de départ est de 15, le maximum du niveau.",
+      "« 2 sauts à 1,20 m » : il n'est pas précisé 2 sauts différents, on peut donc présenter deux fois le même saut (FAQ #196)."
+    ]
   }
 ];
