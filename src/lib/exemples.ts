@@ -1,4 +1,5 @@
 import { EXEMPLES_SOL } from "@/lib/exemples-sol";
+import { EXEMPLES_SAUT } from "@/lib/exemples-saut";
 
 // Mouvements d'exemple, un par agrès et par niveau, construits pour viser la note de départ maximale.
 // Chaque exemple pointe vers des codes d'éléments du référentiel (src/regulation/data/*) ; le moteur calcule
@@ -18,10 +19,11 @@ export interface ExempleMouvement {
   remarques?: string[];
 }
 
-export const EXEMPLES: ExempleMouvement[] = [...EXEMPLES_SOL];
+export const EXEMPLES: ExempleMouvement[] = [...EXEMPLES_SOL, ...EXEMPLES_SAUT];
 
-export function getExemple(apparatus: string, evolutionId: string): ExempleMouvement | undefined {
-  return EXEMPLES.find((e) => e.apparatus === apparatus && e.evolutionId === evolutionId);
+// Tous les exemples d'un agrès et d'un niveau (le Saut en propose plusieurs par niveau).
+export function getExemples(apparatus: string, evolutionId: string): ExempleMouvement[] {
+  return EXEMPLES.filter((e) => e.apparatus === apparatus && e.evolutionId === evolutionId);
 }
 
 // Chronologie habituelle d'un mouvement, à respecter dans les exemples (consignes de l'entraîneur).

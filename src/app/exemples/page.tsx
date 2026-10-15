@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { getAvailableApparatuses, getElement, getArche, getRegulation } from "@/regulation/loader";
 import { analyzeMovement, type CheckResult } from "@/engine/composition";
-import { getExemple, type ExempleMouvement } from "@/lib/exemples";
+import { analyzeSaut } from "@/engine/saut";
+import { getExemples, type ExempleMouvement } from "@/lib/exemples";
 import { serieDe } from "@/lib/series";
 import { champ } from "@/lib/styles";
 
@@ -166,12 +167,79 @@ function Exemple({ exemple }: { exemple: ExempleMouvement }) {
   );
 }
 
+// Saut : un saut (valeur fixe selon son palier) plus la valorisation confirmée à la main.
+function ExempleSaut({ exemple }: { exemple: ExempleMouvement }) {
+  const { apparatus, evolutionId } = exemple;
+  const d = useMemo(
+    () =>
+      analyzeSaut(
+        evolutionId,
+        exemple.elements.map((e) => ({ code: e.code, role: "ELEMENT" as const })),
+        new Set(exemple.confirmations)
+      ),
+    [exemple, evolutionId]
+  );
+  return (
+    <section className="rounded-xl border border-border-subtle bg-surface p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-foreground">{exemple.titre}</h2>
+          {d.sauts.map((s) => (
+            <p key={s.code} className="mt-1 text-xs text-muted">
+              {s.name} · {s.palier} · valeur {s.value}
+            </p>
+          ))}
+        </div>
+        <div className="accent-gradient rounded px-4 py-2 text-white">
+          <div className="text-[11px] uppercase text-white/70">Note de départ</div>
+          <div className="text-2xl font-bold">
+            {d.noteDepart.toFixed(1)}
+            <span className="text-base font-semibold text-white/70">/{d.noteDepartMax.toFixed(1)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-foreground">Validé dans le tronc commun</h3>
+          <ul className="space-y-2">
+            <Ligne apparatus={apparatus} ok={d.troncCommunOk} label={d.troncCommunMessage} codes={exemple.elements.map((e) => e.code)} />
+          </ul>
+        </div>
+        <div>
+          <h3 className="mb-2 text-sm font-semibold text-foreground">Validé dans les valorisations</h3>
+          <ul className="space-y-2">
+            {d.valorisations.map((v) => (
+              <Ligne
+                key={v.id}
+                apparatus={apparatus}
+                ok={v.status === "OK"}
+                label={v.label}
+                info={`(+${v.points} pts)`}
+                codes={exemple.validations[v.id]}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {exemple.remarques && exemple.remarques.length > 0 && (
+        <ul className="mt-4 list-disc space-y-1 pl-5 text-xs text-muted">
+          {exemple.remarques.map((r) => (
+            <li key={r}>{r}</li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
 export default function ExemplesPage() {
   const apparatuses = getAvailableApparatuses();
   const [apparatus, setApparatus] = useState(apparatuses[0]);
   const evolutions = useMemo(() => [...getRegulation(apparatus).evolutions].sort((a, b) => a.ordre - b.ordre), [apparatus]);
   const [evolutionId, setEvolutionId] = useState("A1");
-  const exemple = getExemple(apparatus, evolutionId);
+  const exemples = getExemples(apparatus, evolutionId);
 
   return (
     <div className="min-h-screen">
@@ -213,8 +281,14 @@ export default function ExemplesPage() {
           </label>
         </div>
 
-        {exemple ? (
-          <Exemple key={`${apparatus}-${evolutionId}`} exemple={exemple} />
+        {exemples.length > 0 ? (
+          exemples.map((exemple, i) =>
+            exemple.apparatus === "SAUT" ? (
+              <ExempleSaut key={`${apparatus}-${evolutionId}-${i}`} exemple={exemple} />
+            ) : (
+              <Exemple key={`${apparatus}-${evolutionId}-${i}`} exemple={exemple} />
+            )
+          )
         ) : (
           <section className="rounded-xl border border-border-subtle bg-surface p-5">
             <h2 className="mb-2 text-sm font-semibold text-foreground">
