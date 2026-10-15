@@ -127,9 +127,7 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     },
     "remarques": [
       "Enchaînement de balancés : balancé avant à l'horizontale puis balancé arrière, répétés deux fois (les balancés répétés ne comptent qu'une fois dans le nombre d'éléments).",
-      "« 1 élément de l'arche des élans » est validée par la prise d'élan corps aligné (70) et « 1 pose de pieds à la station debout puis sortie en saut droit vers l'avant » par la pose des pieds jambes groupées (68-26) : chaque valorisation a son propre élément (FAQ #214).",
-      "À vérifier : « Sauter à l'appui » et la « prise d'élan corps aligné » sont classés Base dans nos données, donc normalement non valorisables. Ton programme de club et la FAQ #206 parlent d'éléments P1 pour ces valorisations.",
-      "« 1 élément BI et 1 BS » est confirmée à la main : à vérifier selon la chorégraphie."
+      "« 1 élément de l'arche des élans » est validée par la prise d'élan corps aligné (70) et « 1 pose de pieds à la station debout puis sortie en saut droit vers l'avant » par la pose des pieds jambes groupées (68-26) : chaque valorisation a son propre élément (FAQ #214)."
     ]
   }
 ];
