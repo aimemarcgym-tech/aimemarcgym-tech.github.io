@@ -82,7 +82,9 @@ export function getRegulation(apparatus: string): ApparatusRegulation {
 }
 
 export function getAvailableApparatuses(): string[] {
-  return Object.keys(REGULATIONS);
+  // Ordre de la rotation olympique : Saut, Barres asymétriques, Poutre, Sol.
+  const ordre = ["SAUT", "BARRES_ASYM", "POUTRE", "SOL"];
+  return Object.keys(REGULATIONS).sort((a, b) => ordre.indexOf(a) - ordre.indexOf(b));
 }
 
 export function getArche(apparatus: string, archeId: string): Arche | undefined {

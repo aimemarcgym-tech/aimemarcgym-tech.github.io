@@ -3,10 +3,10 @@ import { createShare, type TeamAllShareData } from "@/lib/shares";
 import { buildGymnastMovementShares } from "@/lib/movementShare";
 
 const APPARATUS_LABELS: Record<string, string> = {
-  SOL: "Sol",
+  SAUT: "Saut",
   BARRES_ASYM: "Barres asymétriques",
   POUTRE: "Poutre",
-  SAUT: "Saut",
+  SOL: "Sol",
 };
 
 // "2019/2017" -> {min: 2017, max: 2019} ; "2015 et avant" -> {min: -Infinity, max: 2015}

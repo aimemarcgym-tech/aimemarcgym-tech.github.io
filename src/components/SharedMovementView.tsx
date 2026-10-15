@@ -8,10 +8,10 @@ import { getApparatusTips, getSautTips } from "@/lib/tips";
 import { serieDe } from "@/lib/series";
 
 const APPARATUS_LABELS: Record<string, string> = {
-  SOL: "Sol",
+  SAUT: "Saut",
   BARRES_ASYM: "Barres asymétriques",
   POUTRE: "Poutre",
-  SAUT: "Saut",
+  SOL: "Sol",
 };
 
 const PALIER_LABEL: Record<string, string> = {

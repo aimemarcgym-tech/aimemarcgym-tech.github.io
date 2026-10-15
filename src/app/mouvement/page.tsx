@@ -9,10 +9,10 @@ import MovementBuilder from "@/components/MovementBuilder";
 import SautBuilder from "@/components/SautBuilder";
 
 const APPARATUS_LABELS: Record<string, string> = {
-  SOL: "Sol",
+  SAUT: "Saut",
   BARRES_ASYM: "Barres asymétriques",
   POUTRE: "Poutre",
-  SAUT: "Saut",
+  SOL: "Sol",
 };
 
 type Movement = Awaited<ReturnType<typeof getMovement>>;

@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import type { PassageOrderAllShareData } from "@/lib/shares";
+import { trierAgres } from "@/lib/agres";
 
 // Ordres de passage d'une équipe, un onglet par agrès (pages de partage en lecture seule).
-export default function PassageOrderTabs({ apparatuses }: { apparatuses: PassageOrderAllShareData["apparatuses"] }) {
+export default function PassageOrderTabs({ apparatuses: liste }: { apparatuses: PassageOrderAllShareData["apparatuses"] }) {
+  // Rotation olympique, y compris pour les anciens liens créés dans un autre ordre.
+  const apparatuses = trierAgres(liste, (a) => a.apparatus);
   const [current, setCurrent] = useState(apparatuses[0]?.apparatus ?? "");
   const active = apparatuses.find((a) => a.apparatus === current) ?? apparatuses[0];
   if (!active) return null;

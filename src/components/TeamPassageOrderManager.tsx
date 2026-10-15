@@ -14,10 +14,10 @@ import { useDragReorder } from "@/hooks/useDragReorder";
 type Gymnast = Awaited<ReturnType<typeof getGymnasts>>[number];
 
 const APPARATUS_LABELS: Record<string, string> = {
-  SOL: "Sol",
+  SAUT: "Saut",
   BARRES_ASYM: "Barres asymétriques",
   POUTRE: "Poutre",
-  SAUT: "Saut",
+  SOL: "Sol",
 };
 
 function ApparatusOrderList({

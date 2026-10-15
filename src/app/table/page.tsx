@@ -8,10 +8,10 @@ import { isVariantElement, isMousseElement } from "@/regulation/variants";
 import DecompositionNote from "@/components/DecompositionNote";
 
 const APPARATUS_LABELS: Record<string, string> = {
-  SOL: "Sol",
+  SAUT: "Saut",
   BARRES_ASYM: "Barres asymétriques",
   POUTRE: "Poutre",
-  SAUT: "Saut",
+  SOL: "Sol",
 };
 
 function palierLabel(p: Palier) {

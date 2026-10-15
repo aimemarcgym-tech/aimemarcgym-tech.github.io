@@ -1,5 +1,6 @@
 "use client";
 
+import { trierAgres } from "@/lib/agres";
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getShare, type ShareDoc, type TeamAllShareData } from "@/lib/shares";
@@ -10,7 +11,7 @@ type Section = "ordres" | "mouvements";
 function PassageOrders({ data }: { data: TeamAllShareData }) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {data.passageOrder.apparatuses.map((a) => (
+      {trierAgres(data.passageOrder.apparatuses, (a) => a.apparatus).map((a) => (
         <section key={a.apparatus} className="rounded-lg border border-border-subtle bg-surface p-4">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">{a.apparatusLabel}</h2>
           {a.gymnasts.length === 0 ? (

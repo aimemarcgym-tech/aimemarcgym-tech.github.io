@@ -16,10 +16,10 @@ import { createShare } from "@/lib/shares";
 import { buildGymnastMovementShares } from "@/lib/movementShare";
 
 const APPARATUS_LABELS: Record<string, string> = {
-  SOL: "Sol",
+  SAUT: "Saut",
   BARRES_ASYM: "Barres asymétriques",
   POUTRE: "Poutre",
-  SAUT: "Saut",
+  SOL: "Sol",
 };
 
 // Ordre officiel de rotation en compétition GAF.
