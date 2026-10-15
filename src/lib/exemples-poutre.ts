@@ -387,5 +387,83 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       "« 1 LG ou LM dont 2 P3 minimum » est validée par la série mixte (saut enjambé P4 et souplesse avant P4), « 1 LA sur poutre » par la série acro (roue « + » et roue), « 1 saut avec 1 rotation à 180° » par le saut en extension ½ tour, « 1 sortie avec liaison acro » par la souplesse arrière « + » suivie du salto arrière groupé : chaque valorisation a ses propres éléments (FAQ #214, #45).",
       "« 1 élément acro P5 minimum sur la poutre » et « Poutre mousse : 1 LA dont 1 élément avec envol » ne sont pas confirmées : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
+  },
+  {
+    "apparatus": "POUTRE",
+    "evolutionId": "C2",
+    "titre": "Poutre C2 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "1"
+      },
+      {
+        "code": "82-26"
+      },
+      {
+        "code": "67",
+        "serie": "GYMNIQUE"
+      },
+      {
+        "code": "63",
+        "serie": "GYMNIQUE"
+      },
+      {
+        "code": "153+-26",
+        "serie": "ACRO"
+      },
+      {
+        "code": "187-26",
+        "serie": "ACRO"
+      },
+      {
+        "code": "61"
+      },
+      {
+        "code": "166-26"
+      },
+      {
+        "code": "202-26"
+      }
+    ],
+    "confirmations": [
+      "P-C2-V1",
+      "P-C2-V2",
+      "P-C2-V3",
+      "P-C2-V4"
+    ],
+    "validations": {
+      "P-C2-TC-1": [
+        "153+-26",
+        "187-26",
+        "166-26",
+        "202-26"
+      ],
+      "P-C2-TC-2": [
+        "82-26"
+      ],
+      "P-C2-TC-3": [
+        "63"
+      ],
+      "P-C2-V1": [
+        "67",
+        "63"
+      ],
+      "P-C2-V2": [
+        "61"
+      ],
+      "P-C2-V3": [
+        "153+-26",
+        "187-26"
+      ],
+      "P-C2-V4": [
+        "166-26"
+      ]
+    },
+    "remarques": [
+      "Entrée en bout de poutre, pivot, série gymnique (saut enjambé avec changement de jambes, saut antéropostérieur ½ tour), série acro (souplesse arrière « + », salto arrière groupé), saut groupé ½ tour, flic-flac, et la sortie en dernier.",
+      "« 1 élément P6 » du tronc commun est validé par le saut antéropostérieur avec ½ tour (P6).",
+      "« 1 LG ou LM dont 2 P4 minimum » est validée par la série gymnique, « 1 LA dont 1 élément avec envol » par la série acro (le salto), « 1 acro avec envol sur la poutre » par le flic-flac (P5) : la sortie ne compte que pour le tronc commun (FAQ #145). « 1 saut avec 1 rotation à 180° » est validée par le saut groupé ½ tour.",
+      "« 1 sortie avec liaison acro dont un élément P4 minimum » et « Poutre mousse : 1 LA de 2 éléments dont 1 salto » ne sont pas confirmées : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
+    ]
   }
 ];
