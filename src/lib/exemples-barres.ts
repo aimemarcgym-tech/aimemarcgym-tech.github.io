@@ -401,5 +401,69 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "« 1 élément en balancé avant ou arrière » est validée par le grand rétablissement (P3), « 1 élément fini à l'ATR » par l'élan en arrière à l'ATR (P5), « 1 rotation P4 minimum » par le tour d'appui arrière libre (P4), « 1 élément P4 minimum » par la bascule (P4) : chaque valorisation a ses propres éléments (FAQ #214).",
       "« 1 lâcher » et « 1 sortie P4 minimum amenée du balancé » ne sont pas confirmées : le mouvement ne contient pas de lâcher et la sortie est en P3. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
+  },
+  {
+    "apparatus": "BARRES_ASYM",
+    "evolutionId": "C2",
+    "titre": "Barres asymétriques C2 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "15-26"
+      },
+      {
+        "code": "100rot"
+      },
+      {
+        "code": "51-26"
+      },
+      {
+        "code": "98-26"
+      },
+      {
+        "code": "46-26"
+      },
+      {
+        "code": "73-26"
+      },
+      {
+        "code": "124bb"
+      },
+      {
+        "code": "157-26"
+      }
+    ],
+    "confirmations": [
+      "BA-C2-TC-1",
+      "BA-C2-V2",
+      "BA-C2-V3",
+      "BA-C2-V4",
+      "BA-C2-V5"
+    ],
+    "validations": {
+      "BA-C2-TC-2": [
+        "124bb"
+      ],
+      "BA-C2-TC-3": [
+        "73-26"
+      ],
+      "BA-C2-V2": [
+        "124bb"
+      ],
+      "BA-C2-V3": [
+        "51-26"
+      ],
+      "BA-C2-V4": [
+        "100rot"
+      ],
+      "BA-C2-V5": [
+        "15-26",
+        "73-26"
+      ]
+    },
+    "remarques": [
+      "Venir à l'appui (bascule, bascule faciale, bascule BS), rotations, élan à l'ATR, grand tour, puis la sortie en dernier.",
+      "« 1 grand tour » est validée par le grand tour en arrière 360° (soleil, P5), « 1 élément P5 minimum » par la bascule faciale (P5), « 1 rotation P4 minimum » par le tour d'appui arrière libre (P4), « bascule avec un élément fini à l'ATR » par la bascule suivie de l'élan en arrière à l'ATR (P5) : chaque valorisation a ses propres éléments (FAQ #214).",
+      "« 1 lâcher » et « 1 sortie P5 minimum » ne sont pas confirmées : le mouvement ne contient pas de lâcher et la sortie (salto arrière tendu) est en P4. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
+    ]
   }
 ];
