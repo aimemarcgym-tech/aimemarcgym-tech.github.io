@@ -74,6 +74,9 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
         "code": "1bisnew"
       },
       {
+        "code": "70elan"
+      },
+      {
         "code": "91rot"
       },
       {
@@ -116,7 +119,7 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
         "1bisnew"
       ],
       "BA-A2-V3": [
-        "68-26"
+        "70elan"
       ],
       "BA-A2-V4": [
         "68-26"
@@ -124,8 +127,8 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     },
     "remarques": [
       "Enchaînement de balancés : balancé avant à l'horizontale puis balancé arrière, répétés deux fois (les balancés répétés ne comptent qu'une fois dans le nombre d'éléments).",
-      "À vérifier : la pose des pieds jambes groupées (68-26) sert à la fois à « 1 élément de l'arche des élans » et à « 1 pose de pieds à la station debout puis sortie en saut droit vers l'avant ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, l'une des deux (+2) ne serait pas retenue (note de 11 au lieu de 13), sauf avec un deuxième élément de l'arche des élans.",
-      "À vérifier : « Sauter à l'appui » est classé Base dans les données, alors que la FAQ #206 parle de l'élément P1 « monter à l'appui » pour la valorisation « 1 sauter à l'appui ». Les éléments Base ne sont normalement pas valorisables.",
+      "« 1 élément de l'arche des élans » est validée par la prise d'élan corps aligné (70) et « 1 pose de pieds à la station debout puis sortie en saut droit vers l'avant » par la pose des pieds jambes groupées (68-26) : chaque valorisation a son propre élément (FAQ #214).",
+      "À vérifier : « Sauter à l'appui » et la « prise d'élan corps aligné » sont classés Base dans nos données, donc normalement non valorisables. Ton programme de club et la FAQ #206 parlent d'éléments P1 pour ces valorisations.",
       "« 1 élément BI et 1 BS » est confirmée à la main : à vérifier selon la chorégraphie."
     ]
   }
