@@ -11,8 +11,40 @@ const PORTEE_COLOR: Record<string, string> = {
   GAM: "text-success",
 };
 
+type Regle = { portee: string; theme: string; detail: string[] };
+
+function ListeRegles({ regles }: { regles: Regle[] }) {
+  return (
+    <ul className="space-y-3">
+      {regles.map((r, i) => (
+        <li key={i} className="rounded-lg border border-border-subtle bg-surface p-4">
+          <div className="mb-1 flex items-center gap-2">
+            <span
+              className={`rounded-full border border-border-strong px-2 py-0.5 text-[10px] font-semibold uppercase ${
+                PORTEE_COLOR[r.portee] ?? "text-muted"
+              }`}
+            >
+              {r.portee}
+            </span>
+            <span className="text-sm font-semibold text-foreground">{r.theme}</span>
+          </div>
+          {r.detail.length === 1 ? (
+            <p className="text-sm text-muted">{r.detail[0]}</p>
+          ) : (
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
+              {r.detail.map((d, j) => (
+                <li key={j}>{d}</li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function GeneralitesView({ data }: { data: Generalites }) {
-  const [tab, setTab] = useState<"regles" | "lexique" | "agres">("regles");
+  const [tab, setTab] = useState<"regles" | "penalites" | "lexique" | "agres">("regles");
   const [selectedAgres, setSelectedAgres] = useState(data.agres[0]?.id ?? "");
 
   const agres = data.agres.find((a) => a.id === selectedAgres) ?? data.agres[0];
@@ -27,6 +59,14 @@ export default function GeneralitesView({ data }: { data: Generalites }) {
           }`}
         >
           Règles de jugement
+        </button>
+        <button
+          onClick={() => setTab("penalites")}
+          className={`flex-1 rounded px-3 py-2 text-sm font-semibold uppercase tracking-wide ${
+            tab === "penalites" ? "accent-gradient text-white" : "text-muted hover:text-foreground"
+          }`}
+        >
+          Jugement &amp; pénalités
         </button>
         <button
           onClick={() => setTab("lexique")}
@@ -46,33 +86,9 @@ export default function GeneralitesView({ data }: { data: Generalites }) {
         </button>
       </div>
 
-      {tab === "regles" && (
-        <ul className="space-y-3">
-          {data.reglesJugement.map((r, i) => (
-            <li key={i} className="rounded-lg border border-border-subtle bg-surface p-4">
-              <div className="mb-1 flex items-center gap-2">
-                <span
-                  className={`rounded-full border border-border-strong px-2 py-0.5 text-[10px] font-semibold uppercase ${
-                    PORTEE_COLOR[r.portee] ?? "text-muted"
-                  }`}
-                >
-                  {r.portee}
-                </span>
-                <span className="text-sm font-semibold text-foreground">{r.theme}</span>
-              </div>
-              {r.detail.length === 1 ? (
-                <p className="text-sm text-muted">{r.detail[0]}</p>
-              ) : (
-                <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
-                  {r.detail.map((d, j) => (
-                    <li key={j}>{d}</li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+      {tab === "regles" && <ListeRegles regles={data.reglesJugement} />}
+
+      {tab === "penalites" && <ListeRegles regles={data.jugementPenalites} />}
 
       {tab === "lexique" && (
         <ul className="grid gap-3 sm:grid-cols-2">

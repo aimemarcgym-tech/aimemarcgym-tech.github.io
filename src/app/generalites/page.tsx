@@ -12,7 +12,7 @@ export default function GeneralitesPage() {
             <span className="accent-gradient-text">Généralités</span>
           </h1>
           <p className="mt-1 text-sm text-muted">
-            Règles de jugement transversales, lexique et matériel/jugement par agrès — {data.source}
+            Règles de jugement transversales, jugement et pénalités, lexique et matériel/jugement par agrès — {data.source}
           </p>
         </div>
       </header>

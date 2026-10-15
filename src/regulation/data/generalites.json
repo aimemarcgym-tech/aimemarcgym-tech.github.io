@@ -4,7 +4,9 @@
     {
       "portee": "MIXTE",
       "theme": "Fautes d'angles",
-      "detail": ["Voir le document technique (barème des pénalisations d'angles par élément)."]
+      "detail": [
+        "Voir le document technique (barème des pénalisations d'angles par élément)."
+      ]
     },
     {
       "portee": "MIXTE",
@@ -28,22 +30,30 @@
     {
       "portee": "MIXTE",
       "theme": "Reconnaissance d'un élément",
-      "detail": ["Un élément non terminé sur les pieds et/ou sur l'agrès n'est pas reconnu (+ 1 pt de pénalité pour chute)."]
+      "detail": [
+        "Un élément non terminé sur les pieds et/ou sur l'agrès n'est pas reconnu (+ 1 pt de pénalité pour chute)."
+      ]
     },
     {
       "portee": "MIXTE",
       "theme": "Sol : salti dans les LAE",
-      "detail": ["Au Sol, les salti doivent être appel 2 pieds dans les LAE."]
+      "detail": [
+        "Au Sol, les salti doivent être appel 2 pieds dans les LAE."
+      ]
     },
     {
       "portee": "MIXTE",
       "theme": "Sol : éléments répétables dans les LAE",
-      "detail": ["Au Sol, les éléments rondade, flip, saut de mains sont répétables dans les LAE, mais comptabilisés 1 seule fois dans le nombre d'éléments."]
+      "detail": [
+        "Au Sol, les éléments rondade, flip, saut de mains sont répétables dans les LAE, mais comptabilisés 1 seule fois dans le nombre d'éléments."
+      ]
     },
     {
       "portee": "MIXTE",
       "theme": "Liaisons : sens",
-      "detail": ["La liaison entre 2 éléments détermine le sens de celle-ci."]
+      "detail": [
+        "La liaison entre 2 éléments détermine le sens de celle-ci."
+      ]
     },
     {
       "portee": "GAF",
@@ -56,25 +66,93 @@
     {
       "portee": "GAF",
       "theme": "Sortie sur balancer arrière",
-      "detail": ["Elle n'est pas codifiée : pas de pénalités d'amplitude, mais la position du corps et les fautes de tenue sont pénalisées."]
+      "detail": [
+        "Elle n'est pas codifiée : pas de pénalités d'amplitude, mais la position du corps et les fautes de tenue sont pénalisées."
+      ]
+    },
+    {
+      "portee": "GAF",
+      "theme": "Tremplins autorisés",
+      "detail": [
+        "7-12 ans : 2 tremplins (environ 21 cm) ou 1 double tremplin aux asymétriques, à la poutre, aux parallèles et aux arçons.",
+        "13 ans et plus : 1 tremplin (environ 21 cm) à ces mêmes agrès.",
+        "Pour le saut, voir le matériel du Saut."
+      ]
     }
   ],
   "lexique": [
-    { "acronym": "Tronc commun", "definition": "Base commune de chaque niveau." },
-    { "acronym": "Arche", "definition": "Classification technique des éléments." },
-    { "acronym": "Palier", "definition": "Le niveau de classification technique des éléments sur chaque arche." },
-    { "acronym": "Prérequis", "definition": "Base technique initiale à l'évolution de l'arche." },
-    { "acronym": "Nomades", "definition": "Éléments non évolutifs (éléments isolés)." },
-    { "acronym": "Valorisation", "definition": "Orientation technique de l'évolution gymnique et acrobatique. Il y a 2 niveaux de valorisations : principales (★) et secondaires." },
-    { "acronym": "LA — Liaison Acrobatique", "definition": "Enchaînement de plusieurs éléments acrobatiques liés directement sans pas intermédiaires et sans sursauts." },
-    { "acronym": "LAE — Liaison Acrobatique avec Envol", "definition": "Enchaînement de plusieurs éléments acrobatiques avec envol liés directement sans pas intermédiaires et sans sursauts." },
-    { "acronym": "LG — Liaison Gymnique", "definition": "Enchaînement de 2 éléments minimum gymniques différents." },
-    { "acronym": "LM — Liaison Mixte", "definition": "Enchaînement d'un élément gymnique et d'un élément acrobatique, ou inversement." },
-    { "acronym": "PG — Passage Gymnique", "definition": "Enchaînement de 2 sauts minimum différents liés directement ou indirectement avec des pas courus, petits sauts, pas chassés, tour chorégraphique... etc, sans passage au sol ni passage chorégraphique statique entre les sauts." },
-    { "acronym": "Éléments gymniques", "definition": "Sauts, Pivots, Maintiens." },
-    { "acronym": "Lâcher", "definition": "Élément avec envol avec saisie de la barre avec les mains simultanées ou alternatives." },
-    { "acronym": "Reprise d'élan", "definition": "Élan des jambes à l'appui facial qui n'est pas nécessaire à l'élément suivant (élan à vide)." },
-    { "acronym": "Balancé intermédiaire", "definition": "Balancé répété à la suite qui n'est pas nécessaire à l'élément suivant, sauf si la valorisation le demande. Une seule pénalité d'élan à vide est comptée pour balancer avant-arrière." }
+    {
+      "acronym": "Tronc commun",
+      "definition": "Base commune de chaque niveau."
+    },
+    {
+      "acronym": "Arche",
+      "definition": "Classification technique des éléments."
+    },
+    {
+      "acronym": "Palier",
+      "definition": "Le niveau de classification technique des éléments sur chaque arche."
+    },
+    {
+      "acronym": "Prérequis",
+      "definition": "Base technique initiale à l'évolution de l'arche."
+    },
+    {
+      "acronym": "Nomades",
+      "definition": "Éléments non évolutifs (éléments isolés)."
+    },
+    {
+      "acronym": "Valorisation",
+      "definition": "Orientation technique de l'évolution gymnique et acrobatique. Il y a 2 niveaux de valorisations : principales (★) et secondaires."
+    },
+    {
+      "acronym": "LA — Liaison Acrobatique",
+      "definition": "Enchaînement de plusieurs éléments acrobatiques liés directement sans pas intermédiaires et sans sursauts."
+    },
+    {
+      "acronym": "LAE — Liaison Acrobatique avec Envol",
+      "definition": "Enchaînement de plusieurs éléments acrobatiques avec envol liés directement sans pas intermédiaires et sans sursauts. Les saltos doivent être appel 2 pieds."
+    },
+    {
+      "acronym": "LG — Liaison Gymnique",
+      "definition": "Enchaînement de 2 éléments minimum gymniques différents (pivot et saut uniquement). Les 2 éléments doivent être dans les paliers valorisables."
+    },
+    {
+      "acronym": "LM — Liaison Mixte",
+      "definition": "Enchaînement d'un élément gymnique (pivot et saut uniquement) et d'un élément acrobatique, ou inversement, en poutre. Les 2 éléments doivent être dans les paliers valorisables."
+    },
+    {
+      "acronym": "PG — Passage Gymnique",
+      "definition": "Enchaînement de 2 sauts minimum différents liés directement ou indirectement avec des pas courus, petits sauts, pas chassés, tour chorégraphique, etc., sans passage au sol ni passage chorégraphique statique entre les sauts."
+    },
+    {
+      "acronym": "Éléments gymniques",
+      "definition": "Sauts, pivots et maintiens (le maintien n'est pas admis dans les séries LM et LG)."
+    },
+    {
+      "acronym": "Lâcher",
+      "definition": "Élément avec envol avec saisie de la barre avec les mains simultanées ou alternatives (entrée poisson, retrait schoushounova, retrait, contre-mouvement, shapochnikova et salto pak, gienger, jaeger, voronin)."
+    },
+    {
+      "acronym": "Reprise d'élan",
+      "definition": "Élan des jambes à l'appui facial qui n'est pas nécessaire à l'élément suivant (élan à vide)."
+    },
+    {
+      "acronym": "Balancé intermédiaire",
+      "definition": "Balancé répété à la suite qui n'est pas nécessaire à l'élément suivant, sauf si la valorisation le demande. Une seule pénalité d'élan à vide est comptée pour balancer avant-arrière."
+    },
+    {
+      "acronym": "Élément +",
+      "definition": "Élément acro enchaîné directement d'un autre élément acro au sol, ou gymnique pour les LM en poutre. L'élément « + » et l'élément normal sont deux éléments différents."
+    },
+    {
+      "acronym": "Changement de barre",
+      "definition": "Passage d'une barre à l'autre entre 2 éléments des paliers autorisés."
+    },
+    {
+      "acronym": "Élan à vide",
+      "definition": "Se divise en reprise d'élan et balancé intermédiaire. Une seule pénalité d'élan à vide est comptée pour un balancé avant-arrière."
+    }
   ],
   "agres": [
     {
@@ -90,12 +168,27 @@
         "debut": "Premier mouvement gymnique ou acrobatique.",
         "fin": "Dernier mouvement gymnique ou acrobatique (l'enchaînement doit se terminer avec la musique)."
       },
-      "rappels": ["Chute sur les salti : reconnue si réception sur les pieds d'abord, sinon non reconnue."],
+      "rappels": [
+        "Chute sur les salti : reconnue si réception sur les pieds d'abord, sinon non reconnue.",
+        "Chaque gymnaste doit avoir son enregistrement musical sur clé USB."
+      ],
       "tempsMax": [
-        { "label": "Évolution A", "duree": "40''" },
-        { "label": "Évolution B1 et B2", "duree": "55''" },
-        { "label": "Évolution B3", "duree": "1'10''" },
-        { "label": "Évolution C", "duree": "1'30''" }
+        {
+          "label": "Évolution A",
+          "duree": "40''"
+        },
+        {
+          "label": "Évolution B1 et B2",
+          "duree": "55''"
+        },
+        {
+          "label": "Évolution B3",
+          "duree": "1'10''"
+        },
+        {
+          "label": "Évolution C",
+          "duree": "1'30''"
+        }
       ]
     },
     {
@@ -118,7 +211,8 @@
         "En cas de chute, la gymnaste a 30'' pour reprendre son enchaînement (au-delà, l'enchaînement est considéré comme fini).",
         "Chute sur les éléments avec envol : reconnu si saisie de la barre d'une ou des deux mains (prise brève) ; non reconnu si la barre est seulement frôlée sans saisie.",
         "Entraîneurs : présence autorisée près de l'agrès.",
-        "Entraîneurs : interdiction de modifier l'écartement des barres en cours d'enchaînement ou après une chute (sinon arrêt du jugement)."
+        "Entraîneurs : interdiction de modifier l'écartement des barres en cours d'enchaînement ou après une chute (sinon arrêt du jugement).",
+        "Évolution A : enchaînement autorisé en 2 ou 3 parties. Évolution B : enchaînement autorisé en 2 parties maximum."
       ]
     },
     {
@@ -141,9 +235,18 @@
         "Entraîneurs : non autorisés à rester près de l'agrès."
       ],
       "tempsMax": [
-        { "label": "Évolution A", "duree": "1'10\" (chutes comprises)" },
-        { "label": "Évolution B", "duree": "1'30\" (chutes comprises)" },
-        { "label": "Évolution C", "duree": "2' (chutes comprises)" }
+        {
+          "label": "Évolution A",
+          "duree": "1'10\" (chutes comprises)"
+        },
+        {
+          "label": "Évolution B",
+          "duree": "1'30\" (chutes comprises)"
+        },
+        {
+          "label": "Évolution C",
+          "duree": "2' (chutes comprises)"
+        }
       ]
     },
     {
@@ -169,6 +272,116 @@
         "Une seule valorisation possible. Je note chaque saut, j'applique les fautes, je calcule la note finale, PUIS j'ajoute la valorisation sur la meilleure des deux notes.",
         "À partir de 13 ans, trampo-tremp autorisé avec déduction d'un point (trampo-tremp = tremplin pour les moins de 13 ans).",
         "Mini trampoline autorisé pour la saison 2026-2027 avec une pénalité de 1 point."
+      ]
+    }
+  ],
+  "jugementPenalites": [
+    {
+      "portee": "MIXTE",
+      "theme": "Échelle des fautes",
+      "detail": [
+        "Petites fautes : 0,1 · Moyennes fautes : 0,3 · Grosses fautes : 0,5 · Très grosses fautes : 1.",
+        "NR : élément non reconnu.",
+        "Les déductions pour fautes de tenue du corps, des bras et des jambes s'ajoutent aux pénalisations des autres fautes."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Rappels techniques",
+      "detail": [
+        "La gymnastique se veut « bras tendus », « jambes tendues » et « jambes serrées » (d'où les précisions d'éléments pour bras fléchis ou jambes écartées).",
+        "Pour tous les éléments présentés, reconnus ou non en difficulté, toutes les fautes de tenue sont pénalisables.",
+        "En cas de chute sur agrès, le jugement reprend quand la gymnaste a repris sa place, au premier élément.",
+        "Est considéré comme élément gymnique tout élément des sauts, pirouettes ou maintiens en appui pédestre. Aux barres asymétriques, il n'existe aucun élément gymnique.",
+        "Éléments réalisés jambes serrées : une seule pénalité pour la flexion des jambes. Éléments demandés avec écart de jambes : les 2 jambes sont dissociées (une faute possible sur chaque jambe ou sur une seule).",
+        "En cas de chute, les fautes de réception (pas, rebond, accroupi, déséquilibre) ne comptent pas."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Éléments de maintien",
+      "detail": [
+        "Maintien de plus de 2 s : aucune pénalité.",
+        "Maintien de 1 à 2 s : −0,3.",
+        "Maintien de moins de 1 s : non reconnu (NR)."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Éléments passant par l'ATR",
+      "detail": [
+        "Deux critères obligatoires : alignement épaules / bassin et position du corps tendu.",
+        "Alignement des épaules et du bassin par rapport à la verticale : de 1 à 10° aucune pénalité ; de 11 à 20° −0,3 ; de 21 à 30° −0,5.",
+        "Angle des jambes par rapport à la verticale : de 1 à 15° −0,1 ; de 16 à 30° −0,3 ; de 31 à 45° −0,5 ; plus de 45° NR."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Sauts gymniques : exigences techniques",
+      "detail": [
+        "Saut groupé : angle des hanches de 45° par rapport à la verticale.",
+        "Saut de chat / ciseaux : élévation alternative des genoux, genoux au-dessus de l'horizontale. De 1 à 15° au-dessus de l'horizontale −0,1 ; genou à l'horizontale −0,3 ; de 1 à 15° sous l'horizontale −0,5 ; à partir de 16° sous l'horizontale NR.",
+        "Saut cosaque : angle des hanches inférieur à 90°, jambe tendue à l'horizontale. De 1 à 15° −0,1 ; de 16 à 30° −0,3 ; de 31 à 45° −0,5 ; 46° et plus NR.",
+        "Saut changement de jambe / changement demi / gogean : battement de la 1re jambe à 45° minimum, jambes tendues, écart de jambes à 180°. Déviation du bassin par rapport à l'horizontale : de 1 à 15° −0,1 ; de 16 à 30° −0,3 ; de 31 à 45° −0,5 ; 46° et plus NR.",
+        "Saut écart antéropostérieur : écart de jambes à 180°, jambes tendues."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Fautes de tenue, générales et de réception (liste)",
+      "detail": [
+        "Tenue : position groupée, carpée ou tendue insuffisante ; bras fléchis ; jambes fléchies ; jambes croisées ; jambes écartées ; pointes de pieds non tendues (déduction maximale sur le mouvement : 0,5).",
+        "Générales : hauteur dans les sauts gymniques ou éléments acrobatiques avec envol ; déviation par rapport à la ligne d'élan ; épaules en avant pour les éléments avec appui manuel ; déséquilibre ; touche ou appui du tapis ou de l'agrès ; chute ; déplacement sur pieds à plat (max. 0,5) ; double touche lors des LA / LAE ; appuis complémentaires des mains ou des pieds (max. 0,5) ; arrêt entre les éléments ; exercice sans sortie (ou sortie hors du palier autorisé, sauf aux barres en A1, A2 et B1).",
+        "Réception : pieds écartés ; sursaut ou rebond (max. 0,5 par réception) ; pas supplémentaires (max. 0,5 par réception) ; réception accroupie ; chute ; réception non terminée sur les pieds ou l'agrès.",
+        "Artistique : manque de prestance ; manque de cadence et de rythme ; absence de passage près du sol ou de la poutre ; manque de variété chorégraphique (sol et poutre).",
+        "Le montant de chaque faute figure dans le tableau des fautes du programme technique."
+      ]
+    },
+    {
+      "portee": "GAF",
+      "theme": "Fautes spécifiques par agrès (liste)",
+      "detail": [
+        "Sol : sortie de praticable (1 pied, 2 pieds) ; non-utilisation de l'ensemble du praticable (sauf 2 premiers niveaux) ; appuis des mains pas à plat lors des appuis manuels ; éléments réceptionnés à 2 pieds à l'extérieur du praticable = NR ; exercice non terminé avec la musique ; musique manquante, avec chant ou mal encodée ; manque de relation musique-mouvement ; dernier élément de l'enchaînement non acrobatique.",
+        "Barres asymétriques : répétition pour l'élément suivant (élan circulaire, tour d'appui arrière à la suite, chaque fois) ; reprise d'élan en appui et/ou en suspension (élan à vide) ; manque de dynamisme et d'amplitude dans les liaisons ; prise de mains alternées lors des lâchers (décalage autorisé lors des rotations longitudinales) ; position groupée trop tôt pour les sorties.",
+        "Poutre : dépassement du temps autorisé (chute comprise) ; position groupée trop tôt pour les sorties."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Comportements : déductions par les juges",
+      "detail": [
+        "Entraîneur : touche ou aide pendant l'exercice ou la sortie ; accompagnement gestuel sans touche (sol, saut, poutre, arçons) ; aide et touche à la réception ; touche de l'engin (chaque fois) ; signes, appels et conseils verbaux à la gymnaste (chaque fois) ; présence près de l'agrès non autorisée (chaque fois) ; nombre d'entraîneurs non conforme.",
+        "Gymnaste : échauffement non autorisé ; se recoiffer ou remettre sa tenue en place sur l'agrès ; mouvement débuté sans le signal des juges (et à recommencer).",
+        "Autres fautes : sur-tapis obligatoire retiré ou mal placé ; tremplin, tapis ou autre objet non autorisé ; tenue de gymnastique non uniforme pour l'équipe (sauf équipe UFOLEP)."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Déductions sur le total de l'équipe (responsables des juges, chefs de plateau)",
+      "detail": [
+        "Gymnaste : comportement incorrect en geste ou en parole, ou exclusion du plateau ; retirer sa tenue de compétition sur le plateau (après un 1er avertissement) ; tenue incorrecte (justaucorps, bijoux, bas de contention, ceinture lombaire, etc.).",
+        "Entraîneur : comportement incorrect en geste ou en parole (accès au plateau refusé) ; changement d'entraîneur non autorisé (accès au plateau refusé) ; tenue vestimentaire non conforme au règlement.",
+        "Juge : tenue incorrecte ; comportement incorrect en geste ou en parole."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Juge en retard ou absent",
+      "detail": [
+        "Juge en retard de 0 à 10 minutes : tolérance.",
+        "De 10 à 20 minutes : amende pour juge absent (voir le règlement financier) et pénalité de 3 points sur le total de l'équipe représentée.",
+        "Au-delà de 20 minutes : amende pour juge absent et pénalité de 10 points sur le total de l'équipe représentée.",
+        "Absence de juge : amende pour juge absent et déclassement (impossibilité de passer à l'échelon supérieur de l'équipe représentée)."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Note de départ maximale par évolution",
+      "detail": [
+        "Évolution A : tronc commun 4 + valorisations 9 = 13.",
+        "Évolution B1 : tronc commun 4 + valorisations 10 = 14.",
+        "Évolutions B2 et B3 : tronc commun 5 + valorisations 10 = 15.",
+        "Évolution C : tronc commun 5 + valorisations 10 = 15."
       ]
     }
   ]
