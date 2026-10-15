@@ -508,7 +508,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "195+"
       },
       {
-        "code": "105"
+        "code": "188"
       },
       {
         "code": "51enjambe",
@@ -519,17 +519,17 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "serie": "GYMNIQUE"
       },
       {
-        "code": "154+"
+        "code": "170+"
       },
       {
-        "code": "185"
+        "code": "170"
       }
     ],
     "confirmations": [
       "C3-V1",
       "C3-V2",
       "C3-V3",
-      "C3-V4"
+      "C3-V6"
     ],
     "validations": {
       "C3-TC-1": [
@@ -539,32 +539,34 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       "C3-TC-2": [
         "148+",
         "195+",
-        "105",
-        "154+",
-        "185"
+        "188",
+        "170+",
+        "170"
       ],
       "C3-TC-3": [
-        "185"
+        "188"
       ],
       "C3-V1": [
-        "105"
+        "188"
       ],
       "C3-V2": [
         "148+",
         "195+",
-        "105"
+        "188"
       ],
       "C3-V3": [
         "71enjambe"
       ],
-      "C3-V4": [
-        "185"
+      "C3-V6": [
+        "188",
+        "170+",
+        "170"
       ]
     },
     "remarques": [
-      "LAE 1 de 3 éléments différents : rondade « + », flic-flac « + », double salto arrière groupé (P6). LAE 2 : saut de mains « + », salto avant avec 1 tour (P7).",
-      "À vérifier : le double salto arrière (105) sert à la fois à « 1 acro avec double rotation » et, comme seul élément P6 de la LAE, à « 1 LAE de 3 éléments dont 1 P6 ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, une des deux seulement serait retenue (14 au lieu de 15).",
-      "« 2 acros de sens différents dans les LAE » et « 2 salti liés » ne sont pas confirmées dans ce mouvement."
+      "LAE 1 de 3 éléments différents : rondade « + », flic-flac « + », salto arrière avec 2/1 tours (P7). LAE 2 : salto avant groupé ou carpé « + » puis salto avant groupé ou carpé (2 salti liés).",
+      "À vérifier : le salto arrière 2/1 tours (188) est le seul élément à double rotation, le seul élément P6 minimum de la LAE 1 et le salto P5 minimum des « 2 salti liés ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, une seule des trois valorisations (V1, V2, V6) serait retenue (12 au lieu de 15).",
+      "« 1 élément acro P7 » et « 2 acros de sens différents dans les LAE » ne sont pas confirmées dans ce mouvement."
     ]
   }
 ];
