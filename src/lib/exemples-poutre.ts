@@ -252,7 +252,13 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
         "code": "152"
       },
       {
-        "code": "62",
+        "code": "62"
+      },
+      {
+        "code": "159-26"
+      },
+      {
+        "code": "32new",
         "serie": "GYMNIQUE"
       },
       {
@@ -260,13 +266,10 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
         "serie": "GYMNIQUE"
       },
       {
-        "code": "159-26"
+        "code": "23new"
       },
       {
         "code": "202-26"
-      },
-      {
-        "code": "23new"
       }
     ],
     "confirmations": [
@@ -287,12 +290,13 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       "P-B3-TC-3": [
         "82-26",
         "62",
+        "32new",
         "57",
         "159-26",
         "202-26"
       ],
       "P-B3-V1": [
-        "62",
+        "32new",
         "57"
       ],
       "P-B3-V2": [
@@ -306,10 +310,9 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       ]
     },
     "remarques": [
-      "Entrée en bout de poutre, puis pivot, roue, série gymnique (saut enjambé, saut de cosaque), souplesse avant, la sortie, et un acro sur la poutre mousse.",
-      "« 1 LG ou LM » est validée par la série gymnique (saut enjambé et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5). « 1 acro sur la poutre P4 minimum » par la souplesse avant (P4) : la sortie ne compte que pour le tronc commun (FAQ #145).",
-      "À vérifier : le saut enjambé (62) sert à la fois à « 1 LG ou LM » (comme élément de la série) et à « 1 saut avec écart antéro ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, l'une des deux ne serait pas retenue (note de 12 ou 13 au lieu de 15), sauf avec un autre saut à écart ou une autre liaison.",
-      "« 1 sortie avec liaison acro » n'est pas confirmée."
+      "Entrée en bout de poutre, puis pivot, roue, saut enjambé, souplesse avant, série gymnique (cosaque changement, saut de cosaque), acro sur la poutre mousse, et la sortie en dernier.",
+      "« 1 LG ou LM » est validée par la série gymnique (cosaque changement et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5), « 1 saut avec écart antéro » par le saut enjambé : chaque valorisation a ses propres éléments (FAQ #214). « 1 acro sur la poutre P4 minimum » est validée par la souplesse avant : la sortie ne compte que pour le tronc commun (FAQ #145).",
+      "« 1 sortie avec liaison acro » n'est pas confirmée : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
   }
 ];
