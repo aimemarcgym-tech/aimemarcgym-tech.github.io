@@ -496,75 +496,51 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",
     "evolutionId": "C3",
-    "titre": "Sol C3 — mouvement à la note maximale",
+    "titre": "Sol C3 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
       {
         "code": "13pivot"
       },
       {
-        "code": "148",
-        "serie": "ACRO"
+        "code": "148+"
       },
       {
-        "code": "155",
-        "serie": "ACRO"
+        "code": "195+"
       },
       {
-        "code": "178",
-        "serie": "ACRO"
+        "code": "105"
+      },
+      {
+        "code": "51enjambe",
+        "serie": "GYMNIQUE"
       },
       {
         "code": "71enjambe",
         "serie": "GYMNIQUE"
       },
       {
-        "code": "60enjambe",
-        "serie": "GYMNIQUE"
+        "code": "154+"
       },
       {
-        "code": "19pivot"
-      },
-      {
-        "code": "148+",
-        "serie": "ACRO"
-      },
-      {
-        "code": "105",
-        "serie": "ACRO"
-      },
-      {
-        "code": "128biche",
-        "serie": "GYMNIQUE"
-      },
-      {
-        "code": "154",
-        "serie": "ACRO"
-      },
-      {
-        "code": "185",
-        "serie": "ACRO"
+        "code": "185"
       }
     ],
     "confirmations": [
       "C3-V1",
       "C3-V2",
       "C3-V3",
-      "C3-V4",
-      "C3-V5"
+      "C3-V4"
     ],
     "validations": {
       "C3-TC-1": [
-        "71enjambe",
-        "60enjambe",
-        "128biche"
+        "51enjambe",
+        "71enjambe"
       ],
       "C3-TC-2": [
-        "148",
-        "155",
-        "178",
         "148+",
+        "195+",
         "105",
-        "154",
+        "154+",
         "185"
       ],
       "C3-TC-3": [
@@ -574,28 +550,21 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "105"
       ],
       "C3-V2": [
-        "148",
-        "155",
-        "178"
+        "148+",
+        "195+",
+        "105"
       ],
       "C3-V3": [
         "71enjambe"
       ],
       "C3-V4": [
         "185"
-      ],
-      "C3-V5": [
-        "155",
-        "148+",
-        "105",
-        "154",
-        "185"
       ]
     },
     "remarques": [
-      "« 1 acro avec double rotation » : double salto arrière groupé (105), après la rondade « + ».",
-      "LAE de 3 éléments différents dont 1 P6 : rondade, flic-flac, salto arrière avec 1/2 tour (178).",
-      "Mouvement à 12 éléments, le maximum du niveau."
+      "LAE 1 de 3 éléments différents : rondade « + », flic-flac « + », double salto arrière groupé (P6). LAE 2 : saut de mains « + », salto avant avec 1 tour (P7).",
+      "À vérifier : le double salto arrière (105) sert à la fois à « 1 acro avec double rotation » et, comme seul élément P6 de la LAE, à « 1 LAE de 3 éléments dont 1 P6 ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, une des deux seulement serait retenue (14 au lieu de 15).",
+      "« 2 acros de sens différents dans les LAE » et « 2 salti liés » ne sont pas confirmées dans ce mouvement."
     ]
   }
 ];
