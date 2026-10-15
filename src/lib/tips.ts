@@ -26,7 +26,7 @@ export function getApparatusTips(apparatus: string): string[] {
         "Liaison mixte (LM) : un élément gymnique (pivot ou saut uniquement) + un acro, et les deux doivent être dans les paliers valorisables. Ex. en B3, saut de chat (P2) + roue ne valide pas la LM.",
         "Un élément de l'arche ATR ne valide pas « acro en poutre haute » : il faut un élément des arches Acros 1 ou 2. Le saut droit (Acros 1) peut valider un acro, mais pas un acro et un saut en même temps.",
         "Un élément « + » est un élément à part entière, enchaîné directement à un autre élément (rondade « + » = rondade suivie d'un élément). Une LAE est par défaut une LA.",
-        "Les éléments d'une série (gymnique, mixte ou acro) peuvent valider deux valorisations : celle de la série et une autre. Ex. en B3, le grand jeté cosaque (saut enjambé + saut de cosaque) valide la série gymnique « 1 LG ou LM », et son saut enjambé valide aussi « 1 saut avec écart antéro » (information de l'entraîneur, à confirmer officiellement).",
+        "Les éléments d'une série (gymnique, mixte ou acro) peuvent valider deux valorisations : celle de la série et une autre. Ex. en B3, le grand jeté cosaque (saut enjambé + saut de cosaque) valide la série gymnique « 1 LG ou LM », et son saut enjambé valide aussi « 1 saut avec écart antéro ». Exception : une série acro terminée par la sortie (« sortie avec liaison acro ») ne partage pas ses éléments (FAQ #45, #47). Règle des séries : information de l'entraîneur, à confirmer officiellement.",
         "« Sortie avec liaison acro » : les éléments de la liaison (ex. roue + salto) ne peuvent pas servir aussi à une autre valorisation (acro P4, LA sur poutre…). On choisit l'une ou l'autre.",
       ];
     case "SOL":
