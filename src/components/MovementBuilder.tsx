@@ -20,7 +20,22 @@ const CAT_ACRO_MOUSSE = "ACRO_MOUSSE_ONLY";
 
 // Éléments qu'on peut placer plusieurs fois dans un même mouvement (les autres ne se placent qu'une fois).
 const ELEMENTS_REPETABLES: Record<string, string[]> = {
-  BARRES_ASYM: ["117bb", "116-26"], // Balancé avant à l'horizontale, Balancé arrière (P2)
+  BARRES_ASYM: [
+    "117bb", // Balancé avant à l'horizontale (P2)
+    "116-26", // Balancé arrière (P2)
+    "121rot", // Depuis un élément codifié de l'appui facial BS filé avant à la suspension (P2)
+    "51-26", // Bascule faciale de l'appui libre (P5)
+    "46-26", // Bascule BS (P4)
+    "98-26", // De l'ATR ou de l'appui facial, pose des pieds puis élan circulaire (P3)
+    "73-26", // Élan en arrière à l'ATR jambes écartées, corps carpé (P5)
+    "76elan", // Élan en arrière à l'ATR jambes serrées, corps tendu (P5)
+    "70elan", // Prise d'élan corps aligné au-dessus de l'horizontale (Base)
+    "91rot", // Tour d'appui facial en arrière (Base)
+    "68-26", // Pose des pieds jambes groupées (P2)
+    "71-26", // Pose des pieds jambes tendues serrées ou écartées (P4)
+    "124bb", // Grand tour en arrière 360°, soleil (P5)
+    "132-26", // Lune, grand tour avant, avec ou sans 1/2 tour (P7)
+  ],
   // Sol : rondade, flip et saut de mains sont répétables dans les LAE mais comptés une seule fois (brochure, FAQ #222).
   SOL: ["148", "148+", "155", "195+", "153", "154", "154+"], // Rondade, Flic-Flac arrière, Saut de mains 1 pied / 2 pieds (+ variantes)
 };
