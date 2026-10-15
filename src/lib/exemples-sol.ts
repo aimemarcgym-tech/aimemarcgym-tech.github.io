@@ -499,7 +499,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
     "titre": "Sol C3 — mouvement à la note maximale (d'après le lien partagé)",
     "elements": [
       {
-        "code": "13pivot"
+        "code": "9pivot"
       },
       {
         "code": "148+"
@@ -511,6 +511,12 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "188"
       },
       {
+        "code": "154+"
+      },
+      {
+        "code": "180"
+      },
+      {
         "code": "51enjambe",
         "serie": "GYMNIQUE"
       },
@@ -519,17 +525,20 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "serie": "GYMNIQUE"
       },
       {
-        "code": "170+"
+        "code": "148"
       },
       {
-        "code": "170"
+        "code": "155"
+      },
+      {
+        "code": "178"
       }
     ],
     "confirmations": [
       "C3-V1",
       "C3-V2",
       "C3-V3",
-      "C3-V6"
+      "C3-V5"
     ],
     "validations": {
       "C3-TC-1": [
@@ -540,8 +549,11 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "148+",
         "195+",
         "188",
-        "170+",
-        "170"
+        "154+",
+        "180",
+        "148",
+        "155",
+        "178"
       ],
       "C3-TC-3": [
         "188"
@@ -550,23 +562,27 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "188"
       ],
       "C3-V2": [
-        "148+",
-        "195+",
-        "188"
+        "148",
+        "155",
+        "178"
       ],
       "C3-V3": [
         "71enjambe"
       ],
-      "C3-V6": [
+      "C3-V5": [
+        "195+",
         "188",
-        "170+",
-        "170"
+        "154+",
+        "180",
+        "155",
+        "178"
       ]
     },
     "remarques": [
-      "LAE 1 de 3 éléments différents : rondade « + », flic-flac « + », salto arrière avec 2/1 tours (P7). LAE 2 : salto avant groupé ou carpé « + » puis salto avant groupé ou carpé (2 salti liés).",
-      "À vérifier : le salto arrière 2/1 tours (188) est le seul élément à double rotation, le seul élément P6 minimum de la LAE 1 et le salto P5 minimum des « 2 salti liés ». Un élément ne valide qu'une seule valorisation (FAQ #214) : en toute rigueur, une seule des trois valorisations (V1, V2, V6) serait retenue (12 au lieu de 15).",
-      "« 1 élément acro P7 » et « 2 acros de sens différents dans les LAE » ne sont pas confirmées dans ce mouvement."
+      "Trois lignes acro : rondade « + », flic-flac « + », salto arrière 2/1 tours (P7) ; saut de mains « + », salto avant tendu ; rondade, flic-flac, salto arrière avec 1/2 tour (P6).",
+      "« 1 acro avec double rotation » est validée par le salto arrière 2/1 tours (188) ; « 1 LAE de 3 éléments dont 1 P6 » par la 3e ligne (rondade, flic-flac, salto 1/2 tour P6) : chaque valorisation a ses propres éléments (FAQ #214).",
+      "« 1 élément acro P7 » et « 2 salti liés » ne sont pas confirmées : le salto 2/1 sert déjà à « double rotation ». « 2 acros de sens différents dans les LAE » : à confirmer (LAE vers l'arrière et LAE vers l'avant).",
+      "Mouvement à 11 éléments (8 à 12 requis)."
     ]
   }
 ];
