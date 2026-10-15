@@ -332,5 +332,74 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "« 1 élément en balancé avant ou arrière (hors sortie) » est validée par le grand rétablissement (P3, arche Balancés), valorisable en B3. « 1 rotation P3 minimum » par la pose des pieds puis élan circulaire (P3), « 2 éléments P3 minimum » par la sortie et la bascule, « bascule prise d'élan » par la bascule BS précédée de la prise d'élan : chaque valorisation a ses propres éléments (FAQ #214).",
       "« 1 sortie P4 minimum » n'est pas confirmée : la sortie est en P3. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
+  },
+  {
+    "apparatus": "BARRES_ASYM",
+    "evolutionId": "C1",
+    "titre": "Barres asymétriques C1 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "15-26"
+      },
+      {
+        "code": "100rot"
+      },
+      {
+        "code": "51-26"
+      },
+      {
+        "code": "73-26"
+      },
+      {
+        "code": "98-26"
+      },
+      {
+        "code": "46-26"
+      },
+      {
+        "code": "121rot"
+      },
+      {
+        "code": "52-26"
+      },
+      {
+        "code": "91rot"
+      },
+      {
+        "code": "154-26"
+      }
+    ],
+    "confirmations": [
+      "BA-C1-TC-1",
+      "BA-C1-V2",
+      "BA-C1-V3",
+      "BA-C1-V4",
+      "BA-C1-V5"
+    ],
+    "validations": {
+      "BA-C1-TC-2": [
+        "73-26"
+      ],
+      "BA-C1-TC-3": [
+        "52-26"
+      ],
+      "BA-C1-V2": [
+        "52-26"
+      ],
+      "BA-C1-V3": [
+        "15-26"
+      ],
+      "BA-C1-V4": [
+        "100rot"
+      ],
+      "BA-C1-V5": [
+        "73-26"
+      ]
+    },
+    "remarques": [
+      "Venir à l'appui (bascule, bascule faciale, bascule BS), rotations, élan à l'ATR, grand rétablissement, puis la sortie en dernier.",
+      "« 1 élément en balancé avant ou arrière » est validée par le grand rétablissement (P3), « 1 élément fini à l'ATR » par l'élan en arrière à l'ATR (P5), « 1 rotation P4 minimum » par le tour d'appui arrière libre (P4), « 1 élément P4 minimum » par la bascule (P4) : chaque valorisation a ses propres éléments (FAQ #214).",
+      "« 1 lâcher » et « 1 sortie P4 minimum amenée du balancé » ne sont pas confirmées : le mouvement ne contient pas de lâcher et la sortie est en P3. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
+    ]
   }
 ];
