@@ -33,6 +33,7 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       }
     ],
     "confirmations": [
+      "BA-A1-TC-1",
       "BA-A1-V1",
       "BA-A1-V2",
       "BA-A1-V3",
@@ -66,7 +67,8 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     "remarques": [
       "Entrée : établissement à l'appui facial depuis la station faciale (BI), puis balancé de bascule (venir à l'appui). Sortie : par repoussé depuis l'appui facial BI, après les balancés.",
       "À vérifier : les trois éléments de l'arche des élans de ce mouvement sont des nomades (62elan, 64elan) et un prérequis (145-26). Les nomades et les prérequis ne sont jamais valorisables : en toute rigueur, « 1 élément de l'arche des élans » (+2) ne serait pas validée (note de 11 au lieu de 13). Elle compte en revanche pour le tronc commun.",
-      "« 1 mouvement en 2 parties avec interruption (BI ou BS ou inversement) » : à confirmer à la main."
+      "« 1 mouvement en 2 parties avec interruption (BI ou BS ou inversement) » : à confirmer à la main.",
+      "« 1 élément BI et 1 BS » est confirmée à la main : l'entrée et le balancé de bascule se font sur la barre inférieure, la suite du mouvement sur la barre supérieure (à vérifier selon ta chorégraphie)."
     ]
   }
 ];
