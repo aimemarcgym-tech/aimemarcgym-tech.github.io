@@ -107,5 +107,63 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       "Entrée en bout de poutre (écart facial), puis pivot, saut, ATR, saut, et la rondade en dernier.",
       "« Poutre mousse : roue » n'est pas confirmée : trois valorisations sur quatre sont retenues (3 retenues sur 4), ce qui suffit pour la note maximale."
     ]
+  },
+  {
+    "apparatus": "POUTRE",
+    "evolutionId": "B1",
+    "titre": "Poutre B1 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "8"
+      },
+      {
+        "code": "45"
+      },
+      {
+        "code": "82-26"
+      },
+      {
+        "code": "152"
+      },
+      {
+        "code": "49-26"
+      },
+      {
+        "code": "201-26"
+      }
+    ],
+    "confirmations": [
+      "P-B1-V1",
+      "P-B1-V2",
+      "P-B1-V3",
+      "P-B1-V4"
+    ],
+    "validations": {
+      "P-B1-TC-1": [
+        "152",
+        "201-26"
+      ],
+      "P-B1-TC-2": [
+        "45",
+        "49-26"
+      ],
+      "P-B1-V1": [
+        "82-26"
+      ],
+      "P-B1-V2": [
+        "49-26"
+      ],
+      "P-B1-V3": [
+        "152"
+      ],
+      "P-B1-V4": [
+        "201-26"
+      ]
+    },
+    "remarques": [
+      "Entrée en bout de poutre, puis saut, pivot, acro, saut, et la sortie en dernier.",
+      "La sortie compte comme acro en poutre haute pour le tronc commun seulement (FAQ #145) : elle valide en revanche « 1 sortie P3 minimum », et la roue seule valide « 1 acro P2 minimum ».",
+      "« Poutre mousse : acro P2 minimum » n'est pas confirmée : quatre valorisations sur cinq sont retenues (4 retenues sur 5)."
+    ]
   }
 ];
