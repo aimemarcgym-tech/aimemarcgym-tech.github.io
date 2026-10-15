@@ -198,5 +198,73 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
       "« 1 sortie amenée du balancé arrière » n'est pas confirmée : la sortie est un salto arrière depuis un élan avant, pas une sortie amenée d'un balancé arrière. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5).",
       "« 1 changement de barre BI-BS » est confirmée à la main."
     ]
+  },
+  {
+    "apparatus": "BARRES_ASYM",
+    "evolutionId": "B2",
+    "titre": "Barres asymétriques B2 — mouvement à la note maximale",
+    "elements": [
+      {
+        "code": "15-26"
+      },
+      {
+        "code": "70elan"
+      },
+      {
+        "code": "91rot"
+      },
+      {
+        "code": "98-26"
+      },
+      {
+        "code": "117bb"
+      },
+      {
+        "code": "116-26"
+      },
+      {
+        "code": "117bb"
+      },
+      {
+        "code": "116-26"
+      },
+      {
+        "code": "154-26"
+      }
+    ],
+    "confirmations": [
+      "BA-B2-TC-1",
+      "BA-B2-V1",
+      "BA-B2-V2",
+      "BA-B2-V3",
+      "BA-B2-V4"
+    ],
+    "validations": {
+      "BA-B2-TC-2": [
+        "70elan"
+      ],
+      "BA-B2-TC-3": [
+        "15-26"
+      ],
+      "BA-B2-V1": [
+        "117bb",
+        "116-26"
+      ],
+      "BA-B2-V2": [
+        "154-26"
+      ],
+      "BA-B2-V3": [
+        "98-26"
+      ],
+      "BA-B2-V4": [
+        "15-26",
+        "70elan"
+      ]
+    },
+    "remarques": [
+      "Enchaînement de balancés : balancé avant à l'horizontale puis balancé arrière, répétés deux fois (les balancés répétés ne comptent qu'une fois dans le nombre d'éléments). La sortie (élan vers l'avant et salto arrière) vient en dernier.",
+      "« 1 rotation P3 minimum » est validée par la pose des pieds puis élan circulaire (98-26, P3), « 1 élément P3 minimum » par la sortie (P3), « bascule prise d'élan à l'horizontale » par la bascule (P4) précédée de la prise d'élan : chaque valorisation a ses propres éléments (FAQ #214).",
+      "« 1 sortie P3 minimum » n'est pas confirmée : la sortie sert déjà à « 1 élément P3 minimum ». Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
+    ]
   }
 ];
