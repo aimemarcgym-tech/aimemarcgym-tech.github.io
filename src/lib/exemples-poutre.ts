@@ -246,16 +246,19 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
         "code": "1"
       },
       {
-        "code": "5new"
-      },
-      {
         "code": "82-26"
       },
       {
         "code": "152"
       },
       {
-        "code": "62",
+        "code": "62"
+      },
+      {
+        "code": "159-26"
+      },
+      {
+        "code": "32new",
         "serie": "GYMNIQUE"
       },
       {
@@ -263,10 +266,10 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
         "serie": "GYMNIQUE"
       },
       {
-        "code": "153+-26"
+        "code": "202-26"
       },
       {
-        "code": "199-26"
+        "code": "23new"
       }
     ],
     "confirmations": [
@@ -277,10 +280,9 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
     ],
     "validations": {
       "P-B3-TC-1": [
-        "5new",
         "152",
-        "153+-26",
-        "199-26"
+        "159-26",
+        "202-26"
       ],
       "P-B3-TC-2": [
         "82-26"
@@ -288,24 +290,28 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       "P-B3-TC-3": [
         "82-26",
         "62",
+        "32new",
         "57",
-        "153+-26"
+        "159-26",
+        "202-26"
       ],
       "P-B3-V1": [
-        "62",
+        "32new",
         "57"
       ],
       "P-B3-V2": [
         "62"
       ],
       "P-B3-V3": [
-        "153+-26"
+        "159-26"
+      ],
+      "P-B3-V5": [
+        "23new"
       ]
     },
     "remarques": [
-      "Entrée en bout de poutre, saut droit, pivot, roue, grand jeté cosaque (saut enjambé + saut de cosaque), souplesse arrière « + », et la sortie en dernier.",
-      "Le grand jeté cosaque est une série gymnique : elle valide « 1 LG ou LM », et son saut enjambé valide aussi « 1 saut avec écart antéro » (les éléments d'une série peuvent valider deux valorisations : information de l'entraîneur, à confirmer officiellement).",
-      "« 1 acro sur la poutre P4 minimum » est validée par la souplesse arrière « + » (P4) : la sortie ne compte que pour le tronc commun (FAQ #145). « Poutre mousse : acro P4 minimum » est confirmée à la main (aucun élément de poutre mousse dans ce mouvement).",
+      "Entrée en bout de poutre, pivot, roue, saut enjambé, souplesse avant, série gymnique (cosaque changement, saut de cosaque), la sortie, puis un acro sur la poutre mousse.",
+      "« 1 LG ou LM » est validée par la série gymnique (cosaque changement et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5), « 1 saut avec écart antéro » par le saut enjambé : chaque valorisation a ses propres éléments (FAQ #214). « 1 acro sur la poutre P4 minimum » est validée par la souplesse avant : la sortie ne compte que pour le tronc commun (FAQ #145).",
       "« 1 sortie avec liaison acro » n'est pas confirmée : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
   },
