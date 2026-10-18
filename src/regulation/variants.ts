@@ -19,8 +19,13 @@ export function isChainVariant(code: string, name: string) {
 // est nommé "(variante)" ou que son code contient "+" : dans les deux cas
 // c'est ce qui distingue l'élément isolé de sa version en enchaînement/liaison.
 export function isVariantElement(code: string, name: string) {
+  if (ELEMENTS_DISTINCTS.has(code)) return false;
   return isNamedVariant(name) || code.includes("+");
 }
+
+// Codes avec « + » qui sont des éléments à part entière, pas une variante : Barres 157+26 = soleil puis sortie salto
+// arrière tendu (élément distinct du soleil 124, tous deux en P5 ; confirmé par l'utilisateur et la FAQ #232).
+const ELEMENTS_DISTINCTS = new Set(["157+26"]);
 
 // Poutre uniquement : les mêmes noms/gestes exécutés sur poutre basse en
 // mousse (arche "Accro poutre mousse") n'ont pas la même valeur/difficulté
