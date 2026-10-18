@@ -161,6 +161,32 @@ export default function Home() {
                   const clubId = members[0]?.club?.id ?? null;
                   const sansIndiv = members.filter((g) => g.team || !indivIds.has(g.id));
                   const indivClub = individuelles.filter((i) => members.some((g) => g.id === i.gymnastId));
+                  const indivBloc = (
+                        <IndividuellesClub
+                        individuelles={indivClub}
+                        gymnastesClub={members}
+                        evolutions={evolutions.map((e) => e.id)}
+                        onAjouter={async (gymnastId) => {
+                          const g = members.find((x) => x.id === gymnastId);
+                          await createIndividuelle({
+                            clubId,
+                            gymnastId,
+                            evolution:
+                              (g?.team ? teamEvolution(g.team, members.filter((x) => x.team === g.team)) : null) ??
+                              evolutions[0].id,
+                          });
+                          refresh();
+                        }}
+                        onModifier={async (id, evolution) => {
+                          await updateIndividuelle(id, evolution);
+                          refresh();
+                        }}
+                        onRetirer={async (id) => {
+                          await deleteIndividuelle(id);
+                          refresh();
+                        }}
+                      />
+                  );
                   const marquer = (teamName: string | null, teamMembers: GymnastList) => (gymnastId: string) => ({
                     active: indivIds.has(gymnastId),
                     onMettre: async () => {
@@ -209,6 +235,7 @@ export default function Home() {
                               </TeamGroup>
                             </div>
                           ))}
+                          <div>{indivBloc}</div>
                         </div>
                       ) : (
                         <DraggableGymnastList
@@ -218,32 +245,8 @@ export default function Home() {
                           individuelle={marquer(null, members)}
                         />
                       )}
-                      <div className="mt-3">
-                        <IndividuellesClub
-                          individuelles={indivClub}
-                          gymnastesClub={members}
-                          evolutions={evolutions.map((e) => e.id)}
-                          onAjouter={async (gymnastId) => {
-                            const g = members.find((x) => x.id === gymnastId);
-                            await createIndividuelle({
-                              clubId,
-                              gymnastId,
-                              evolution:
-                                (g?.team ? teamEvolution(g.team, members.filter((x) => x.team === g.team)) : null) ??
-                                evolutions[0].id,
-                            });
-                            refresh();
-                          }}
-                          onModifier={async (id, evolution) => {
-                            await updateIndividuelle(id, evolution);
-                            refresh();
-                          }}
-                          onRetirer={async (id) => {
-                            await deleteIndividuelle(id);
-                            refresh();
-                          }}
-                        />
-                      </div>
+                      {!hasTeams && <div className="mt-3 border-t border-dashed border-border-strong pt-4">{indivBloc}</div>}
+
                     </ClubGroup>
                   );
                 })}
