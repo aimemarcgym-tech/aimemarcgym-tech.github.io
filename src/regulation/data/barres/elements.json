@@ -16,7 +16,7 @@
     { "code": "8new-bb", "name": "Grande culbute à l'appui libre à l'horizontale", "archeId": "BARRES-BALANCES", "branch": "avant", "palier": "P4", "sourcePage": 52, "verified": true },
     { "code": "154-26", "name": "Elan vers l'avant et salto arrière groupé ou carpé", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P3", "sourcePage": 52, "verified": true },
     { "code": "157-26", "name": "Elan vers l'avant et salto arrière tendu", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P4", "sourcePage": 52, "verified": true },
-    { "code": "157+26", "name": "Sortie salto arrière tendu depuis le grand tour arrière", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P4", "sourcePage": 52, "verified": true },
+    { "code": "157+26", "name": "Sortie salto arrière tendu depuis le grand tour arrière", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P5", "sourcePage": 52, "verified": true },
     { "code": "163-26", "name": "Salto arrière avec 1 tour (360°)", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P6", "rotationDeg": 360, "sourcePage": 52, "verified": true },
     { "code": "166-26", "name": "Double salto arrière groupé, carpé ou tendu", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P7", "sourcePage": 52, "verified": true },
     { "code": "168-26", "name": "Salto arrière avec 3/2 tour ou +", "archeId": "BARRES-SORTIES", "branch": null, "palier": "P7", "sourcePage": 52, "verified": true },
