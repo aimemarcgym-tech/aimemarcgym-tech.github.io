@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState, useTransition, type FormEvent } from "react";
-import { getGymnasts, createGymnast } from "@/lib/data";
+import { getGymnasts, createGymnast, getIndividuelles, createIndividuelle, updateIndividuelle, deleteIndividuelle } from "@/lib/data";
+import type { IndividuelleRow } from "@/lib/idb";
+import { teamEvolution } from "@/lib/teamNotes";
+import IndividuellesClub from "@/components/IndividuellesClub";
 import { getRegulation } from "@/regulation/loader";
 import DraggableGymnastList from "@/components/DraggableGymnastList";
 import ClubGroup from "@/components/ClubGroup";
@@ -13,12 +16,16 @@ type GymnastList = NonNullable<Gymnasts>;
 
 export default function Home() {
   const [gymnasts, setGymnasts] = useState<Gymnasts | null>(null);
+  const [individuelles, setIndividuelles] = useState<IndividuelleRow[]>([]);
+  const [aussiIndiv, setAussiIndiv] = useState(false);
+  const [nivIndiv, setNivIndiv] = useState("");
   const [pending, startTransition] = useTransition();
   const sol = getRegulation("SOL");
   const evolutions = [...sol.evolutions].sort((a, b) => a.ordre - b.ordre);
 
   function refresh() {
     getGymnasts().then(setGymnasts);
+    getIndividuelles().then(setIndividuelles);
   }
 
   useEffect(() => {
@@ -30,8 +37,17 @@ export default function Home() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     startTransition(async () => {
-      await createGymnast(formData);
+      const created = await createGymnast(formData);
+      if (aussiIndiv) {
+        await createIndividuelle({
+          clubId: created.clubId ?? null,
+          gymnastId: created.id,
+          evolution: nivIndiv || evolutions[0].id,
+        });
+      }
       form.reset();
+      setAussiIndiv(false);
+      setNivIndiv("");
       refresh();
     });
   }
@@ -59,9 +75,13 @@ export default function Home() {
     return a.localeCompare(b);
   });
 
+  const indivIds = new Set(individuelles.map((i) => i.gymnastId));
+
   function groupByTeam(members: GymnastList) {
     const byTeam = new Map<string, GymnastList>();
     for (const g of members) {
+      // Une gymnaste sans équipe qui est en individuelle n'a pas à figurer dans « Sans équipe ».
+      if (!g.team && indivIds.has(g.id)) continue;
       const teamName = g.team ?? "Sans équipe";
       const list = byTeam.get(teamName) ?? [];
       list.push(g);
@@ -139,6 +159,19 @@ export default function Home() {
                 {clubGroups.map(([clubName, members]) => {
                   const hasTeams = members.some((g) => g.team);
                   const clubId = members[0]?.club?.id ?? null;
+                  const sansIndiv = members.filter((g) => g.team || !indivIds.has(g.id));
+                  const indivClub = individuelles.filter((i) => members.some((g) => g.id === i.gymnastId));
+                  const marquer = (teamName: string | null, teamMembers: GymnastList) => (gymnastId: string) => ({
+                    active: indivIds.has(gymnastId),
+                    onMettre: async () => {
+                      await createIndividuelle({
+                        clubId,
+                        gymnastId,
+                        evolution: (teamName ? teamEvolution(teamName, teamMembers) : null) ?? evolutions[0].id,
+                      });
+                      refresh();
+                    },
+                  });
                   return (
                     <ClubGroup
                       key={clubName}
@@ -167,14 +200,50 @@ export default function Home() {
                                   }))}
                                 onAdded={refresh}
                               >
-                                <DraggableGymnastList members={teamMembers} onReordered={refresh} onDeleted={refresh} />
+                                <DraggableGymnastList
+                                  members={teamMembers}
+                                  onReordered={refresh}
+                                  onDeleted={refresh}
+                                  individuelle={marquer(teamName === "Sans équipe" ? null : teamName, teamMembers)}
+                                />
                               </TeamGroup>
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <DraggableGymnastList members={members} onReordered={refresh} onDeleted={refresh} />
+                        <DraggableGymnastList
+                          members={sansIndiv}
+                          onReordered={refresh}
+                          onDeleted={refresh}
+                          individuelle={marquer(null, members)}
+                        />
                       )}
+                      <div className="mt-3">
+                        <IndividuellesClub
+                          individuelles={indivClub}
+                          gymnastesClub={members}
+                          evolutions={evolutions.map((e) => e.id)}
+                          onAjouter={async (gymnastId) => {
+                            const g = members.find((x) => x.id === gymnastId);
+                            await createIndividuelle({
+                              clubId,
+                              gymnastId,
+                              evolution:
+                                (g?.team ? teamEvolution(g.team, members.filter((x) => x.team === g.team)) : null) ??
+                                evolutions[0].id,
+                            });
+                            refresh();
+                          }}
+                          onModifier={async (id, evolution) => {
+                            await updateIndividuelle(id, evolution);
+                            refresh();
+                          }}
+                          onRetirer={async (id) => {
+                            await deleteIndividuelle(id);
+                            refresh();
+                          }}
+                        />
+                      </div>
                     </ClubGroup>
                   );
                 })}
@@ -224,6 +293,24 @@ export default function Home() {
                   className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
                 />
               </div>
+              <label className="flex items-center gap-2 text-sm text-foreground">
+                <input type="checkbox" checked={aussiIndiv} onChange={(e) => setAussiIndiv(e.target.checked)} />
+                Aussi en individuelle
+              </label>
+              {aussiIndiv && (
+                <select
+                  value={nivIndiv || evolutions[0].id}
+                  onChange={(e) => setNivIndiv(e.target.value)}
+                  aria-label="Niveau en individuelle"
+                  className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
+                >
+                  {evolutions.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      Évolution {e.id}
+                    </option>
+                  ))}
+                </select>
+              )}
               <button
                 type="submit"
                 disabled={pending}

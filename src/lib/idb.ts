@@ -40,6 +40,14 @@ export interface GymnastRow {
   homeOrder?: number | null;
 }
 
+// Engagement d'une gymnaste en individuelle : son propre niveau, indépendant de celui de son équipe.
+export interface IndividuelleRow {
+  id: string;
+  clubId: string | null;
+  gymnastId: string;
+  evolution: string; // A1 … C3
+}
+
 export interface GymnastSkillRow {
   id: string;
   gymnastId: string;

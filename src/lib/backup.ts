@@ -18,6 +18,7 @@ const STORES = [
   "movementElements",
   "movementSnapshots",
   "trainingSessions",
+  "individuelles",
 ] as const;
 
 // Les musiques (Blob) ne sont pas sérialisables telles quelles en JSON :
@@ -83,6 +84,7 @@ export interface BackupData {
   movementElements: unknown[];
   movementSnapshots: unknown[];
   trainingSessions?: unknown[];
+  individuelles?: unknown[];
   gymnastMusic?: BackupMusicEntry[];
   photoAlbums?: BackupPhotoAlbumEntry[];
   photos?: BackupPhotoEntry[];

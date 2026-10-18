@@ -1,0 +1,663 @@
+<title>Architecture Handoff</title>
+<style>
+  /*
+    layout: single-column reading doc, sticky left-rail TOC on wide screens,
+    generous measure, code blocks treated as distinct "data" objects
+  */
+  :root {
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --border: #e4e0d6;
+    --fg: #232019;
+    --muted: #6b6558;
+    --accent: #a4472e;
+    --accent-soft: #f3e4dd;
+    --code-bg: #1f1c17;
+    --code-fg: #e9e4d8;
+    --code-accent: #e0a05c;
+    --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+    --font-body: "Source Serif 4", Georgia, serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17140f;
+      --surface: #201c16;
+      --border: #3a3428;
+      --fg: #ece7db;
+      --muted: #a89f8c;
+      --accent: #e28a63;
+      --accent-soft: #3a251d;
+      --code-bg: #100e0b;
+      --code-fg: #e9e4d8;
+      --code-accent: #f0b978;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17140f;
+    --surface: #201c16;
+    --border: #3a3428;
+    --fg: #ece7db;
+    --muted: #a89f8c;
+    --accent: #e28a63;
+    --accent-soft: #3a251d;
+    --code-bg: #100e0b;
+    --code-fg: #e9e4d8;
+    --code-accent: #f0b978;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 16.5px;
+    line-height: 1.65;
+    padding-inline: 16px;
+    padding-block: 32px;
+  }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .page { grid-template-columns: 1fr; }
+    nav.toc { display: none; }
+  }
+
+  nav.toc {
+    position: sticky;
+    top: 32px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    border-left: 2px solid var(--border);
+    padding-left: 16px;
+  }
+  nav.toc .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: block;
+  }
+  nav.toc a {
+    display: block;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 5px 0;
+    border-bottom: 1px solid transparent;
+  }
+  nav.toc a:hover { color: var(--accent); }
+
+  header.hero {
+    max-width: 720px;
+    margin-bottom: 8px;
+  }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .kicker::before {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2rem, 4vw, 2.7rem);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 18px;
+  }
+  .lede {
+    font-size: 1.08rem;
+    color: var(--muted);
+    max-width: 62ch;
+  }
+
+  .principle {
+    margin: 36px 0 44px;
+    padding: 22px 26px;
+    background: var(--accent-soft);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    max-width: 720px;
+  }
+  .principle .label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .principle p { margin: 0; font-size: 1.02rem; }
+  .principle strong { color: var(--fg); }
+
+  main section {
+    max-width: 720px;
+    margin-bottom: 52px;
+    scroll-margin-top: 24px;
+  }
+  main section.wide { max-width: 900px; }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: -0.005em;
+    margin: 0 0 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+    padding-top: 28px;
+  }
+  section:first-of-type h2 { border-top: none; padding-top: 0; }
+  h2 .num {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-right: 10px;
+    letter-spacing: 0;
+  }
+  h3 {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 24px 0 10px;
+    color: var(--fg);
+  }
+  p { margin: 0 0 14px; }
+  ul, ol { margin: 0 0 14px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  li > ul, li > ol { margin-top: 6px; }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 18px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 0 0 16px;
+    border: 1px solid #000;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: 1em;
+  }
+  pre .kw { color: var(--code-accent); }
+  pre .str { color: #9fc98a; }
+  pre .com { color: #8a8371; font-style: italic; }
+
+  .filetree {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-family: var(--font-mono);
+    font-size: 12.8px;
+    line-height: 1.75;
+    overflow-x: auto;
+    white-space: pre;
+    margin-bottom: 16px;
+    color: var(--fg);
+  }
+  .filetree .dir { color: var(--accent); font-weight: 600; }
+  .filetree .comment { color: var(--muted); }
+
+  .callout {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 0.95rem;
+  }
+  .callout.warn { border-color: var(--accent); }
+  .callout .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .transfer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 18px 0 8px;
+  }
+  @media (max-width: 620px) { .transfer-grid { grid-template-columns: 1fr; } }
+  .transfer-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    background: var(--surface);
+  }
+  .transfer-card h4 {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .transfer-card.yes h4 { color: #4f8a5a; }
+  .transfer-card.no h4 { color: var(--accent); }
+  .transfer-card ul { margin: 0; padding-left: 18px; font-size: 0.92rem; }
+  .transfer-card li { margin-bottom: 8px; }
+
+  ol.steps { list-style: none; padding: 0; counter-reset: step; }
+  ol.steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 38px;
+    margin-bottom: 16px;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  footer {
+    max-width: 720px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .copy-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 4px 0 24px;
+  }
+  .copy-btn:hover { opacity: 0.9; }
+  .copy-btn.copied { background: #4f8a5a; }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<div class="page">
+  <nav class="toc">
+    <span class="eyebrow">Sommaire</span>
+    <a href="#stack">Stack technique</a>
+    <a href="#tree">Arborescence</a>
+    <a href="#engine">Moteur de règlement</a>
+    <a href="#firebase">Firestore</a>
+    <a href="#shares">Partage par lien</a>
+    <a href="#backup">Sauvegarde</a>
+    <a href="#dnd">Glisser-déposer</a>
+    <a href="#conventions">Conventions</a>
+    <a href="#transfer">Ce qui ne se transpose pas</a>
+    <a href="#start">Démarrer le nouveau projet</a>
+  </nav>
+
+  <div>
+    <header class="hero">
+      <span class="kicker">Note de transmission</span>
+      <h1>Architecture de référence — appli UFOLEP GAF</h1>
+      <p class="lede">
+        Résumé de l'architecture d'une PWA de gestion de compétitions et d'entraînements
+        de gymnastique (fédération UFOLEP, section GAF), à donner à une nouvelle session
+        Claude pour démarrer un projet FFG séparé sans repartir de zéro.
+      </p>
+    </header>
+
+    <button class="copy-btn" id="copyBtn" type="button">Copier tout le texte</button>
+
+    <div class="principle">
+      <span class="label">Principe fondateur — à réappliquer quelle que soit la fédération</span>
+      <p>
+        <strong>Ne jamais inventer de donnée réglementaire.</strong> Tout ce qui n'est pas
+        fiablement vérifiable dans les documents officiels doit être marqué
+        « ⚠ à confirmer » plutôt que deviné. C'est la règle la plus importante du projet —
+        elle évite qu'un coach note mal une gymnaste en vrai à cause d'une donnée fausse.
+      </p>
+    </div>
+
+    <main>
+      <section id="stack">
+        <h2><span class="num">01</span>Stack technique</h2>
+        <ul>
+          <li><strong>Next.js 16 (App Router)</strong>, TypeScript, React 19, Tailwind CSS v4.</li>
+          <li><strong>Export statique</strong> (<code>output: "export"</code>, <code>trailingSlash: true</code>) — appli 100&nbsp;% cliente, aucun serveur Next en prod. Hébergée sur <strong>GitHub Pages</strong> via un dossier <code>docs/</code> synchronisé à chaque build.</li>
+          <li><strong>PWA</strong> : service worker généré après le build, précache tous les assets, fonctionnement 100&nbsp;% hors-ligne une fois visité en ligne. Détection de nouvelle version avec bannière « Actualiser » plutôt que rechargement forcé en pleine saisie.</li>
+          <li><strong>Firebase Auth + Firestore</strong> pour les données « légères » (texte/structure), synchronisées entre appareils d'un même compte coach.</li>
+          <li><strong>IndexedDB</strong> (librairie <code>idb</code>) pour le binaire lourd (musiques, photos, vidéos) — volontairement <em>non</em> synchronisé dans le cloud, pour éviter les coûts de stockage à l'échelle. L'export/import JSON manuel sert de sauvegarde/transfert.</li>
+        </ul>
+        <pre><code><span class="com">// package.json — dépendances clés</span>
+firebase, idb, next, react, react-dom
+@tailwindcss/postcss, tailwindcss, typescript, workbox-build
+
+<span class="com">// build</span>
+next build &amp;&amp; node scripts/generate-sw.mjs &amp;&amp; node scripts/sync-docs.mjs</code></pre>
+      </section>
+
+      <section id="tree" class="wide">
+        <h2><span class="num">02</span>Arborescence</h2>
+        <div class="filetree"><span class="dir">src/</span>
+  <span class="dir">app/</span>                      <span class="comment">routes Next.js App Router (une page = un dossier)</span>
+    page.tsx                accueil (gymnastes par club/équipe)
+    connexion/               login (email/mdp Firebase Auth)
+    mouvement/               constructeur de mouvement (agrès + évolution)
+    gymnaste/                fiche gymnaste
+    entrainement/            journal d'entraînement
+    competition/
+      calendrier/  musiques/  ordres-passage/  categories-age/  resultats/
+    <span class="dir">media/</span>{photos,videos}/    albums photo/vidéo
+    <span class="dir">partage/</span>                  <span class="comment">pages PUBLIQUES (sans auth) pour les liens de partage</span>
+      mouvement/, ordre-passage/, ordres-passage/, programme/
+    sauvegarde/               export/import JSON complet
+    table/                     vue tableau de bord
+    layout.tsx                  AuthProvider + AuthGate
+
+  <span class="dir">components/</span>                un fichier = un composant, pas de sous-dossiers
+  <span class="dir">contexts/</span>AuthContext.tsx    user, loading, signIn/signUp/signOut
+  <span class="dir">hooks/</span>                       useDragReorder.ts...
+
+  <span class="dir">lib/</span>                        couche métier hors UI
+    firebase.ts               init Firebase (auth, db persistance offline)
+    data.ts                    TOUTES les fonctions CRUD, signatures stables
+    backup.ts                  export/import JSON (multi-device)
+    shares.ts                  partage par lien public (snapshot Firestore)
+    share.ts                   partage NATIF (Web Share API, fichiers locaux)
+    idb.ts                     schéma IndexedDB
+    format.ts                   helpers de formatage partagés
+
+  <span class="dir">regulation/</span>                 ⭐ le coeur réutilisable
+    types.ts                   Palier, Arche, RegElement, Evolution, CheckSpec
+    loader.ts                   getRegulation / getElement / getArche / getEvolution
+    checks.ts                   id d'exigence → CheckSpec (règle vérifiable)
+    variants.ts                  helpers de classification
+    <span class="dir">data/</span>
+      &lt;agrès&gt;/arches.json        familles d'éléments
+      &lt;agrès&gt;/elements.json      éléments codifiés (code, nom, palier, arche)
+      &lt;agrès&gt;/decomposition.json barème par évolution (tronc commun + valorisations)
+      &lt;agrès&gt;/reference.json     lexique affiché dans l'appli
+      generalites.json, categories-age.json, calendrier.json
+
+  <span class="dir">engine/</span>                     calcul de note à partir d'une séquence + du règlement
+    composition.ts             agrès classiques : tronc commun + valorisations
+    saut.ts                     agrès Saut : barème de valeur fixe par palier</div>
+      </section>
+
+      <section id="engine" class="wide">
+        <h2><span class="num">03</span>Le moteur de règlement data-driven</h2>
+        <p>
+          C'est le design le plus important à reproduire pour la FFG,
+          <strong>même si les données changent entièrement</strong>. Les règles ne sont
+          jamais codées en dur dans les composants : chaque exigence a un <code>id</code>
+          mappé vers un <code>CheckSpec</code> typé, évalué génériquement.
+        </p>
+        <pre><code><span class="kw">type</span> CheckSpec =
+  | { type: <span class="str">"CATEGORY_COUNT"</span>; category: string; min: number; branch?: string }
+  | { type: <span class="str">"ELEMENT_AT_PALIER_MIN"</span>; palierMin: Palier; category?: string; min?: number }
+  | { type: <span class="str">"SALTO_AT_PALIER_MIN"</span>; palierMin: Palier }
+  | { type: <span class="str">"TWO_ACRO_DIFFERENT_DIRECTIONS"</span> }
+  | { type: <span class="str">"LIAISON_ACRO"</span>; runMinLength: number; runsNeeded: number }
+  | { type: <span class="str">"FORCE_OR_PG"</span> }
+  | { type: <span class="str">"NAME_CONTAINS_ALL"</span>; terms: string[]; min?: number }
+  | { type: <span class="str">"MANUAL"</span> }; <span class="com">// confirmation manuelle du coach</span></code></pre>
+        <p>
+          <code>engine/composition.ts</code> expose <code>evaluateCheck(apparatus, spec, elements, context)</code>,
+          générique pour tous les types ci-dessus. Ajouter une nouvelle règle = ajouter un cas au
+          union type + un cas dans le switch, sans toucher aux données existantes.
+        </p>
+
+        <h3>Contexte tronc commun / valorisation</h3>
+        <p>
+          <code>context: "TRONC_COMMUN" | "VALORISATION"</code> — certains paliers (ex.
+          « Prérequis ») comptent pour le tronc commun mais jamais pour une valorisation ;
+          le moteur exclut certains éléments du set « utilisable » selon le contexte
+          d'évaluation, jamais au niveau des données.
+        </p>
+
+        <h3>Éléments cross-listés</h3>
+        <div class="callout warn">
+          <span class="label">Piège identifié et corrigé dans ce projet</span>
+          <p>
+            Un même élément qui compte dans deux catégories (ex. une sortie qui compte
+            aussi comme acro) se modélise via <code>extraCategories?: string[]</code> sur
+            l'élément — <strong>jamais</strong> en dupliquant la ligne JSON avec le même
+            <code>code</code>. Dupliquer casse les clés React et les <code>Map</code>
+            indexées par code.
+          </p>
+        </div>
+
+        <h3>Suggestions (« Assistant »)</h3>
+        <p>
+          <code>computeSuggestions()</code> simule l'ajout de chaque élément candidat non
+          utilisé et compare avant/après sur chaque exigence manquante — permet de dire
+          « ajouter X complète l'exigence Y » sans logique spécifique par exigence.
+        </p>
+
+        <h3>Import des données réglementaires</h3>
+        <p>
+          Transcrites à la main depuis des PDF/tableaux officiels, avec
+          <code>verified: true/false</code> et <code>sourcePage</code> pour tracer la
+          provenance. Ne jamais deviner une valeur manquante — la laisser absente et flaguer.
+        </p>
+      </section>
+
+      <section id="firebase" class="wide">
+        <h2><span class="num">04</span>Firestore — structure</h2>
+        <pre><code>users/{uid}/
+  clubs/{id}
+  gymnasts/{id}            <span class="com">(+ passageOrder, musicOrder, homeOrder)</span>
+  gymnastSkills/{id}        <span class="com">statut de maîtrise par élément et gymnaste</span>
+  movements/{id}
+  movementElements/{id}
+  movementSnapshots/{id}    <span class="com">historique horodaté</span>
+  trainingSessions/{id}     <span class="com">journal, par gymnaste OU par équipe</span>
+  meta/migration            <span class="com">migration one-shot IndexedDB → Firestore</span>
+
+shares/{shareId}            <span class="com">collection PUBLIQUE séparée — instantanés figés</span>
+                            <span class="com">pour le partage par lien sans compte</span></code></pre>
+        <p>Règles de sécurité :</p>
+        <pre><code>match /databases/{database}/documents {
+  match /users/{uid}/{document=**} {
+    allow read, write: <span class="kw">if</span> request.auth != null &amp;&amp; request.auth.uid == uid;
+  }
+  match /shares/{shareId} {
+    allow read: <span class="kw">if</span> true;
+    allow create: <span class="kw">if</span> request.auth != null &amp;&amp; request.resource.data.ownerUid == request.auth.uid;
+    allow update, delete: <span class="kw">if</span> request.auth != null &amp;&amp; resource.data.ownerUid == request.auth.uid;
+  }
+}</code></pre>
+        <p>
+          <code>src/lib/data.ts</code> centralise toutes les opérations Firestore derrière
+          des fonctions nommées (<code>getGymnasts</code>, <code>createMovement</code>,
+          <code>saveMovementElements</code>…) — jamais d'accès direct depuis un composant.
+          Helpers internes <code>col()</code>/<code>docRef()</code> scopent automatiquement
+          sur <code>users/{'{uid}'}/...</code>
+        </p>
+      </section>
+
+      <section id="shares">
+        <h2><span class="num">05</span>Partage par lien public</h2>
+        <ul>
+          <li><code>createShare(type, data)</code> écrit un <strong>instantané figé</strong> (pas une référence live) dans <code>shares/{'{id}'}</code> ; <code>getShare(id)</code> le relit publiquement.</li>
+          <li><code>AuthGate.tsx</code> laisse passer les routes <code>/partage/*</code> sans vérifier la connexion, et n'affiche pas la nav.</li>
+          <li>Chaque type a son propre payload typé et sa propre page publique de lecture.</li>
+          <li>Pièces jointes (PDF…) encodées en base64 dans le document Firestore, plafonnées pour rester sous 1&nbsp;Mo/document.</li>
+        </ul>
+      </section>
+
+      <section id="backup">
+        <h2><span class="num">06</span>Sauvegarde manuelle</h2>
+        <p>
+          <code>src/lib/backup.ts</code> exporte tout (Firestore + IndexedDB) en un seul
+          JSON téléchargeable, et sait le réimporter. <code>downloadBackup()</code> utilise
+          <code>showSaveFilePicker</code> (File System Access API, Chrome/Edge desktop)
+          pour laisser choisir l'emplacement, avec repli sur téléchargement classique sinon.
+        </p>
+      </section>
+
+      <section id="dnd">
+        <h2><span class="num">07</span>Glisser-déposer</h2>
+        <p>
+          <code>useDragReorder.ts</code> : réordonnancement par <strong>Pointer Events</strong>
+          (pas l'API HTML5 Drag and Drop native, qui ne marche pas sur mobile tactile).
+          Capture du pointeur dès <code>pointerdown</code>, position des éléments mesurée
+          une seule fois au début du drag pour éviter un reflow forcé à chaque
+          <code>pointermove</code>. <code>DragHandle.tsx</code> = poignée standard
+          (zone tactile 40×40).
+        </p>
+      </section>
+
+      <section id="conventions">
+        <h2><span class="num">08</span>Conventions de code</h2>
+        <ul>
+          <li>Un fichier par composant dans <code>src/components/</code>, pas de sous-dossiers, pas de barrel <code>index.ts</code>.</li>
+          <li>Commentaires réservés au pourquoi non-évident — jamais pour décrire ce que fait le code.</li>
+          <li>Pas d'abstraction prématurée : dupliquer 3 lignes plutôt qu'abstraire pour un seul appelant.</li>
+          <li>TypeScript strict, <code>npx tsc --noEmit</code> après chaque changement.</li>
+          <li>Déploiement : <code>npm run build</code> puis push sur <code>main</code> (GitHub Pages sert directement <code>docs/</code>).</li>
+        </ul>
+      </section>
+
+      <section id="transfer" class="wide">
+        <h2><span class="num">09</span>Ce qui ne se transpose pas</h2>
+        <p>Spécifique UFOLEP GAF, à refaire entièrement pour la FFG :</p>
+        <div class="transfer-grid">
+          <div class="transfer-card no">
+            <h4>✕ Ne se transpose pas</h4>
+            <ul>
+              <li>Tous les <code>regulation/data/**/*.json</code> — arches, éléments, barèmes, évolutions, âges/catégories.</li>
+              <li>Le calendrier scrappé depuis un Google Sheets UFOLEP précis (endpoint <code>gviz/tq?tqx=out:csv</code>).</li>
+              <li>Les <code>CheckSpec</code> concrets de <code>checks.ts</code> — encodent des règles UFOLEP précises.</li>
+              <li>Le modèle Saut à part (<code>engine/saut.ts</code>) — à vérifier si la FFG a un système équivalent.</li>
+            </ul>
+          </div>
+          <div class="transfer-card yes">
+            <h4>✓ Se transpose</h4>
+            <ul>
+              <li>Le <em>type</em> de système : id → CheckSpec → evaluateCheck.</li>
+              <li>L'architecture Firebase (Auth, Firestore, règles de sécurité).</li>
+              <li>Le pattern de partage par lien (instantané figé, collection publique).</li>
+              <li>Export/import JSON, glisser-déposer Pointer Events, structure de fichiers.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="start">
+        <h2><span class="num">10</span>Démarrer le nouveau projet</h2>
+        <ol class="steps">
+          <li><code>npx create-next-app</code> (App Router, TypeScript, Tailwind) en reprenant <code>next.config.ts</code> (export statique) si l'appli doit rester 100&nbsp;% cliente/hébergeable sur GitHub Pages.</li>
+          <li>Recréer <code>src/regulation/types.ts</code> avec les concepts FFG équivalents (paliers/niveaux, familles, évolutions/catégories — noms exacts selon le règlement FFG).</li>
+          <li>Construire <code>checks.ts</code> au fur et à mesure que les exigences FFG sont transcrites, pas tout d'un coup.</li>
+          <li>Copier le pattern Firebase (<code>firebase.ts</code>, <code>AuthContext.tsx</code>, <code>AuthGate.tsx</code>) tel quel, avec un nouveau projet Firebase.</li>
+          <li>Redemander explicitement où sont les documents/PDF officiels FFG avant d'écrire la moindre donnée réglementaire.</li>
+        </ol>
+      </section>
+    </main>
+
+    <footer>
+      Rédigé à partir du projet « Gestion Compétitions &amp; Entraînements — UFOLEP GAF ». Rien n'est copié automatiquement : ceci est une référence à lire, pas du code à réutiliser tel quel.
+    </footer>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copyBtn');
+    var text = document.querySelector('main').innerText;
+    btn.addEventListener('click', function () {
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+      var done = function () {
+        btn.textContent = 'Copié !';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'Copier tout le texte';
+          btn.classList.remove('copied');
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () {
+          fallback();
+          done();
+        });
+      } else {
+        fallback();
+        done();
+      }
+    });
+  })();
+</script>

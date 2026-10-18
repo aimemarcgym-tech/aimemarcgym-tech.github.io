@@ -17,10 +17,12 @@ export default function DraggableGymnastList<T extends Gymnast>({
   members,
   onReordered,
   onDeleted,
+  individuelle,
 }: {
   members: T[];
   onReordered: () => void;
   onDeleted: () => void;
+  individuelle?: (gymnastId: string) => { active: boolean; onMettre: () => void };
 }) {
   const sorted = [...members].sort((a, b) => {
     const ao = a.homeOrder ?? Infinity;
@@ -60,6 +62,7 @@ export default function DraggableGymnastList<T extends Gymnast>({
                 lastName={g.lastName}
                 movementCount={g.movements.length}
                 onDeleted={onDeleted}
+                individuelle={individuelle?.(g.id)}
               />
             </div>
           </li>

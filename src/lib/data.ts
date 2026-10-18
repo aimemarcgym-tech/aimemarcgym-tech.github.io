@@ -21,6 +21,7 @@ import {
   type MovementElementRow,
   type MovementSnapshotRow,
   type EquipmentSettings,
+  type IndividuelleRow,
   type TrainingSessionRow,
   type ResultDocRow,
 } from "@/lib/idb";
@@ -179,10 +180,11 @@ export async function updateGymnast(
 }
 
 export async function deleteGymnast(gymnastId: string) {
-  const [skillsSnap, movementsSnap, trainingSnap] = await Promise.all([
+  const [skillsSnap, movementsSnap, trainingSnap, individuellesSnap] = await Promise.all([
     getDocs(query(col("gymnastSkills"), where("gymnastId", "==", gymnastId))),
     getDocs(query(col("movements"), where("gymnastId", "==", gymnastId))),
     getDocs(query(col("trainingSessions"), where("gymnastId", "==", gymnastId))),
+    getDocs(query(col("individuelles"), where("gymnastId", "==", gymnastId))),
   ]);
   for (const m of movementsSnap.docs) {
     await deleteMovementCascade(m.id);
@@ -191,6 +193,7 @@ export async function deleteGymnast(gymnastId: string) {
   batch.delete(docRef("gymnasts", gymnastId));
   for (const s of skillsSnap.docs) batch.delete(s.ref);
   for (const t of trainingSnap.docs) batch.delete(t.ref);
+  for (const i of individuellesSnap.docs) batch.delete(i.ref);
   await batch.commit();
 
   // La musique reste locale à l'appareil (non synchronisée) : on nettoie
@@ -679,4 +682,25 @@ export async function getTeamEquipment(teamKey: string): Promise<EquipmentSettin
 
 export async function setTeamEquipment(teamKey: string, patch: Partial<Record<keyof EquipmentSettings, string>>) {
   await setDoc(docRef("teamEquipment", encodeURIComponent(teamKey)), { reglages: patch }, { merge: true });
+}
+
+// Individuelles : une gymnaste peut être engagée en individuelle avec son propre niveau (indépendant de son équipe).
+export async function getIndividuelles(): Promise<IndividuelleRow[]> {
+  const snap = await getDocs(col("individuelles"));
+  return snap.docs.map((d) => d.data() as IndividuelleRow);
+}
+
+export async function createIndividuelle(data: Omit<IndividuelleRow, "id">): Promise<IndividuelleRow> {
+  const row: IndividuelleRow = { id: crypto.randomUUID(), ...data };
+  await setDoc(docRef("individuelles", row.id), row);
+  return row;
+}
+
+export async function updateIndividuelle(id: string, evolution: string) {
+  await updateDoc(docRef("individuelles", id), { evolution });
+}
+
+// Retirer une individuelle conserve la gymnaste, son profil et son équipe.
+export async function deleteIndividuelle(id: string) {
+  await deleteDoc(docRef("individuelles", id));
 }
