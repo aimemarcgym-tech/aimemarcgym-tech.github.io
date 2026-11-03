@@ -17,6 +17,8 @@ type GymnastList = NonNullable<Gymnasts>;
 export default function Home() {
   const [gymnasts, setGymnasts] = useState<Gymnasts | null>(null);
   const [individuelles, setIndividuelles] = useState<IndividuelleRow[]>([]);
+  // Cible d'un lien « Voir l'équipe » depuis le profil d'une gymnaste : /?club=…&team=…
+  const [cible, setCible] = useState<{ club: string; team: string } | null>(null);
   const [aussiIndiv, setAussiIndiv] = useState(false);
   const [nivIndiv, setNivIndiv] = useState("");
   const [pending, startTransition] = useTransition();
@@ -30,7 +32,19 @@ export default function Home() {
 
   useEffect(() => {
     refresh();
+    const params = new URLSearchParams(window.location.search);
+    const club = params.get("club");
+    const team = params.get("team");
+    if (club && team) setCible({ club, team });
   }, []);
+
+  useEffect(() => {
+    if (!cible || !gymnasts) return;
+    const t = setTimeout(() => {
+      document.getElementById(`equipe-${cible.club}-${cible.team}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 150);
+    return () => clearTimeout(t);
+  }, [cible, gymnasts]);
 
   function handleCreate(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -205,6 +219,7 @@ export default function Home() {
                       clubName={clubName}
                       memberCount={members.length}
                       memberIds={members.map((g) => g.id)}
+                      forceOpen={cible?.club === clubName}
                       onRenamed={refresh}
                     >
                       {hasTeams ? (
@@ -217,6 +232,8 @@ export default function Home() {
                               <TeamGroup
                                 clubId={clubId}
                                 teamName={teamName}
+                                forceOpen={cible?.club === clubName && cible.team === teamName}
+                                anchorId={`equipe-${clubName}-${teamName}`}
                                 memberCount={teamMembers.length}
                                 onRenamed={refresh}
                                 available={members

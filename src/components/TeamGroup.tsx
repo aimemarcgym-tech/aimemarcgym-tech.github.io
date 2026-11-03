@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useEffect, useState, useTransition, type ReactNode } from "react";
 import { teamColor } from "@/lib/teamColor";
 import { renameTeam, updateGymnastTeam } from "@/lib/data";
 import ShareLinkButton from "@/components/ShareLinkButton";
@@ -13,6 +13,8 @@ export default function TeamGroup({
   onRenamed,
   available = [],
   onAdded,
+  forceOpen = false,
+  anchorId,
   children,
 }: {
   clubId: string | null;
@@ -22,6 +24,8 @@ export default function TeamGroup({
   // Gymnastes du club qui ne sont pas dans cette équipe : proposées dans « Ajouter une gymnaste… ».
   available?: { id: string; label: string }[];
   onAdded?: () => void;
+  forceOpen?: boolean;
+  anchorId?: string;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -31,8 +35,12 @@ export default function TeamGroup({
   const isUnassigned = teamName === "Sans équipe";
   const color = teamColor(teamName);
 
+  useEffect(() => {
+    if (forceOpen) setOpen(true);
+  }, [forceOpen]);
+
   return (
-    <div className={`border-l pl-2 sm:ml-4 sm:pl-3 ${isUnassigned ? "border-border-subtle" : color.border}`}>
+    <div id={anchorId} className={`scroll-mt-24 border-l pl-2 sm:ml-4 sm:pl-3 ${isUnassigned ? "border-border-subtle" : color.border}`}>
       <div className="mb-2 flex w-full flex-wrap items-center gap-x-2.5 gap-y-1.5">
         <button
           onClick={() => setOpen((v) => !v)}

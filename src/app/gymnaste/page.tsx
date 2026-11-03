@@ -111,7 +111,7 @@ function GymnastPageInner() {
                 />
               </div>
               <div className="mt-1">
-                <TeamEditor gymnastId={gymnast.id} initialTeam={gymnast.team} onSaved={refresh} />
+                <TeamEditor gymnastId={gymnast.id} initialTeam={gymnast.team} clubName={gymnast.club?.name ?? ""} onSaved={refresh} />
               </div>
             </div>
             {headerActionsRevealed && (

@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { updateGymnastTeam } from "@/lib/data";
 import { teamColor } from "@/lib/teamColor";
 
 export default function TeamEditor({
   gymnastId,
   initialTeam,
+  clubName,
   onSaved,
 }: {
   gymnastId: string;
+  clubName?: string;
   initialTeam: string | null;
   onSaved?: (team: string | null) => void;
 }) {
@@ -23,16 +26,26 @@ export default function TeamEditor({
   if (!editing) {
     const color = savedTeam ? teamColor(savedTeam) : null;
     return (
-      <button onClick={() => setEditing(true)} className="text-sm text-muted hover:text-foreground">
-        {savedTeam && color ? (
-          <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 ${color.border} ${color.bg}`}>
-            <span className={`h-2 w-2 rounded-full ${color.dot}`} />
-            <span className={color.text}>{savedTeam}</span>
-          </span>
-        ) : (
-          <span className="underline decoration-dotted">+ Ajouter une équipe</span>
+      <span className="inline-flex flex-wrap items-center gap-3">
+        <button onClick={() => setEditing(true)} className="text-sm text-muted hover:text-foreground">
+          {savedTeam && color ? (
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 ${color.border} ${color.bg}`}>
+              <span className={`h-2 w-2 rounded-full ${color.dot}`} />
+              <span className={color.text}>{savedTeam}</span>
+            </span>
+          ) : (
+            <span className="underline decoration-dotted">+ Ajouter une équipe</span>
+          )}
+        </button>
+        {savedTeam && (
+          <Link
+            href={`/?club=${encodeURIComponent(clubName || "Sans club")}&team=${encodeURIComponent(savedTeam)}`}
+            className="text-sm accent-gradient-text font-medium"
+          >
+            Voir l&apos;équipe →
+          </Link>
         )}
-      </button>
+      </span>
     );
   }
 

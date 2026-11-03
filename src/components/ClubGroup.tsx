@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useEffect, useState, useTransition, type ReactNode } from "react";
 import { renameClub, deleteClub, deleteGymnast, assignGymnastsToClub } from "@/lib/data";
 
 export default function ClubGroup({
@@ -8,6 +8,7 @@ export default function ClubGroup({
   clubName,
   memberCount,
   memberIds = [],
+  forceOpen = false,
   onRenamed,
   children,
 }: {
@@ -16,6 +17,8 @@ export default function ClubGroup({
   memberCount: number;
   // Pour « Sans club » (pas de club à supprimer) : les gymnastes à supprimer d'un coup.
   memberIds?: string[];
+  // Ouvre le groupe (lien « Voir l'équipe » depuis le profil d'une gymnaste).
+  forceOpen?: boolean;
   onRenamed?: () => void;
   children: ReactNode;
 }) {
@@ -24,6 +27,10 @@ export default function ClubGroup({
   const [deleting, setDeleting] = useState(false);
   const [value, setValue] = useState(clubName);
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (forceOpen) setOpen(true);
+  }, [forceOpen]);
 
   return (
     <div>
