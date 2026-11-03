@@ -134,6 +134,15 @@ export async function deleteClub(clubId: string) {
   await batch.commit();
 }
 
+// Rattache des gymnastes sans club à un club (créé s'il n'existe pas) : c'est le « Renommer » du groupe « Sans club ».
+export async function assignGymnastsToClub(gymnastIds: string[], clubName: string) {
+  const clubId = await findOrCreateClub(clubName.trim());
+  if (!clubId) return;
+  const batch = writeBatch(db);
+  for (const id of gymnastIds) batch.update(docRef("gymnasts", id), { clubId });
+  await batch.commit();
+}
+
 // Renomme une équipe pour toutes les gymnastes qui la partagent (le champ
 // "team" est un texte libre par gymnaste, pas une entité séparée -> on met
 // à jour chaque gymnaste du club dont le champ correspond à l'ancien nom).

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition, type ReactNode } from "react";
-import { renameClub, deleteClub, deleteGymnast } from "@/lib/data";
+import { renameClub, deleteClub, deleteGymnast, assignGymnastsToClub } from "@/lib/data";
 
 export default function ClubGroup({
   clubId,
@@ -39,7 +39,41 @@ export default function ClubGroup({
           </span>
         </button>
         {!clubId && memberIds.length > 0 &&
-          (deleting ? (
+          (editing ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!value.trim()) return;
+                startTransition(async () => {
+                  await assignGymnastsToClub(memberIds, value);
+                  setEditing(false);
+                  onRenamed?.();
+                });
+              }}
+              className="flex items-center gap-2"
+            >
+              <input
+                autoFocus
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Nom du club"
+                className="rounded border border-border-strong bg-surface-alt px-2 py-1 text-sm text-foreground focus:border-accent-solid focus:outline-none"
+              />
+              <button type="submit" disabled={pending} className="text-xs accent-gradient-text underline disabled:opacity-50">
+                {pending ? "…" : "OK"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setValue(clubName);
+                  setEditing(false);
+                }}
+                className="text-xs text-muted hover:text-foreground"
+              >
+                Annuler
+              </button>
+            </form>
+          ) : deleting ? (
             <span className="flex flex-wrap items-center gap-2 text-xs">
               <span className="text-danger">
                 Supprimer les {memberIds.length} gymnaste{memberIds.length > 1 ? "s" : ""} sans club, avec leurs mouvements ?
@@ -66,12 +100,23 @@ export default function ClubGroup({
               </button>
             </span>
           ) : (
-            <button
-              onClick={() => setDeleting(true)}
-              className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
-            >
-              Tout supprimer
-            </button>
+            <>
+              <button
+                onClick={() => {
+                  setValue("");
+                  setEditing(true);
+                }}
+                className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+              >
+                Renommer
+              </button>
+              <button
+                onClick={() => setDeleting(true)}
+                className="rounded border border-border-strong px-2 py-0.5 text-xs text-muted hover:border-accent-solid/60 hover:text-foreground"
+              >
+                Supprimer
+              </button>
+            </>
           ))}
         {clubId &&
           (editing ? (
