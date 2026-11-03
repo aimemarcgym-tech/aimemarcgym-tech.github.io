@@ -204,6 +204,7 @@ export default function Home() {
                       clubId={clubId}
                       clubName={clubName}
                       memberCount={members.length}
+                      memberIds={members.map((g) => g.id)}
                       onRenamed={refresh}
                     >
                       {hasTeams ? (
