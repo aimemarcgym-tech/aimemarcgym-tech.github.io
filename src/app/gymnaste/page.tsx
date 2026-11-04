@@ -135,7 +135,7 @@ function GymnastPageInner() {
               className="rounded bg-accent-solid px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 disabled:opacity-50"
             />
           </div>
-          <div className="mb-4 flex flex-wrap items-center gap-3">
+          <div className="mb-4 space-y-3">
             {[...gymnast.movements]
               .sort((a, b) => APPARATUS_ORDER.indexOf(a.apparatus) - APPARATUS_ORDER.indexOf(b.apparatus))
               .map((m) => (
@@ -143,7 +143,7 @@ function GymnastPageInner() {
                 key={m.id}
                 movementId={m.id}
                 label={m.label}
-                apparatus={m.apparatus}
+                apparatusLabel={APPARATUS_LABELS[m.apparatus] ?? m.apparatus}
                 evolution={m.evolution}
                 onDeleted={refresh}
               />
