@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import DeleteMovementButton from "@/components/DeleteMovementButton";
 
 export default function MovementChip({
@@ -16,15 +17,20 @@ export default function MovementChip({
   evolution: string;
   onDeleted?: () => void;
 }) {
+  const router = useRouter();
+
   return (
-    <div className="flex items-center justify-between gap-4 rounded-lg border border-border-subtle bg-surface px-4 py-3 shadow-sm transition hover:border-accent-solid/60">
+    <div
+      onClick={() => router.push(`/mouvement/?id=${movementId}`)}
+      className="flex cursor-pointer items-center justify-between gap-4 rounded-lg border border-border-subtle bg-surface px-4 py-3 shadow-sm transition hover:border-accent-solid/60"
+    >
       <div className="min-w-0">
         <div className="text-base text-foreground">{label}</div>
         <div className="mt-0.5 text-xs text-muted">
           {apparatusLabel} · Évolution {evolution}
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-3">
+      <div className="flex shrink-0 items-center gap-3" onClick={(e) => e.stopPropagation()}>
         <Link href={`/mouvement/?id=${movementId}`} className="text-sm accent-gradient-text font-medium">
           Ouvrir →
         </Link>
