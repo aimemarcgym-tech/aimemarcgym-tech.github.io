@@ -24,7 +24,7 @@ export function isVariantElement(code: string, name: string) {
 }
 
 // Codes avec « + » qui sont des éléments à part entière, pas une variante : Barres 157+26 = soleil puis sortie salto
-// arrière tendu (élément distinct du soleil 124, tous deux en P5 ; confirmé par l'utilisateur et la FAQ #232).
+// arrière tendu (élément distinct du soleil 124, tous deux en P5 ; confirmé par l'utilisateur et la FAQ #10).
 const ELEMENTS_DISTINCTS = new Set(["157+26"]);
 
 // Poutre uniquement : les mêmes noms/gestes exécutés sur poutre basse en

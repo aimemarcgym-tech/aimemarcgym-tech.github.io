@@ -180,7 +180,7 @@ function evaluateCheck(
       const matches = uniq.filter((e) => {
         if (!elementCategories(apparatus, e).includes(spec.category)) return false;
         if (spec.branch && e.branch !== spec.branch) return false;
-        // FAQ #145 : en poutre, une sortie ne compte comme acro en poutre haute
+        // FAQ #39 : en poutre, une sortie ne compte comme acro en poutre haute
         // (tronc commun) que si son palier est autorisé au niveau.
         if (
           apparatus === "POUTRE" &&

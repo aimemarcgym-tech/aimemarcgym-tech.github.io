@@ -162,7 +162,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
     },
     "remarques": [
       "Entrée en bout de poutre, puis saut, pivot, acro, saut, et la sortie en dernier.",
-      "La sortie compte comme acro en poutre haute pour le tronc commun seulement (FAQ #145) : elle valide en revanche « 1 sortie P3 minimum », et la roue seule valide « 1 acro P2 minimum ».",
+      "La sortie compte comme acro en poutre haute pour le tronc commun seulement (FAQ #39) : elle valide en revanche « 1 sortie P3 minimum », et la roue seule valide « 1 acro P2 minimum ».",
       "« Poutre mousse : acro P2 minimum » n'est pas confirmée : quatre valorisations sur cinq sont retenues (4 retenues sur 5)."
     ]
   },
@@ -233,7 +233,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
     },
     "remarques": [
       "Entrée en bout de poutre, puis maintien, pivot, saut, acro, saut, la sortie, et un acro sur la poutre mousse.",
-      "« 2 éléments gymniques P3 minimum dans le mouvement » est validée par le saut en extension ½ tour et le saut antéro-postérieur (P3). « 1 élément acro sur la poutre P3 minimum » par la souplesse arrière : la sortie ne compte que pour le tronc commun (FAQ #145).",
+      "« 2 éléments gymniques P3 minimum dans le mouvement » est validée par le saut en extension ½ tour et le saut antéro-postérieur (P3). « 1 élément acro sur la poutre P3 minimum » par la souplesse arrière : la sortie ne compte que pour le tronc commun (FAQ #39).",
       "« 1 saut avec écart antéro » n'est pas confirmée : le saut antéro-postérieur sert déjà aux deux éléments gymniques. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
   },
@@ -311,7 +311,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
     },
     "remarques": [
       "Entrée en bout de poutre, pivot, roue, saut enjambé, souplesse avant, série gymnique (cosaque changement, saut de cosaque), la sortie, puis un acro sur la poutre mousse.",
-      "« 1 LG ou LM » est validée par la série gymnique (cosaque changement et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5), « 1 saut avec écart antéro » par le saut enjambé : chaque valorisation a ses propres éléments (FAQ #214). « 1 acro sur la poutre P4 minimum » est validée par la souplesse avant : la sortie ne compte que pour le tronc commun (FAQ #145).",
+      "« 1 LG ou LM » est validée par la série gymnique (cosaque changement et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5), « 1 saut avec écart antéro » par le saut enjambé : chaque valorisation a ses propres éléments (FAQ #214). « 1 acro sur la poutre P4 minimum » est validée par la souplesse avant : la sortie ne compte que pour le tronc commun (FAQ #39).",
       "« 1 sortie avec liaison acro » n'est pas confirmée : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
   },
@@ -468,7 +468,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
     "remarques": [
       "Entrée en bout de poutre, pivot, série gymnique (saut enjambé avec changement de jambes, saut antéropostérieur ½ tour), série acro (souplesse arrière « + », salto arrière groupé), saut groupé ½ tour, flic-flac, et la sortie en dernier.",
       "« 1 élément P6 » du tronc commun est validé par le saut antéropostérieur avec ½ tour (P6).",
-      "« 1 LG ou LM dont 2 P4 minimum » est validée par la série gymnique, « 1 LA dont 1 élément avec envol » par la série acro (le salto), « 1 acro avec envol sur la poutre » par le flic-flac (P5) : la sortie ne compte que pour le tronc commun (FAQ #145). « 1 saut avec 1 rotation à 180° » est validée par le saut groupé ½ tour.",
+      "« 1 LG ou LM dont 2 P4 minimum » est validée par la série gymnique, « 1 LA dont 1 élément avec envol » par la série acro (le salto), « 1 acro avec envol sur la poutre » par le flic-flac (P5) : la sortie ne compte que pour le tronc commun (FAQ #39). « 1 saut avec 1 rotation à 180° » est validée par le saut groupé ½ tour.",
       "« 1 sortie avec liaison acro dont un élément P4 minimum » et « Poutre mousse : 1 LA de 2 éléments dont 1 salto » ne sont pas confirmées : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
   },
