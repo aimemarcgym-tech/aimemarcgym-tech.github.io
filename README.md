@@ -38,6 +38,10 @@ autorisés/valorisables, valorisations pondérées).
 vérifiables à partir des données (comptage d'arches, paliers, catégories,
 liaisons acrobatiques par séquence, "2 acros de sens différents"...).
 
+✅ Panneau d'analyse du constructeur : le bloc « Paliers » affiche les paliers
+autorisés du niveau et de l'agrès choisis, avec les paliers valorisables
+marqués d'une étoile (★).
+
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec
 envol, "liés directement ou indirectement", combinaisons nominatives comme
 "Sursaut + fente + roue") car les données numérisées ne portent pas encore

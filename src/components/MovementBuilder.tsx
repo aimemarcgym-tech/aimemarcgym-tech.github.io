@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { analyzeMovement, type MovementElementRef } from "@/engine/composition";
-import { palierRank, type ApparatusRegulation } from "@/regulation/types";
+import { palierRank, estPalierValorisable, type ApparatusRegulation } from "@/regulation/types";
 import { saveMovementElements } from "@/lib/data";
 import SnapshotHistory, { useSnapshotHistory } from "@/components/SnapshotHistory";
 import { APPAREILS_AVEC_SERIES, SERIES, serieDe, type SerieType } from "@/lib/series";
@@ -589,6 +589,29 @@ export default function MovementBuilder({
                 ))}
               </ul>
             )}
+            {(() => {
+              const evo = regulation.evolutions.find((e) => e.id === evolutionId);
+              if (!evo) return null;
+              return (
+                <div className="mt-2 flex flex-wrap items-center gap-1 text-xs text-muted">
+                  {evo.paliersAutorises.map((p) => {
+                    const valo = estPalierValorisable(p, evo.paliersValorisables);
+                    return (
+                      <span
+                        key={p}
+                        className={`rounded-full border px-2 py-0.5 font-medium ${
+                          valo ? "border-success text-success" : "border-border-subtle text-muted"
+                        }`}
+                      >
+                        {p}
+                        {valo ? " ★" : ""}
+                      </span>
+                    );
+                  })}
+                  <span className="ml-1">★ = valorisable</span>
+                </div>
+              );
+            })()}
           </div>
 
           {diagnostic.liaisons.dernierEnVariante.length > 0 && (
