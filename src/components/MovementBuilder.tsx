@@ -608,7 +608,7 @@ export default function MovementBuilder({
                       </span>
                     );
                   })}
-                  <span className="ml-1">★ = valorisable</span>
+                  <span className="ml-1">★ = valorisable, gris = autorisé mais non valorisable</span>
                 </div>
               );
             })()}
