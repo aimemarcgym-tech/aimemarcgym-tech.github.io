@@ -133,7 +133,7 @@
           { "id": "BA-C1-V3", "label": "1 élément P4 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-C1-V4", "label": "1 rotation P4 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-C1-V5", "label": "1 élément fini à l'ATR", "pondere": true, "points": 3 },
-          { "id": "BA-C1-V6", "label": "1 sortie P4 (min.) amené du balancé", "pondere": false, "points": 2 }
+          { "id": "BA-C1-V6", "label": "1 balancé arrière P2 (élt n°116-26) et sortie P4 (min.)", "pondere": false, "points": 2 }
         ]
       }
     },

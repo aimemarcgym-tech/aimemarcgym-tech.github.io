@@ -34,6 +34,6 @@
     { "code": "55new", "name": "Saut de main Tsukahara groupé. Rotation longitudinale de 90° à 180° dans le 1er envol et salto arrière groupé dans le 2e envol", "archeId": "SAUT-RONDADE-MAINS", "branch": "mains", "palier": "P6", "value": 14, "rotationDeg": 180, "sourcePage": 51, "verified": true },
     { "code": "66new", "name": "Saut de main Tsukahara tendu. Rotation longitudinale de 90° à 180° dans le 1er envol et salto arrière tendu dans le 2e envol", "archeId": "SAUT-RONDADE-MAINS", "branch": "mains", "palier": "P6", "value": 14, "rotationDeg": 180, "sourcePage": 51, "verified": true },
     { "code": "75new", "name": "Saut de main Tsukahara vrillé ou Kasamatsu. Rotation longitudinale de 90° à 180° dans le 1er envol et salto arrière avec rotation longitudinale de 360° dans le 2e envol", "archeId": "SAUT-RONDADE-MAINS", "branch": "mains", "palier": "P7", "value": 14, "rotationDeg": 360, "sourcePage": 51, "verified": true },
-    { "code": "5new", "name": "Appel sur le tremplin en rondade et saut extension vers l'arrière et réception sur 1/2 hauteur de tapis", "archeId": "SAUT-RONDADE-MAINS", "branch": null, "palier": "PR3", "value": 11, "sourcePage": 51, "verified": true }
+    { "code": "5new", "name": "Appel sur le tremplin en rondade et saut extension vers l'arrière et réception sur hauteur de tapis", "archeId": "SAUT-RONDADE-MAINS", "branch": null, "palier": "PR3", "value": 11, "sourcePage": 51, "verified": true }
   ]
 }

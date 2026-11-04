@@ -216,7 +216,8 @@
         "Chute sur les éléments avec envol : reconnu si saisie de la barre d'une ou des deux mains (prise brève) ; non reconnu si la barre est seulement frôlée sans saisie.",
         "Entraîneurs : présence autorisée près de l'agrès.",
         "Entraîneurs : interdiction de modifier l'écartement des barres en cours d'enchaînement ou après une chute (sinon arrêt du jugement).",
-        "Évolution A : enchaînement autorisé en 2 ou 3 parties. Évolution B : enchaînement autorisé en 2 parties maximum."
+        "Évolution A : enchaînement autorisé en 2 ou 3 parties ; changement de barres codifié interdit. Évolution B : enchaînement autorisé en 2 parties maximum ; en B1, 2 parties max uniquement si l'élément balancé de bascule est présenté.",
+        "Filières jeunes : pour l'entrée « 1 bis new », possibilité d'ajouter un bloc (les épaules ne doivent pas dépasser la barre inférieure)."
       ]
     },
     {
@@ -307,7 +308,8 @@
       "detail": [
         "Maintien de plus de 2 s : aucune pénalité.",
         "Maintien de 1 à 2 s : −0,3.",
-        "Maintien de moins de 1 s : non reconnu (NR)."
+        "Maintien de moins de 1 s : non reconnu (NR).",
+        "La règle des angles s'applique à tous les maintiens (et pas seulement aux équerres) : pénalité pour les angles en dessous et au-dessus."
       ]
     },
     {
@@ -336,7 +338,7 @@
       "detail": [
         "Tenue : position groupée, carpée ou tendue insuffisante ; bras fléchis ; jambes fléchies ; jambes croisées ; jambes écartées ; pointes de pieds non tendues (déduction maximale sur le mouvement : 0,5).",
         "Générales : hauteur dans les sauts gymniques ou éléments acrobatiques avec envol ; déviation par rapport à la ligne d'élan ; épaules en avant pour les éléments avec appui manuel ; déséquilibre ; touche ou appui du tapis ou de l'agrès ; chute ; déplacement sur pieds à plat (max. 0,5) ; double touche lors des LA / LAE ; appuis complémentaires des mains ou des pieds (max. 0,5) ; arrêt entre les éléments ; exercice sans sortie (ou sortie hors du palier autorisé, sauf aux barres en A1, A2 et B1).",
-        "Réception : pieds écartés ; sursaut ou rebond (max. 0,5 par réception) ; pas supplémentaires (max. 0,5 par réception) ; réception accroupie ; chute ; réception non terminée sur les pieds ou l'agrès.",
+        "Réception : pieds écartés (0,3 si plus large que le bassin) ; sursaut ou rebond (max. 0,5 par réception) ; pas supplémentaires (max. 0,5 par réception) ; réception accroupie ; chute ; réception non terminée sur les pieds ou l'agrès.",
         "Artistique : manque de prestance ; manque de cadence et de rythme ; absence de passage près du sol ou de la poutre ; manque de variété chorégraphique (sol et poutre).",
         "Le montant de chaque faute figure dans le tableau des fautes du programme technique."
       ]
@@ -345,7 +347,7 @@
       "portee": "GAF",
       "theme": "Fautes spécifiques par agrès (liste)",
       "detail": [
-        "Sol : sortie de praticable (1 pied, 2 pieds) ; non-utilisation de l'ensemble du praticable (sauf 2 premiers niveaux) ; appuis des mains pas à plat lors des appuis manuels ; éléments réceptionnés à 2 pieds à l'extérieur du praticable = NR ; exercice non terminé avec la musique ; musique manquante, avec chant ou mal encodée ; manque de relation musique-mouvement ; dernier élément de l'enchaînement non acrobatique.",
+        "Sol : sortie de praticable (1 pied, 2 pieds) ; appuis des mains pas à plat lors des appuis manuels ; éléments réceptionnés à 2 pieds à l'extérieur du praticable = NR ; exercice non terminé avec la musique ; musique manquante, avec chant ou mal encodée ; manque de relation musique-mouvement ; dernier élément de l'enchaînement non acrobatique.",
         "Barres asymétriques : répétition pour l'élément suivant (élan circulaire, tour d'appui arrière à la suite, chaque fois) ; reprise d'élan en appui et/ou en suspension (élan à vide) ; manque de dynamisme et d'amplitude dans les liaisons ; prise de mains alternées lors des lâchers (décalage autorisé lors des rotations longitudinales) ; position groupée trop tôt pour les sorties.",
         "Poutre : dépassement du temps autorisé (chute comprise) ; position groupée trop tôt pour les sorties."
       ]
@@ -375,7 +377,7 @@
         "Juge en retard de 0 à 10 minutes : tolérance.",
         "De 10 à 20 minutes : amende pour juge absent (voir le règlement financier) et pénalité de 3 points sur le total de l'équipe représentée.",
         "Au-delà de 20 minutes : amende pour juge absent et pénalité de 10 points sur le total de l'équipe représentée.",
-        "Absence de juge : amende pour juge absent et déclassement (impossibilité de passer à l'échelon supérieur de l'équipe représentée)."
+        "Absence de juge : amende pour juge absent et non qualification (texte d'octobre 2026, qui remplace « déclassement »)."
       ]
     },
     {

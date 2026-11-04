@@ -102,7 +102,7 @@ export const BARRES_ASYM_CHECKS: Record<string, CheckSpec> = {
   "BA-C1-V1": { type: "NAME_CONTAINS_ALL", terms: ["lâch"] },
   "BA-C1-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4" },
   "BA-C1-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P4", category: "ROTATIONS" },
-  // BA-C1-V6 "1 sortie P4 (min.) amené du balancé" : condition d'enchaînement
+  // BA-C1-V6 "1 balancé arrière P2 (élt n°116-26) et sortie P4 (min.)" : condition d'enchaînement
   // (amené du balancé) non vérifiable automatiquement -> confirmation manuelle.
 
   "BA-C2-V1": { type: "NAME_CONTAINS_ALL", terms: ["lâch"] },

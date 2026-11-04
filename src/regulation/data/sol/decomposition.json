@@ -181,7 +181,7 @@
           { "id": "C3-V3", "label": "1 FORCE ou 1 SAUT P6 (min.)", "pondere": false, "points": 2 },
           { "id": "C3-V4", "label": "1 élément acro P7", "pondere": false, "points": 2 },
           { "id": "C3-V5", "label": "2 acros de sens différents avec envol incorporés dans les LAE", "pondere": false, "points": 2 },
-          { "id": "C3-V6", "label": "2 salti liés dont 1 P5 (min.)", "pondere": false, "points": 2 }
+          { "id": "C3-V6", "label": "2 salti liés directement dont 1 P5 (min.)", "pondere": false, "points": 2 }
         ]
       }
     }
