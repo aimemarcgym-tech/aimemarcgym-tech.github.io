@@ -593,22 +593,27 @@ export default function MovementBuilder({
               const evo = regulation.evolutions.find((e) => e.id === evolutionId);
               if (!evo) return null;
               return (
-                <div className="mt-2 flex flex-wrap items-center gap-1 text-xs text-muted">
-                  {evo.paliersAutorises.map((p) => {
-                    const valo = estPalierValorisable(p, evo.paliersValorisables);
-                    return (
-                      <span
-                        key={p}
-                        className={`rounded-full border px-2 py-0.5 font-medium ${
-                          valo ? "border-success text-success" : "border-border-subtle text-muted"
-                        }`}
-                      >
-                        {p}
-                        {valo ? " ★" : ""}
-                      </span>
-                    );
-                  })}
-                  <span className="ml-1">★ = valorisable, gris = autorisé mais non valorisable</span>
+                <div className="mt-3 text-xs text-muted">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {evo.paliersAutorises.map((p) => {
+                      const valo = estPalierValorisable(p, evo.paliersValorisables);
+                      return (
+                        <span
+                          key={p}
+                          className={`rounded-full border px-2.5 py-0.5 font-medium ${
+                            valo ? "border-success text-success" : "border-border-subtle text-muted"
+                          }`}
+                        >
+                          {p}
+                          {valo ? " ★" : ""}
+                        </span>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-2 space-y-0.5">
+                    <div>★ = valorisable</div>
+                    <div>Gris = autorisé mais non valorisable</div>
+                  </div>
                 </div>
               );
             })()}
