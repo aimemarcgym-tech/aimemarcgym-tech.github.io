@@ -41,7 +41,14 @@ export default function GymnastHeaderEditor({
   if (!editing) {
     return (
       <div className="flex items-center gap-3">
-        <button type="button" onClick={onToggleReveal} className="text-left">
+        <button
+          type="button"
+          onClick={() => {
+            setEditing(true);
+            if (!revealed) onToggleReveal();
+          }}
+          className="text-left"
+        >
           <h1 className="text-xl font-bold text-foreground">
             {saved.firstName} {saved.lastName}
           </h1>
