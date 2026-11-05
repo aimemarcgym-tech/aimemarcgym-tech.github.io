@@ -500,6 +500,9 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
         "serie": "GYMNIQUE"
       },
       {
+        "code": "188-26"
+      },
+      {
         "code": "164+"
       },
       {
@@ -534,7 +537,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
         "192-26"
       ],
       "P-C3-V4": [
-        "192-26"
+        "188-26"
       ],
       "P-C3-V5": [
         "164+",
@@ -542,9 +545,9 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       ]
     },
     "remarques": [
-      "Entrée en bout de poutre, pivot, série acro (flic-flac « + », salto arrière tendu pieds décalés), série gymnique (saut enjambé, cosaque changement), rondade « + », et la sortie en dernier.",
+      "Entrée en bout de poutre, pivot, série acro (flic-flac « + », salto arrière tendu pieds décalés), série gymnique (saut enjambé, cosaque changement), salto arrière carpé, rondade « + », et la sortie en dernier.",
       "« 1 élément P7 » du tronc commun est validé par le salto arrière tendu pieds décalés (P7). « 1 LG ou LM dont 2 P4 minimum » est validée par la série gymnique, « 1 sortie avec liaison acro dont 1 élément P5 minimum » par la rondade « + » suivie de la sortie (P5).",
-      "Le salto arrière tendu pieds décalés (P7) valide à la fois « 1 LA de 2 éléments dont 1 salto » (comme élément de la série acro) et « 1 salto sur poutre P6 minimum » : les éléments d'une série peuvent valider deux valorisations (information de l'entraîneur, à confirmer officiellement).",
+      "« 1 LA de 2 éléments dont 1 salto » est validée par la série acro (flic-flac « + » et salto arrière tendu pieds décalés) ; « 1 salto sur poutre P6 minimum » par le salto arrière carpé (P6) : chaque valorisation a ses propres éléments (FAQ #214).",
       "« 1 saut écart avec 1 rotation à 180° » et « Poutre mousse : 1 LA de 2 éléments avec envol dont 1 salto » ne sont pas confirmées : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
   }

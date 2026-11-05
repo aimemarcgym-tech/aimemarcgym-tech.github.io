@@ -8,6 +8,9 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
     "titre": "Barres asymétriques A1 — mouvement à la note maximale",
     "elements": [
       {
+        "code": "1bisnew"
+      },
+      {
         "code": "2new-va"
       },
       {
@@ -53,12 +56,12 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
         "68-26"
       ],
       "BA-A1-V4": [
-        "2new-va"
+        "1bisnew"
       ]
     },
     "remarques": [
-      "Balancé de bascule (venir à l'appui, P2), établissement à l'appui facial, tour d'appui facial en arrière, pose des pieds jambes groupées (élans, P2), puis les balancés (avant avec placement par l'entraîneur, puis arrière).",
-      "« 1 élément de l'arche des élans » est validée par la pose des pieds jambes groupées (P2, valorisable). « 1 élément des arches Balancés » par le balancé arrière (P2). « 1 élément de l'arche venir à l'appui » par le balancé de bascule (P2).",
+      "Sauter à l'appui, balancé de bascule (venir à l'appui), établissement à l'appui facial, tour d'appui facial en arrière, pose des pieds jambes groupées (élans, P2), puis les balancés (avant avec placement par l'entraîneur, puis arrière).",
+      "« 1 élément de l'arche des élans » est validée par la pose des pieds jambes groupées (P2, valorisable). « 1 élément des arches Balancés » par le balancé arrière (P2). « 1 élément de l'arche venir à l'appui » par « sauter à l'appui » (Base, équivalent du P1, règle à confirmer officiellement) : le balancé de bascule sert à l'autre valorisation, car un élément ne valide qu'une seule valorisation (FAQ #214).",
       "« 1 élément BI et 1 BS » et « 1 mouvement en 2 parties avec interruption (BI ou BS ou inversement) » sont confirmées à la main."
     ]
   },

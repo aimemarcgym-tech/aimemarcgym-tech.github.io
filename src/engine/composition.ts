@@ -6,7 +6,8 @@ import { PALIER_ORDER, palierRank, estPalierValorisable, type CheckSpec, type Ev
 export interface MovementElementRef {
   code: string;
   role: "ENTREE" | "ELEMENT" | "SORTIE";
-  // Pastille de série posée sur l'élément (Sol et Poutre) : simple annotation, sans effet sur le calcul.
+  // Pastille de série posée sur l'élément (Sol et Poutre) : sans effet sur le calcul, sauf pour l'avertissement
+  // de doublons (une série confirmée réserve ses éléments).
   serie?: "MIXTE" | "GYMNIQUE" | "ACRO";
 }
 
@@ -260,12 +261,16 @@ function evaluateCheck(
 // Avertit quand des valorisations confirmées s'appuient sur les mêmes éléments (FAQ #214 : un élément ne valide
 // qu'une seule valorisation ; FAQ #45/#47 : une sortie avec liaison acro utilise aussi l'acro qui la précède).
 // Ne juge que ce que le moteur sait identifier (valorisations à critère d'élément, « sortie avec liaison acro » à
-// la Poutre) ; les autres, vérifiées à la main, ne déclenchent rien. « 2 acros de sens différents » est exemptée.
+// la Poutre, séries LAE/LA/LG/LM repérées par leurs pastilles) ; les autres, vérifiées à la main, ne déclenchent
+// rien. « 2 acros de sens différents » est exemptée.
+// Une série confirmée (LAE, LA, LG, LM) réserve ses éléments : en attendant une réponse officielle, la FAQ
+// ne prévoit pas qu'un élément de série valide aussi une autre valorisation.
 function findValorisationOverlaps(
   apparatus: string,
   evolution: Evolution,
   elements: RegElement[],
-  confirmed: Set<string>
+  confirmed: Set<string>,
+  series: (string | undefined)[]
 ): string[] {
   const valorisable = (e: RegElement) => estPalierValorisable(e.palier, evolution.paliersValorisables);
   const distinct = elements.filter((e, k) => elements.findIndex((x) => x.code === e.code) === k);
@@ -286,6 +291,20 @@ function findValorisationOverlaps(
         if (before && elementCategories(apparatus, before).includes("ACRO")) reserved.set(before.code, opt.label);
       }
       continue;
+    }
+    // Série confirmée : ses éléments (ceux qui portent la pastille correspondante) ne peuvent servir qu'à elle.
+    if ((apparatus === "SOL" || apparatus === "POUTRE") && !/^poutre mousse/i.test(opt.label)) {
+      const types = new Set<string>();
+      if (/\b(LAE|LA)\b/.test(opt.label)) types.add("ACRO");
+      if (/\bLG\b/.test(opt.label)) types.add("GYMNIQUE");
+      if (/\bLM\b/.test(opt.label)) types.add("MIXTE");
+      if (types.size > 0) {
+        elements.forEach((e, k) => {
+          const s = series[k];
+          if (s && types.has(s) && !reserved.has(e.code)) reserved.set(e.code, opt.label);
+        });
+        continue;
+      }
     }
     let candidates: RegElement[] | null = null;
     let need = 1;
@@ -442,7 +461,13 @@ export function analyzeMovement(
     liaisons: { dernierEnVariante: findVariantEndingViolations(apparatus, elements) },
     valorisations: {
       results: valoResults,
-      avertissements: findValorisationOverlaps(apparatus, evolution, elements, manualConfirmations),
+      avertissements: findValorisationOverlaps(
+        apparatus,
+        evolution,
+        elements,
+        manualConfirmations,
+        refs.filter((r) => getElement(apparatus, r.code) !== undefined).map((r) => r.serie)
+      ),
       validatedCount: validated.length,
       choisir: evolution.valorisations.choisir,
       parmi: evolution.valorisations.parmi,

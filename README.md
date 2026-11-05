@@ -42,6 +42,12 @@ liaisons acrobatiques par séquence, "2 acros de sens différents"...).
 autorisés du niveau et de l'agrès choisis, avec les paliers valorisables
 marqués d'une étoile (★).
 
+✅ Valorisations : un élément ne valide qu'une seule valorisation, y compris
+les éléments d'une série (LAE, LA, LG, LM), conformément à la FAQ (#214, #45,
+#47). La règle « une série vaut deux valorisations » est suspendue en attendant
+une réponse officielle. L'avertissement de doublons tient compte des séries
+confirmées (via les pastilles de série).
+
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec
 envol, "liés directement ou indirectement", combinaisons nominatives comme
 "Sursaut + fente + roue") car les données numérisées ne portent pas encore

@@ -428,9 +428,6 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "13pivot"
       },
       {
-        "code": "148+"
-      },
-      {
         "code": "158+"
       },
       {
@@ -441,6 +438,9 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       },
       {
         "code": "39chat"
+      },
+      {
+        "code": "148+"
       },
       {
         "code": "154+"
@@ -477,19 +477,19 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "C2-V2": [
         "148+",
-        "158+",
-        "179"
+        "154+",
+        "180"
       ],
       "C2-V3": [
         "51enjambe"
       ],
       "C2-V4": [
-        "180"
+        "158+"
       ]
     },
     "remarques": [
-      "LAE 1 de 3 éléments différents : rondade « + », flic-flac avant « + » (P6), salto arrière avec 1 tour (P6). LAE 2 : saut de mains « + », salto avant tendu (P6).",
-      "« 1 salto avec rotation longitudinale 360° » : salto arrière avec 1 tour (179). « 1 élément acro P6 » : salto avant tendu (180). « 1 LAE dont 1 P5 » : le flic-flac avant « + » (P6).",
+      "LAE 1 de 2 éléments : flic-flac avant « + » (P6), salto arrière avec 1 tour (P6). LAE 2 de 3 éléments différents : rondade « + », saut de mains « + », salto avant tendu (P6).",
+      "« 1 salto avec rotation longitudinale 360° » : salto arrière avec 1 tour (179). « 1 élément acro P6 » : flic-flac avant « + » (158+). « 1 LAE de 3 éléments dont 1 P5 » : la LAE 2, dont le salto avant tendu est P6. Chaque valorisation a ses propres éléments (FAQ #214).",
       "« 2 acros de sens différents dans les LAE » et « 2 salti liés » ne sont pas confirmées : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
   },
