@@ -1,7 +1,7 @@
 import type { ExempleMouvement } from "@/lib/exemples";
 
 // Sol : un mouvement par niveau, construit pour la note de départ maximale (vérifié avec le moteur).
-// Chronologie : on alterne lignes d'acros (LAE) et pivots / sauts, le mouvement se termine par un acro.
+// Chronologie : on alterne lignes d'acros (LAE) et pivots / sauts, le mouvement se termine par une acro.
 export const EXEMPLES_SOL: ExempleMouvement[] = [
   {
     "apparatus": "SOL",

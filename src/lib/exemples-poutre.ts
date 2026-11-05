@@ -232,7 +232,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       ]
     },
     "remarques": [
-      "Entrée en bout de poutre, puis maintien, pivot, saut, acro, saut, la sortie, et un acro sur la poutre mousse.",
+      "Entrée en bout de poutre, puis maintien, pivot, saut, acro, saut, la sortie, et une acro sur la poutre mousse.",
       "« 2 éléments gymniques P3 minimum dans le mouvement » est validée par le saut en extension ½ tour et le saut antéro-postérieur (P3). « 1 élément acro sur la poutre P3 minimum » par la souplesse arrière : la sortie ne compte que pour le tronc commun (FAQ #39).",
       "« 1 saut avec écart antéro » n'est pas confirmée : le saut antéro-postérieur sert déjà aux deux éléments gymniques. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
@@ -310,7 +310,7 @@ export const EXEMPLES_POUTRE: ExempleMouvement[] = [
       ]
     },
     "remarques": [
-      "Entrée en bout de poutre, pivot, roue, saut enjambé, souplesse avant, série gymnique (cosaque changement, saut de cosaque), la sortie, puis un acro sur la poutre mousse.",
+      "Entrée en bout de poutre, pivot, roue, saut enjambé, souplesse avant, série gymnique (cosaque changement, saut de cosaque), la sortie, puis une acro sur la poutre mousse.",
       "« 1 LG ou LM » est validée par la série gymnique (cosaque changement et saut de cosaque, deux sauts différents dans les paliers valorisables P3 à P5), « 1 saut avec écart antéro » par le saut enjambé : chaque valorisation a ses propres éléments (FAQ #214). « 1 acro sur la poutre P4 minimum » est validée par la souplesse avant : la sortie ne compte que pour le tronc commun (FAQ #39).",
       "« 1 sortie avec liaison acro » n'est pas confirmée : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 5)."
     ]
