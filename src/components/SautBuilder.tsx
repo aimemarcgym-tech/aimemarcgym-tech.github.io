@@ -302,7 +302,7 @@ export default function SautBuilder({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-[1.15fr_1.15fr_1.15fr_1.3fr] lg:gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
         {/* ZONE 1 — MES SAUTS (+ historique des instantanés) */}
         <div className="space-y-4">
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
