@@ -270,7 +270,7 @@ export default function SautBuilder({
   }
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-6">
+    <main className="mx-auto max-w-[1600px] px-6 py-6">
       <div className="mb-4 flex items-center justify-between text-sm text-muted">
         <span>
           {sequence.length}/{diagnostic.sautsRequired} saut(s) sélectionné(s)
