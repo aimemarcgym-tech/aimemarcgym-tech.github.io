@@ -96,8 +96,8 @@ function GymnastPageInner() {
     <div className="min-h-screen">
       <header className="border-b border-border-subtle bg-surface/60 backdrop-blur">
         <div className="mx-auto max-w-5xl px-6 py-5">
-          <div className="flex items-start justify-between">
-            <div>
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 flex-1">
               <Link href="/" className="text-sm accent-gradient-text font-medium">← Toutes les gymnastes</Link>
               <div className="mt-1">
                 <GymnastHeaderEditor

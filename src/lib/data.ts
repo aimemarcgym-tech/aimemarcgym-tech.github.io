@@ -47,6 +47,11 @@ function docRef(name: string, id: string) {
   return doc(db, "users", getCurrentUid(), name, id);
 }
 
+export async function getClubNames(): Promise<string[]> {
+  const snap = await getDocs(col("clubs"));
+  return snap.docs.map((d) => (d.data() as ClubRow).name).sort((a, b) => a.localeCompare(b, "fr"));
+}
+
 async function findOrCreateClub(clubName: string): Promise<string | undefined> {
   if (!clubName) return undefined;
   const snap = await getDocs(col("clubs"));

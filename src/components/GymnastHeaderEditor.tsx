@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { updateGymnast } from "@/lib/data";
+import { useEffect, useState, useTransition } from "react";
+import { getClubNames, updateGymnast } from "@/lib/data";
+import { btnContour, btnDegrade, champ, etiquette } from "@/lib/styles";
 
 export default function GymnastHeaderEditor({
   gymnastId,
@@ -31,6 +32,11 @@ export default function GymnastHeaderEditor({
     birthYear: birthYear ? String(birthYear) : "",
   });
   const [pending, startTransition] = useTransition();
+  const [clubNames, setClubNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (editing) getClubNames().then(setClubNames);
+  }, [editing]);
 
   if (!editing) {
     return (
@@ -63,58 +69,62 @@ export default function GymnastHeaderEditor({
           setEditing(false);
         });
       }}
-      className="flex flex-wrap items-end gap-2 rounded-lg border border-border-subtle bg-surface-alt p-3"
+      className="mt-4 space-y-3 rounded-lg border border-border-subtle bg-surface p-4 shadow-sm"
     >
-      <div>
-        <label className="mb-1 block text-[10px] text-muted">Prénom</label>
-        <input
-          value={form.firstName}
-          onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
-          required
-          className="rounded border border-border-strong bg-surface px-2 py-1 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-        />
+      <h2 className="text-sm font-semibold text-foreground">Modifier le profil</h2>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className={etiquette}>Prénom</label>
+          <input
+            value={form.firstName}
+            onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
+            required
+            className={champ}
+          />
+        </div>
+        <div>
+          <label className={etiquette}>Nom</label>
+          <input
+            value={form.lastName}
+            onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
+            required
+            className={champ}
+          />
+        </div>
+        <div>
+          <label className={etiquette}>Club</label>
+          <input
+            value={form.clubName}
+            onChange={(e) => setForm((f) => ({ ...f, clubName: e.target.value }))}
+            placeholder="Aucun club"
+            list="clubs-profil"
+            className={champ}
+          />
+          <datalist id="clubs-profil">
+            {clubNames.map((n) => (
+              <option key={n} value={n} />
+            ))}
+          </datalist>
+        </div>
+        <div>
+          <label className={etiquette}>Année de naissance</label>
+          <input
+            type="number"
+            value={form.birthYear}
+            onChange={(e) => setForm((f) => ({ ...f, birthYear: e.target.value }))}
+            placeholder={String(new Date().getFullYear() - 12)}
+            className={champ}
+          />
+        </div>
       </div>
-      <div>
-        <label className="mb-1 block text-[10px] text-muted">Nom</label>
-        <input
-          value={form.lastName}
-          onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
-          required
-          className="rounded border border-border-strong bg-surface px-2 py-1 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-        />
+      <div className="flex gap-2">
+        <button type="submit" disabled={pending} className={btnDegrade}>
+          {pending ? "…" : "Enregistrer"}
+        </button>
+        <button type="button" onClick={() => setEditing(false)} className={btnContour}>
+          Annuler
+        </button>
       </div>
-      <div>
-        <label className="mb-1 block text-[10px] text-muted">Club</label>
-        <input
-          value={form.clubName}
-          onChange={(e) => setForm((f) => ({ ...f, clubName: e.target.value }))}
-          placeholder="Aucun club"
-          className="rounded border border-border-strong bg-surface px-2 py-1 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
-        />
-      </div>
-      <div>
-        <label className="mb-1 block text-[10px] text-muted">Année de naissance</label>
-        <input
-          type="number"
-          value={form.birthYear}
-          onChange={(e) => setForm((f) => ({ ...f, birthYear: e.target.value }))}
-          className="w-24 rounded border border-border-strong bg-surface px-2 py-1 text-sm text-foreground focus:border-accent-solid focus:outline-none"
-        />
-      </div>
-      <button
-        type="submit"
-        disabled={pending}
-        className="accent-gradient rounded px-3 py-1.5 text-xs font-medium text-white hover:opacity-90 disabled:opacity-50"
-      >
-        {pending ? "…" : "Enregistrer"}
-      </button>
-      <button
-        type="button"
-        onClick={() => setEditing(false)}
-        className="rounded border border-border-strong px-3 py-1.5 text-xs text-muted hover:text-foreground"
-      >
-        Annuler
-      </button>
     </form>
   );
 }
