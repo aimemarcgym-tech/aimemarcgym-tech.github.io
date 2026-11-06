@@ -264,7 +264,8 @@ function evaluateCheck(
 // la Poutre, séries LAE/LA/LG/LM repérées par leurs pastilles) ; les autres, vérifiées à la main, ne déclenchent
 // rien. « 2 acros de sens différents » est exemptée.
 // Une série confirmée (LAE, LA, LG, LM) réserve ses éléments : en attendant une réponse officielle, la FAQ
-// ne prévoit pas qu'un élément de série valide aussi une autre valorisation.
+// ne prévoit pas qu'un élément de série valide aussi une autre valorisation. Exception confirmée : une série acro
+// terminée par une sortie vaut deux valorisations (ses éléments ne sont pas réservés).
 function findValorisationOverlaps(
   apparatus: string,
   evolution: Evolution,
@@ -299,6 +300,14 @@ function findValorisationOverlaps(
       if (/\bLG\b/.test(opt.label)) types.add("GYMNIQUE");
       if (/\bLM\b/.test(opt.label)) types.add("MIXTE");
       if (types.size > 0) {
+        // Exception confirmée (FAQ, 2026-11-06) : une série acro terminée par une sortie vaut deux valorisations,
+        // donc ses éléments ne sont pas réservés.
+        const acroTermineeParSortie =
+          types.has("ACRO") &&
+          last !== undefined &&
+          series[elements.length - 1] === "ACRO" &&
+          isSortieElement(last.archeId, last.extraCategories);
+        if (acroTermineeParSortie) continue;
         elements.forEach((e, k) => {
           const s = series[k];
           if (s && types.has(s) && !reserved.has(e.code)) reserved.set(e.code, opt.label);
