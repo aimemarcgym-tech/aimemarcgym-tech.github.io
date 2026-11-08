@@ -188,8 +188,8 @@ function SharedMovementBody({ data }: { data: MovementShareData }) {
             <div>Barème &quot;Valeur des sauts&quot; (palier du saut retenu).</div>
             <div className="text-white/60">
               La valorisation des 2 sauts différents est appliquée si les 2 sauts sont reconnus et que l&apos;un des
-              deux se trouve dans les paliers valorisables. Si le meilleur saut est un nomade, alors les nomades
-              n&apos;étant pas valorisables, pas de valorisation.
+              deux se trouve dans les paliers valorisables. Un saut nomade peut servir à valoriser, mais sa note
+              ne peut pas être retenue s&apos;il a le moins de points de déduction.
             </div>
           </NoteCard>
 

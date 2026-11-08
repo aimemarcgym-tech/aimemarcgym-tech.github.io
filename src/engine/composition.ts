@@ -286,13 +286,9 @@ function findValorisationOverlaps(
   for (const opt of evolution.valorisations.options) {
     if (!confirmed.has(opt.id)) continue;
     const spec = getCheck(opt.id, apparatus);
-    if (apparatus === "POUTRE" && /sortie avec liaison acro/i.test(opt.label)) {
-      if (last && isSortieElement(last.archeId, last.extraCategories)) {
-        reserved.set(last.code, opt.label);
-        if (before && elementCategories(apparatus, before).includes("ACRO")) reserved.set(before.code, opt.label);
-      }
-      continue;
-    }
+    // Mémo de jugement : les éléments d'une « sortie avec liaison acro » peuvent aussi servir à la valorisation acro.
+    // Ils ne sont donc pas réservés.
+    if (apparatus === "POUTRE" && /sortie avec liaison acro/i.test(opt.label)) continue;
     // Série confirmée : ses éléments (ceux qui portent la pastille correspondante) ne peuvent servir qu'à elle.
     if ((apparatus === "SOL" || apparatus === "POUTRE") && !/^poutre mousse/i.test(opt.label)) {
       const types = new Set<string>();

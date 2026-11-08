@@ -8,7 +8,7 @@ export function getSautTips(sautsRequired: number, evolutionId?: string): string
     sautsRequired === 1
       ? "Un seul type de saut est demandé à ce niveau : il peut être exécuté deux fois en compétition (meilleure note gardée), inutile de l'ajouter deux fois ici."
       : "2 sauts de familles de 1er envol différentes sont demandés à ce niveau : chacun compte pour sa meilleure note parmi ses essais en compétition.",
-    "Un saut nomade n'est jamais valorisable, même s'il obtient la meilleure note.",
+    "Un saut nomade peut servir à valoriser (ex. Pétrick + lune en B3), mais sa note ne peut pas être retenue si c'est le saut qui a le moins de points de déduction (mémo de jugement).",
   ];
   // FAQ #166 : en A1 et A2, les sauts PR se font sur une pile de tapis de 80 cm, donc jamais « Saut à 1 m ».
   if (evolutionId === "A1" || evolutionId === "A2") {
@@ -27,7 +27,7 @@ export function getApparatusTips(apparatus: string): string[] {
         "Un élément de l'arche ATR ne valide pas « acro en poutre haute » : il faut un élément des arches Acros 1 ou 2. Le saut droit (Acros 1) peut valider une acro, mais pas une acro et un saut en même temps.",
         "Un élément « + » est un élément à part entière, enchaîné directement à un autre élément (rondade « + » = rondade suivie d'un élément). Une LAE est par défaut une LA.",
         "Un élément ne valide qu'une seule valorisation, y compris les éléments d'une série (gymnique, mixte ou acro) : ceux de la série « 1 LG ou LM » ou « 1 LA » ne servent pas aussi à une autre valorisation (FAQ #214, #45, #47). Exception confirmée : une série acro terminée par une sortie vaut deux valorisations. Pour les autres séries, une valeur double reste en attente de confirmation officielle.",
-        "« Sortie avec liaison acro » : les éléments de la liaison (ex. roue + salto) ne peuvent pas servir aussi à une autre valorisation (acro P4, LA sur poutre…). On choisit l'une ou l'autre.",
+        "« Sortie avec liaison acro » : les éléments de la liaison (ex. roue + salto) peuvent servir aussi à la valorisation acro (mémo de jugement).",
       ];
     case "SOL":
       return [

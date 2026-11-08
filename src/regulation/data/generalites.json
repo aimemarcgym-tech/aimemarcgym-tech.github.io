@@ -13,7 +13,7 @@
       "theme": "La valorisation",
       "detail": [
         "Est validée même avec une chute.",
-        "Ne peut jamais contenir d'éléments nomades.",
+        "Ne peut jamais contenir d'éléments nomades (sauf au Saut : un saut nomade peut servir à valoriser, mémo de jugement).",
         "Est distincte des autres valorisations.",
         "Au Sol, les 2 acros de sens différents peuvent être validées par des éléments des autres valorisations."
       ]
