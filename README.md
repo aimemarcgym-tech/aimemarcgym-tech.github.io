@@ -45,7 +45,8 @@ marqués d'une étoile (★).
 ✅ Valorisations : un élément ne valide qu'une seule valorisation, y compris
 les éléments d'une série (LAE, LA, LG, LM), conformément à la FAQ (#214, #45,
 #47). La règle « une série vaut deux valorisations » est suspendue en attendant
-une réponse officielle. L'avertissement de doublons tient compte des séries
+une réponse officielle, sauf à la Poutre : une série acro terminée par une sortie
+y vaut deux valorisations (validée par l'entraîneur, encore à confirmer ; pas au Sol). L'avertissement de doublons tient compte des séries
 confirmées (via les pastilles de série).
 
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec

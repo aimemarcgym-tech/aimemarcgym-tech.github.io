@@ -26,14 +26,14 @@ export function getApparatusTips(apparatus: string): string[] {
         "Liaison mixte (LM) : un élément gymnique (pivot ou saut uniquement) + une acro, et les deux doivent être dans les paliers valorisables. Ex. en B3, saut de chat (P2) + roue ne valide pas la LM.",
         "Un élément de l'arche ATR ne valide pas « acro en poutre haute » : il faut un élément des arches Acros 1 ou 2. Le saut droit (Acros 1) peut valider une acro, mais pas une acro et un saut en même temps.",
         "Un élément « + » est un élément à part entière, enchaîné directement à un autre élément (rondade « + » = rondade suivie d'un élément). Une LAE est par défaut une LA.",
-        "Un élément ne valide qu'une seule valorisation, y compris les éléments d'une série (gymnique, mixte ou acro) : ceux de la série « 1 LG ou LM » ou « 1 LA » ne servent pas aussi à une autre valorisation (FAQ #214, #45, #47). Exception confirmée : une série acro terminée par une sortie vaut deux valorisations. Pour les autres séries, une valeur double reste en attente de confirmation officielle.",
+        "Un élément ne valide qu'une seule valorisation, y compris les éléments d'une série (gymnique, mixte ou acro) : ceux de la série « 1 LG ou LM » ou « 1 LA » ne servent pas aussi à une autre valorisation (FAQ #214, #45, #47). Exception à la Poutre, encore à confirmer : une série acro terminée par une sortie vaut deux valorisations. Pour les autres séries, une valeur double reste en attente de confirmation officielle.",
         "« Sortie avec liaison acro » : les éléments de la liaison (ex. roue + salto) peuvent servir aussi à la valorisation acro (mémo de jugement).",
       ];
     case "SOL":
       return [
         "« 2 acros de sens différents » est la seule valorisation qui peut réutiliser des éléments déjà comptés dans une autre valorisation — pour toutes les autres, il faut des éléments distincts.",
         "Rondade, flip et saut de mains sont répétables dans les LAE mais comptés une seule fois dans le nombre d'éléments. L'élément « + » et l'élément normal sont deux éléments différents.",
-        "Un élément ne valide qu'une seule valorisation, y compris les éléments d'une LAE ou d'une série : ils ne servent pas aussi à une autre valorisation (FAQ #214, #45, #47). Exception confirmée : une série acro terminée par une sortie vaut deux valorisations. Pour les autres séries, une valeur double reste en attente de confirmation officielle.",
+        "Un élément ne valide qu'une seule valorisation, y compris les éléments d'une LAE ou d'une série : ils ne servent pas aussi à une autre valorisation (FAQ #214, #45, #47). Une valeur double pour une série reste en attente de confirmation officielle.",
         "Le sens d'une liaison est celui de l'élément de liaison, pas celui de la rondade : rondade-flip et rondade-salto sont deux liaisons arrière.",
         "Un élément dont le palier n'est pas valorisable ne valorise jamais (il ne peut pas être « déclassé »), mais il compte pour le tronc commun si son palier est autorisé. Une LAE de 3 éléments reste valide avec 4.",
       ];

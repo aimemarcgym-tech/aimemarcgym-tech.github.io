@@ -264,8 +264,8 @@ function evaluateCheck(
 // la Poutre, séries LAE/LA/LG/LM repérées par leurs pastilles) ; les autres, vérifiées à la main, ne déclenchent
 // rien. « 2 acros de sens différents » est exemptée.
 // Une série confirmée (LAE, LA, LG, LM) réserve ses éléments : en attendant une réponse officielle, la FAQ
-// ne prévoit pas qu'un élément de série valide aussi une autre valorisation. Exception confirmée : une série acro
-// terminée par une sortie vaut deux valorisations (ses éléments ne sont pas réservés).
+// ne prévoit pas qu'un élément de série valide aussi une autre valorisation. Exception à la Poutre seulement (à
+// confirmer) : une série acro terminée par une sortie vaut deux valorisations (ses éléments ne sont pas réservés).
 function findValorisationOverlaps(
   apparatus: string,
   evolution: Evolution,
@@ -296,9 +296,10 @@ function findValorisationOverlaps(
       if (/\bLG\b/.test(opt.label)) types.add("GYMNIQUE");
       if (/\bLM\b/.test(opt.label)) types.add("MIXTE");
       if (types.size > 0) {
-        // Exception confirmée (FAQ, 2026-11-06) : une série acro terminée par une sortie vaut deux valorisations,
-        // donc ses éléments ne sont pas réservés.
+        // Exception validée par l'entraîneur (2026-11-06), Poutre uniquement et encore à confirmer : une série acro
+        // terminée par une sortie vaut deux valorisations, donc ses éléments ne sont pas réservés. Pas au Sol.
         const acroTermineeParSortie =
+          apparatus === "POUTRE" &&
           types.has("ACRO") &&
           last !== undefined &&
           series[elements.length - 1] === "ACRO" &&
