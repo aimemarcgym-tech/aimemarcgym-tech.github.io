@@ -42,12 +42,6 @@ liaisons acrobatiques par séquence, "2 acros de sens différents"...).
 autorisés du niveau et de l'agrès choisis, avec les paliers valorisables
 marqués d'une étoile (★).
 
-🧪 Test (Poutre uniquement) : dans la bibliothèque d'éléments, chaque élément
-affiche des badges avec les valorisations de l'évolution auxquelles il peut
-contribuer (bleu : jugé par l'appli ; jaune : piste à confirmer à la main), ou
-« non valorisable ». Aide visuelle seulement : rien n'est coché, toutes les
-valorisations restent confirmées à la main (`src/engine/valorisations-element.ts`).
-
 ✅ Valorisations : un élément ne valide qu'une seule valorisation, y compris
 les éléments d'une série (LAE, LA, LG, LM), conformément à la FAQ (#214, #45,
 #47). La règle « une série vaut deux valorisations » est suspendue en attendant

@@ -8,7 +8,6 @@ import SnapshotHistory, { useSnapshotHistory } from "@/components/SnapshotHistor
 import { APPAREILS_AVEC_SERIES, SERIES, serieDe, type SerieType } from "@/lib/series";
 import { getCheck } from "@/regulation/checks";
 import { isVariantElement, isMousseElement, isSortieElement } from "@/regulation/variants";
-import { valorisationsPourElement } from "@/engine/valorisations-element";
 import ReferencePanel from "@/components/ReferencePanel";
 import ShareLinkButton from "@/components/ShareLinkButton";
 import DragHandle from "@/components/DragHandle";
@@ -882,18 +881,6 @@ export default function MovementBuilder({
                     Poutre mousse
                   </span>
                 )}
-                {apparatus === "POUTRE" && (
-                  <>
-                    <span className="flex items-center gap-1">
-                      <span className="inline-block h-2.5 w-2.5 rounded-sm bg-accent-from/15" />
-                      Peut valider (jugé par l&apos;appli)
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <span className="inline-block h-2.5 w-2.5 rounded-sm bg-warning/15" />
-                      Piste, à confirmer
-                    </span>
-                  </>
-                )}
               </div>
               <div className="grid max-h-[32rem] grid-cols-2 gap-2 overflow-y-auto">
                 {filteredLibrary.map((el) => {
@@ -951,32 +938,6 @@ export default function MovementBuilder({
                         )}
                       </div>
                       <span className="text-xs leading-snug text-foreground">{el.name}</span>
-                      {apparatus === "POUTRE" && (() => {
-                        const info = valorisationsPourElement(apparatus, evolutionId, el);
-                        if (!info.valorisable) {
-                          return (
-                            <span className="rounded border border-border-subtle px-1.5 py-0.5 text-[10px] text-muted">
-                              non valorisable
-                            </span>
-                          );
-                        }
-                        if (info.badges.length === 0) return null;
-                        return (
-                          <span className="flex flex-wrap gap-1">
-                            {info.badges.map((b) => (
-                              <span
-                                key={b.id}
-                                title={b.fiable ? b.titre : `${b.titre} (à confirmer à la main)`}
-                                className={`max-w-full truncate rounded px-1.5 py-0.5 text-[10px] ${
-                                  b.fiable ? "bg-accent-from/15 text-foreground" : "bg-warning/15 text-warning"
-                                }`}
-                              >
-                                {b.label}
-                              </span>
-                            ))}
-                          </span>
-                        );
-                      })()}
                     </button>
                   );
                 })}
