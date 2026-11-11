@@ -46,6 +46,20 @@ body {
   background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
 }
 
+/* Bouton natif « Choisir un fichier » d'un <input type="file"> avec le même dégradé que .accent-gradient. */
+.file-accent-gradient::file-selector-button {
+  background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  color: #ffffff;
+  cursor: pointer;
+}
+.file-accent-gradient:hover:not(:disabled)::file-selector-button {
+  opacity: 0.9;
+}
+.file-accent-gradient:disabled::file-selector-button {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .accent-gradient-text {
   background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
   -webkit-background-clip: text;

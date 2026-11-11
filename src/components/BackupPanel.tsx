@@ -144,7 +144,7 @@ export default function BackupPanel() {
           accept="application/json"
           onChange={handleFileChosen}
           disabled={reading || importing}
-          className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:bg-surface-alt file:px-3 file:py-2 file:text-xs file:text-foreground hover:file:bg-border-strong"
+          className="file-accent-gradient block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
         />
       </div>
 
