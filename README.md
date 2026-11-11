@@ -49,6 +49,9 @@ une réponse officielle, sauf à la Poutre : une série acro terminée par une s
 y vaut deux valorisations (validée par l'entraîneur, encore à confirmer ; pas au Sol). L'avertissement de doublons tient compte des séries
 confirmées (via les pastilles de série).
 
+✅ Import d'une sauvegarde : une animation (sablier tournant) s'affiche pendant la
+lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette page ».
+
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec
 envol, "liés directement ou indirectement", combinaisons nominatives comme
 "Sursaut + fente + roue") car les données numérisées ne portent pas encore

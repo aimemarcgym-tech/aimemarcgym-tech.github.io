@@ -3,10 +3,21 @@
 import { useRef, useState } from "react";
 import { exportAll, importAll, downloadBackup, type BackupData } from "@/lib/backup";
 
+function Spinner({ className = "h-5 w-5" }: { className?: string }) {
+  return (
+    <svg className={`animate-spin ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-25" />
+      <path d="M22 12a10 10 0 0 0-10-10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function BackupPanel() {
   const [status, setStatus] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<BackupData | null>(null);
   const [busy, setBusy] = useState(false);
+  const [reading, setReading] = useState(false);
+  const [importing, setImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function handleExport() {
@@ -61,6 +72,7 @@ export default function BackupPanel() {
     e.target.value = "";
     if (!file) return;
     setStatus(`Lecture du fichier (${(file.size / 1024).toFixed(0)} Ko)…`);
+    setReading(true);
     try {
       const text = await readFileAsText(file);
       const data = JSON.parse(text) as BackupData;
@@ -75,12 +87,16 @@ export default function BackupPanel() {
       setStatus(
         `Impossible de lire ce fichier (${detail || "erreur inconnue"}) — si le problème persiste depuis un stockage cloud, essayez de copier le fichier dans le stockage interne de l'appareil (pas juste "hors ligne" dans l'appli cloud) avant de réimporter.`
       );
+    } finally {
+      setReading(false);
     }
   }
 
   async function confirmImport() {
     if (!confirming) return;
     setBusy(true);
+    setImporting(true);
+    setStatus(null);
     try {
       const { counts } = await importAll(confirming);
       setStatus(
@@ -90,6 +106,7 @@ export default function BackupPanel() {
       setStatus(e instanceof Error ? e.message : "Échec de l'import.");
     } finally {
       setBusy(false);
+      setImporting(false);
       setConfirming(null);
     }
   }
@@ -126,11 +143,28 @@ export default function BackupPanel() {
           type="file"
           accept="application/json"
           onChange={handleFileChosen}
+          disabled={reading || importing}
           className="block w-full text-sm text-muted file:mr-3 file:rounded file:border-0 file:bg-surface-alt file:px-3 file:py-2 file:text-xs file:text-foreground hover:file:bg-border-strong"
         />
       </div>
 
-      {confirming && (
+      {importing && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="flex items-center gap-3 rounded-lg border border-border-strong bg-surface-alt p-4 text-sm text-foreground"
+        >
+          <Spinner className="h-6 w-6 shrink-0 text-accent-solid" />
+          <div>
+            <p className="font-medium">Import en cours…</p>
+            <p className="text-xs text-muted">
+              Cela peut durer un moment avec des musiques, photos ou vidéos. Ne fermez pas cette page.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {confirming && !importing && (
         <div className="rounded-lg border border-danger/40 bg-danger/10 p-4">
           <p className="mb-3 text-sm text-danger">
             Remplacer toutes vos données de compte par cette sauvegarde ({(confirming.gymnasts as unknown[])?.length ?? 0}{" "}
@@ -156,7 +190,12 @@ export default function BackupPanel() {
         </div>
       )}
 
-      {status && <p className="text-sm text-muted">{status}</p>}
+      {status && (
+        <p role="status" className="flex items-center gap-2 text-sm text-muted">
+          {reading && <Spinner className="h-4 w-4 shrink-0" />}
+          <span>{status}</span>
+        </p>
+      )}
     </div>
   );
 }
