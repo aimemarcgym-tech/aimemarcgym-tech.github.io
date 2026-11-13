@@ -201,6 +201,8 @@ export default function TablePage() {
       setVue("elements");
       setRecherche(mots.join(" "));
       const cherche = mots.join(" ");
+      // Les résultats s'affichent plus bas que la barre : on y amène l'écran pour qu'on les voie tout de suite.
+      setTimeout(() => document.getElementById("resultats-table")?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
       setMessageVoix(
         total(mots) === 0
           ? `J’ai compris : « ${dite} ». Aucun élément trouvé, essaie de redire seulement le nom de l’élément.`
@@ -357,7 +359,7 @@ export default function TablePage() {
 
         {vue === "decomposition" && <DecompositionNote apparatus={apparatus} />}
 
-        <div className={`space-y-8 ${vue === "decomposition" ? "hidden" : ""}`}>
+        <div id="resultats-table" className={`scroll-mt-4 space-y-8 ${vue === "decomposition" ? "hidden" : ""}`}>
           {mots.length > 0 && archesAffichees.length === 0 && (
             <p className="text-sm text-muted">
               Aucun élément trouvé pour « {recherche.trim()} » en {APPARATUS_LABELS[apparatus] ?? apparatus}. Regarde les nombres sur les autres agrès.
