@@ -49,6 +49,31 @@ function correspond(el: { code: string; name: string; branch?: string | null; pa
   return mots.every((m) => texte.includes(m));
 }
 
+// Reconnaissance vocale du navigateur (Chrome, Edge, Safari ; absente de Firefox). Types minimaux, non fournis par TypeScript.
+type Reconnaissance = {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onerror: ((e: { error: string }) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+type FabriqueReconnaissance = new () => Reconnaissance;
+
+// « Sissonne à la poutre » → { agres: "POUTRE", texte: "sissonne" }. Sans agrès cité, l'agrès affiché ne change pas.
+function analyserDictee(dite: string): { agres: string | null; texte: string } {
+  const n = normaliser(dite).replace(/[.,!?;:]/g, " ").replace(/\s+/g, " ").trim();
+  const agresDe = (mot: string) => (mot.startsWith("barre") ? "BARRES_ASYM" : mot === "saut" ? "SAUT" : mot === "poutre" ? "POUTRE" : "SOL");
+  const motif = "(saut|barres?(?: asymetriques?)?|poutre|sol)";
+  const avecPrep = new RegExp(`\\b(?:a la|a|au|aux|en|sur la|sur le|sur|de la|du|de)\\s+${motif}\\b`);
+  const seul = new RegExp(`\\b${motif}\\s*$`);
+  const m = n.match(avecPrep) ?? n.match(seul);
+  if (!m) return { agres: null, texte: n };
+  return { agres: agresDe(m[m.length - 1] ?? m[1]), texte: n.replace(m[0], " ").replace(/\s+/g, " ").trim() };
+}
+
 // Zone qu'on fait glisser au doigt (ou à la souris) vers la gauche ou la droite pour voir les colonnes cachées.
 // Le défilement vertical de la page reste natif (touch-action: pan-y) ; seul le glissement horizontal est géré ici.
 function ZoneGlissante({ children }: { children: React.ReactNode }) {
@@ -94,6 +119,43 @@ export default function TablePage() {
   const [apparatus, setApparatus] = useState(apparatuses[0]);
   const [vue, setVue] = useState<"elements" | "decomposition">("elements");
   const [recherche, setRecherche] = useState("");
+  const [ecoute, setEcoute] = useState(false);
+  const [messageVoix, setMessageVoix] = useState<string | null>(null);
+
+  // Dicte un élément (et éventuellement l'agrès) : « sissonne à la poutre » ouvre la Poutre et filtre « sissonne ».
+  function dicter() {
+    const w = window as unknown as { SpeechRecognition?: FabriqueReconnaissance; webkitSpeechRecognition?: FabriqueReconnaissance };
+    const Fabrique = w.SpeechRecognition ?? w.webkitSpeechRecognition;
+    if (!Fabrique) {
+      setMessageVoix("La recherche vocale n’est pas disponible sur ce navigateur (essaie Chrome, Edge ou Safari).");
+      return;
+    }
+    setMessageVoix(null);
+    const r = new Fabrique();
+    r.lang = "fr-FR";
+    r.interimResults = false;
+    r.maxAlternatives = 1;
+    r.onresult = (e) => {
+      const dite = e.results[0]?.[0]?.transcript ?? "";
+      const { agres, texte } = analyserDictee(dite);
+      if (agres && apparatuses.includes(agres as (typeof apparatuses)[number])) setApparatus(agres as (typeof apparatuses)[number]);
+      setVue("elements");
+      setRecherche(texte);
+      setMessageVoix(`J’ai compris : « ${dite} »`);
+    };
+    r.onerror = (e) => {
+      setMessageVoix(
+        e.error === "not-allowed" || e.error === "service-not-allowed"
+          ? "Le micro est refusé : autorise-le dans les réglages du navigateur."
+          : e.error === "no-speech"
+            ? "Je n’ai rien entendu, réessaie."
+            : "La recherche vocale a échoué, réessaie.",
+      );
+    };
+    r.onend = () => setEcoute(false);
+    setEcoute(true);
+    r.start();
+  }
 
   const regulation = useMemo(() => getRegulation(apparatus), [apparatus]);
   const mots = useMemo(() => normaliser(recherche).split(/\s+/).filter(Boolean), [recherche]);
@@ -179,16 +241,35 @@ export default function TablePage() {
           ))}
         </div>
         {vue === "elements" && (
-          <input
-            type="search"
-            value={recherche}
-            onChange={(e) => setRecherche(e.target.value)}
-            placeholder="Rechercher un élément (nom, code, palier)…"
-            aria-label="Rechercher un élément"
-            enterKeyHint="search"
-            autoComplete="off"
-            className="w-full max-w-xl rounded-lg border border-border-strong bg-surface-alt px-3 py-2 text-base text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none sm:text-sm"
-          />
+          <div className="space-y-1">
+            <div className="flex max-w-xl items-center gap-2">
+              <input
+                type="search"
+                value={recherche}
+                onChange={(e) => setRecherche(e.target.value)}
+                placeholder="Rechercher un élément (nom, code, palier)…"
+                aria-label="Rechercher un élément"
+                enterKeyHint="search"
+                autoComplete="off"
+                className="min-w-0 flex-1 rounded-lg border border-border-strong bg-surface-alt px-3 py-2 text-base text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none sm:text-sm"
+              />
+              <button
+                type="button"
+                onClick={dicter}
+                disabled={ecoute}
+                aria-label="Rechercher à la voix"
+                title="Rechercher à la voix (ex. « sissonne à la poutre »)"
+                className={`shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-white ${ecoute ? "animate-pulse bg-danger" : "accent-gradient"}`}
+              >
+                {ecoute ? "🎙 J’écoute…" : "🎙 Voix"}
+              </button>
+            </div>
+            {messageVoix && (
+              <p className="text-xs text-muted" role="status">
+                {messageVoix}
+              </p>
+            )}
+          </div>
         )}
         <div className="flex flex-wrap gap-2">
           {apparatuses.map((a) => (
