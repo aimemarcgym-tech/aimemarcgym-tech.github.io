@@ -6,6 +6,7 @@ import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import { palierRank, type Palier } from "@/regulation/types";
 import { isVariantElement, isMousseElement } from "@/regulation/variants";
 import DecompositionNote from "@/components/DecompositionNote";
+import { preparerModele, enregistrerVoix, transcrire } from "@/lib/voixLocale";
 
 const APPARATUS_LABELS: Record<string, string> = {
   SAUT: "Saut",
@@ -159,6 +160,7 @@ export default function TablePage() {
   const [ecoute, setEcoute] = useState(false);
   const [messageVoix, setMessageVoix] = useState<string | null>(null);
   const recoRef = useRef<Reconnaissance | null>(null);
+  const arretLocal = useRef<AbortController | null>(null);
 
   // Comprend une phrase (dictée ou tapée puis validée par Entrée) : « sissonne à la poutre » ouvre la Poutre et filtre « sissonne ».
   function appliquerDictee(dite: string) {
@@ -199,11 +201,60 @@ export default function TablePage() {
   }
 
   // Dicte un élément avec le micro du navigateur.
+  // Reconnaissance sur l'appareil (Whisper) : marche partout, y compris Vivaldi, Brave et Firefox, qui n'ont pas le service vocal de Google.
+  // Au premier usage, un modèle d'environ 80 Mo est téléchargé une seule fois, puis gardé par le navigateur.
+  async function dicterLocal() {
+    const ctrl = new AbortController();
+    arretLocal.current = ctrl;
+    setEcoute(true);
+    try {
+      setMessageVoix("Préparation de la reconnaissance vocale… (au premier usage : téléchargement d’environ 80 Mo, une seule fois)");
+      await preparerModele((p) => setMessageVoix(`Téléchargement du modèle vocal : ${p} % (une seule fois, puis il est gardé)`));
+      if (ctrl.signal.aborted) return;
+      setMessageVoix("🎙 Parle maintenant (la phrase se termine au silence). Rappuie sur le bouton pour arrêter.");
+      const audio = await enregistrerVoix(ctrl.signal);
+      if (!audio) {
+        setMessageVoix("Je n’ai rien entendu, réessaie en parlant juste après avoir appuyé.");
+        return;
+      }
+      setMessageVoix("Je transcris…");
+      const texte = await transcrire(audio);
+      if (!texte) setMessageVoix("Je n’ai rien compris, réessaie.");
+      else appliquerDictee(texte);
+    } catch (e) {
+      const nom = e instanceof Error ? e.name : "";
+      setMessageVoix(
+        nom === "NotAllowedError" || nom === "SecurityError"
+          ? "Le micro est refusé : clique sur le cadenas à gauche de l’adresse et autorise le micro pour ce site."
+          : nom === "NotFoundError"
+            ? "Aucun micro détecté sur cet appareil."
+            : "Impossible de charger la reconnaissance vocale : vérifie ta connexion internet (nécessaire une première fois) et réessaie.",
+      );
+    } finally {
+      arretLocal.current = null;
+      setEcoute(false);
+    }
+  }
+
+  function surBoutonVoix() {
+    // Pendant l'enregistrement local, un nouvel appui l'arrête et lance la transcription.
+    if (arretLocal.current) {
+      arretLocal.current.abort();
+      return;
+    }
+    dicter();
+  }
+
   function dicter() {
     const w = window as unknown as { SpeechRecognition?: FabriqueReconnaissance; webkitSpeechRecognition?: FabriqueReconnaissance };
     const Fabrique = w.SpeechRecognition ?? w.webkitSpeechRecognition;
-    if (!Fabrique) {
-      setMessageVoix("La recherche vocale n’est pas disponible sur ce navigateur (essaie Chrome, Edge ou Safari).");
+    // Sans service vocal du navigateur (ou s'il a déjà échoué ici), on utilise directement la reconnaissance sur l'appareil.
+    let dejaLocal = false;
+    try {
+      dejaLocal = localStorage.getItem("voixLocale") === "1";
+    } catch {}
+    if (!Fabrique || dejaLocal) {
+      void dicterLocal();
       return;
     }
     setMessageVoix(null);
@@ -214,6 +265,7 @@ export default function TablePage() {
     r.onresult = (e) => appliquerDictee(e.results[0]?.[0]?.transcript ?? "");
     let recu = false;
     let erreur = false;
+    let bascule = false;
     const surResultat = r.onresult;
     r.onresult = (e) => {
       recu = true;
@@ -222,6 +274,15 @@ export default function TablePage() {
     r.onerror = (e) => {
       if (e.error === "aborted") return;
       erreur = true;
+      if (e.error === "network" || e.error === "service-not-allowed" || e.error === "language-not-supported") {
+        // Le service vocal du navigateur n'existe pas ici (Vivaldi, Brave…) : on passe à la reconnaissance sur l'appareil, et on s'en souvient.
+        try {
+          localStorage.setItem("voixLocale", "1");
+        } catch {}
+        bascule = true;
+        void dicterLocal();
+        return;
+      }
       setMessageVoix(
         e.error === "not-allowed" || e.error === "service-not-allowed"
           ? "Le micro est refusé : clique sur le cadenas à gauche de l’adresse et autorise le micro pour ce site."
@@ -235,8 +296,9 @@ export default function TablePage() {
       );
     };
     r.onend = () => {
-      setEcoute(false);
       recoRef.current = null;
+      if (bascule) return;
+      setEcoute(false);
       if (!recu && !erreur) setMessageVoix("Je n’ai rien entendu, réessaie en parlant juste après avoir appuyé.");
     };
     // Garder une référence : sinon Chrome peut arrêter la reconnaissance aussitôt (objet recyclé).
@@ -355,13 +417,12 @@ export default function TablePage() {
               />
               <button
                 type="button"
-                onClick={dicter}
-                disabled={ecoute}
+                onClick={surBoutonVoix}
                 aria-label="Rechercher à la voix"
                 title="Rechercher à la voix (ex. « sissonne à la poutre »)"
                 className={`shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-white ${ecoute ? "animate-pulse bg-danger" : "accent-gradient"}`}
               >
-                {ecoute ? "🎙 J’écoute…" : "🎙 Voix"}
+                {ecoute ? "🎙 En cours…" : "🎙 Voix"}
               </button>
             </div>
             {messageVoix && (
