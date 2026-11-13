@@ -129,7 +129,7 @@ export default function SortieMp3({ blob, nom: nomInitial, onCouper }: { blob: B
       {url && <CustomAudioPlayer src={url} />}
       {gymnastes.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <select value={gymnaste} onChange={(e) => setGymnaste(e.target.value)} className="rounded border border-border-strong bg-surface px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none" aria-label="Gymnaste">
+          <select value={gymnaste} onChange={(e) => setGymnaste(e.target.value)} className="select-groupes min-w-[16rem] max-w-full flex-1 rounded border border-border-strong bg-surface px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none sm:max-w-md" aria-label="Gymnaste">
             <option value="">Ajouter à la musique de…</option>
             {groupes.map((groupe) => (
               <optgroup key={groupe.libelle} label={groupe.libelle}>

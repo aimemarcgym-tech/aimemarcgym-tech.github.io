@@ -60,6 +60,18 @@ body {
   cursor: default;
 }
 
+/* Titres de groupes (club · équipe) d'une liste déroulante : en couleur d'accent sur ordinateur
+   (les menus natifs de mobile/tablette ignorent la couleur et gardent leur style). */
+.select-groupes optgroup {
+  color: var(--accent-from);
+  font-weight: 700;
+  font-style: normal;
+}
+.select-groupes option {
+  color: var(--foreground);
+  font-weight: 400;
+}
+
 .accent-gradient-text {
   background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
   -webkit-background-clip: text;
