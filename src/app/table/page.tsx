@@ -167,6 +167,8 @@ function phonetique(mot: string): string {
 
 // Chiffres que la reconnaissance écrit à la place du mot (« 6 zones » pour « sissonne » : on y lit « six zones », qui sonne comme le nom).
 const CHIFFRES: Record<string, string> = { "0": "zero", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf", "10": "dix" };
+// Mots que la reconnaissance a réellement entendus à la place d'un nom d'élément (relevés lors des essais).
+const CONFUSIONS: Record<string, string> = { rume: "roue", rum: "roue", roux: "roue", route: "roue", rou: "roue", rue: "roue", ronda: "rondade", rondat: "rondade", chandel: "chandelle", flicflac: "flic" };
 const sansS = (x: string) => (x.length > 3 ? x.replace(/s$/, "") : x);
 
 function toleranceCle(cle: string) {
@@ -196,6 +198,10 @@ function corrigerMots(motsBruts: string[], vocabulaireMots: string[]) {
   for (let i = 0; i < mots.length; i++) {
     const m = mots[i];
     // Un chiffre seul n'est lu comme un mot (« 6 zones » = « six zones ») que dans le recollage ci-dessous.
+    if (CONFUSIONS[m] && dansVocab.has(CONFUSIONS[m])) {
+      sortie.push(CONFUSIONS[m]);
+      continue;
+    }
     const chiffre = CHIFFRES[m] !== undefined;
     if ((!chiffre && (m.length < 3 || /\d/.test(m))) || dansVocab.has(m)) {
       sortie.push(m);
@@ -335,7 +341,8 @@ export default function TablePage() {
       const vocab = vocabulaire(cibles).map((m) => ({ mot: m, cle: phonetique(m) }));
       const vus = new Set<string>();
       for (const m of brut.filter((x) => x.length >= 3)) {
-        for (const p of motsProches(m, vocab.filter((v) => v.mot.length >= 4), Math.max(1, Math.floor(m.length / 3))).slice(0, 4)) vus.add(p.mot);
+        // Plus large qu'avant : un mot court mal entendu (« rume » pour « roue ») reste à 2 lettres près.
+        for (const p of motsProches(m, vocab.filter((v) => v.mot.length >= 3), m.length >= 4 ? Math.max(2, Math.floor(m.length / 3)) : 1).slice(0, 4)) vus.add(p.mot);
       }
       const motAgres = citeValide ? ({ SAUT: "saut", BARRES_ASYM: "barres", POUTRE: "poutre", SOL: "sol" } as Record<string, string>)[citeValide] : null;
       setSuggestions([...vus].slice(0, 6).map((x) => (motAgres ? `${x} en ${motAgres}` : x)));
