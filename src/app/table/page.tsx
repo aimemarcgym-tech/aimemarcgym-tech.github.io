@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import { palierRank, type Palier } from "@/regulation/types";
@@ -47,6 +47,46 @@ function correspond(el: { code: string; name: string; branch?: string | null; pa
   if (mots.length === 0) return true;
   const texte = normaliser(`${el.code} ${el.name} ${el.branch ?? ""} ${palierLabel(el.palier)}`);
   return mots.every((m) => texte.includes(m));
+}
+
+// Zone qu'on fait glisser au doigt (ou à la souris) vers la gauche ou la droite pour voir les colonnes cachées.
+// Le défilement vertical de la page reste natif (touch-action: pan-y) ; seul le glissement horizontal est géré ici.
+function ZoneGlissante({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const depart = useRef<{ x: number; gauche: number } | null>(null);
+  const [glisse, setGlisse] = useState(false);
+
+  function fin() {
+    depart.current = null;
+    setGlisse(false);
+  }
+
+  return (
+    <div>
+      <p className="px-3 pt-2 text-[11px] text-muted sm:hidden">↔ Fais glisser le tableau pour voir les autres colonnes</p>
+      <div
+        ref={ref}
+        className={`touch-pan-y overflow-x-auto overscroll-x-contain ${glisse ? "cursor-grabbing select-none" : "cursor-grab"}`}
+        onPointerDown={(e) => {
+          if (e.pointerType === "mouse" && e.button !== 0) return;
+          depart.current = { x: e.clientX, gauche: ref.current?.scrollLeft ?? 0 };
+          if (e.pointerType === "mouse") e.currentTarget.setPointerCapture(e.pointerId);
+        }}
+        onPointerMove={(e) => {
+          const d = depart.current;
+          if (!d || !ref.current) return;
+          const dx = e.clientX - d.x;
+          if (Math.abs(dx) > 3) setGlisse(true);
+          ref.current.scrollLeft = d.gauche - dx;
+        }}
+        onPointerUp={fin}
+        onPointerCancel={fin}
+        onPointerLeave={(e) => e.pointerType !== "mouse" && fin()}
+      >
+        {children}
+      </div>
+    </div>
+  );
 }
 
 export default function TablePage() {
@@ -179,7 +219,7 @@ export default function TablePage() {
             </p>
           )}
           {archesAffichees.map(({ arche, elements }) => (
-            <section key={arche.id} className="mx-auto w-full max-w-full overflow-hidden rounded-xl border border-border-subtle sm:w-fit">
+            <section key={arche.id} className="mx-auto w-fit max-w-full overflow-hidden rounded-xl border border-border-subtle">
               <div className="border-b border-border-subtle bg-surface-alt/50 px-4 py-3">
                 <h2 className="text-sm font-semibold text-foreground">
                   {arche.name}
@@ -195,22 +235,22 @@ export default function TablePage() {
               {elements.length === 0 ? (
                 <p className="px-4 py-4 text-sm text-muted">Aucun élément recensé pour cette arche.</p>
               ) : (
-                <div className="touch-pan-x touch-pan-y overflow-x-auto overscroll-x-contain">
-                  <table className="w-full min-w-0 border-collapse text-sm sm:min-w-[600px]">
+                <ZoneGlissante>
+                  <table className="min-w-[600px] border-collapse text-sm">
                     <thead>
                       <tr className="bg-surface-alt text-left text-xs uppercase tracking-wide text-muted">
-                        <th className="px-2 py-2 font-semibold sm:w-20 sm:px-4">Code</th>
-                        <th className="min-w-0 px-2 py-2 font-semibold sm:min-w-[420px] sm:px-4">Nom</th>
-                        <th className="hidden px-4 py-2 font-semibold sm:table-cell sm:w-28">Branche</th>
-                        <th className="px-2 py-2 font-semibold sm:w-24 sm:px-4">Palier</th>
-                        {apparatus === "SAUT" && <th className="px-2 py-2 font-semibold sm:w-32 sm:px-4"><span className="sm:hidden">Valeur</span><span className="hidden sm:inline">Valeur de départ</span></th>}
+                        <th className="w-20 px-3 py-2 font-semibold">Code</th>
+                        <th className="min-w-[420px] px-3 py-2 font-semibold">Nom</th>
+                        <th className="w-28 px-3 py-2 font-semibold">Branche</th>
+                        <th className="w-24 px-3 py-2 font-semibold">Palier</th>
+                        {apparatus === "SAUT" && <th className="w-32 px-3 py-2 font-semibold">Valeur de départ</th>}
                       </tr>
                     </thead>
                     <tbody>
                       {elements.map((el) => (
                         <tr key={el.code} className="border-t border-border-subtle">
-                          <td className="whitespace-nowrap px-2 py-2 font-mono text-xs text-foreground sm:px-4">{el.code}</td>
-                          <td className="px-2 py-2 text-foreground sm:px-4">
+                          <td className="whitespace-nowrap px-3 py-2 font-mono text-xs text-foreground">{el.code}</td>
+                          <td className="px-3 py-2 text-foreground">
                             {el.name}
                             {!el.verified && <span className="ml-1.5 text-xs text-warning">⚠ à confirmer</span>}
                             {isMousseElement(el.archeId) && (
@@ -238,10 +278,9 @@ export default function TablePage() {
                                 + {c}
                               </span>
                             ))}
-                            {el.branch && <div className="mt-0.5 text-xs text-muted sm:hidden">Branche : {el.branch}</div>}
                           </td>
-                          <td className="hidden px-4 py-2 text-xs text-muted sm:table-cell">{el.branch ?? "—"}</td>
-                          <td className="px-2 py-2 sm:px-4">
+                          <td className="px-3 py-2 text-xs text-muted">{el.branch ?? "—"}</td>
+                          <td className="px-3 py-2">
                             <span
                               className={`rounded-full border px-2 py-0.5 text-xs font-medium ${palierBadgeClasses(el.palier)}`}
                             >
@@ -249,7 +288,7 @@ export default function TablePage() {
                             </span>
                           </td>
                           {apparatus === "SAUT" && (
-                            <td className="px-2 py-2 text-sm font-semibold text-foreground sm:px-4">
+                            <td className="px-3 py-2 text-sm font-semibold text-foreground">
                               {el.value !== undefined ? el.value.toFixed(1).replace(/\.0$/, "") : "—"}
                             </td>
                           )}
@@ -257,7 +296,7 @@ export default function TablePage() {
                       ))}
                     </tbody>
                   </table>
-                </div>
+                </ZoneGlissante>
               )}
             </section>
           ))}
