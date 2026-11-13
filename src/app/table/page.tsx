@@ -96,6 +96,24 @@ function analyserDictee(dite: string): { agres: string | null; texte: string } {
   return { agres: null, texte: n };
 }
 
+// Mémoire de ce qu'on a corrigé à la main : phrase mal entendue (sans accents ni ponctuation) → nom choisi. Gardée dans le navigateur de l'appareil.
+const CLE_APPRIS = "voixAppris";
+const clePhrase = (dite: string) => normaliser(dite).replace(/[.,!?;:'’]/g, " ").replace(/\s+/g, " ").trim();
+function lireAppris(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(CLE_APPRIS) ?? "{}") as Record<string, string>;
+  } catch {
+    return {};
+  }
+}
+function enregistrerAppris(cle: string, valeur: string) {
+  try {
+    localStorage.setItem(CLE_APPRIS, JSON.stringify({ ...lireAppris(), [cle]: valeur }));
+  } catch {
+    // Stockage indisponible : tant pis, l'appli ne retiendra pas la correction.
+  }
+}
+
 // Petits mots qu'on dit sans qu'ils fassent partie du nom d'un élément (« une sissonne », « montre-moi la roue »).
 const MOTS_VIDES = new Set(["le", "la", "les", "un", "une", "des", "du", "de", "d", "l", "et", "a", "au", "aux", "en", "avec", "pour", "sur", "moi", "je", "veux", "voir", "montre", "affiche", "cherche", "recherche", "trouve", "element", "elements"]);
 
@@ -264,9 +282,25 @@ export default function TablePage() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const recoRef = useRef<Reconnaissance | null>(null);
   const arretLocal = useRef<AbortController | null>(null);
+  const derniereEntendue = useRef("");
+
+  // Toucher une suggestion applique ce nom ET retient « ce qui a été entendu → ce nom » pour les prochaines fois.
+  function choisirSuggestion(sug: string) {
+    const entendue = derniereEntendue.current;
+    appliquerDictee(sug, false);
+    if (entendue && clePhrase(entendue) !== clePhrase(sug)) {
+      enregistrerAppris(clePhrase(entendue), sug);
+      setMessageVoix(`Retenu : la prochaine fois, « ${entendue} » ouvrira « ${sug} ».`);
+    }
+  }
 
   // Comprend une phrase (dictée ou tapée puis validée par Entrée) : « sissonne à la poutre » ouvre la Poutre et filtre « sissonne ».
-  function appliquerDictee(dite: string) {
+  function appliquerDictee(diteEntendue: string, apprendre = true) {
+    let dite = diteEntendue;
+    // Phrase déjà corrigée à la main une fois (en touchant une suggestion) : on applique ce qui avait été choisi.
+    const retenu = apprendre ? lireAppris()[clePhrase(dite)] : undefined;
+    if (retenu) dite = retenu;
+    if (apprendre) derniereEntendue.current = diteEntendue;
     const { agres: cite, texte } = analyserDictee(dite);
     const citeValide = cite && apparatuses.includes(cite as (typeof apparatuses)[number]) ? cite : null;
     const cibles: string[] = citeValide ? [citeValide] : [...apparatuses];
@@ -308,20 +342,20 @@ export default function TablePage() {
     } else setSuggestions([]);
     setMessageVoix(
       total(mots) === 0
-        ? `J’ai compris : « ${dite} ». Aucun élément trouvé${" — essaie un de ces noms, ou redis seulement le nom de l’élément."}`
-        : `J’ai compris : « ${dite} ». Recherche : « ${cherche} ».`,
+        ? `J’ai compris : « ${diteEntendue} ». Aucun élément trouvé${" — touche le bon nom (l’appli s’en souviendra), ou redis seulement le nom de l’élément."}`
+        : `J’ai compris : « ${diteEntendue} ».${retenu ? ` (appris : « ${retenu} »)` : ""} Recherche : « ${cherche} ».`,
     );
   }
 
   // Dicte un élément avec le micro du navigateur.
   // Reconnaissance sur l'appareil (Whisper) : marche partout, y compris Vivaldi, Brave et Firefox, qui n'ont pas le service vocal de Google.
-  // Au premier usage, un modèle d'environ 250 Mo est téléchargé une seule fois, puis gardé par le navigateur.
+  // Au premier usage, un modèle d'environ 80 Mo est téléchargé une seule fois, puis gardé par le navigateur.
   async function dicterLocal() {
     const ctrl = new AbortController();
     arretLocal.current = ctrl;
     setEcoute(true);
     try {
-      setMessageVoix("Préparation de la reconnaissance vocale… (au premier usage : téléchargement d’environ 250 Mo, une seule fois)");
+      setMessageVoix("Préparation de la reconnaissance vocale… (au premier usage : téléchargement d’environ 80 Mo, une seule fois)");
       await preparerModele((p) => setMessageVoix(`Téléchargement du modèle vocal : ${p} % (une seule fois, puis il est gardé)`));
       if (ctrl.signal.aborted) return;
       setMessageVoix("🎙 Parle maintenant (la phrase se termine au silence). Rappuie sur le bouton pour arrêter.");
@@ -549,7 +583,7 @@ export default function TablePage() {
                   <button
                     key={sug}
                     type="button"
-                    onClick={() => appliquerDictee(sug)}
+                    onClick={() => choisirSuggestion(sug)}
                     className="rounded-full border border-accent-solid/50 bg-accent-from/10 px-3 py-1 text-xs font-medium text-foreground hover:bg-accent-from/20"
                   >
                     {sug}
