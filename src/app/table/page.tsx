@@ -67,14 +67,33 @@ type FabriqueReconnaissance = new () => Reconnaissance;
 
 // « Sissonne à la poutre » → { agres: "POUTRE", texte: "sissonne" }. Sans agrès cité, l'agrès affiché ne change pas.
 function analyserDictee(dite: string): { agres: string | null; texte: string } {
-  const n = normaliser(dite).replace(/[.,!?;:]/g, " ").replace(/\s+/g, " ").trim();
-  const agresDe = (mot: string) => (mot.startsWith("barre") ? "BARRES_ASYM" : mot === "saut" ? "SAUT" : mot === "poutre" ? "POUTRE" : "SOL");
-  const motif = "(saut|barres?(?: asymetriques?)?|poutre|sol)";
-  const avecPrep = new RegExp(`\\b(?:a la|a|au|aux|en|sur la|sur le|sur|de la|du|de)\\s+${motif}\\b`);
-  const seul = new RegExp(`\\b${motif}\\s*$`);
-  const m = n.match(avecPrep) ?? n.match(seul);
-  if (!m) return { agres: null, texte: n };
-  return { agres: agresDe(m[m.length - 1] ?? m[1]), texte: n.replace(m[0], " ").replace(/\s+/g, " ").trim() };
+  const n = normaliser(dite).replace(/[.,!?;:'’]/g, " ").replace(/\s+/g, " ").trim();
+  const mots = n ? n.split(" ") : [];
+  // Le nom de l'agrès tel qu'il est souvent mal entendu : « poudre », « pôtre » → poutre ; « bar », « bars » → barres.
+  const agresDe = (brut: string): string | null => {
+    const t = brut.length > 3 ? brut.replace(/s$/, "") : brut;
+    if (t.length >= 5 && distance(t, "poutre") <= 1) return "POUTRE";
+    if (/^bar{1,2}e?s?$/.test(brut)) return "BARRES_ASYM";
+    if (/^(saut|sault|sots?)$/.test(brut)) return "SAUT";
+    if (/^(sol|sols|soul|saul)$/.test(brut)) return "SOL";
+    return null;
+  };
+  // « au », « aux », « à la »… (« ou » : « au » mal entendu) ; on retient le dernier agrès cité avec sa préposition, ou en fin de phrase.
+  const PREP = new Set(["a", "au", "aux", "ou", "o", "en", "sur", "de", "du"]);
+  for (let i = mots.length - 1; i >= 0; i--) {
+    const agres = agresDe(mots[i]);
+    if (!agres) continue;
+    // « barres asymétriques » : on retire aussi le mot qui suit.
+    const fin = agres === "BARRES_ASYM" && mots[i + 1]?.startsWith("asym") ? i + 2 : i + 1;
+    let debut = i;
+    if (debut > 0 && (mots[debut - 1] === "la" || mots[debut - 1] === "le")) debut--;
+    const avecPrep = debut > 0 && PREP.has(mots[debut - 1]);
+    if (avecPrep) debut--;
+    else if (debut < i) debut = i; // « la poutre » sans préposition : on ne garde que l'agrès
+    if (!avecPrep && fin < mots.length) continue; // sans préposition, l'agrès doit finir la phrase
+    return { agres, texte: [...mots.slice(0, debut), ...mots.slice(fin)].join(" ").trim() };
+  }
+  return { agres: null, texte: n };
 }
 
 // Petits mots qu'on dit sans qu'ils fassent partie du nom d'un élément (« une sissonne », « montre-moi la roue »).
@@ -124,8 +143,13 @@ function phonetique(mot: string): string {
     .replace(/x/g, "ks")
     .replace(/(.)\1+/g, "$1");
   if (s.length > 3) s = s.replace(/[estdx]+$/, "");
+  else if (s.length > 2) s = s.replace(/e$/, "");
   return s;
 }
+
+// Chiffres que la reconnaissance écrit à la place du mot (« 6 zones » pour « sissonne » : on y lit « six zones », qui sonne comme le nom).
+const CHIFFRES: Record<string, string> = { "0": "zero", "1": "un", "2": "deux", "3": "trois", "4": "quatre", "5": "cinq", "6": "six", "7": "sept", "8": "huit", "9": "neuf", "10": "dix" };
+const sansS = (x: string) => (x.length > 3 ? x.replace(/s$/, "") : x);
 
 function toleranceCle(cle: string) {
   return cle.length >= 7 ? 2 : cle.length >= 4 ? 1 : 0;
@@ -136,26 +160,43 @@ function motsProches(mot: string, vocab: { mot: string; cle: string }[], toleran
   const cle = phonetique(mot);
   const tol = tolerance ?? toleranceCle(cle);
   return vocab
-    .map((v) => ({ mot: v.mot, d: cle.length >= 4 ? Math.min(distance(cle, v.cle), distance(mot, v.mot)) : distance(mot, v.mot) }))
+    .map((v) => {
+      const brut = distance(sansS(mot), sansS(v.mot));
+      // Mot court : seule une clé identique compte (« rou » ↔ « roue »).
+      const d = cle.length >= 4 ? Math.min(distance(cle, v.cle), brut) : mot.length >= 3 && cle === v.cle ? 0 : brut;
+      return { mot: v.mot, d };
+    })
     .filter((x) => x.d <= tol)
     .sort((x, y) => x.d - y.d || Math.abs(x.mot.length - mot.length) - Math.abs(y.mot.length - mot.length));
 }
 
-function corrigerMots(mots: string[], vocabulaireMots: string[]) {
+function corrigerMots(motsBruts: string[], vocabulaireMots: string[]) {
   const vocab = vocabulaireMots.map((m) => ({ mot: m, cle: phonetique(m) }));
   const dansVocab = new Set(vocabulaireMots);
   const sortie: string[] = [];
+  const mots = motsBruts;
   for (let i = 0; i < mots.length; i++) {
     const m = mots[i];
-    if (m.length < 3 || /\d/.test(m) || dansVocab.has(m)) {
+    // Un chiffre seul n'est lu comme un mot (« 6 zones » = « six zones ») que dans le recollage ci-dessous.
+    const chiffre = CHIFFRES[m] !== undefined;
+    if ((!chiffre && (m.length < 3 || /\d/.test(m))) || dansVocab.has(m)) {
       sortie.push(m);
       continue;
+    }
+    // Petit mot collé au nom (« demain » pour « de mains ») : on le retire si le reste est un nom connu.
+    const collage = m.match(/^(de|du|des|le|la|les|un|une)(.{3,})$/);
+    if (collage) {
+      const reste = motsProches(collage[2], vocab)[0];
+      if (reste && reste.d === 0) {
+        sortie.push(reste.mot);
+        continue;
+      }
     }
     // Un nom coupé en deux par la reconnaissance (« six onne » pour « sissonne ») : on essaie de recoller 2 ou 3 mots.
     let recolle = false;
     for (const n of [3, 2]) {
       if (i + n > mots.length) continue;
-      const ensemble = mots.slice(i, i + n).join("");
+      const ensemble = mots.slice(i, i + n).map((x) => CHIFFRES[x] ?? x).join("");
       if (ensemble.length < 5) continue;
       const proche = motsProches(ensemble, vocab.filter((v) => v.mot.length >= 5))[0];
       if (proche) {
@@ -274,13 +315,13 @@ export default function TablePage() {
 
   // Dicte un élément avec le micro du navigateur.
   // Reconnaissance sur l'appareil (Whisper) : marche partout, y compris Vivaldi, Brave et Firefox, qui n'ont pas le service vocal de Google.
-  // Au premier usage, un modèle d'environ 80 Mo est téléchargé une seule fois, puis gardé par le navigateur.
+  // Au premier usage, un modèle d'environ 250 Mo est téléchargé une seule fois, puis gardé par le navigateur.
   async function dicterLocal() {
     const ctrl = new AbortController();
     arretLocal.current = ctrl;
     setEcoute(true);
     try {
-      setMessageVoix("Préparation de la reconnaissance vocale… (au premier usage : téléchargement d’environ 80 Mo, une seule fois)");
+      setMessageVoix("Préparation de la reconnaissance vocale… (au premier usage : téléchargement d’environ 250 Mo, une seule fois)");
       await preparerModele((p) => setMessageVoix(`Téléchargement du modèle vocal : ${p} % (une seule fois, puis il est gardé)`));
       if (ctrl.signal.aborted) return;
       setMessageVoix("🎙 Parle maintenant (la phrase se termine au silence). Rappuie sur le bouton pour arrêter.");

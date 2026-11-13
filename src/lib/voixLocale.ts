@@ -1,9 +1,10 @@
 // Reconnaissance vocale sur l'appareil, sans service en ligne pour la voix : on enregistre la phrase au micro, puis le modèle Whisper
-// (transformers.js) la transcrit dans le navigateur. Au premier usage, le modèle (~80 Mo) est téléchargé puis gardé en mémoire du navigateur.
+// (transformers.js) la transcrit dans le navigateur. Au premier usage, le modèle (~250 Mo) est téléchargé puis gardé en mémoire du navigateur.
 // Marche dans tous les navigateurs récents (Chrome, Edge, Vivaldi, Firefox…), contrairement à la reconnaissance vocale intégrée de Chrome.
 
 const BIBLIOTHEQUE = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.6/+esm";
-const MODELE = "Xenova/whisper-base";
+// « small » comprend bien mieux les noms d'éléments que « base » (testé sur 14 phrases : « poutre » entendu « poudre » par base, juste avec small), mais pèse ~250 Mo et transcrit plus lentement.
+const MODELE = "Xenova/whisper-small";
 
 type Transcripteur = (audio: Float32Array, options?: Record<string, unknown>) => Promise<{ text: string }>;
 
