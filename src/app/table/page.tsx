@@ -47,7 +47,9 @@ function normaliser(s: string) {
 function correspond(el: { code: string; name: string; branch?: string | null; palier: Palier }, mots: string[]) {
   if (mots.length === 0) return true;
   const texte = normaliser(`${el.code} ${el.name} ${el.branch ?? ""} ${palierLabel(el.palier)}`);
-  return mots.every((m) => texte.includes(m));
+  // Aussi sans tirets ni espaces, pour que « flicflac » retrouve « flic-flac ».
+  const compact = texte.replace(/[^a-z0-9]/g, "");
+  return mots.every((m) => texte.includes(m) || compact.includes(m));
 }
 
 // Reconnaissance vocale du navigateur (Chrome, Edge, Safari ; absente de Firefox). Types minimaux, non fournis par TypeScript.
@@ -95,21 +97,80 @@ function vocabulaire(agres: string[]): string[] {
   return [...s];
 }
 
-function corrigerMots(mots: string[], vocab: string[]) {
-  return mots.map((m) => {
-    if (m.length < 4 || /\d/.test(m) || vocab.some((t) => t.includes(m))) return m;
-    const tolerance = m.length >= 8 ? 2 : 1;
-    let meilleur = m;
-    let d = tolerance + 1;
-    for (const t of vocab) {
-      const x = distance(m, t);
-      if (x < d) {
-        d = x;
-        meilleur = t;
+// Clé phonétique approximative du français : « sissonne », « cissonne » et « sisone » donnent la même clé.
+// Sert à rapprocher ce que la reconnaissance vocale a entendu du vrai nom de l'élément.
+function phonetique(mot: string): string {
+  let s = mot.replace(/[^a-z]/g, "");
+  s = s
+    .replace(/ph/g, "f")
+    .replace(/qu/g, "k")
+    .replace(/ck/g, "k")
+    .replace(/gu(?=[eiy])/g, "g")
+    .replace(/gn/g, "N")
+    .replace(/sch|ch|sh/g, "S")
+    .replace(/c(?=[eiy])/g, "s")
+    .replace(/[cq]/g, "k")
+    .replace(/g(?=[eiy])/g, "j")
+    .replace(/eau|au/g, "o")
+    .replace(/ou/g, "U")
+    .replace(/oi/g, "W")
+    .replace(/ai|ei/g, "e")
+    .replace(/(ain|ein|in|im|un)(?![aeiouynm])/g, "I")
+    .replace(/(an|am|en|em)(?![aeiouynm])/g, "A")
+    .replace(/(on|om)(?![aeiouynm])/g, "O")
+    .replace(/h/g, "")
+    .replace(/y/g, "i")
+    .replace(/z/g, "s")
+    .replace(/x/g, "ks")
+    .replace(/(.)\1+/g, "$1");
+  if (s.length > 3) s = s.replace(/[estdx]+$/, "");
+  return s;
+}
+
+function toleranceCle(cle: string) {
+  return cle.length >= 7 ? 2 : cle.length >= 4 ? 1 : 0;
+}
+
+// Mots du vocabulaire proches (par le son) d'un mot entendu, du plus proche au plus éloigné.
+function motsProches(mot: string, vocab: { mot: string; cle: string }[], tolerance?: number) {
+  const cle = phonetique(mot);
+  const tol = tolerance ?? toleranceCle(cle);
+  return vocab
+    .map((v) => ({ mot: v.mot, d: cle.length >= 4 ? Math.min(distance(cle, v.cle), distance(mot, v.mot)) : distance(mot, v.mot) }))
+    .filter((x) => x.d <= tol)
+    .sort((x, y) => x.d - y.d || Math.abs(x.mot.length - mot.length) - Math.abs(y.mot.length - mot.length));
+}
+
+function corrigerMots(mots: string[], vocabulaireMots: string[]) {
+  const vocab = vocabulaireMots.map((m) => ({ mot: m, cle: phonetique(m) }));
+  const dansVocab = new Set(vocabulaireMots);
+  const sortie: string[] = [];
+  for (let i = 0; i < mots.length; i++) {
+    const m = mots[i];
+    if (m.length < 3 || /\d/.test(m) || dansVocab.has(m)) {
+      sortie.push(m);
+      continue;
+    }
+    // Un nom coupé en deux par la reconnaissance (« six onne » pour « sissonne ») : on essaie de recoller 2 ou 3 mots.
+    let recolle = false;
+    for (const n of [3, 2]) {
+      if (i + n > mots.length) continue;
+      const ensemble = mots.slice(i, i + n).join("");
+      if (ensemble.length < 5) continue;
+      const proche = motsProches(ensemble, vocab.filter((v) => v.mot.length >= 5))[0];
+      if (proche) {
+        sortie.push(proche.mot);
+        i += n - 1;
+        recolle = true;
+        break;
       }
     }
-    return d <= tolerance ? meilleur : m;
-  });
+    if (recolle) continue;
+    const proche = motsProches(m, vocab)[0];
+    if (proche) sortie.push(proche.mot);
+    else sortie.push(m);
+  }
+  return sortie;
 }
 
 // Zone qu'on fait glisser au doigt (ou à la souris) vers la gauche ou la droite pour voir les colonnes cachées.
@@ -159,6 +220,7 @@ export default function TablePage() {
   const [recherche, setRecherche] = useState("");
   const [ecoute, setEcoute] = useState(false);
   const [messageVoix, setMessageVoix] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const recoRef = useRef<Reconnaissance | null>(null);
   const arretLocal = useRef<AbortController | null>(null);
 
@@ -193,9 +255,19 @@ export default function TablePage() {
     const cherche = mots.join(" ");
     // Les résultats s'affichent plus bas que la barre : on y amène l'écran pour qu'on les voie tout de suite.
     setTimeout(() => document.getElementById("resultats-table")?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+    if (total(mots) === 0) {
+      // Rien de trouvé : on propose les noms d'éléments qui ressemblent, par le son, aux mots entendus.
+      const vocab = vocabulaire(cibles).map((m) => ({ mot: m, cle: phonetique(m) }));
+      const vus = new Set<string>();
+      for (const m of brut.filter((x) => x.length >= 3)) {
+        for (const p of motsProches(m, vocab.filter((v) => v.mot.length >= 4), Math.max(1, Math.floor(m.length / 3))).slice(0, 4)) vus.add(p.mot);
+      }
+      const motAgres = citeValide ? ({ SAUT: "saut", BARRES_ASYM: "barres", POUTRE: "poutre", SOL: "sol" } as Record<string, string>)[citeValide] : null;
+      setSuggestions([...vus].slice(0, 6).map((x) => (motAgres ? `${x} en ${motAgres}` : x)));
+    } else setSuggestions([]);
     setMessageVoix(
       total(mots) === 0
-        ? `J’ai compris : « ${dite} ». Aucun élément trouvé, essaie de redire seulement le nom de l’élément.`
+        ? `J’ai compris : « ${dite} ». Aucun élément trouvé${" — essaie un de ces noms, ou redis seulement le nom de l’élément."}`
         : `J’ai compris : « ${dite} ». Recherche : « ${cherche} ».`,
     );
   }
@@ -429,6 +501,20 @@ export default function TablePage() {
               <p className="text-xs text-muted" role="status">
                 {messageVoix}
               </p>
+            )}
+            {suggestions.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {suggestions.map((sug) => (
+                  <button
+                    key={sug}
+                    type="button"
+                    onClick={() => appliquerDictee(sug)}
+                    className="rounded-full border border-accent-solid/50 bg-accent-from/10 px-3 py-1 text-xs font-medium text-foreground hover:bg-accent-from/20"
+                  >
+                    {sug}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
         )}
