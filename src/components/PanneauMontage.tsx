@@ -88,14 +88,31 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
   }, []);
 
   // Gymnastes qui ont une musique (onglet Compétitions › Musiques) : on peut la reprendre ici pour la retravailler.
-  const [avecMusique, setAvecMusique] = useState<{ id: string; firstName: string; lastName: string; team: string | null }[]>([]);
+  const [avecMusique, setAvecMusique] = useState<{ id: string; firstName: string; lastName: string; team: string | null; club: string | null }[]>([]);
+  // Groupées par club puis par niveau/équipe (ex. « Club X · B3 »), triées par nom dans chaque groupe.
+  const groupesMusique = useMemo(() => {
+    const map = new Map<string, { club: string; equipe: string; gymnastes: typeof avecMusique }>();
+    for (const g of avecMusique) {
+      const club = g.club || "Sans club";
+      const equipe = g.team || "Sans équipe";
+      const cle = `${club}\u0000${equipe}`;
+      if (!map.has(cle)) map.set(cle, { club, equipe, gymnastes: [] });
+      map.get(cle)!.gymnastes.push(g);
+    }
+    return [...map.values()]
+      .sort((a, b) => a.club.localeCompare(b.club) || a.equipe.localeCompare(b.equipe, "fr", { numeric: true }))
+      .map((x) => ({
+        libelle: `${x.club} · ${x.equipe}`,
+        gymnastes: [...x.gymnastes].sort((a, b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName)),
+      }));
+  }, [avecMusique]);
   const chargerListeGymnastes = useCallback(async () => {
     const toutes = await getGymnasts();
     const liste = await Promise.all(toutes.map(async (g) => ((await getGymnastMusic(g.id)) ? g : null)));
     setAvecMusique(
       liste
         .filter((g): g is NonNullable<typeof g> => g !== null)
-        .map((g) => ({ id: g.id, firstName: g.firstName, lastName: g.lastName, team: g.team ?? null }))
+        .map((g) => ({ id: g.id, firstName: g.firstName, lastName: g.lastName, team: g.team ?? null, club: g.club?.name ?? null }))
     );
   }, []);
   useEffect(() => {
@@ -397,18 +414,16 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
           onFocus={chargerListeGymnastes}
           onChange={(e) => e.target.value && void reprendreMusique(e.target.value)}
           aria-label="Reprendre la musique d’une gymnaste"
-          className="min-w-0 max-w-full rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none"
+          className="select-groupes min-w-[16rem] max-w-full flex-1 rounded border border-border-strong bg-surface-alt px-2 py-1.5 text-sm text-foreground focus:border-accent-solid focus:outline-none sm:max-w-md"
         >
           <option value="">{avecMusique.length === 0 ? "Reprendre la musique d’une gymnaste… (aucune pour le moment)" : "Reprendre la musique d’une gymnaste…"}</option>
-          {Array.from(new Set(avecMusique.map((g) => g.team || "Sans équipe"))).map((equipe) => (
-            <optgroup key={equipe} label={equipe}>
-              {avecMusique
-                .filter((g) => (g.team || "Sans équipe") === equipe)
-                .map((g) => (
-                  <option key={g.id} value={g.id}>
-                    {g.firstName} {g.lastName}
-                  </option>
-                ))}
+          {groupesMusique.map((groupe) => (
+            <optgroup key={groupe.libelle} label={groupe.libelle}>
+              {groupe.gymnastes.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.firstName} {g.lastName}
+                </option>
+              ))}
             </optgroup>
           ))}
         </select>
