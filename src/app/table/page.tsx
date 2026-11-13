@@ -74,6 +74,43 @@ function analyserDictee(dite: string): { agres: string | null; texte: string } {
   return { agres: agresDe(m[m.length - 1] ?? m[1]), texte: n.replace(m[0], " ").replace(/\s+/g, " ").trim() };
 }
 
+// Petits mots qu'on dit sans qu'ils fassent partie du nom d'un élément (« une sissonne », « montre-moi la roue »).
+const MOTS_VIDES = new Set(["le", "la", "les", "un", "une", "des", "du", "de", "d", "l", "et", "a", "au", "aux", "en", "avec", "pour", "sur", "moi", "je", "veux", "voir", "montre", "affiche", "cherche", "recherche", "trouve", "element", "elements"]);
+
+function distance(a: string, b: string) {
+  let prec = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cour = [i];
+    for (let j = 1; j <= b.length; j++) cour[j] = Math.min(prec[j] + 1, cour[j - 1] + 1, prec[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prec = cour;
+  }
+  return prec[b.length];
+}
+
+// Mots du vocabulaire des éléments, pour rattraper un mot mal entendu (« cissonne » → « sissonne »).
+function vocabulaire(agres: string[]): string[] {
+  const s = new Set<string>();
+  for (const a of agres) for (const e of getRegulation(a as never).elements) for (const t of normaliser(e.name).split(/[^a-z0-9]+/)) if (t.length >= 3) s.add(t);
+  return [...s];
+}
+
+function corrigerMots(mots: string[], vocab: string[]) {
+  return mots.map((m) => {
+    if (m.length < 4 || /\d/.test(m) || vocab.some((t) => t.includes(m))) return m;
+    const tolerance = m.length >= 8 ? 2 : 1;
+    let meilleur = m;
+    let d = tolerance + 1;
+    for (const t of vocab) {
+      const x = distance(m, t);
+      if (x < d) {
+        d = x;
+        meilleur = t;
+      }
+    }
+    return d <= tolerance ? meilleur : m;
+  });
+}
+
 // Zone qu'on fait glisser au doigt (ou à la souris) vers la gauche ou la droite pour voir les colonnes cachées.
 // Le défilement vertical de la page reste natif (touch-action: pan-y) ; seul le glissement horizontal est géré ici.
 function ZoneGlissante({ children }: { children: React.ReactNode }) {
@@ -137,11 +174,38 @@ export default function TablePage() {
     r.maxAlternatives = 1;
     r.onresult = (e) => {
       const dite = e.results[0]?.[0]?.transcript ?? "";
-      const { agres, texte } = analyserDictee(dite);
-      if (agres && apparatuses.includes(agres as (typeof apparatuses)[number])) setApparatus(agres as (typeof apparatuses)[number]);
+      const { agres: cite, texte } = analyserDictee(dite);
+      const citeValide = cite && apparatuses.includes(cite as (typeof apparatuses)[number]) ? cite : null;
+      const cibles: string[] = citeValide ? [citeValide] : [...apparatuses];
+      // Sans petits mots, au singulier, avec les mots mal entendus rapprochés du vocabulaire des éléments.
+      const brut = texte
+        .split(" ")
+        .filter((m) => m && !MOTS_VIDES.has(m))
+        .map((m) => (m.length > 4 && /[sx]$/.test(m) ? m.slice(0, -1) : m));
+      const corriges = corrigerMots(brut, vocabulaire(cibles));
+      const total = (mots: string[]) => cibles.reduce((n, a) => n + getRegulation(a as never).elements.filter((el) => correspond(el, mots)).length, 0);
+      // Si rien ne correspond à tous les mots, on retire un mot à la fois (le premier qui donne des résultats).
+      let mots = corriges;
+      if (total(mots) === 0 && corriges.length > 1) {
+        const essais = corriges.map((_, i) => corriges.filter((__, j) => j !== i));
+        mots = essais.find((x) => total(x) > 0) ?? corriges;
+      }
+      // Sans agrès cité : on reste sur l'agrès affiché s'il a des résultats, sinon on va sur celui qui en a le plus.
+      let agresFinal = apparatus as string;
+      if (citeValide) agresFinal = citeValide;
+      else if (mots.length > 0) {
+        const nb = (a: string) => getRegulation(a as never).elements.filter((el) => correspond(el, mots)).length;
+        if (nb(agresFinal) === 0) agresFinal = [...apparatuses].sort((x, y) => nb(y) - nb(x))[0] as string;
+      }
+      setApparatus(agresFinal as (typeof apparatuses)[number]);
       setVue("elements");
-      setRecherche(texte);
-      setMessageVoix(`J’ai compris : « ${dite} »`);
+      setRecherche(mots.join(" "));
+      const cherche = mots.join(" ");
+      setMessageVoix(
+        total(mots) === 0
+          ? `J’ai compris : « ${dite} ». Aucun élément trouvé, essaie de redire seulement le nom de l’élément.`
+          : `J’ai compris : « ${dite} ». Recherche : « ${cherche} ».`,
+      );
     };
     r.onerror = (e) => {
       setMessageVoix(

@@ -58,7 +58,7 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ Page Table : barre de recherche (nom, code, branche, palier ; sans accents ni majuscules, tous les mots doivent correspondre) avec le nombre de résultats sur chaque agrès.
 
-✅ Page Table : recherche à la voix (bouton « 🎙 Voix »). On dit par exemple « sissonne à la poutre » : l'agrès cité est ouvert et l'élément filtré. Sans agrès cité, l'agrès affiché ne change pas. Utilise la reconnaissance vocale du navigateur (Chrome, Edge, Safari ; pas Firefox), demande l'accès au micro et a besoin d'internet.
+✅ Page Table : recherche à la voix (bouton « 🎙 Voix »). On dit par exemple « sissonne à la poutre » : l'agrès cité est ouvert et l'élément filtré. Sans agrès cité, l'appli reste sur l'agrès affiché s'il a des résultats, sinon va sur celui qui en a le plus. Elle ignore les petits mots (« une », « les »…), les pluriels et rapproche un mot mal entendu du vocabulaire des éléments (« cissonne » → « sissonne »). Utilise la reconnaissance vocale du navigateur (Chrome, Edge, Safari ; pas Firefox), demande l'accès au micro et a besoin d'internet.
 
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec
 envol, "liés directement ou indirectement", combinaisons nominatives comme
