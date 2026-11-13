@@ -160,7 +160,45 @@ export default function TablePage() {
   const [messageVoix, setMessageVoix] = useState<string | null>(null);
   const recoRef = useRef<Reconnaissance | null>(null);
 
-  // Dicte un élément (et éventuellement l'agrès) : « sissonne à la poutre » ouvre la Poutre et filtre « sissonne ».
+  // Comprend une phrase (dictée ou tapée puis validée par Entrée) : « sissonne à la poutre » ouvre la Poutre et filtre « sissonne ».
+  function appliquerDictee(dite: string) {
+    const { agres: cite, texte } = analyserDictee(dite);
+    const citeValide = cite && apparatuses.includes(cite as (typeof apparatuses)[number]) ? cite : null;
+    const cibles: string[] = citeValide ? [citeValide] : [...apparatuses];
+    // Sans petits mots, au singulier, avec les mots mal entendus rapprochés du vocabulaire des éléments.
+    const brut = texte
+      .split(" ")
+      .filter((m) => m && !MOTS_VIDES.has(m))
+      .map((m) => (m.length > 4 && /[sx]$/.test(m) ? m.slice(0, -1) : m));
+    const corriges = corrigerMots(brut, vocabulaire(cibles));
+    const total = (mots: string[]) => cibles.reduce((n, a) => n + getRegulation(a as never).elements.filter((el) => correspond(el, mots)).length, 0);
+    // Si rien ne correspond à tous les mots, on retire un mot à la fois (le premier qui donne des résultats).
+    let mots = corriges;
+    if (total(mots) === 0 && corriges.length > 1) {
+      const essais = corriges.map((_, i) => corriges.filter((__, j) => j !== i));
+      mots = essais.find((x) => total(x) > 0) ?? corriges;
+    }
+    // Sans agrès cité : on reste sur l'agrès affiché s'il a des résultats, sinon on va sur celui qui en a le plus.
+    let agresFinal = apparatus as string;
+    if (citeValide) agresFinal = citeValide;
+    else if (mots.length > 0) {
+      const nb = (a: string) => getRegulation(a as never).elements.filter((el) => correspond(el, mots)).length;
+      if (nb(agresFinal) === 0) agresFinal = [...apparatuses].sort((x, y) => nb(y) - nb(x))[0] as string;
+    }
+    setApparatus(agresFinal as (typeof apparatuses)[number]);
+    setVue("elements");
+    setRecherche(mots.join(" "));
+    const cherche = mots.join(" ");
+    // Les résultats s'affichent plus bas que la barre : on y amène l'écran pour qu'on les voie tout de suite.
+    setTimeout(() => document.getElementById("resultats-table")?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+    setMessageVoix(
+      total(mots) === 0
+        ? `J’ai compris : « ${dite} ». Aucun élément trouvé, essaie de redire seulement le nom de l’élément.`
+        : `J’ai compris : « ${dite} ». Recherche : « ${cherche} ».`,
+    );
+  }
+
+  // Dicte un élément avec le micro du navigateur.
   function dicter() {
     const w = window as unknown as { SpeechRecognition?: FabriqueReconnaissance; webkitSpeechRecognition?: FabriqueReconnaissance };
     const Fabrique = w.SpeechRecognition ?? w.webkitSpeechRecognition;
@@ -173,43 +211,7 @@ export default function TablePage() {
     r.lang = "fr-FR";
     r.interimResults = false;
     r.maxAlternatives = 1;
-    r.onresult = (e) => {
-      const dite = e.results[0]?.[0]?.transcript ?? "";
-      const { agres: cite, texte } = analyserDictee(dite);
-      const citeValide = cite && apparatuses.includes(cite as (typeof apparatuses)[number]) ? cite : null;
-      const cibles: string[] = citeValide ? [citeValide] : [...apparatuses];
-      // Sans petits mots, au singulier, avec les mots mal entendus rapprochés du vocabulaire des éléments.
-      const brut = texte
-        .split(" ")
-        .filter((m) => m && !MOTS_VIDES.has(m))
-        .map((m) => (m.length > 4 && /[sx]$/.test(m) ? m.slice(0, -1) : m));
-      const corriges = corrigerMots(brut, vocabulaire(cibles));
-      const total = (mots: string[]) => cibles.reduce((n, a) => n + getRegulation(a as never).elements.filter((el) => correspond(el, mots)).length, 0);
-      // Si rien ne correspond à tous les mots, on retire un mot à la fois (le premier qui donne des résultats).
-      let mots = corriges;
-      if (total(mots) === 0 && corriges.length > 1) {
-        const essais = corriges.map((_, i) => corriges.filter((__, j) => j !== i));
-        mots = essais.find((x) => total(x) > 0) ?? corriges;
-      }
-      // Sans agrès cité : on reste sur l'agrès affiché s'il a des résultats, sinon on va sur celui qui en a le plus.
-      let agresFinal = apparatus as string;
-      if (citeValide) agresFinal = citeValide;
-      else if (mots.length > 0) {
-        const nb = (a: string) => getRegulation(a as never).elements.filter((el) => correspond(el, mots)).length;
-        if (nb(agresFinal) === 0) agresFinal = [...apparatuses].sort((x, y) => nb(y) - nb(x))[0] as string;
-      }
-      setApparatus(agresFinal as (typeof apparatuses)[number]);
-      setVue("elements");
-      setRecherche(mots.join(" "));
-      const cherche = mots.join(" ");
-      // Les résultats s'affichent plus bas que la barre : on y amène l'écran pour qu'on les voie tout de suite.
-      setTimeout(() => document.getElementById("resultats-table")?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
-      setMessageVoix(
-        total(mots) === 0
-          ? `J’ai compris : « ${dite} ». Aucun élément trouvé, essaie de redire seulement le nom de l’élément.`
-          : `J’ai compris : « ${dite} ». Recherche : « ${cherche} ».`,
-      );
-    };
+    r.onresult = (e) => appliquerDictee(e.results[0]?.[0]?.transcript ?? "");
     let recu = false;
     let erreur = false;
     const surResultat = r.onresult;
@@ -226,7 +228,7 @@ export default function TablePage() {
           : e.error === "audio-capture"
             ? "Aucun micro détecté sur cet appareil."
             : e.error === "network"
-              ? "Le service de reconnaissance vocale du navigateur est injoignable (internet, ou navigateur sans ce service). Essaie avec Chrome ou Edge."
+              ? "Ce navigateur n’a pas de service de reconnaissance vocale (c’est le cas de Vivaldi, Brave, Firefox) ou internet est coupé. Sur PC, clique dans la barre de recherche et dicte avec Windows : touches Windows + H."
               : e.error === "no-speech"
                 ? "Je n’ai rien entendu, réessaie en parlant juste après avoir appuyé."
                 : `La recherche vocale a échoué (${e.error}), réessaie.`,
@@ -338,6 +340,13 @@ export default function TablePage() {
                 type="search"
                 value={recherche}
                 onChange={(e) => setRecherche(e.target.value)}
+                onKeyDown={(e) => {
+                  // Entrée : même analyse qu'à la voix (utile avec la dictée Windows, Win + H) — « sissonne à la poutre » ouvre la Poutre.
+                  if (e.key === "Enter" && recherche.trim()) {
+                    e.preventDefault();
+                    appliquerDictee(recherche);
+                  }
+                }}
                 placeholder="Rechercher un élément (nom, code, palier)…"
                 aria-label="Rechercher un élément"
                 enterKeyHint="search"
