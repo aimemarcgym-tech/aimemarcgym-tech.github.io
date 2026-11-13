@@ -158,6 +158,7 @@ export default function TablePage() {
   const [recherche, setRecherche] = useState("");
   const [ecoute, setEcoute] = useState(false);
   const [messageVoix, setMessageVoix] = useState<string | null>(null);
+  const recoRef = useRef<Reconnaissance | null>(null);
 
   // Dicte un élément (et éventuellement l'agrès) : « sissonne à la poutre » ouvre la Poutre et filtre « sissonne ».
   function dicter() {
@@ -209,18 +210,42 @@ export default function TablePage() {
           : `J’ai compris : « ${dite} ». Recherche : « ${cherche} ».`,
       );
     };
+    let recu = false;
+    let erreur = false;
+    const surResultat = r.onresult;
+    r.onresult = (e) => {
+      recu = true;
+      surResultat?.(e);
+    };
     r.onerror = (e) => {
+      if (e.error === "aborted") return;
+      erreur = true;
       setMessageVoix(
         e.error === "not-allowed" || e.error === "service-not-allowed"
-          ? "Le micro est refusé : autorise-le dans les réglages du navigateur."
-          : e.error === "no-speech"
-            ? "Je n’ai rien entendu, réessaie."
-            : "La recherche vocale a échoué, réessaie.",
+          ? "Le micro est refusé : clique sur le cadenas à gauche de l’adresse et autorise le micro pour ce site."
+          : e.error === "audio-capture"
+            ? "Aucun micro détecté sur cet appareil."
+            : e.error === "network"
+              ? "Le service de reconnaissance vocale du navigateur est injoignable (internet, ou navigateur sans ce service). Essaie avec Chrome ou Edge."
+              : e.error === "no-speech"
+                ? "Je n’ai rien entendu, réessaie en parlant juste après avoir appuyé."
+                : `La recherche vocale a échoué (${e.error}), réessaie.`,
       );
     };
-    r.onend = () => setEcoute(false);
+    r.onend = () => {
+      setEcoute(false);
+      recoRef.current = null;
+      if (!recu && !erreur) setMessageVoix("Je n’ai rien entendu, réessaie en parlant juste après avoir appuyé.");
+    };
+    // Garder une référence : sinon Chrome peut arrêter la reconnaissance aussitôt (objet recyclé).
+    recoRef.current = r;
     setEcoute(true);
-    r.start();
+    try {
+      r.start();
+    } catch {
+      setEcoute(false);
+      setMessageVoix("Impossible de démarrer le micro, réessaie.");
+    }
   }
 
   const regulation = useMemo(() => getRegulation(apparatus), [apparatus]);
