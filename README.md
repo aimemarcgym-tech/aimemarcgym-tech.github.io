@@ -52,6 +52,8 @@ confirmées (via les pastilles de série).
 ✅ Import d'une sauvegarde : une animation (sablier tournant) s'affiche pendant la
 lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette page ».
 
+✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
+
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec
 envol, "liés directement ou indirectement", combinaisons nominatives comme
 "Sursaut + fente + roue") car les données numérisées ne portent pas encore

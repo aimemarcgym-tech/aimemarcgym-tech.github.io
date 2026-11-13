@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDialogues } from "@/components/Dialogues";
 import { RenommerEnLigne } from "@/components/EnLigne";
 import CustomAudioPlayer from "@/components/CustomAudioPlayer";
@@ -33,6 +33,24 @@ export default function SortieMp3({ blob, nom: nomInitial, onCouper }: { blob: B
   useEffect(() => {
     getGymnasts().then(setGymnastes);
   }, []);
+
+  // Liste groupée par club puis par niveau/équipe (ex. « Club X · B3 »), triée par nom dans chaque groupe.
+  const groupes = useMemo(() => {
+    const map = new Map<string, { club: string; equipe: string; gymnastes: Gymnaste[] }>();
+    for (const g of gymnastes) {
+      const club = g.club?.name ?? "Sans club";
+      const equipe = g.team || "Sans équipe";
+      const cle = `${club}\u0000${equipe}`;
+      if (!map.has(cle)) map.set(cle, { club, equipe, gymnastes: [] });
+      map.get(cle)!.gymnastes.push(g);
+    }
+    return [...map.values()]
+      .sort((a, b) => a.club.localeCompare(b.club) || a.equipe.localeCompare(b.equipe, "fr", { numeric: true }))
+      .map((x) => ({
+        libelle: `${x.club} · ${x.equipe}`,
+        gymnastes: [...x.gymnastes].sort((a, b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName)),
+      }));
+  }, [gymnastes]);
 
   const fichier = () => new File([blob], nom, { type: "audio/mpeg" });
 
@@ -113,10 +131,14 @@ export default function SortieMp3({ blob, nom: nomInitial, onCouper }: { blob: B
         <div className="flex flex-wrap items-center gap-2">
           <select value={gymnaste} onChange={(e) => setGymnaste(e.target.value)} className="rounded border border-border-strong bg-surface px-2 py-1 text-xs text-foreground focus:border-accent-solid focus:outline-none" aria-label="Gymnaste">
             <option value="">Ajouter à la musique de…</option>
-            {gymnastes.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.firstName} {g.lastName}
-              </option>
+            {groupes.map((groupe) => (
+              <optgroup key={groupe.libelle} label={groupe.libelle}>
+                {groupe.gymnastes.map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.firstName} {g.lastName}
+                  </option>
+                ))}
+              </optgroup>
             ))}
           </select>
           <button type="button" disabled={!gymnaste} onClick={ajouter} className={`${bouton} disabled:opacity-50`}>
