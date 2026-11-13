@@ -54,6 +54,8 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
+✅ Page Table sur téléphone : colonnes resserrées (la branche passe sous le nom) pour voir le palier et la valeur sans défiler ; le tableau reste déplaçable au doigt.
+
 ✅ Page Table : barre de recherche (nom, code, branche, palier ; sans accents ni majuscules, tous les mots doivent correspondre) avec le nombre de résultats sur chaque agrès.
 
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec

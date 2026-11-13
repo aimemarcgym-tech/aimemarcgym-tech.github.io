@@ -179,7 +179,7 @@ export default function TablePage() {
             </p>
           )}
           {archesAffichees.map(({ arche, elements }) => (
-            <section key={arche.id} className="mx-auto w-fit max-w-full overflow-hidden rounded-xl border border-border-subtle">
+            <section key={arche.id} className="mx-auto w-full max-w-full overflow-hidden rounded-xl border border-border-subtle sm:w-fit">
               <div className="border-b border-border-subtle bg-surface-alt/50 px-4 py-3">
                 <h2 className="text-sm font-semibold text-foreground">
                   {arche.name}
@@ -195,22 +195,22 @@ export default function TablePage() {
               {elements.length === 0 ? (
                 <p className="px-4 py-4 text-sm text-muted">Aucun élément recensé pour cette arche.</p>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-[600px] border-collapse text-sm">
+                <div className="touch-pan-x touch-pan-y overflow-x-auto overscroll-x-contain">
+                  <table className="w-full min-w-0 border-collapse text-sm sm:min-w-[600px]">
                     <thead>
                       <tr className="bg-surface-alt text-left text-xs uppercase tracking-wide text-muted">
-                        <th className="w-20 px-4 py-2 font-semibold">Code</th>
-                        <th className="min-w-[420px] px-4 py-2 font-semibold">Nom</th>
-                        <th className="w-28 px-4 py-2 font-semibold">Branche</th>
-                        <th className="w-24 px-4 py-2 font-semibold">Palier</th>
-                        {apparatus === "SAUT" && <th className="w-32 px-4 py-2 font-semibold">Valeur de départ</th>}
+                        <th className="px-2 py-2 font-semibold sm:w-20 sm:px-4">Code</th>
+                        <th className="min-w-0 px-2 py-2 font-semibold sm:min-w-[420px] sm:px-4">Nom</th>
+                        <th className="hidden px-4 py-2 font-semibold sm:table-cell sm:w-28">Branche</th>
+                        <th className="px-2 py-2 font-semibold sm:w-24 sm:px-4">Palier</th>
+                        {apparatus === "SAUT" && <th className="px-2 py-2 font-semibold sm:w-32 sm:px-4"><span className="sm:hidden">Valeur</span><span className="hidden sm:inline">Valeur de départ</span></th>}
                       </tr>
                     </thead>
                     <tbody>
                       {elements.map((el) => (
                         <tr key={el.code} className="border-t border-border-subtle">
-                          <td className="whitespace-nowrap px-4 py-2 font-mono text-xs text-foreground">{el.code}</td>
-                          <td className="px-4 py-2 text-foreground">
+                          <td className="whitespace-nowrap px-2 py-2 font-mono text-xs text-foreground sm:px-4">{el.code}</td>
+                          <td className="px-2 py-2 text-foreground sm:px-4">
                             {el.name}
                             {!el.verified && <span className="ml-1.5 text-xs text-warning">⚠ à confirmer</span>}
                             {isMousseElement(el.archeId) && (
@@ -238,9 +238,10 @@ export default function TablePage() {
                                 + {c}
                               </span>
                             ))}
+                            {el.branch && <div className="mt-0.5 text-xs text-muted sm:hidden">Branche : {el.branch}</div>}
                           </td>
-                          <td className="px-4 py-2 text-xs text-muted">{el.branch ?? "—"}</td>
-                          <td className="px-4 py-2">
+                          <td className="hidden px-4 py-2 text-xs text-muted sm:table-cell">{el.branch ?? "—"}</td>
+                          <td className="px-2 py-2 sm:px-4">
                             <span
                               className={`rounded-full border px-2 py-0.5 text-xs font-medium ${palierBadgeClasses(el.palier)}`}
                             >
@@ -248,7 +249,7 @@ export default function TablePage() {
                             </span>
                           </td>
                           {apparatus === "SAUT" && (
-                            <td className="px-4 py-2 text-sm font-semibold text-foreground">
+                            <td className="px-2 py-2 text-sm font-semibold text-foreground sm:px-4">
                               {el.value !== undefined ? el.value.toFixed(1).replace(/\.0$/, "") : "—"}
                             </td>
                           )}
