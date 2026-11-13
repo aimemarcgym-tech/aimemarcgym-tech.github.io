@@ -37,17 +37,40 @@ function palierBadgeClasses(p: Palier) {
   return "border-accent-solid/50 bg-accent-from/10 text-white";
 }
 
+// Sans majuscules ni accents, pour qu'« ecart » retrouve « écarté ».
+function normaliser(s: string) {
+  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+// Tous les mots tapés doivent se retrouver dans le code, le nom, la branche ou le palier de l'élément.
+function correspond(el: { code: string; name: string; branch?: string | null; palier: Palier }, mots: string[]) {
+  if (mots.length === 0) return true;
+  const texte = normaliser(`${el.code} ${el.name} ${el.branch ?? ""} ${palierLabel(el.palier)}`);
+  return mots.every((m) => texte.includes(m));
+}
+
 export default function TablePage() {
   const apparatuses = getAvailableApparatuses();
   const [apparatus, setApparatus] = useState(apparatuses[0]);
   const [vue, setVue] = useState<"elements" | "decomposition">("elements");
+  const [recherche, setRecherche] = useState("");
 
   const regulation = useMemo(() => getRegulation(apparatus), [apparatus]);
+  const mots = useMemo(() => normaliser(recherche).split(/\s+/).filter(Boolean), [recherche]);
+
+  // Nombre de résultats par agrès, affiché sur les boutons d'agrès pour savoir où chercher.
+  const resultatsParAgres = useMemo(() => {
+    const r: Record<string, number> = {};
+    if (mots.length === 0) return r;
+    for (const a of apparatuses) r[a] = getRegulation(a).elements.filter((e) => correspond(e, mots)).length;
+    return r;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mots]);
 
   const archesWithElements = useMemo(() => {
     return regulation.arches.map((arche) => {
       const elements = regulation.elements
-        .filter((e) => e.archeId === arche.id)
+        .filter((e) => e.archeId === arche.id && correspond(e, mots))
         .slice()
         .sort((a, b) => {
           const topGroupCmp = topGroupRank(a.palier) - topGroupRank(b.palier);
@@ -60,7 +83,10 @@ export default function TablePage() {
         });
       return { arche, elements };
     });
-  }, [regulation]);
+  }, [regulation, mots]);
+
+  // Pendant une recherche, les arches sans résultat sont masquées.
+  const archesAffichees = mots.length > 0 ? archesWithElements.filter((x) => x.elements.length > 0) : archesWithElements;
 
   return (
     <div className="min-h-screen">
@@ -112,6 +138,18 @@ export default function TablePage() {
             </button>
           ))}
         </div>
+        {vue === "elements" && (
+          <input
+            type="search"
+            value={recherche}
+            onChange={(e) => setRecherche(e.target.value)}
+            placeholder="Rechercher un élément (nom, code, palier)…"
+            aria-label="Rechercher un élément"
+            enterKeyHint="search"
+            autoComplete="off"
+            className="w-full max-w-xl rounded-lg border border-border-strong bg-surface-alt px-3 py-2 text-base text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none sm:text-sm"
+          />
+        )}
         <div className="flex flex-wrap gap-2">
           {apparatuses.map((a) => (
             <button
@@ -125,6 +163,9 @@ export default function TablePage() {
               }`}
             >
               {APPARATUS_LABELS[a] ?? a}
+              {vue === "elements" && mots.length > 0 && (
+                <span className={`ml-1.5 text-xs ${resultatsParAgres[a] ? "text-foreground" : "text-muted"}`}>({resultatsParAgres[a] ?? 0})</span>
+              )}
             </button>
           ))}
         </div>
@@ -132,7 +173,12 @@ export default function TablePage() {
         {vue === "decomposition" && <DecompositionNote apparatus={apparatus} />}
 
         <div className={`space-y-8 ${vue === "decomposition" ? "hidden" : ""}`}>
-          {archesWithElements.map(({ arche, elements }) => (
+          {mots.length > 0 && archesAffichees.length === 0 && (
+            <p className="text-sm text-muted">
+              Aucun élément trouvé pour « {recherche.trim()} » en {APPARATUS_LABELS[apparatus] ?? apparatus}. Regarde les nombres sur les autres agrès.
+            </p>
+          )}
+          {archesAffichees.map(({ arche, elements }) => (
             <section key={arche.id} className="mx-auto w-fit max-w-full overflow-hidden rounded-xl border border-border-subtle">
               <div className="border-b border-border-subtle bg-surface-alt/50 px-4 py-3">
                 <h2 className="text-sm font-semibold text-foreground">

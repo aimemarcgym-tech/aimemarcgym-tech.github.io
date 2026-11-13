@@ -54,6 +54,8 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
+✅ Page Table : barre de recherche (nom, code, branche, palier ; sans accents ni majuscules, tous les mots doivent correspondre) avec le nombre de résultats sur chaque agrès.
+
 ⚠️ **Certaines règles ne sont volontairement PAS auto-détectées** (LAE avec
 envol, "liés directement ou indirectement", combinaisons nominatives comme
 "Sursaut + fente + roue") car les données numérisées ne portent pas encore
