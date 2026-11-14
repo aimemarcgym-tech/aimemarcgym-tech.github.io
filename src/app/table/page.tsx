@@ -239,7 +239,7 @@ function corrigerMots(motsBruts: string[], vocabulaireMots: string[]) {
 }
 
 // Zone qu'on fait glisser au doigt (ou à la souris) vers la gauche ou la droite pour voir les colonnes cachées.
-// Le défilement vertical de la page reste natif (touch-action: pan-y) ; seul le glissement horizontal est géré ici.
+// Le défilement vertical de la page et le zoom à deux doigts restent natifs (touch-action: pan-y pinch-zoom) ; seul le glissement horizontal est géré ici.
 function ZoneGlissante({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const depart = useRef<{ x: number; gauche: number } | null>(null);
@@ -255,7 +255,7 @@ function ZoneGlissante({ children }: { children: React.ReactNode }) {
       <p className="px-3 pt-2 text-[11px] text-muted sm:hidden">↔ Fais glisser le tableau pour voir les autres colonnes</p>
       <div
         ref={ref}
-        className={`touch-pan-y overflow-x-auto overscroll-x-contain ${glisse ? "cursor-grabbing select-none" : "cursor-grab"}`}
+        className={`touch-pan-y touch-pinch-zoom overflow-x-auto overscroll-x-contain ${glisse ? "cursor-grabbing select-none" : "cursor-grab"}`}
         onPointerDown={(e) => {
           if (e.pointerType === "mouse" && e.button !== 0) return;
           depart.current = { x: e.clientX, gauche: ref.current?.scrollLeft ?? 0 };

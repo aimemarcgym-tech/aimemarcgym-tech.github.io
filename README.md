@@ -54,7 +54,7 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
-✅ Page Table : les tableaux d'éléments se font glisser au doigt (ou à la souris) vers la gauche et la droite pour voir toutes les colonnes ; le défilement vertical de la page reste normal.
+✅ Page Table : les tableaux d'éléments se font glisser au doigt (ou à la souris) vers la gauche et la droite pour voir toutes les colonnes ; le défilement vertical de la page et le zoom à deux doigts restent normaux.
 
 ✅ Page Table : le bouton « ↑ Retour en haut » n'apparaît que sur ordinateur (masqué sur tout appareil tactile, en portrait comme en paysage, pour ne pas cacher les infos). Sur appareil tactile, une marge est laissée sous les résultats pour pouvoir lire la dernière ligne, et la croix d'effacement de la barre de recherche est plus grosse et bleue (classe `croix-large` dans `globals.css`).
 
