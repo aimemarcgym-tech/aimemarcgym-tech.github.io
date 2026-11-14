@@ -56,7 +56,7 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ Page Table : les tableaux d'éléments se font glisser au doigt (ou à la souris) vers la gauche et la droite pour voir toutes les colonnes ; le défilement vertical de la page reste normal.
 
-✅ Page Table : le bouton « ↑ Retour en haut » n'apparaît que sur ordinateur (masqué sur tout appareil tactile, en portrait comme en paysage, pour ne pas cacher les infos).
+✅ Page Table : le bouton « ↑ Retour en haut » n'apparaît que sur ordinateur (masqué sur tout appareil tactile, en portrait comme en paysage, pour ne pas cacher les infos). Sur appareil tactile, une marge est laissée sous les résultats pour pouvoir lire la dernière ligne.
 
 ✅ Page Table : barre de recherche (nom, code, branche, palier ; sans accents ni majuscules, tous les mots doivent correspondre) avec le nombre de résultats sur chaque agrès.
 

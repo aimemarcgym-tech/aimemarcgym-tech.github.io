@@ -622,7 +622,7 @@ export default function TablePage() {
 
         {vue === "decomposition" && <DecompositionNote apparatus={apparatus} />}
 
-        <div id="resultats-table" className={`scroll-mt-4 space-y-8 ${vue === "decomposition" ? "hidden" : ""}`}>
+        <div id="resultats-table" className={`scroll-mt-4 space-y-8 pb-24 [@media(pointer:fine)]:pb-0 ${vue === "decomposition" ? "hidden" : ""}`}>
           {mots.length > 0 && archesAffichees.length === 0 && (
             <p className="text-sm text-muted">
               Aucun élément trouvé pour « {recherche.trim()} » en {APPARATUS_LABELS[apparatus] ?? apparatus}. Regarde les nombres sur les autres agrès.
