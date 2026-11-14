@@ -574,7 +574,7 @@ export default function TablePage() {
                 onClick={surBoutonVoix}
                 aria-label="Rechercher à la voix"
                 title="Rechercher à la voix (ex. « sissonne à la poutre »)"
-                className={`shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-white ${ecoute ? "animate-pulse bg-danger" : "accent-gradient"}`}
+                className={`hidden shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-white [@media(pointer:coarse)]:block ${ecoute ? "animate-pulse bg-danger" : "accent-gradient"}`}
               >
                 {ecoute ? "🎙 En cours…" : "🎙 Voix"}
               </button>
