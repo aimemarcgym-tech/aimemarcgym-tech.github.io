@@ -61,6 +61,9 @@ export default function ReferencePanel({ apparatus, evolutionId }: { apparatus: 
             <div className="text-xs uppercase text-muted">Temps max — {evolutionId}</div>
             <div className="text-3xl font-bold accent-gradient-text">{tempsMax?.duree ?? "—"}</div>
             {tempsMax && <div className="mt-1 text-xs text-muted">{tempsMax.label}</div>}
+            {apparatus === "POUTRE" && (
+              <div className="mt-2 text-xs font-semibold text-warning">Dépassement du temps : pénalité de 1 point</div>
+            )}
           </div>
           <ul className="space-y-1 text-xs text-muted">
             {reference.tempsMax.map((t) => (
