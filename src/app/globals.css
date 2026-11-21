@@ -46,6 +46,25 @@ body {
   background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
 }
 
+/* Bouton « qui s'allume » : éteint au repos, dégradé d'accent seulement quand il est actif (cliquable)
+   ET survolé ou pressé. Un bouton désactivé reste éteint, sans réaction au survol. */
+.bouton-allume {
+  border: 1px solid var(--border-strong);
+  color: var(--foreground);
+  transition: background-color 0.12s, color 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+.bouton-allume:hover:not(:disabled),
+.bouton-allume:active:not(:disabled),
+.bouton-allume:focus-visible:not(:disabled) {
+  background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  border-color: transparent;
+  color: #ffffff;
+}
+.bouton-allume:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* Bouton natif « Choisir un fichier » d'un <input type="file"> avec le même dégradé que .accent-gradient. */
 .file-accent-gradient::file-selector-button {
   background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to));
