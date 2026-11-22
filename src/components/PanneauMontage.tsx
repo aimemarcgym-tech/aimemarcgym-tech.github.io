@@ -7,7 +7,8 @@ import { champ, panneau, titrePanneau } from "@/lib/styles";
 import { getGymnasts, getGymnastMusic } from "@/lib/data";
 
 const HAUTEUR = 96;
-const bouton = "bouton-allume rounded-md px-3 py-1.5 text-xs font-medium";
+const bouton = "rounded-md border border-border-strong px-3 py-1.5 text-xs font-medium text-foreground hover:border-accent-solid disabled:opacity-50";
+const boutonAction = "bouton-allume rounded-md px-3 py-1.5 text-xs font-medium";
 
 export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; fichier: File } | null }) {
   const [fichier, setFichier] = useState<File | null>(null);
@@ -17,6 +18,7 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
   const [retraits, setRetraits] = useState<Segment[]>([]);
+  const [actif, setActif] = useState<"retirer" | "garder" | "annuler" | "reafficher" | null>(null);
   const [a, setA] = useState("");
   const [b, setB] = useState("");
   const [position, setPosition] = useState(0);
@@ -144,6 +146,7 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
     setBuffer(null);
     setForme([]);
     setUrl(null);
+    setActif(null);
     setRetraits([]);
     setA("");
     setB("");
@@ -498,16 +501,16 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => retirer()} className="bouton-allume rounded px-4 py-2 text-sm font-semibold">
+            <button type="button" data-allume={actif === "retirer"} onClick={() => { setActif("retirer"); retirer(); }} className={`${boutonAction} px-4! py-2! text-sm! font-semibold!`}>
               ✂ Retirer la sélection A–B
             </button>
-            <button type="button" onClick={garder} className={bouton}>
+            <button type="button" data-allume={actif === "garder"} onClick={() => { setActif("garder"); garder(); }} className={boutonAction}>
               Garder uniquement la sélection
             </button>
-            <button type="button" disabled={retraits.length === 0} onClick={() => setRetraits((l) => l.slice(0, -1))} className={bouton}>
+            <button type="button" data-allume={actif === "annuler"} disabled={retraits.length === 0} onClick={() => { setActif("annuler"); setRetraits((l) => l.slice(0, -1)); }} className={boutonAction}>
               ↶ Annuler le dernier retrait
             </button>
-            <button type="button" disabled={retraits.length === 0} onClick={() => setRetraits([])} className={bouton}>
+            <button type="button" data-allume={actif === "reafficher"} disabled={retraits.length === 0} onClick={() => { setActif("reafficher"); setRetraits([]); }} className={boutonAction}>
               ↺ Tout réafficher
             </button>
           </div>
@@ -542,7 +545,7 @@ export default function PanneauMontage({ aCouper }: { aCouper?: { cle: number; f
                 ))}
               </select>
             </label>
-            <button type="button" disabled={encours || conserves.length === 0} onClick={creer} className="bouton-allume rounded px-6 py-2.5 text-sm font-semibold">
+            <button type="button" disabled={encours || conserves.length === 0} onClick={creer} className="accent-gradient rounded px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent-from/20 hover:opacity-90 disabled:opacity-50">
               {encours ? `Création… ${Math.round(progression * 100)} %` : "✂ Créer le montage ➜"}
             </button>
           </div>

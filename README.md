@@ -54,7 +54,7 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
-✅ Panneau « Couper une musique » : les boutons sont éteints au repos et ne s'allument (dégradé violet-rose) que lorsqu'ils sont actifs et survolés ou pressés ; un bouton désactivé reste éteint, grisé, sans réaction au survol (classe `bouton-allume` dans `globals.css`).
+✅ Panneau « Couper une musique » : parmi les 4 boutons d'action (Retirer la sélection A–B, Garder uniquement la sélection, Annuler le dernier retrait, Tout réafficher), un seul est allumé (dégradé violet-rose) à la fois : le dernier sur lequel on a cliqué. Les autres sont éteints, il n'y a pas d'effet au survol, et un bouton désactivé reste éteint et grisé (classe `bouton-allume` dans `globals.css`, attribut `data-allume`). Le bouton « Créer le montage » garde son dégradé permanent.
 
 ✅ Page Table : les tableaux d'éléments se font glisser au doigt (ou à la souris) vers la gauche et la droite pour voir toutes les colonnes ; le défilement vertical de la page et le zoom à deux doigts restent normaux.
 
