@@ -119,6 +119,9 @@
     { "code": "41sissonne", "name": "Sissonne", "archeId": "SOL-SAUTS-2PIEDS", "branch": "A", "palier": "P4", "sourcePage": 71, "verified": true },
     { "code": "69new", "name": "Saut biche 2 pieds", "archeId": "SOL-SAUTS-2PIEDS", "branch": "A", "palier": "P3", "sourcePage": 71, "verified": true },
     { "code": "28", "name": "Saut groupé (jambes serrées) appel des 2 pieds", "archeId": "SOL-SAUTS-2PIEDS", "branch": "B", "palier": "P2", "sourcePage": 71, "verified": true },
+    { "code": "38", "name": "Saut groupé avec 1/2 tour (180°) appel des 2 pieds", "archeId": "SOL-SAUTS-2PIEDS", "branch": "B", "palier": "P3", "rotationDeg": 180, "sourcePage": 71, "verified": true },
+    { "code": "58saut", "name": "Saut groupé avec 1 tour (360°) appel des 2 pieds", "archeId": "SOL-SAUTS-2PIEDS", "branch": "B", "palier": "P4", "rotationDeg": 360, "sourcePage": 71, "verified": true },
+    { "code": "122saut", "name": "Saut extension 1/2 tour", "archeId": "SOL-SAUTS-2PIEDS", "branch": "A", "palier": "P3", "rotationDeg": 180, "sourcePage": 71, "verified": true },
     { "code": "37saut", "name": "Saut antéro-postérieur à 180° appel et réception des 2 pieds", "archeId": "SOL-SAUTS-2PIEDS", "branch": "A", "palier": "P3", "rotationDeg": 180, "sourcePage": 71, "verified": true },
     { "code": "49saut", "name": "Saut antéro-postérieur à 180° avec 1/2 tour", "archeId": "SOL-SAUTS-2PIEDS", "branch": "A", "palier": "P4", "rotationDeg": 180, "sourcePage": 71, "verified": true },
     { "code": "69saut", "name": "Saut antéro-postérieur à 180° avec 1/1 tour", "archeId": "SOL-SAUTS-2PIEDS", "branch": "A", "palier": "P5", "rotationDeg": 360, "sourcePage": 71, "verified": true },
@@ -135,6 +138,8 @@
     { "code": "66saut", "name": "Saut groupé avec 1 tour 1/2 (540°)", "archeId": "SOL-SAUTS-2PIEDS", "branch": "B", "palier": "P5", "rotationDeg": 540, "sourcePage": 71, "verified": true },
     { "code": "29cabriole", "name": "Cabriole. Saut appel 1 pied et réception même pied en écartant la jambe libre", "archeId": "SOL-SAUTS-1PIED", "branch": null, "palier": "BASE", "sourcePage": 72, "verified": true },
     { "code": "27chat", "name": "Saut de chat en avant", "archeId": "SOL-SAUTS-1PIED", "branch": "A", "palier": "P2", "sourcePage": 72, "verified": true },
+    { "code": "35", "name": "Saut de cosaque appel d'1 pied. Saut groupé 1 jambe tendue à l'horizontale en avant appel d'1 pied", "archeId": "SOL-SAUTS-1PIED", "branch": "A", "palier": "P2", "sourcePage": 72, "verified": true },
+    { "code": "73new", "name": "Saut ciseau demi", "archeId": "SOL-SAUTS-1PIED", "branch": "B", "palier": "P4", "rotationDeg": 180, "sourcePage": 72, "verified": true },
     { "code": "32cabriole", "name": "Cabriole avec demi-tour (jambes tendues et retour à l'arabesque)", "archeId": "SOL-SAUTS-1PIED", "branch": "A", "palier": "P2", "rotationDeg": 180, "sourcePage": 72, "verified": true },
     { "code": "36chat", "name": "Saut de chat en avant avec 1/2 tour (180°)", "archeId": "SOL-SAUTS-1PIED", "branch": "B", "palier": "P3", "rotationDeg": 180, "sourcePage": 72, "verified": true },
     { "code": "128biche", "name": "Saut de biche", "archeId": "SOL-SAUTS-1PIED", "branch": "A", "palier": "P3", "sourcePage": 72, "verified": true },
@@ -152,6 +157,6 @@
     { "code": "70enjambe", "name": "Saut changement de jambes pied/tête. Saut enjambé avec changement de jambes au saut cambré", "archeId": "SOL-SAUTS-1PIED", "branch": "B", "palier": "P6", "sourcePage": 72, "verified": true },
     { "code": "72enjambe", "name": "Saut avec changement de jambes 1 tour", "archeId": "SOL-SAUTS-1PIED", "branch": "B", "palier": "P7", "rotationDeg": 360, "sourcePage": 72, "verified": true },
     { "code": "71assemble", "name": "Assemblé", "archeId": "SOL-SAUTS-1PIED", "branch": null, "palier": "PREREQUIS", "sourcePage": 72, "verified": true },
-    { "code": "33ciseaux", "name": "Saut ciseaux en avant avec les jambes tendues", "archeId": "SOL-SAUTS-1PIED", "branch": null, "palier": "PREREQUIS", "sourcePage": 72, "verified": true }
+    { "code": "33ciseaux", "name": "Saut ciseaux en avant avec les jambes tendues", "archeId": "SOL-SAUTS-1PIED", "branch": null, "palier": "NOMADE", "sourcePage": 72, "verified": true }
   ]
 }
