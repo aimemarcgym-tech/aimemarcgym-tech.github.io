@@ -91,6 +91,7 @@
     { "code": "153+-26", "name": "Souplesse arrière. Renversement arrière sans envol retour libre (variante)", "archeId": "POUTRE-ACROS2", "branch": "arriere", "palier": "P4", "sourcePage": 60, "verified": true },
     { "code": "168-26", "name": "Flic-flac arrivée pieds décalés", "archeId": "POUTRE-ACROS2", "branch": "arriere", "palier": "P5", "sourcePage": 60, "verified": true },
     { "code": "166-26", "name": "Flic-flac. Renversement arrière avec envol départ libre arrivée 2 pieds serrés", "archeId": "POUTRE-ACROS2", "branch": "arriere", "palier": "P5", "sourcePage": 60, "verified": true },
+    { "code": "166+-26", "name": "Flic-flac. Renversement arrière avec envol départ libre arrivée 2 pieds serrés (variante)", "archeId": "POUTRE-ACROS2", "branch": "arriere", "palier": "P6", "sourcePage": 60, "verified": true },
     { "code": "168+-26", "name": "Flic-flac arrivée pieds décalés (variante)", "archeId": "POUTRE-ACROS2", "branch": "arriere", "palier": "P6", "sourcePage": 60, "verified": true },
     { "code": "175-26", "name": "Flic-flac avec 1/2 de tour en passant par l'ATR et renversement avant (Onodi)", "archeId": "POUTRE-ACROS2", "branch": "arriere", "palier": "P7", "rotationDeg": 180, "sourcePage": 60, "verified": true },
     { "code": "160", "name": "Tic-Tac. Renversement avant arrière sans envol", "archeId": "POUTRE-ACROS2", "branch": "avant", "palier": "P4", "sourcePage": 60, "verified": true },
