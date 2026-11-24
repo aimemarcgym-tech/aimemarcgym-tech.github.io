@@ -38,7 +38,7 @@
       "valorisations": {
         "choisir": 4, "parmi": 4,
         "options": [
-          { "id": "BA-A2-V1", "label": "Enchaînement de 2 balancers (av. et arr) aide possible au démarrage du bal. av. (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-A2-V1", "label": "Enchaînement de 2 balancés (av. et arr) aide possible au démarrage du bal. av. (hors sortie)", "pondere": true, "points": 3 },
           { "id": "BA-A2-V2", "label": "1 sauter à l'appui", "pondere": false, "points": 2 },
           { "id": "BA-A2-V3", "label": "1 élément de l'arche des élans", "pondere": false, "points": 2 },
           { "id": "BA-A2-V4", "label": "1 pose de pieds à la station debout puis sortie en saut droit vers l'avant", "pondere": false, "points": 2 }
@@ -59,7 +59,7 @@
       "valorisations": {
         "choisir": 4, "parmi": 5,
         "options": [
-          { "id": "BA-B1-V1", "label": "Enchaînement de deux balancers (av et ar ou inversement x2) (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-B1-V1", "label": "Enchaînement de deux balancés (av et ar ou inversement x2) (hors sortie)", "pondere": true, "points": 3 },
           { "id": "BA-B1-V2", "label": "1 élément P2 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-B1-V3", "label": "1 prise d'élan tour d'appui arrière", "pondere": true, "points": 3 },
           { "id": "BA-B1-V4", "label": "1 changement de barre BI - BS", "pondere": false, "points": 2 },
@@ -82,10 +82,10 @@
       "valorisations": {
         "choisir": 4, "parmi": 5,
         "options": [
-          { "id": "BA-B2-V1", "label": "Enchaînement de deux balancers (av et ar ou inversement x2) (hors sortie)", "pondere": true, "points": 3 },
+          { "id": "BA-B2-V1", "label": "Enchaînement de deux balancés (av et ar ou inversement x2) (hors sortie)", "pondere": true, "points": 3 },
           { "id": "BA-B2-V2", "label": "1 élément P3 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-B2-V3", "label": "1 rotation P3 (min.)", "pondere": false, "points": 2 },
-          { "id": "BA-B2-V4", "label": "Bascule prise d'élan à l'horizontale", "pondere": true, "points": 3 },
+          { "id": "BA-B2-V4", "label": "Bascule prise d'élan à l'horizontale (min.)", "pondere": true, "points": 3 },
           { "id": "BA-B2-V5", "label": "1 sortie P3 (min.)", "pondere": false, "points": 2 }
         ]
       }
@@ -108,7 +108,7 @@
           { "id": "BA-B3-V1", "label": "1 élément en balancé av ou arr (hors sortie)", "pondere": true, "points": 3 },
           { "id": "BA-B3-V2", "label": "2 éléments P3 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-B3-V3", "label": "1 rotation P3 (min.)", "pondere": false, "points": 2 },
-          { "id": "BA-B3-V4", "label": "Bascule P4 prise d'élan au dessus de l'horizontale", "pondere": true, "points": 3 },
+          { "id": "BA-B3-V4", "label": "Bascule P4 (min.) prise d'élan au-dessus de l'horizontale (min.)", "pondere": true, "points": 3 },
           { "id": "BA-B3-V5", "label": "1 sortie P4 (min.)", "pondere": false, "points": 2 }
         ]
       }
@@ -148,7 +148,7 @@
         ]
       },
       "paliersAutorises": ["P2", "P3", "P4", "P5", "P6", "P7"],
-      "paliersValorisables": ["P4", "P5", "P6"],
+      "paliersValorisables": ["P4", "P5", "P6", "P7"],
       "valorisations": {
         "choisir": 4, "parmi": 6,
         "options": [
@@ -181,7 +181,7 @@
           { "id": "BA-C3-V3", "label": "1 élément P5 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-C3-V4", "label": "1 rotation P6 (min.)", "pondere": false, "points": 2 },
           { "id": "BA-C3-V5", "label": "1 ATR ou grand tour, avec rotation 180° (min.)", "pondere": true, "points": 3 },
-          { "id": "BA-C3-V6", "label": "1 sortie P5 (min.) amené d'un élément P5 (min.)", "pondere": false, "points": 2 }
+          { "id": "BA-C3-V6", "label": "1 sortie P5 (min.)", "pondere": false, "points": 2 }
         ]
       }
     }

@@ -113,8 +113,8 @@ export const BARRES_ASYM_CHECKS: Record<string, CheckSpec> = {
 
   "BA-C3-V3": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P5" },
   "BA-C3-V4": { type: "ELEMENT_AT_PALIER_MIN", palierMin: "P6", category: "ROTATIONS" },
-  // BA-C3-V6 "1 sortie P5 (min.) amené d'un élément P5 (min.)" : condition
-  // d'enchaînement non vérifiable automatiquement -> confirmation manuelle.
+  // BA-C3-V6 « 1 sortie P5 (min.) » : l'ancienne condition « amenée d'un élément P5 (min.) » a été
+  // retirée du programme d'octobre 2026 ; reste en confirmation manuelle (comme les autres valorisations).
 };
 
 // Poutre (GAF). Catégories d'arches : ATR_MAINTIEN, PIVOT, ACRO, SAUT_GYM,

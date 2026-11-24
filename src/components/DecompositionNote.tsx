@@ -182,7 +182,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
             {!saut && (
               <>
                 <LigneBarre evolutions={evolutions}>Tronc commun</LigneBarre>
-                <LigneTexte evolutions={evolutions} texte={(e) => `${e.troncCommun.arches} arches`} />
+                <LigneTexte evolutions={evolutions} texte={(e) => `${e.troncCommun.arches} arches (min.)`} />
                 <LigneTexte
                   evolutions={evolutions}
                   texte={(e) => `${e.troncCommun.elementsMin} à ${e.troncCommun.elementsMax} éléments`}

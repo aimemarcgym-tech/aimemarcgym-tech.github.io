@@ -524,14 +524,13 @@ export const EXEMPLES_BARRES: ExempleMouvement[] = [
         "51-26"
       ],
       "BA-C3-V6": [
-        "130-26",
         "166-26"
       ]
     },
     "remarques": [
       "Venir à l'appui (bascules), élans à l'ATR, rotations, grand tour arrière, puis la sortie (double salto arrière) en dernier.",
-      "« 1 lâcher P5 minimum » est validée par l'élément avec envol arrivée à la suspension (P5), « 1 élément P5 minimum » par la bascule faciale (P5), « 1 sortie P5 minimum amenée d'un élément P5 minimum » par le grand tour arrière puis le double salto : chaque valorisation a ses propres éléments (FAQ #214, #45). « 1 ATR ou grand tour avec rotation 180° » est confirmée à la main.",
-      "« 1 élément en balancé P5 minimum » et « 1 rotation P6 minimum » ne sont pas confirmées : le grand tour arrière, seul balancé du mouvement, sert déjà d'élément d'amenée à la sortie. Les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
+      "« 1 lâcher P5 minimum » est validée par l'élément avec envol arrivée à la suspension (P5), « 1 élément P5 minimum » par la bascule faciale (P5), « 1 sortie P5 minimum » par le double salto (depuis le programme d'octobre 2026, la sortie n'a plus besoin d'être amenée d'un élément P5) : chaque valorisation a ses propres éléments (FAQ #214, #45). « 1 ATR ou grand tour avec rotation 180° » est confirmée à la main.",
+      "« 1 élément en balancé P5 minimum » et « 1 rotation P6 minimum » ne sont pas retenues ici : les quatre autres valorisations suffisent pour la note maximale (4 retenues sur 6)."
     ]
   }
 ];

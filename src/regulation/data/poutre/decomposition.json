@@ -210,7 +210,7 @@
           },
           {
             "id": "P-B2-TC-3",
-            "label": "1 élément P3"
+            "label": "1 élément P3 (min.)"
           }
         ]
       },
@@ -282,7 +282,7 @@
           },
           {
             "id": "P-B3-TC-3",
-            "label": "1 élément P4"
+            "label": "1 élément P4 (min.)"
           }
         ]
       },
@@ -354,7 +354,7 @@
           },
           {
             "id": "P-C1-TC-3",
-            "label": "1 élément P5"
+            "label": "1 élément P5 (min.)"
           }
         ]
       },
@@ -434,7 +434,7 @@
           },
           {
             "id": "P-C2-TC-3",
-            "label": "1 élément P6"
+            "label": "1 élément P6 (min.)"
           }
         ]
       },
@@ -548,7 +548,7 @@
           },
           {
             "id": "P-C3-V3",
-            "label": "1 LA 2 éléments dont 1 salto sur poutre",
+            "label": "1 LA de 2 éléments dont 1 salto sur poutre",
             "pondere": true,
             "points": 3
           },
