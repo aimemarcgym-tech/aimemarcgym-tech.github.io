@@ -18,6 +18,7 @@
     { "code": "80", "name": "Double salto avant avec demi-tour ou +", "archeId": "SOL-ACROS1", "branch": "avant", "palier": "P7", "sourcePage": 65, "verified": true },
     { "code": "99", "name": "Départ libre, roulade arrière avec appui des mains, arrivée sur les pieds jambes fléchies", "archeId": "SOL-ACROS1", "branch": "arriere", "palier": "P2", "sourcePage": 65, "verified": true },
     { "code": "82new", "name": "Roulade arrière arrivée appuis facial", "archeId": "SOL-ACROS1", "branch": "arriere", "palier": "P3", "sourcePage": 65, "verified": true },
+    { "code": "104", "name": "Roulade arrière jambes tendues et serrées", "archeId": "SOL-ACROS1", "branch": "arriere", "palier": "P3", "sourcePage": 65, "verified": true },
     { "code": "106", "name": "Départ libre, roulade arrière à l'ATR bras tendus, retour libre", "archeId": "SOL-ACROS1", "branch": "arriere", "palier": "P4", "sourcePage": 65, "verified": true },
     { "code": "109", "name": "Départ libre, roulade arrière à l'ATR bras tendus 1/2 tour (180°), retour libre", "archeId": "SOL-ACROS1", "branch": "arriere", "palier": "P5", "rotationDeg": 180, "sourcePage": 65, "verified": true },
     { "code": "112", "name": "Départ libre, roulade arrière à l'ATR bras tendus et 1 tour (360°), retour libre", "archeId": "SOL-ACROS1", "branch": "arriere", "palier": "P6", "rotationDeg": 360, "sourcePage": 65, "verified": true },
