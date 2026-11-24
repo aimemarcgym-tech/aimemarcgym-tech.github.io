@@ -24,7 +24,7 @@
     "musique": "Accompagnement musical obligatoire (orchestre sans chant, piano ou autre instrument). Vocalises sans mot autorisées. Chaque gymnaste doit avoir son enregistrement sur clé USB.",
     "jugementDebut": "Premier mouvement gymnique ou acrobatique.",
     "jugementFin": "Dernier mouvement gymnique ou acrobatique (l'enchaînement doit se terminer avec la musique).",
-    "chuteSalti": "Chute sur les salti : reconnu si réception sur les pieds d'abord, sinon non reconnu."
+    "chuteSalti": "Chute sur les salti et les sorties : reconnu si réception sur les pieds d'abord, sinon non reconnu."
   },
   "regleGenerales": [
     "La valorisation est validée même avec une chute, mais ne peut jamais contenir d'éléments nomades.",

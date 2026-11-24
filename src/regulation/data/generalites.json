@@ -5,7 +5,7 @@
       "portee": "MIXTE",
       "theme": "Fautes d'angles",
       "detail": [
-        "Voir le document technique (barème des pénalisations d'angles par élément)."
+        "Voir les pages « Angles » du programme technique (barème des pénalisations d'angles par élément)."
       ]
     },
     {
@@ -31,7 +31,15 @@
       "portee": "MIXTE",
       "theme": "Reconnaissance d'un élément",
       "detail": [
-        "Un élément non terminé sur les pieds et/ou sur l'agrès n'est pas reconnu (+ 1 pt de pénalité pour chute)."
+        "Un élément non terminé sur les pieds et/ou sur l'agrès n'est pas reconnu (+ 1 pt de pénalité pour chute).",
+        "Chute sur les salti et les sorties : avec réception sur les pieds d'abord, la difficulté est reconnue ; sans réception sur les pieds d'abord, la difficulté n'est pas reconnue."
+      ]
+    },
+    {
+      "portee": "MIXTE",
+      "theme": "Reprise d'enchaînement",
+      "detail": [
+        "En cas de chute, le gymnaste a 30'' pour reprendre son enchaînement. Au-delà de 30'', l'enchaînement est considéré comme terminé."
       ]
     },
     {
@@ -57,15 +65,15 @@
     },
     {
       "portee": "GAF",
-      "theme": "Enchaînement de balancers (Barres asymétriques)",
+      "theme": "Enchaînement de balancés (Barres asymétriques)",
       "detail": [
-        "En A1 : balancer avant / balancer arrière / balancer avant / sortie sur balancer arrière.",
-        "En B1/B2 (enchaînement de balancers x2) : balancer avant / balancer arrière / balancer avant / balancer arrière, et sortie échappé ou sur balancer arrière."
+        "En A2 : balancé avant / balancé arrière / balancé avant / sortie sur balancé arrière.",
+        "En B1/B2 (enchaînement de balancés x2) : balancé avant / balancé arrière / balancé avant / balancé arrière, et sortie échappé ou sur balancé arrière."
       ]
     },
     {
       "portee": "GAF",
-      "theme": "Sortie sur balancer arrière",
+      "theme": "Sortie sur balancé arrière",
       "detail": [
         "Elle n'est pas codifiée : pas de pénalités d'amplitude, mais la position du corps et les fautes de tenue sont pénalisées."
       ]
@@ -83,7 +91,7 @@
   "lexique": [
     {
       "acronym": "Tronc commun",
-      "definition": "Base commune de chaque niveau."
+      "definition": "Base commune de chaque niveau. Un seul élément peut valider plusieurs critères du tronc commun."
     },
     {
       "acronym": "Arche",
@@ -98,12 +106,20 @@
       "definition": "Base technique initiale à l'évolution de l'arche."
     },
     {
+      "acronym": "Paliers autorisés",
+      "definition": "Niveau des éléments qui sont pris en compte dans le tronc commun."
+    },
+    {
+      "acronym": "Paliers valorisés (valorisables)",
+      "definition": "Niveau des éléments qui peuvent valider une valorisation."
+    },
+    {
       "acronym": "Nomades",
-      "definition": "Éléments non évolutifs (éléments isolés)."
+      "definition": "Éléments non évolutifs (éléments isolés). Un nomade peut compter dans le tronc commun mais pas dans une valorisation."
     },
     {
       "acronym": "Valorisation",
-      "definition": "Orientation technique de l'évolution gymnique et acrobatique. Il y a 2 niveaux de valorisations : principales (★) et secondaires."
+      "definition": "Orientation technique de l'évolution gymnique et acrobatique. Il y a 2 niveaux de valorisations : principales (★) et secondaires. Un élément ne peut remplir qu'une seule valorisation."
     },
     {
       "acronym": "LA — Liaison Acrobatique",
@@ -130,8 +146,16 @@
       "definition": "Sauts, pivots et maintiens (le maintien n'est pas admis dans les séries LM et LG)."
     },
     {
+      "acronym": "Élément",
+      "definition": "Un élément est identifié par un numéro. Un élément répété ne peut remplir qu'une seule valorisation et n'est comptabilisé qu'une seule fois (à l'exception des éléments acrobatiques avec envol au sol)."
+    },
+    {
+      "acronym": "Acro",
+      "definition": "En poutre et au sol, sont considérés comme acros les éléments qui se trouvent dans les arches ACROS 1 et ACROS 2."
+    },
+    {
       "acronym": "Lâcher",
-      "definition": "Élément avec envol avec saisie de la barre avec les mains simultanées ou alternatives (entrée poisson, retrait schoushounova, retrait, contre-mouvement, shapochnikova et salto pak, gienger, jaeger, voronin)."
+      "definition": "Élément avec envol avec saisie de la barre avec les mains simultanées ou alternatives (entrée poisson, retrait schoushounova, retrait, contre-mouvement, shapochnikova et salto pak, gienger, jaeger, voronin, coupé écart)."
     },
     {
       "acronym": "Reprise d'élan",
@@ -139,15 +163,19 @@
     },
     {
       "acronym": "Balancé intermédiaire",
-      "definition": "Balancé répété à la suite qui n'est pas nécessaire à l'élément suivant, sauf si la valorisation le demande. Une seule pénalité d'élan à vide est comptée pour balancer avant-arrière."
+      "definition": "Balancé répété à la suite qui n'est pas nécessaire à l'élément suivant, sauf si la valorisation le demande. Une seule pénalité d'élan à vide est comptée pour balancé avant-arrière."
     },
     {
       "acronym": "Élément +",
-      "definition": "Élément acro enchaîné directement d'un autre élément acro au sol, ou gymnique pour les LM en poutre. L'élément « + » et l'élément normal sont deux éléments différents."
+      "definition": "Un élément prend une valeur + (+ à côté du numéro de l'élément dans l'arche) : au sol, s'il est un élément acro enchaîné directement d'un autre élément acro avec envol des paliers autorisés ; en poutre, s'il est un élément acro enchaîné directement d'un autre élément acro ou gymnique des paliers autorisés. L'élément « + » et l'élément normal sont deux éléments différents."
     },
     {
       "acronym": "Changement de barre",
       "definition": "Passage d'une barre à l'autre entre 2 éléments des paliers autorisés."
+    },
+    {
+      "acronym": "Enchaînement en 2 parties minimum",
+      "definition": "Enchaînement composé d'une partie en BI (barre inférieure) et d'une partie en BS (barre supérieure), ou inversement, avec une interruption entre les deux barres. Le changement de barre avec un élément codifié est interdit."
     },
     {
       "acronym": "Élan à vide",
@@ -173,7 +201,8 @@
         "fin": "Dernier mouvement gymnique ou acrobatique (l'enchaînement doit se terminer avec la musique)."
       },
       "rappels": [
-        "Chute sur les salti : reconnue si réception sur les pieds d'abord, sinon non reconnue.",
+        "Chute sur les salti et les sorties : reconnue si réception sur les pieds d'abord, sinon non reconnue.",
+        "Élément « + » : un élément prend une valeur + s'il est enchaîné directement d'un autre élément acro avec envol des paliers autorisés.",
         "Chaque gymnaste doit avoir son enregistrement musical sur clé USB."
       ],
       "tempsMax": [
@@ -216,7 +245,8 @@
         "Chute sur les éléments avec envol : reconnu si saisie de la barre d'une ou des deux mains (prise brève) ; non reconnu si la barre est seulement frôlée sans saisie.",
         "Entraîneurs : présence autorisée près de l'agrès.",
         "Entraîneurs : interdiction de modifier l'écartement des barres en cours d'enchaînement ou après une chute (sinon arrêt du jugement).",
-        "Évolution A : enchaînement autorisé en 2 ou 3 parties ; changement de barres codifié interdit. Évolution B : enchaînement autorisé en 2 parties maximum ; en B1, 2 parties max uniquement si l'élément balancé de bascule est présenté.",
+        "Enchaînement en 2 ou 3 parties : une partie en BI (barre inférieure) et une partie en BS (barre supérieure), ou inversement, avec une interruption entre les deux barres. Le changement de barre avec un élément codifié est interdit.",
+        "Évolution A : enchaînement autorisé en 2 ou 3 parties. Évolution B1 : enchaînement autorisé en 2 parties maximum (uniquement si présentation de l'élément balancé de bascule).",
         "Filières jeunes : pour l'entrée « 1 bis new », possibilité d'ajouter un bloc (les épaules ne doivent pas dépasser la barre inférieure)."
       ]
     },
@@ -237,7 +267,9 @@
       "rappels": [
         "Chute avec réception d'un ou deux pieds sur la poutre : difficulté reconnue.",
         "Chute sans réception d'un ou deux pieds sur la poutre : difficulté non reconnue.",
-        "Entraîneurs : non autorisés à rester près de l'agrès."
+        "Élément « + » : un élément prend une valeur + (+ à côté du numéro de l'élément dans l'arche) s'il est un élément acro enchaîné directement d'un autre élément acro ou gymnique des paliers autorisés.",
+        "Entraîneurs : non autorisés à rester près de l'agrès.",
+        "La poutre en mousse est à réaliser en début ou en fin de mouvement, et ne fait pas partie du temps imparti."
       ],
       "tempsMax": [
         {
@@ -333,7 +365,7 @@
       "theme": "Sauts gymniques : exigences techniques",
       "detail": [
         "Saut groupé : angle des hanches de 45° par rapport à la verticale.",
-        "Saut de chat / ciseaux : élévation alternative des genoux, genoux au-dessus de l'horizontale. De 1 à 15° au-dessus de l'horizontale −0,1 ; genou à l'horizontale −0,3 ; de 1 à 15° sous l'horizontale −0,5 ; à partir de 16° sous l'horizontale NR.",
+        "Saut de chat / ciseaux : élévation alternative des genoux, genoux au-dessus de l'horizontale. Aucune pénalité au-delà de 15° au-dessus de l'horizontale ; de 0 à 15° au-dessus de l'horizontale −0,1 ; de 1 à 15° sous l'horizontale −0,3 ; de 15 à 30° sous l'horizontale −0,5 ; à partir de 31° sous l'horizontale NR.",
         "Saut cosaque : angle des hanches inférieur à 90°, jambe tendue à l'horizontale. De 1 à 15° −0,1 ; de 16 à 30° −0,3 ; de 31 à 45° −0,5 ; 46° et plus NR.",
         "Saut changement de jambe / changement demi / gogean : battement de la 1re jambe à 45° minimum, jambes tendues, écart de jambes à 180°. Déviation du bassin par rapport à l'horizontale : de 1 à 15° −0,1 ; de 16 à 30° −0,3 ; de 31 à 45° −0,5 ; 46° et plus NR.",
         "Saut écart antéropostérieur : écart de jambes à 180°, jambes tendues."
