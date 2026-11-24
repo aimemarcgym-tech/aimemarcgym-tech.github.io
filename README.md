@@ -54,6 +54,8 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
+✅ Sol, arche « Cercles » (PDF « GAM-GAF Arches SOL », décidé avec l'utilisateur le 24/11) : la numérotation du PDF (1, 24, 26, 34…) diffère de celle de l'appli (131 à 163) ; les codes existants sont conservés pour ne pas casser les mouvements enregistrés. 157 « avec 1/1 pivot » passe de P6 à P5 ; les éléments fusionnés sont scindés comme dans le PDF : 139 devient « serrées 540° » (P2) et s'ajoutent 26 (écartées 360°, P2), 36 (écartées 540° ou +, P3) et 34 (serrées 720° ou +, P3) ; 154 devient « serrées à l'ATR » et s'ajoute 56 (écartées à l'ATR, P5) ; ajout du pré-requis 3. Les nouveaux éléments ont pour code le numéro du PDF suivi de « cercle ».
+
 ✅ Sol, arches « Sauts gymniques » (PDF « GAM-GAF Arches SOL », décidé avec l'utilisateur le 24/11) : ajout, appel 2 pieds, de 38 (groupé 1/2 tour, P3), 58 (groupé 1 tour, P4) et 122 (extension 1/2 tour, P3) ; appel 1 pied, de 35 (cosaque appel d'1 pied, P2) et 73 new (ciseau demi, P4) ; le 33 « Saut ciseaux en avant » passe de pré-requis à nomade, comme dans le PDF. Les autres éléments concordaient.
 
 ✅ Sol, arche « Acros 1 » (PDF « GAM-GAF Arches SOL », décidé avec l'utilisateur le 24/11) : ajout de l'élément 104 « Roulade arrière jambes tendues et serrées », branche arrière, P3 (il manquait ; les 34 autres éléments concordent avec le PDF).
