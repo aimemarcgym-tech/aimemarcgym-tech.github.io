@@ -19,6 +19,7 @@ const PALIER_LABEL: Record<string, string> = {
   PR1: "PR1",
   PR2: "PR2",
   PR3: "PR3",
+  PR4: "PR4",
   BASE: "Base",
   NOMADE: "Nomade",
 };

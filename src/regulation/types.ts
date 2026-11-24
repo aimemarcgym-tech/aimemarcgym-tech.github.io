@@ -9,6 +9,7 @@ export type Palier =
   | "PR1"
   | "PR2"
   | "PR3"
+  | "PR4"
   | "BASE"
   | "P1"
   | "P2"

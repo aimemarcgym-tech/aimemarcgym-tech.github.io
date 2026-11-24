@@ -25,7 +25,7 @@ function palierLabel(p: Palier) {
 // Prérequis, Base et Nomade regroupés en tête de chaque tableau d'arche,
 // avant les paliers gradués P1-P7.
 function topGroupRank(p: Palier): number {
-  if (p === "PREREQUIS" || p === "PR1" || p === "PR2" || p === "PR3") return 0;
+  if (p === "PREREQUIS" || p === "PR1" || p === "PR2" || p === "PR3" || p === "PR4") return 0;
   if (p === "BASE") return 1;
   if (p === "NOMADE") return 2;
   return 3;

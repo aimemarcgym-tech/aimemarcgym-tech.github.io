@@ -19,6 +19,7 @@ const PALIER_LABEL: Record<string, string> = {
   PR1: "PR1",
   PR2: "PR2",
   PR3: "PR3",
+  PR4: "PR4",
   BASE: "Base",
   NOMADE: "Nomade",
 };
@@ -255,7 +256,7 @@ export default function SautBuilder({
       list.push(el);
       groups.set(key, list);
     }
-    const isPrerequis = (p: string) => p === "PREREQUIS" || p === "PR1" || p === "PR2" || p === "PR3";
+    const isPrerequis = (p: string) => p === "PREREQUIS" || p === "PR1" || p === "PR2" || p === "PR3" || p === "PR4";
     for (const list of groups.values()) {
       list.sort((a, b) => Number(isPrerequis(b.palier)) - Number(isPrerequis(a.palier)));
     }

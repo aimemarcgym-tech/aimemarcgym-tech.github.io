@@ -67,11 +67,11 @@ function LigneTexte({ evolutions, texte }: { evolutions: Evolution[]; texte: (e:
   );
 }
 
-function GrillePaliers({ actifs, couleur }: { actifs: string[]; couleur: string }) {
+function GrillePaliers({ actifs, couleur, grille = PALIERS_GRILLE }: { actifs: string[]; couleur: string; grille?: readonly string[] }) {
   const set = new Set(actifs.map(norm));
   return (
     <div className="grid gap-px p-1" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
-      {PALIERS_GRILLE.map((p) => {
+      {grille.map((p) => {
         const ok = set.has(p);
         return (
           <span
@@ -99,34 +99,39 @@ function libelleValo(label: string, pondere: boolean) {
   return pondere ? `(*) ${label}` : label;
 }
 
-const PILE_DE_TAPIS: Record<string, { pr: string; texte: string; statut: string }[]> = {
-  A1: [
-    { pr: "PR1", texte: "Saut droit", statut: "AUTORISÉ" },
-    { pr: "PR2", texte: "Lune plat dos", statut: "VALORISABLE" },
-  ],
-  A2: [
-    { pr: "PR2", texte: "Lune plat dos", statut: "AUTORISÉ" },
-    { pr: "PR2", texte: "Rondade plat ventre", statut: "VALORISABLE" },
-  ],
-  B1: [
-    { pr: "PR2", texte: "Rondade plat ventre", statut: "VALORISABLE" },
-    { pr: "PR3", texte: "Rondade debout ou sur le tremplin", statut: "VALORISABLE" },
-  ],
-  B2: [
-    { pr: "PR2", texte: "Rondade plat ventre", statut: "AUTORISÉ" },
-    { pr: "PR3", texte: "Rondade debout ou sur le tremplin", statut: "VALORISABLE" },
-  ],
+// Grille des paliers du Saut : A1 à B2 listent PR1 à PR4 puis P1 à P4 ; B3 à C3 gardent « PR » puis P1 à P7.
+const GRILLE_SAUT_PR = ["PR1", "PR2", "PR3", "PR4", "P1", "P2", "P3", "P4"];
+const estPrSaut = (p: string) => /^PR[1-4]$/.test(p);
+
+// Définition des sauts en PR (pile de tapis), d'après les pages d'arches et la page « Saut » du programme.
+const DEFINITION_PR: Record<string, string> = {
+  PR1: "Saut droit",
+  PR2: "Lune plat dos",
+  PR3: "Rondade arrivée plat ventre",
+  PR4: "Rondade arrivée debout sur tapis de 80 cm, ou rondade sur tremplin et saut extension",
 };
+
+// Détail des PR d'une évolution, tiré des données (paliers autorisés et valorisables).
+function detailsPr(e: Evolution): { pr: string; texte: string; statut: string }[] {
+  return e.paliersAutorises
+    .filter(estPrSaut)
+    .map((pr) => ({
+      pr,
+      texte: DEFINITION_PR[pr],
+      statut: e.paliersValorisables.includes(pr) ? "VALORISABLE" : "AUTORISÉ",
+    }));
+}
 
 const VALEUR_SAUTS: { palier: string; valeur: number }[] = [
   { palier: "PR1", valeur: 9 },
   { palier: "PR2", valeur: 10 },
-  { palier: "PR3", valeur: 11 },
+  { palier: "PR3", valeur: 10 },
+  { palier: "PR4", valeur: 11 },
   { palier: "P1", valeur: 12 },
   { palier: "P2", valeur: 12 },
   { palier: "P3", valeur: 13 },
   { palier: "P4", valeur: 13 },
-  { palier: "P5", valeur: 14 },
+  { palier: "P5", valeur: 13 },
   { palier: "P6", valeur: 14 },
   { palier: "P7", valeur: 14 },
   { palier: "Nomades", valeur: 12 },
@@ -147,6 +152,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
   const nbLignes = Math.max(...parEvolution.map((x) => x.options.length));
   const nbTcLignes = Math.max(0, ...evolutions.map((e) => e.troncCommun.exigences.length));
   const mousseUtile = parEvolution.some((x) => x.mousse);
+  const pileDeTapis = evolutions.map((e) => ({ e, lignes: detailsPr(e) })).filter((x) => x.lignes.length > 0);
 
   return (
     <div className="space-y-4">
@@ -191,7 +197,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
             <tr>
               {evolutions.map((e) => (
                 <td key={e.id} className="border-r border-border-subtle last:border-r-0">
-                  <GrillePaliers actifs={e.paliersAutorises} couleur={couleurDe(e.id)} />
+                  <GrillePaliers actifs={e.paliersAutorises} couleur={couleurDe(e.id)} grille={saut && e.paliersAutorises.some(estPrSaut) ? GRILLE_SAUT_PR : PALIERS_GRILLE} />
                 </td>
               ))}
             </tr>
@@ -199,7 +205,7 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
             <tr>
               {evolutions.map((e) => (
                 <td key={e.id} className="border-r border-border-subtle last:border-r-0">
-                  <GrillePaliers actifs={e.paliersValorisables} couleur={couleurDe(e.id)} />
+                  <GrillePaliers actifs={e.paliersValorisables} couleur={couleurDe(e.id)} grille={saut && e.paliersAutorises.some(estPrSaut) ? GRILLE_SAUT_PR : PALIERS_GRILLE} />
                 </td>
               ))}
             </tr>
@@ -245,28 +251,31 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
 
       <p className="text-[13px] text-muted">
         (*) Valorisation pondérée. Les cases hachurées ne sont pas concernées par l&apos;évolution. Source : programme technique
-        GAF 2026-2030, « Décomposition de la note ».
+        UFOLEP du 20 octobre 2026, « Décomposition de la note ».
       </p>
 
       {saut && (
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-border-subtle p-4">
-            <h2 className="mb-2 text-[15px] font-semibold text-foreground">Pile de tapis (en filière jeune uniquement)</h2>
+            <h2 className="mb-1 text-[15px] font-semibold text-foreground">Sauts en PR (avec pile de tapis)</h2>
+            <p className="mb-2 text-[13px] font-semibold text-danger">
+              Autorisés seulement en filière régionale, jeunes et groupe.
+            </p>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[420px] border-collapse text-[13px]">
                 <thead>
                   <tr className="text-left text-muted">
-                    {Object.keys(PILE_DE_TAPIS).map((id) => (
-                      <th key={id} className="px-2 py-1 font-semibold" style={{ color: couleurDe(id) }}>
-                        {id} — détails des PR
+                    {pileDeTapis.map(({ e }) => (
+                      <th key={e.id} className="px-2 py-1 font-semibold" style={{ color: couleurDe(e.id) }}>
+                        {e.id} — détails des PR
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="align-top">
-                    {Object.entries(PILE_DE_TAPIS).map(([id, lignes]) => (
-                      <td key={id} className="space-y-1.5 border-t border-border-subtle px-2 py-2">
+                    {pileDeTapis.map(({ e, lignes }) => (
+                      <td key={e.id} className="space-y-1.5 border-t border-border-subtle px-2 py-2">
                         {lignes.map((l, i) => (
                           <div key={i} className="text-foreground">
                             <span className="font-semibold">{l.pr}</span> = {l.texte}{" "}
@@ -307,8 +316,20 @@ export default function DecompositionNote({ apparatus }: { apparatus: string }) 
                 </tbody>
               </table>
             </div>
+            <h3 className="mb-1 mt-4 text-[15px] font-semibold text-foreground">Généralités</h3>
+            <ul className="list-disc space-y-1 pl-5 text-[13px] text-muted">
+              <li>Chaque gymnaste peut présenter 2 sauts (identiques ou différents). La meilleure note est prise en considération.</li>
+              <li>Le saut doit être annoncé avant d&apos;être exécuté (pas de pénalité en cas d&apos;absence d&apos;annonce).</li>
+              <li>Pour les sauts avec rondade sur tremplin, la protection tremplin est obligatoire (autrement saut non reconnu).</li>
+              <li>Seuls les sauts en Tsukahara peuvent avoir une pose de mains alternative.</li>
+              <li>
+                Pour les sauts avec salto et rotation longitudinale, celle-ci peut être réalisée n&apos;importe quand (ex. : lune salto
+                avant demi = lune demi salto arrière).
+              </li>
+            </ul>
             <h3 className="mb-1 mt-4 text-[15px] font-semibold text-foreground">Précisions</h3>
             <ul className="list-disc space-y-1 pl-5 text-[13px] text-muted">
+              <li>Chaque gymnaste peut valider une des valorisations au choix dans son niveau et obtenir 2 points supplémentaires.</li>
               <li>
                 Je note chaque saut, puis j&apos;applique les fautes, je calcule la note finale PUIS j&apos;ajoute la valorisation
                 sur la meilleure des deux notes.

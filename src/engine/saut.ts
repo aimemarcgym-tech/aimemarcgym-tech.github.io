@@ -47,11 +47,14 @@ export interface SautDiagnostic {
   suggestions: SautSuggestion[];
 }
 
-// PR1/PR2/PR3 (paliers prérequis propres au barème de valeur des sauts) sont
-// tous traités comme "PREREQUIS" du point de vue des paliers autorisés par
-// évolution (qui utilisent la catégorie générique PREREQUIS/PR, commune aux
-// autres agrès).
-const PREREQUIS_TIER: Palier[] = ["PREREQUIS", "PR1", "PR2", "PR3"];
+// PR1 à PR4 (sauts « prérequis » sur pile de tapis, filières jeunes) sont des
+// paliers à part entière : le programme d'octobre 2026 liste, pour chaque
+// évolution, exactement ceux qui sont autorisés et valorisables (ex. A1 :
+// PR2 valorisable ; A2 : PR3 ; B1 : PR3 et PR4 ; B2 : PR4).
+// Base et Nomade sont toujours autorisés.
+function palierAutorise(palier: Palier, paliersAutorises: Palier[]): boolean {
+  return palier === "BASE" || palier === "NOMADE" || paliersAutorises.includes(palier);
+}
 
 export function analyzeSaut(
   evolutionId: string,
@@ -64,10 +67,7 @@ export function analyzeSaut(
   }
   const sautsRequired = evolution.troncCommun.elementsMax;
 
-  const estAutorise = (palier: Palier) =>
-    palier === "BASE" ||
-    palier === "NOMADE" ||
-    evolution.paliersAutorises.some((p) => (PREREQUIS_TIER.includes(palier) ? PREREQUIS_TIER.includes(p) : p === palier));
+  const estAutorise = (palier: Palier) => palierAutorise(palier, evolution.paliersAutorises);
 
   const sauts: SautResult[] = elements
     .map((e) => getElement("SAUT", e.code))
@@ -164,13 +164,7 @@ function computeSautSuggestions(evolutionId: string, sauts: SautResult[], sautsR
 
   const suggestions: SautSuggestion[] = [];
   for (const el of candidates) {
-    const autorise =
-      el.palier === "BASE" ||
-      el.palier === "NOMADE" ||
-      evolution.paliersAutorises.some((p) =>
-        PREREQUIS_TIER.includes(el.palier) ? PREREQUIS_TIER.includes(p) : p === el.palier
-      );
-    if (!autorise) continue;
+    if (!palierAutorise(el.palier, evolution.paliersAutorises)) continue;
 
     const reasons: string[] = [`Complète le tronc commun (${sauts.length + 1}/${sautsRequired} saut(s))`];
     if (sautsRequired >= 2 && !chosenArches.has(el.archeId)) {

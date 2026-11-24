@@ -1,6 +1,6 @@
 {
   "apparatus": "SAUT",
-  "source": "Sept26_Decompo note 11 sept 2026 AGRES.pdf (page Saut)",
+  "source": "Programme Technique UFOLEP (20 oct. 2026), page 32 « Saut — Décomposition de la note » (paliers PR1 à PR4 lus sur le rendu image du PDF)",
   "note": "Le Saut ne fonctionne pas comme les autres agrès (pas de tronc commun d'arches/éléments cumulés). La note de départ = valeur du (meilleur) saut retenu (barème « Valeur des sauts ») + 1 seule valorisation possible. Les évolutions B2 et plus exigent 2 sauts de familles de 1er envol différentes (Renversement vs Rondade/Saut de mains), dont au moins 1 dans les paliers valorisables.",
   "evolutions": [
     {
@@ -14,11 +14,14 @@
         "exigences": []
       },
       "paliersAutorises": [
-        "PREREQUIS",
+        "PR1",
+        "PR2",
+        "PR3",
+        "PR4",
         "P1"
       ],
       "paliersValorisables": [
-        "PREREQUIS",
+        "PR2",
         "P1"
       ],
       "valorisations": {
@@ -51,10 +54,14 @@
         "exigences": []
       },
       "paliersAutorises": [
-        "PREREQUIS",
+        "PR1",
+        "PR2",
+        "PR3",
+        "PR4",
         "P1"
       ],
       "paliersValorisables": [
+        "PR3",
         "P1"
       ],
       "valorisations": {
@@ -87,11 +94,15 @@
         "exigences": []
       },
       "paliersAutorises": [
+        "PR3",
+        "PR4",
         "P1",
         "P2",
         "P3"
       ],
       "paliersValorisables": [
+        "PR3",
+        "PR4",
         "P1",
         "P2"
       ],
@@ -125,12 +136,16 @@
         "exigences": []
       },
       "paliersAutorises": [
+        "PR3",
+        "PR4",
         "P1",
         "P2",
         "P3",
         "P4"
       ],
       "paliersValorisables": [
+        "PR4",
+        "P1",
         "P2",
         "P3"
       ],

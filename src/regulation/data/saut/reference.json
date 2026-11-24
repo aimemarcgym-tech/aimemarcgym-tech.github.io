@@ -5,7 +5,7 @@
   "lexique": [
     { "acronym": "1er envol", "name": "Premier envol", "definition": "Phase entre l'appel sur le tremplin et la pose des mains sur la table de saut." },
     { "acronym": "2e envol", "name": "Second envol", "definition": "Phase entre la pose des mains sur la table de saut et la réception." },
-    { "acronym": "PR1/PR2/PR3", "name": "Paliers prérequis (Saut)", "definition": "Uniquement en filière jeune : PR1 (saut droit) est dans les paliers du A1 mais non valorisable ; PR2 (lune plat dos) est valorisable en A1 ; PR2 (rondade plat ventre et rondade sur tremplin) est valorisable en A2, B1 et B2." }
+    { "acronym": "PR1 à PR4", "name": "Paliers prérequis (Saut)", "definition": "Sauts sur pile de tapis, autorisés seulement en filière régionale, jeunes et groupe. PR1 = saut droit (9), PR2 = lune plat dos (10), PR3 = rondade arrivée plat ventre (10), PR4 = rondade arrivée debout sur tapis de 80 cm ou rondade sur tremplin et saut extension (11). Autorisés / valorisables : A1 PR1 à PR4 / PR2 ; A2 PR1 à PR4 / PR3 ; B1 PR3 et PR4 / PR3 et PR4 ; B2 PR3 et PR4 / PR4." }
   ],
   "materiel": {
     "praticable": "Pile de tapis : min. L 4,0 m x l 2,0 m, hauteur 0,8 m (± 5 cm). Table de saut : de 1 m à 1 m 35 du sol. Piste d'élan : 25 m maximum.",
