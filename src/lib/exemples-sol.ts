@@ -192,7 +192,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "148+"
       },
       {
-        "code": "195+"
+        "code": "155+"
       },
       {
         "code": "169"
@@ -221,14 +221,14 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
     "validations": {
       "B2-TC-1": [
         "148+",
-        "195+",
+        "155+",
         "169",
         "153",
         "154"
       ],
       "B2-TC-2": [
         "148+",
-        "195+",
+        "155+",
         "169",
         "45enjambe",
         "39chat"
@@ -243,7 +243,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "B2-V2": [
         "148+",
-        "195+"
+        "155+"
       ],
       "B2-V3": [
         "45enjambe"
@@ -268,7 +268,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "serie": "ACRO"
       },
       {
-        "code": "195+",
+        "code": "155+",
         "serie": "ACRO"
       },
       {
@@ -306,7 +306,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "B3-TC-2": [
         "148+",
-        "195+",
+        "155+",
         "172",
         "154+",
         "170"
@@ -321,14 +321,14 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "B3-V2": [
         "148+",
-        "195+",
+        "155+",
         "172"
       ],
       "B3-V3": [
         "51enjambe"
       ],
       "B3-V5": [
-        "195+",
+        "155+",
         "154+",
         "170"
       ]
@@ -351,7 +351,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "148+"
       },
       {
-        "code": "195+"
+        "code": "155+"
       },
       {
         "code": "172"
@@ -384,7 +384,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "C1-TC-2": [
         "148+",
-        "195+",
+        "155+",
         "172",
         "154+",
         "180"
@@ -400,14 +400,14 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "C1-V2": [
         "148+",
-        "195+",
+        "155+",
         "172"
       ],
       "C1-V3": [
         "42cosaque"
       ],
       "C1-V5": [
-        "195+",
+        "155+",
         "172",
         "154+",
         "180"
@@ -505,7 +505,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "code": "148+"
       },
       {
-        "code": "195+"
+        "code": "155+"
       },
       {
         "code": "188"
@@ -547,7 +547,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
       ],
       "C3-TC-2": [
         "148+",
-        "195+",
+        "155+",
         "188",
         "154+",
         "180",
@@ -570,7 +570,7 @@ export const EXEMPLES_SOL: ExempleMouvement[] = [
         "71enjambe"
       ],
       "C3-V5": [
-        "195+",
+        "155+",
         "188",
         "154+",
         "180",

@@ -54,6 +54,8 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
+✅ Sol, arche « Acros 2 » (PDF « GAM-GAF Arches SOL », décidé avec l'utilisateur le 24/11) : le sens avant/arrière est corrigé d'après le PDF (151, 153, 154, 154+, 158, 158+ et 182 passent d'« arrière » à « avant » ; seuls 149, 155, 155+ et 175 sont en arrière), ce qui joue sur la règle « 2 acros de sens différents » ; le code `195+` devient `155+` (exemples Sol et constructeur mis à jour) ; ajout des pré-requis 84 et 68 new et des nomades 47, 135 et 159, absents jusque-là. Les 24 exemples restent à la note maximale. Autres écarts Sol (Acros 1, Cercles, Sauts gymniques) à traiter ensuite.
+
 ✅ Poutre, arche « Acros 2 » (PDF « GAF Arches POUTRE », décidé avec l'utilisateur le 24/11) : ajout de l'élément 166+ 26 « Flic-flac. Renversement arrière avec envol départ libre arrivée 2 pieds serrés (variante) », branche arrière, P6 (code `166+-26`). Les 164 autres éléments concordaient.
 
 ✅ Barres, arches (PDF « GAF Arches BARRES ASYMETRIQUES », décidé avec l'utilisateur le 24/11) : l'élément 56-26 « Bascule fixe » (Venir à l'appui) passe de P4 à P5 (d'après la position sur l'arc) ; l'élément 140 « Salto arrière entre les barres arrivée suspension BI (salto Pak) avec passage par l'appui » est ajouté aux balancés avant, en P6 (il manquait depuis la brochure de septembre).

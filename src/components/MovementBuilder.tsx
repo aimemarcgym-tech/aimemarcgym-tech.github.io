@@ -37,7 +37,7 @@ const ELEMENTS_REPETABLES: Record<string, string[]> = {
     "132-26", // Lune, grand tour avant, avec ou sans 1/2 tour (P7)
   ],
   // Sol : rondade, flip et saut de mains sont répétables dans les LAE mais comptés une seule fois (brochure, FAQ #222).
-  SOL: ["148", "148+", "155", "195+", "153", "154", "154+"], // Rondade, Flic-Flac arrière, Saut de mains 1 pied / 2 pieds (+ variantes)
+  SOL: ["148", "148+", "155", "155+", "153", "154", "154+"], // Rondade, Flic-Flac arrière, Saut de mains 1 pied / 2 pieds (+ variantes)
 };
 
 // Déduit, quand c'est possible, la ou les catégories d'arche associées à une
