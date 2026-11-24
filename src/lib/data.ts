@@ -26,7 +26,7 @@ import {
   type ResultDocRow,
 } from "@/lib/idb";
 import type { PhotoAlbumRow, PhotoRow } from "@/lib/idb";
-import { REGULATION_VERSION } from "@/regulation/loader";
+import { REGULATION_VERSION, codeActuel } from "@/regulation/loader";
 
 // Couche de données : clubs/gymnastes/mouvements passent par Firestore
 // (synchronisés entre appareils, cf. le plan de migration cloud), tandis que
@@ -232,7 +232,10 @@ export async function getGymnast(id: string) {
     getDocs(query(col("movements"), where("gymnastId", "==", id))),
   ]);
 
-  const skills = skillsSnap.docs.map((d) => d.data() as GymnastSkillRow);
+  const skills = skillsSnap.docs.map((d) => {
+    const row = d.data() as GymnastSkillRow;
+    return { ...row, elementCode: codeActuel(row.elementCode) };
+  });
   const movements = movementsSnap.docs.map((d) => d.data() as MovementRow);
   movements.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
@@ -278,14 +281,23 @@ export async function getMovement(id: string) {
     getDoc(docRef("gymnasts", movement.gymnastId)),
   ]);
 
-  const elements = elementsSnap.docs.map((d) => d.data() as MovementElementRow);
+  const elements = elementsSnap.docs.map((d) => {
+    const row = d.data() as MovementElementRow;
+    return { ...row, elementCode: codeActuel(row.elementCode) };
+  });
   elements.sort((a, b) => a.position - b.position);
 
   let gymnastWithSkills: (GymnastRow & { skills: GymnastSkillRow[] }) | null = null;
   if (gymnastSnap.exists()) {
     const gymnast = gymnastSnap.data() as GymnastRow;
     const skillsSnap = await getDocs(query(col("gymnastSkills"), where("gymnastId", "==", gymnast.id)));
-    gymnastWithSkills = { ...gymnast, skills: skillsSnap.docs.map((d) => d.data() as GymnastSkillRow) };
+    gymnastWithSkills = {
+      ...gymnast,
+      skills: skillsSnap.docs.map((d) => {
+        const row = d.data() as GymnastSkillRow;
+        return { ...row, elementCode: codeActuel(row.elementCode) };
+      }),
+    };
   }
 
   return { ...movement, elements, gymnast: gymnastWithSkills };
@@ -350,7 +362,15 @@ export async function deleteSnapshot(snapshotId: string) {
 
 export async function getSnapshots(movementId: string) {
   const snap = await getDocs(query(col("movementSnapshots"), where("movementId", "==", movementId)));
-  const snapshots = snap.docs.map((d) => d.data() as MovementSnapshotRow);
+  const snapshots = snap.docs.map((d) => {
+    const row = d.data() as MovementSnapshotRow;
+    try {
+      const codes = (JSON.parse(row.elementCodes) as string[]).map(codeActuel);
+      return { ...row, elementCodes: JSON.stringify(codes) };
+    } catch {
+      return row;
+    }
+  });
   snapshots.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
   return snapshots;
 }

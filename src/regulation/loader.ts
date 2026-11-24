@@ -91,8 +91,19 @@ export function getArche(apparatus: string, archeId: string): Arche | undefined 
   return getRegulation(apparatus).arches.find((a) => a.id === archeId);
 }
 
+// Codes d'éléments renommés après une mise à jour de la réglementation : les mouvements, historiques et
+// compétences déjà enregistrés gardent l'ancien code, qu'on traduit à la lecture.
+const CODES_RENOMMES: Record<string, string> = {
+  "195+": "155+", // Sol, Acros 2 : Flic-Flac (variante), numéro corrigé d'après le PDF des arches (24/11/2026)
+};
+
+export function codeActuel(code: string): string {
+  return CODES_RENOMMES[code] ?? code;
+}
+
 export function getElement(apparatus: string, code: string): RegElement | undefined {
-  return getRegulation(apparatus).elements.find((e) => e.code === code);
+  const actuel = codeActuel(code);
+  return getRegulation(apparatus).elements.find((e) => e.code === actuel);
 }
 
 export function getEvolution(apparatus: string, evolutionId: string): Evolution | undefined {
