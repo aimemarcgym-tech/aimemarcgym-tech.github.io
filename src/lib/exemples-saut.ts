@@ -268,35 +268,35 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
   {
     "apparatus": "SAUT",
     "evolutionId": "C1",
-    "titre": "Tsukahara groupé (P3) et Yurchenko carpé (P5)",
+    "titre": "Tsukahara groupé (P3) et Yurchenko tendu (P6) — note maximale",
     "elements": [
       {
         "code": "44-26"
       },
       {
-        "code": "50-26"
+        "code": "51-26"
       }
     ],
     "confirmations": [
-      "SAUT-C1-V3"
+      "SAUT-C1-V2"
     ],
     "validations": {
-      "SAUT-C1-V3": [
-        "50-26"
+      "SAUT-C1-V2": [
+        "44-26"
       ]
     },
     "remarques": [
-      "Deux sauts de familles de 1er envol différentes : Tsukahara (arche Renversement latéral) et Yurchenko (arche Rondade). Le meilleur saut, le Yurchenko carpé, vaut 13.",
-      "Avec « saut avec un élément sur le tremplin » (+2) sur le meilleur saut (Yurchenko : appel en rondade sur le tremplin), la note de départ est de 15 sur 16 : le maximum du niveau demande un saut P6 ou plus (valeur 14)."
+      "Deux sauts de familles de 1er envol différentes : Tsukahara (arche Renversement latéral) et Yurchenko (arche Rondade). Le meilleur saut, le Yurchenko tendu (P6), vaut 14.",
+      "Le Tsukahara (P3, dans les paliers valorisables de C1) a une rotation longitudinale de 180° : il valide « saut avec rotation longitudinale ou transversale » (+2), qui s'ajoute à la meilleure note (FAQ #265). Note de départ de 16, le maximum du niveau. Le Yurchenko P6 n'est pas dans les paliers valorisables de C1, d'où ce choix."
     ]
   },
   {
     "apparatus": "SAUT",
     "evolutionId": "C2",
-    "titre": "Yurchenko carpé (P5) et Tsukahara groupé (P3)",
+    "titre": "Yurchenko tendu (P6) et Tsukahara groupé (P3) — note maximale",
     "elements": [
       {
-        "code": "50-26"
+        "code": "51-26"
       },
       {
         "code": "44-26"
@@ -307,12 +307,12 @@ export const EXEMPLES_SAUT: ExempleMouvement[] = [
     ],
     "validations": {
       "SAUT-C2-V3": [
-        "50-26"
+        "51-26"
       ]
     },
     "remarques": [
-      "Deux sauts de familles de 1er envol différentes : Yurchenko (arche Rondade) et Tsukahara (arche Renversement latéral). Le meilleur saut, le Yurchenko carpé, vaut 13.",
-      "Avec « saut avec un élément sur le tremplin » (+2) sur le meilleur saut (Yurchenko : appel en rondade sur le tremplin), la note de départ est de 15 sur 16 : le maximum du niveau demande un saut P6 ou P7 (valeur 14)."
+      "Deux sauts de familles de 1er envol différentes : Yurchenko (arche Rondade) et Tsukahara (arche Renversement latéral). Le meilleur saut, le Yurchenko tendu (P6), vaut 14.",
+      "Le Yurchenko P6 est dans les paliers valorisables de C2 (P4 à P7) : avec « saut avec un élément sur le tremplin » (+2) sur ce saut (appel en rondade sur le tremplin), la note de départ est de 16, le maximum du niveau."
     ]
   },
   {
