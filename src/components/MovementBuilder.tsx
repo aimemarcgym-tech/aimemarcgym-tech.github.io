@@ -454,14 +454,14 @@ export default function MovementBuilder({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md rounded-xl border-2 border-danger bg-surface p-6 text-center shadow-2xl"
+            className="w-full max-w-xs rounded-lg border border-danger bg-surface p-4 text-center shadow-xl"
           >
-            <div className="mb-2 text-3xl text-danger">✕</div>
-            <p className="text-lg font-semibold text-foreground">{blocage}</p>
+            <div className="mb-1 text-xl text-danger">✕</div>
+            <p className="text-sm font-medium text-foreground">{blocage}</p>
             <button
               autoFocus
               onClick={() => setBlocage(null)}
-              className="accent-gradient mt-5 rounded px-6 py-2 text-sm font-medium text-white hover:opacity-90"
+              className="accent-gradient mt-3 rounded px-5 py-1.5 text-xs font-medium text-white hover:opacity-90"
             >
               OK
             </button>
