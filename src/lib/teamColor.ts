@@ -48,12 +48,12 @@ const NIVEAU_COLORS: Record<string, readonly { text: string; border: string; bg:
     { text: "text-rose-400", border: "border-rose-500/40", bg: "bg-rose-500/10", dot: "bg-rose-500" },
     { text: "text-rose-500", border: "border-rose-600/50", bg: "bg-rose-600/10", dot: "bg-rose-600" },
   ],
-  B1: [
+  C3: [
     { text: "text-fuchsia-200", border: "border-fuchsia-400/40", bg: "bg-fuchsia-400/10", dot: "bg-fuchsia-300" },
     { text: "text-fuchsia-400", border: "border-fuchsia-500/40", bg: "bg-fuchsia-500/10", dot: "bg-fuchsia-500" },
     { text: "text-fuchsia-500", border: "border-fuchsia-600/50", bg: "bg-fuchsia-600/10", dot: "bg-fuchsia-600" },
   ],
-  C3: [
+  B1: [
     { text: "text-red-200", border: "border-red-400/40", bg: "bg-red-400/10", dot: "bg-red-300" },
     { text: "text-red-400", border: "border-red-500/40", bg: "bg-red-500/10", dot: "bg-red-500" },
     { text: "text-red-500", border: "border-red-600/50", bg: "bg-red-600/10", dot: "bg-red-600" },
