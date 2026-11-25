@@ -9,9 +9,12 @@ export default function TeamEditor({
   gymnastId,
   initialTeam,
   clubName,
+  niveau,
   onSaved,
 }: {
   gymnastId: string;
+  // Niveau de l'équipe (donne sa couleur) ; sans lui, la couleur dépend du nom.
+  niveau?: string | null;
   clubName?: string;
   initialTeam: string | null;
   onSaved?: (team: string | null) => void;
@@ -24,7 +27,7 @@ export default function TeamEditor({
   const [pending, startTransition] = useTransition();
 
   if (!editing) {
-    const color = savedTeam ? teamColor(savedTeam) : null;
+    const color = savedTeam ? teamColor(savedTeam, niveau) : null;
     return (
       <span className="inline-flex flex-wrap items-center gap-3">
         <button onClick={() => setEditing(true)} className="text-sm text-muted hover:text-foreground">

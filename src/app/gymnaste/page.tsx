@@ -114,7 +114,7 @@ function GymnastPageInner() {
                 />
               </div>
               <div className="mt-1">
-                <TeamEditor gymnastId={gymnast.id} initialTeam={gymnast.team} clubName={gymnast.club?.name ?? ""} onSaved={refresh} />
+                <TeamEditor gymnastId={gymnast.id} initialTeam={gymnast.team} clubName={gymnast.club?.name ?? ""} niveau={niveauEquipe ?? gymnast.team?.match(/\b([ABC][123])\b/i)?.[1]?.toUpperCase()} onSaved={refresh} />
               </div>
             </div>
             {headerActionsRevealed && (

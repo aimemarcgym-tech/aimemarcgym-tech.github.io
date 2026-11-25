@@ -18,6 +18,8 @@ export default function TeamGroup({
   niveau,
   niveaux = [],
   onNiveau,
+  couleurNiveau,
+  rang = 0,
   children,
 }: {
   clubId: string | null;
@@ -33,6 +35,10 @@ export default function TeamGroup({
   niveau?: string | null;
   niveaux?: string[];
   onNiveau?: (evolution: string) => void;
+  // Niveau qui donne sa couleur à l'équipe (enregistré, lu dans le nom ou déduit des mouvements) et rang de l'équipe
+  // parmi celles du même niveau dans le club : la couleur est celle du niveau, déclinée selon le rang.
+  couleurNiveau?: string | null;
+  rang?: number;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -40,7 +46,7 @@ export default function TeamGroup({
   const [value, setValue] = useState(teamName);
   const [pending, startTransition] = useTransition();
   const isUnassigned = teamName === "Sans équipe";
-  const color = teamColor(teamName);
+  const color = teamColor(teamName, couleurNiveau, rang);
 
   useEffect(() => {
     if (forceOpen) setOpen(true);

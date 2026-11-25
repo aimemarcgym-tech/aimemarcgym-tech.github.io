@@ -240,7 +240,14 @@ export default function Home() {
                     >
                       {hasTeams ? (
                         <div className="space-y-3">
-                          {groupByTeam(members).map(([teamName, teamMembers]) => (
+                          {groupByTeam(members).map(([teamName, teamMembers], idx, equipes) => {
+                            const niveauCouleur = (nom: string, membres: GymnastList) =>
+                              nom === "Sans équipe" ? null : teamEvolution(nom, membres, teamLevelOf(teamLevels, clubId, nom));
+                            const couleurNiveau = niveauCouleur(teamName, teamMembers);
+                            const rang = equipes
+                              .slice(0, idx)
+                              .filter(([nom, mem]) => couleurNiveau !== null && niveauCouleur(nom, mem) === couleurNiveau).length;
+                            return (
                             <div
                               key={teamName}
                               className="border-b border-dashed border-border-strong pb-4 last:border-b-0 last:pb-0"
@@ -251,6 +258,8 @@ export default function Home() {
                                 forceOpen={cible?.club === clubName && cible.team === teamName}
                                 anchorId={`equipe-${clubName}-${teamName}`}
                                 memberCount={teamMembers.length}
+                                couleurNiveau={couleurNiveau}
+                                rang={rang}
                                 niveau={teamLevelOf(teamLevels, clubId, teamName)}
                                 niveaux={evolutions.map((e) => e.id)}
                                 onNiveau={async (evolution) => {
@@ -274,7 +283,8 @@ export default function Home() {
                                 />
                               </TeamGroup>
                             </div>
-                          ))}
+                            );
+                          })}
                           <div>{indivBloc}</div>
                         </div>
                       ) : (
