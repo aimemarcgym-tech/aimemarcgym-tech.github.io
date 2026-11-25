@@ -72,6 +72,12 @@ export async function createGymnast(formData: FormData) {
 
   const clubId = await findOrCreateClub(String(formData.get("clubName") ?? "").trim());
 
+  // Niveau choisi pour une équipe nouvelle : n'écrase jamais celui d'une équipe qui en a déjà un.
+  const teamLevel = String(formData.get("teamLevel") ?? "").trim();
+  if (team && teamLevel && !(await getTeamLevel(clubId ?? null, team))) {
+    await setTeamLevel(clubId ?? null, team, teamLevel);
+  }
+
   const gymnast: GymnastRow = {
     id: crypto.randomUUID(),
     firstName,
@@ -160,9 +166,51 @@ export async function renameTeam(clubId: string | null, oldTeamName: string, new
     return (g.clubId ?? null) === clubId && g.team === oldTeamName;
   });
   if (matching.length === 0) return;
+  // Le niveau de l'équipe suit son nouveau nom.
+  const level = await getTeamLevel(clubId, oldTeamName);
   const batch = writeBatch(db);
   for (const d of matching) batch.update(d.ref, { team: trimmed });
   await batch.commit();
+  if (level && trimmed !== oldTeamName) {
+    await setTeamLevel(clubId, trimmed, level);
+    await deleteDoc(docRef("teamLevels", teamLevelKey(clubId, oldTeamName)));
+  }
+}
+
+// Niveau (évolution A1 … C3) d'une équipe, choisi à sa création ou dans son en-tête. Clé : club + nom d'équipe.
+// Il est proposé par défaut pour les nouveaux mouvements de ses gymnastes ; chaque mouvement garde son propre niveau.
+function teamLevelKey(clubId: string | null, team: string) {
+  return encodeURIComponent(`${clubId ?? "none"}::${team}`);
+}
+
+export async function getTeamLevel(clubId: string | null, team: string): Promise<string | null> {
+  const snap = await getDoc(docRef("teamLevels", teamLevelKey(clubId, team)));
+  return snap.exists() ? ((snap.data().evolution as string) ?? null) : null;
+}
+
+// Tous les niveaux d'équipe, par clé « clubId::équipe » (voir teamLevelOf).
+export async function getTeamLevels(): Promise<Record<string, string>> {
+  const snap = await getDocs(col("teamLevels"));
+  const out: Record<string, string> = {};
+  for (const d of snap.docs) {
+    const data = d.data() as { clubId: string | null; team: string; evolution: string };
+    out[`${data.clubId ?? "none"}::${data.team}`] = data.evolution;
+  }
+  return out;
+}
+
+export function teamLevelOf(levels: Record<string, string>, clubId: string | null, team: string): string | null {
+  return levels[`${clubId ?? "none"}::${team}`] ?? null;
+}
+
+// Un niveau vide retire le niveau enregistré (l'appli retombe alors sur le niveau lu dans le nom, ou le plus courant).
+export async function setTeamLevel(clubId: string | null, team: string, evolution: string) {
+  const ref = docRef("teamLevels", teamLevelKey(clubId, team));
+  if (!evolution) {
+    await deleteDoc(ref);
+    return;
+  }
+  await setDoc(ref, { clubId, team, evolution });
 }
 
 export async function updateGymnastTeam(gymnastId: string, team: string) {

@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getGymnast, createMovement } from "@/lib/data";
+import { getGymnast, createMovement, getTeamLevel } from "@/lib/data";
 import { getRegulation, getAvailableApparatuses } from "@/regulation/loader";
 import Link from "next/link";
 import DeleteGymnastButton from "@/components/DeleteGymnastButton";
@@ -34,10 +34,13 @@ function GymnastPageInner() {
   const [gymnast, setGymnast] = useState<Gymnast | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [headerActionsRevealed, setHeaderActionsRevealed] = useState(false);
+  // Niveau enregistré de l'équipe de la gymnaste : proposé par défaut pour un nouveau mouvement.
+  const [niveauEquipe, setNiveauEquipe] = useState<string | null>(null);
 
   function refresh() {
     if (!id) return;
-    getGymnast(id).then((g) => {
+    getGymnast(id).then(async (g) => {
+      setNiveauEquipe(g?.team ? await getTeamLevel(g.clubId ?? null, g.team) : null);
       setGymnast(g);
       setLoaded(true);
     });
@@ -156,7 +159,7 @@ function GymnastPageInner() {
             evolutionsByApparatus={Object.fromEntries(
               apparatuses.map((a) => [a, regulations[a].evolutions.map((e) => ({ id: e.id, genre: e.genre }))])
             )}
-            defaultEvolutionId={gymnast.team?.match(/\b([ABC][123])\b/i)?.[1]?.toUpperCase()}
+            defaultEvolutionId={niveauEquipe ?? gymnast.team?.match(/\b([ABC][123])\b/i)?.[1]?.toUpperCase()}
           />
         </section>
 

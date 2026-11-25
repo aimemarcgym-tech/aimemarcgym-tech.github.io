@@ -1,7 +1,17 @@
 "use client";
 
 import { useEffect, useState, useTransition, type FormEvent } from "react";
-import { getGymnasts, createGymnast, getIndividuelles, createIndividuelle, updateIndividuelle, deleteIndividuelle } from "@/lib/data";
+import {
+  getGymnasts,
+  createGymnast,
+  getIndividuelles,
+  createIndividuelle,
+  updateIndividuelle,
+  deleteIndividuelle,
+  getTeamLevels,
+  setTeamLevel,
+  teamLevelOf,
+} from "@/lib/data";
 import type { IndividuelleRow } from "@/lib/idb";
 import { teamEvolution } from "@/lib/teamNotes";
 import IndividuellesClub from "@/components/IndividuellesClub";
@@ -17,6 +27,7 @@ type GymnastList = NonNullable<Gymnasts>;
 export default function Home() {
   const [gymnasts, setGymnasts] = useState<Gymnasts | null>(null);
   const [individuelles, setIndividuelles] = useState<IndividuelleRow[]>([]);
+  const [teamLevels, setTeamLevels] = useState<Record<string, string>>({});
   // Cible d'un lien « Voir l'équipe » depuis le profil d'une gymnaste : /?club=…&team=…
   const [cible, setCible] = useState<{ club: string; team: string } | null>(null);
   const [aussiIndiv, setAussiIndiv] = useState(false);
@@ -28,6 +39,7 @@ export default function Home() {
   function refresh() {
     getGymnasts().then(setGymnasts);
     getIndividuelles().then(setIndividuelles);
+    getTeamLevels().then(setTeamLevels);
   }
 
   useEffect(() => {
@@ -186,7 +198,9 @@ export default function Home() {
                             clubId,
                             gymnastId,
                             evolution:
-                              (g?.team ? teamEvolution(g.team, members.filter((x) => x.team === g.team)) : null) ??
+                              (g?.team
+                                ? teamEvolution(g.team, members.filter((x) => x.team === g.team), teamLevelOf(teamLevels, clubId, g.team))
+                                : null) ??
                               evolutions[0].id,
                           });
                           refresh();
@@ -207,7 +221,9 @@ export default function Home() {
                       await createIndividuelle({
                         clubId,
                         gymnastId,
-                        evolution: (teamName ? teamEvolution(teamName, teamMembers) : null) ?? evolutions[0].id,
+                        evolution:
+                          (teamName ? teamEvolution(teamName, teamMembers, teamLevelOf(teamLevels, clubId, teamName)) : null) ??
+                          evolutions[0].id,
                       });
                       refresh();
                     },
@@ -235,6 +251,12 @@ export default function Home() {
                                 forceOpen={cible?.club === clubName && cible.team === teamName}
                                 anchorId={`equipe-${clubName}-${teamName}`}
                                 memberCount={teamMembers.length}
+                                niveau={teamLevelOf(teamLevels, clubId, teamName)}
+                                niveaux={evolutions.map((e) => e.id)}
+                                onNiveau={async (evolution) => {
+                                  await setTeamLevel(clubId, teamName, evolution);
+                                  refresh();
+                                }}
                                 onRenamed={refresh}
                                 available={members
                                   .filter((g) => g.team !== (teamName === "Sans équipe" ? null : teamName))
@@ -313,6 +335,24 @@ export default function Home() {
                   type="number"
                   className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground placeholder:text-muted focus:border-accent-solid focus:outline-none"
                 />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-muted">Niveau de l&apos;équipe (optionnel)</label>
+                <select
+                  name="teamLevel"
+                  defaultValue=""
+                  className="w-full rounded border border-border-strong bg-surface-alt px-3 py-2 text-sm text-foreground focus:border-accent-solid focus:outline-none"
+                >
+                  <option value="">Aucun</option>
+                  {evolutions.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      Évolution {e.id}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-[11px] text-muted">
+                  Sert pour une équipe nouvelle ; une équipe qui a déjà un niveau le garde.
+                </p>
               </div>
               <label className="flex items-center gap-2 text-sm text-foreground">
                 <input type="checkbox" checked={aussiIndiv} onChange={(e) => setAussiIndiv(e.target.checked)} />

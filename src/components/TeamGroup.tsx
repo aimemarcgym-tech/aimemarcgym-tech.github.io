@@ -15,6 +15,9 @@ export default function TeamGroup({
   onAdded,
   forceOpen = false,
   anchorId,
+  niveau,
+  niveaux = [],
+  onNiveau,
   children,
 }: {
   clubId: string | null;
@@ -26,6 +29,10 @@ export default function TeamGroup({
   onAdded?: () => void;
   forceOpen?: boolean;
   anchorId?: string;
+  // Niveau enregistré de l'équipe (vide : aucun), niveaux proposés, et enregistrement d'un changement.
+  niveau?: string | null;
+  niveaux?: string[];
+  onNiveau?: (evolution: string) => void;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -98,6 +105,21 @@ export default function TeamGroup({
               Renommer
             </button>
           ))}
+        {!isUnassigned && !editing && onNiveau && (
+          <select
+            value={niveau ?? ""}
+            onChange={(e) => onNiveau(e.target.value)}
+            aria-label={`Niveau de l'équipe ${teamName}`}
+            className="rounded border border-border-strong bg-surface-alt px-1.5 py-0.5 text-[11px] text-foreground focus:border-accent-solid focus:outline-none"
+          >
+            <option value="">Niveau…</option>
+            {niveaux.map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        )}
         {!isUnassigned && !editing && (
           <ShareLinkButton
             onCreate={() => createTeamShare(clubId, teamName)}

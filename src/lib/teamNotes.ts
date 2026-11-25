@@ -1,4 +1,4 @@
-import { getMovement } from "@/lib/data";
+import { getMovement, getTeamLevel } from "@/lib/data";
 import { penaliteMaterielFromStorage } from "@/lib/movementShare";
 import { analyzeMovement } from "@/engine/composition";
 import { analyzeSaut } from "@/engine/saut";
@@ -9,6 +9,7 @@ export const NOTES_APPARATUS = ["SAUT", "BARRES_ASYM", "POUTRE", "SOL"] as const
 
 interface MemberLike {
   id: string;
+  clubId?: string | null;
   firstName: string;
   lastName: string;
   movements: { id: string; apparatus: string; evolution: string }[];
@@ -23,8 +24,10 @@ export interface TeamStartNotes {
   maxPerApparatus: number[];
 }
 
-// L'évolution de l'équipe : celle que son nom indique (« B1 »…), sinon la plus courante dans les mouvements de ses gymnastes.
-export function teamEvolution(teamName: string, members: MemberLike[]): string | null {
+// L'évolution de l'équipe : celle qui a été choisie pour elle (niveau enregistré), sinon celle que son nom indique
+// (« B1 »…), sinon la plus courante dans les mouvements de ses gymnastes.
+export function teamEvolution(teamName: string, members: MemberLike[], stored?: string | null): string | null {
+  if (stored) return stored;
   const fromName = teamName.match(/\b([ABC][123])\b/i)?.[1]?.toUpperCase();
   if (fromName) return fromName;
   const counts = new Map<string, number>();
@@ -47,7 +50,8 @@ export function formatNote(n: number): string {
 // Note de départ de chaque gymnaste à chaque agrès : celle de son meilleur mouvement à l'évolution de
 // l'équipe, avec les mêmes confirmations manuelles que dans le constructeur (au Saut, après pénalité matériel).
 export async function computeTeamStartNotes(teamName: string, members: MemberLike[]): Promise<TeamStartNotes> {
-  const evolution = teamEvolution(teamName, members);
+  const stored = await getTeamLevel(members[0]?.clubId ?? null, teamName);
+  const evolution = teamEvolution(teamName, members, stored);
   const nbCompte = notesComptees(evolution);
 
   const noteOf = async (m: { id: string; apparatus: string; evolution: string }): Promise<number | null> => {

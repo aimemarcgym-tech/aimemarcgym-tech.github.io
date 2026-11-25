@@ -55,6 +55,8 @@ lecture du fichier puis pendant l'import, avec le message « Ne fermez pas cette
 ✅ « Faire ces musiques » : la liste « Ajouter à la musique de… » est groupée par club puis par niveau/équipe, triée par nom.
 
 ✅ Anciens codes d'éléments : quand un code est renommé par une mise à jour de la réglementation (premier cas : `195+` devenu `155+` au Sol), les mouvements, historiques et compétences déjà enregistrés sont traduits à la lecture (table `CODES_RENOMMES` dans `regulation/loader.ts`), au lieu d'afficher le code brut.
+✅ **Niveau d'une équipe.** Le formulaire « Ajouter une gymnaste » propose un « Niveau de l'équipe (optionnel) » (utile pour une équipe nouvelle ; une équipe qui a déjà un niveau le garde), et l'en-tête de chaque équipe sur l'accueil a un menu pour le changer. Le niveau est enregistré par équipe (collection 	eamLevels, clé club + nom d'équipe), suit l'équipe quand on la renomme, et sert de niveau par défaut pour les nouveaux mouvements de ses gymnastes (modifiable à chaque mouvement) et pour les notes de départ d'équipe. Priorité : niveau enregistré, puis niveau lu dans le nom (« B1 »), puis niveau le plus courant.
+
 
 ✅ Saut, arche « Rondade et saut de mains » (PDF « GAM-GAF Arches SAUT », décidé avec l'utilisateur le 24/11) : le 55 new « Saut de main Tsukahara groupé » passe de P6 à P5 (d'après la position sur l'arc), donc de 14 à 13 dans la valeur des sauts. Les autres éléments concordent. Question en attente : le PDF montre aussi un 19-26 « Lune vrille » en P5 dans cette arche (en plus de celui de l'arche Renversement, en P2), non ajouté.
 
