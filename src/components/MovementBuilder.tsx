@@ -275,7 +275,7 @@ export default function MovementBuilder({
   }, [sequence]);
 
   // Au Sol, le mouvement doit se terminer par une acro : on refuse tout ce qui mettrait un autre élément en dernier.
-  const MSG_FIN_SOL = "Au Sol, le mouvement doit se terminer par une acro : cette action mettrait un autre élément en dernier.";
+  const MSG_FIN_SOL = "Au Sol, le mouvement doit se terminer par une acro : ce déplacement mettrait un autre élément en dernier.";
   function estAcro(code: string): boolean {
     const e = elementByCode.get(code);
     return e ? elementInCats(e, ["ACRO"]) : false;
@@ -287,21 +287,11 @@ export default function MovementBuilder({
   function addElement(code: string) {
     setBlocage(null);
     if (apparatus === "SOL" && !estAcro(code)) {
-      // Un élément qui n'est pas une acro se place juste avant la dernière acro, jamais en dernier.
-      let derniereAcro = -1;
-      sequence.forEach((s, i) => {
-        if (estAcro(s.code)) derniereAcro = i;
-      });
-      if (derniereAcro === -1) {
-        setBlocage("Au Sol, le mouvement doit se terminer par une acro : ajoute d'abord une acro, ce nouvel élément se placera avant elle.");
-        return;
-      }
-      setSequence((s) => {
-        const copy = [...s];
-        copy.splice(derniereAcro, 0, { code, role: "ELEMENT" });
-        return copy;
-      });
-      setDirty(true);
+      // Un élément ajouté se place toujours en dernier : si ce n'est pas une acro, il est refusé.
+      const nom = elementByCode.get(code)?.name;
+      setBlocage(
+        `${nom ? `« ${nom} » n'est pas une acro. ` : ""}Au Sol, le mouvement doit se terminer par une acro : cet élément ne peut pas être placé en dernier.`
+      );
       return;
     }
     setSequence((s) => [...s, { code, role: "ELEMENT" }]);
@@ -455,6 +445,29 @@ export default function MovementBuilder({
 
   return (
     <main className="mx-auto max-w-[1600px] px-6 py-6">
+      {blocage && (
+        <div
+          role="alertdialog"
+          aria-modal="true"
+          onClick={() => setBlocage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-xl border-2 border-danger bg-surface p-6 text-center shadow-2xl"
+          >
+            <div className="mb-2 text-3xl text-danger">✕</div>
+            <p className="text-lg font-semibold text-foreground">{blocage}</p>
+            <button
+              autoFocus
+              onClick={() => setBlocage(null)}
+              className="accent-gradient mt-5 rounded px-6 py-2 text-sm font-medium text-white hover:opacity-90"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
       <div className="mb-4 flex items-center justify-between">
         <div className="text-sm text-muted">
           {diagnostic.elementCount} élément(s) · {diagnostic.archesCount} arche(s) utilisée(s)
@@ -495,11 +508,6 @@ export default function MovementBuilder({
         <div className="space-y-6">
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Mon mouvement</h2>
-          {blocage && (
-            <p role="alert" className="mb-3 rounded border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
-              ✕ {blocage}
-            </p>
-          )}
           {sequence.length === 0 ? (
             <p className="text-sm text-muted">Ajoutez des éléments depuis l&apos;Assistant ou la Bibliothèque, à droite →</p>
           ) : (
