@@ -42,6 +42,10 @@ export interface Diagnostic {
     // pas être une variante — seuls les éléments intermédiaires le peuvent.
     dernierEnVariante: { code: string; name: string; category: string }[];
   };
+  // Au Sol, le mouvement doit se terminer par une acro : renseigné quand le dernier élément n'en est pas une.
+  fin: {
+    sansAcro: { code: string; name: string } | null;
+  };
   valorisations: {
     results: CheckResult[];
     // Avertissements (jamais bloquants) : un même élément ne peut valider qu'une seule valorisation (FAQ #214, #45, #47).
@@ -151,6 +155,13 @@ function findVariantEndingViolations(
     }
   }
   return violations;
+}
+
+// Au Sol, le dernier élément du mouvement doit être une acro (règle de l'utilisateur).
+function findFinSansAcro(apparatus: string, elements: RegElement[]): { code: string; name: string } | null {
+  if (apparatus !== "SOL" || elements.length === 0) return null;
+  const last = elements[elements.length - 1];
+  return elementCategories(apparatus, last).includes("ACRO") ? null : { code: last.code, name: last.name };
 }
 
 function evaluateCheck(
@@ -465,6 +476,7 @@ export function analyzeMovement(
     },
     paliers: { horsAutorise },
     liaisons: { dernierEnVariante: findVariantEndingViolations(apparatus, elements) },
+    fin: { sansAcro: findFinSansAcro(apparatus, elements) },
     valorisations: {
       results: valoResults,
       avertissements: findValorisationOverlaps(

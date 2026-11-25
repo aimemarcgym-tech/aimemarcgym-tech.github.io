@@ -298,6 +298,21 @@ function SharedMovementBody({ data }: { data: MovementShareData }) {
           </div>
         )}
 
+        {diagnostic.fin?.sansAcro && (
+          <div className="mb-4">
+            <div className="mb-1 flex items-center justify-between text-sm font-semibold text-foreground">
+              <span>Fin du mouvement</span>
+            </div>
+            <ul className="space-y-1 text-xs text-danger">
+              <li>
+                ✕ Au Sol, le mouvement doit se terminer par une acro : le dernier élément (
+                {data.elements.find((e) => e.code === diagnostic.fin.sansAcro?.code)?.name ?? diagnostic.fin.sansAcro.name}) n&apos;en
+                est pas une.
+              </li>
+            </ul>
+          </div>
+        )}
+
         <div className="mb-4">
           <div className="mb-1 flex items-center justify-between text-sm font-semibold text-foreground">
             <span>Valorisations</span>
