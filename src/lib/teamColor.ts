@@ -28,7 +28,7 @@ const NIVEAU_COLORS: Record<string, readonly { text: string; border: string; bg:
     { text: "text-indigo-400", border: "border-indigo-500/40", bg: "bg-indigo-500/10", dot: "bg-indigo-500" },
     { text: "text-indigo-500", border: "border-indigo-600/50", bg: "bg-indigo-600/10", dot: "bg-indigo-600" },
   ],
-  B1: [
+  C2: [
     { text: "text-amber-200", border: "border-amber-400/40", bg: "bg-amber-400/10", dot: "bg-amber-300" },
     { text: "text-amber-400", border: "border-amber-500/40", bg: "bg-amber-500/10", dot: "bg-amber-500" },
     { text: "text-amber-500", border: "border-amber-600/50", bg: "bg-amber-600/10", dot: "bg-amber-600" },
@@ -48,7 +48,7 @@ const NIVEAU_COLORS: Record<string, readonly { text: string; border: string; bg:
     { text: "text-rose-400", border: "border-rose-500/40", bg: "bg-rose-500/10", dot: "bg-rose-500" },
     { text: "text-rose-500", border: "border-rose-600/50", bg: "bg-rose-600/10", dot: "bg-rose-600" },
   ],
-  C2: [
+  B1: [
     { text: "text-fuchsia-200", border: "border-fuchsia-400/40", bg: "bg-fuchsia-400/10", dot: "bg-fuchsia-300" },
     { text: "text-fuchsia-400", border: "border-fuchsia-500/40", bg: "bg-fuchsia-500/10", dot: "bg-fuchsia-500" },
     { text: "text-fuchsia-500", border: "border-fuchsia-600/50", bg: "bg-fuchsia-600/10", dot: "bg-fuchsia-600" },
