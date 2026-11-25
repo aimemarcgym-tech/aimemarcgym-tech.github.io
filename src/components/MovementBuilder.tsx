@@ -114,6 +114,8 @@ export default function MovementBuilder({
   const [category, setCategory] = useState<string>("ALL");
   const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
   const [revealedActions, setRevealedActions] = useState<Set<number>>(new Set());
+  // Message affiché quand une action est refusée (Sol : le mouvement doit finir par une acro).
+  const [blocage, setBlocage] = useState<string | null>(null);
 
   const skillMap = useMemo(() => {
     const m = new Map<string, SkillStatus>();
@@ -272,23 +274,56 @@ export default function MovementBuilder({
     return m;
   }, [sequence]);
 
+  // Au Sol, le mouvement doit se terminer par une acro : on refuse tout ce qui mettrait un autre élément en dernier.
+  const MSG_FIN_SOL = "Au Sol, le mouvement doit se terminer par une acro : cette action mettrait un autre élément en dernier.";
+  function estAcro(code: string): boolean {
+    const e = elementByCode.get(code);
+    return e ? elementInCats(e, ["ACRO"]) : false;
+  }
+  function finOk(codes: string[]): boolean {
+    return apparatus !== "SOL" || codes.length === 0 || estAcro(codes[codes.length - 1]);
+  }
+
   function addElement(code: string) {
+    setBlocage(null);
+    if (apparatus === "SOL" && !estAcro(code)) {
+      // Un élément qui n'est pas une acro se place juste avant la dernière acro, jamais en dernier.
+      let derniereAcro = -1;
+      sequence.forEach((s, i) => {
+        if (estAcro(s.code)) derniereAcro = i;
+      });
+      if (derniereAcro === -1) {
+        setBlocage("Au Sol, le mouvement doit se terminer par une acro : ajoute d'abord une acro, ce nouvel élément se placera avant elle.");
+        return;
+      }
+      setSequence((s) => {
+        const copy = [...s];
+        copy.splice(derniereAcro, 0, { code, role: "ELEMENT" });
+        return copy;
+      });
+      setDirty(true);
+      return;
+    }
     setSequence((s) => [...s, { code, role: "ELEMENT" }]);
     setDirty(true);
   }
   function removeElement(index: number) {
+    setBlocage(null);
     setSequence((s) => s.filter((_, i) => i !== index));
     setRevealedActions(new Set());
     setDirty(true);
   }
   function moveElement(index: number, dir: -1 | 1) {
-    setSequence((s) => {
-      const copy = [...s];
-      const target = index + dir;
-      if (target < 0 || target >= copy.length) return copy;
-      [copy[index], copy[target]] = [copy[target], copy[index]];
-      return copy;
-    });
+    const target = index + dir;
+    if (target < 0 || target >= sequence.length) return;
+    const copy = [...sequence];
+    [copy[index], copy[target]] = [copy[target], copy[index]];
+    if (!finOk(copy.map((x) => x.code))) {
+      setBlocage(MSG_FIN_SOL);
+      return;
+    }
+    setBlocage(null);
+    setSequence(copy);
     setRevealedActions(new Set());
     setDirty(true);
   }
@@ -315,12 +350,15 @@ export default function MovementBuilder({
   }
   function reorderTo(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex) return;
-    setSequence((s) => {
-      const copy = [...s];
-      const [moved] = copy.splice(fromIndex, 1);
-      copy.splice(toIndex, 0, moved);
-      return copy;
-    });
+    const copy = [...sequence];
+    const [moved] = copy.splice(fromIndex, 1);
+    copy.splice(toIndex, 0, moved);
+    if (!finOk(copy.map((x) => x.code))) {
+      setBlocage(MSG_FIN_SOL);
+      return;
+    }
+    setBlocage(null);
+    setSequence(copy);
     setRevealedActions(new Set());
     setDirty(true);
   }
@@ -457,6 +495,11 @@ export default function MovementBuilder({
         <div className="space-y-6">
         <section className="rounded-lg border border-border-subtle bg-surface p-4">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted">Mon mouvement</h2>
+          {blocage && (
+            <p role="alert" className="mb-3 rounded border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger">
+              ✕ {blocage}
+            </p>
+          )}
           {sequence.length === 0 ? (
             <p className="text-sm text-muted">Ajoutez des éléments depuis l&apos;Assistant ou la Bibliothèque, à droite →</p>
           ) : (
