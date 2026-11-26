@@ -114,8 +114,6 @@ export default function MovementBuilder({
   const [category, setCategory] = useState<string>("ALL");
   const [assistantOnlyMastered, setAssistantOnlyMastered] = useState(true);
   const [revealedActions, setRevealedActions] = useState<Set<number>>(new Set());
-  // Message affiché quand une action est refusée (Sol : le mouvement doit finir par une acro).
-  const [blocage, setBlocage] = useState<string | null>(null);
 
   const skillMap = useMemo(() => {
     const m = new Map<string, SkillStatus>();
@@ -274,46 +272,23 @@ export default function MovementBuilder({
     return m;
   }, [sequence]);
 
-  // Au Sol, le mouvement doit se terminer par une acro : on refuse tout ce qui mettrait un autre élément en dernier.
-  const MSG_FIN_SOL = "Au Sol, le mouvement doit se terminer par une acro : ce déplacement mettrait un autre élément en dernier.";
-  function estAcro(code: string): boolean {
-    const e = elementByCode.get(code);
-    return e ? elementInCats(e, ["ACRO"]) : false;
-  }
-  function finOk(codes: string[]): boolean {
-    return apparatus !== "SOL" || codes.length === 0 || estAcro(codes[codes.length - 1]);
-  }
-
   function addElement(code: string) {
-    setBlocage(null);
-    if (apparatus === "SOL" && !estAcro(code)) {
-      // Un élément ajouté se place toujours en dernier : si ce n'est pas une acro, il est refusé.
-      const nom = elementByCode.get(code)?.name;
-      setBlocage(
-        `${nom ? `« ${nom} » n'est pas une acro. ` : ""}Au Sol, le mouvement doit se terminer par une acro : cet élément ne peut pas être placé en dernier.`
-      );
-      return;
-    }
     setSequence((s) => [...s, { code, role: "ELEMENT" }]);
     setDirty(true);
   }
   function removeElement(index: number) {
-    setBlocage(null);
     setSequence((s) => s.filter((_, i) => i !== index));
     setRevealedActions(new Set());
     setDirty(true);
   }
   function moveElement(index: number, dir: -1 | 1) {
-    const target = index + dir;
-    if (target < 0 || target >= sequence.length) return;
-    const copy = [...sequence];
-    [copy[index], copy[target]] = [copy[target], copy[index]];
-    if (!finOk(copy.map((x) => x.code))) {
-      setBlocage(MSG_FIN_SOL);
-      return;
-    }
-    setBlocage(null);
-    setSequence(copy);
+    setSequence((s) => {
+      const copy = [...s];
+      const target = index + dir;
+      if (target < 0 || target >= copy.length) return copy;
+      [copy[index], copy[target]] = [copy[target], copy[index]];
+      return copy;
+    });
     setRevealedActions(new Set());
     setDirty(true);
   }
@@ -340,15 +315,12 @@ export default function MovementBuilder({
   }
   function reorderTo(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex) return;
-    const copy = [...sequence];
-    const [moved] = copy.splice(fromIndex, 1);
-    copy.splice(toIndex, 0, moved);
-    if (!finOk(copy.map((x) => x.code))) {
-      setBlocage(MSG_FIN_SOL);
-      return;
-    }
-    setBlocage(null);
-    setSequence(copy);
+    setSequence((s) => {
+      const copy = [...s];
+      const [moved] = copy.splice(fromIndex, 1);
+      copy.splice(toIndex, 0, moved);
+      return copy;
+    });
     setRevealedActions(new Set());
     setDirty(true);
   }
@@ -445,29 +417,6 @@ export default function MovementBuilder({
 
   return (
     <main className="mx-auto max-w-[1600px] px-6 py-6">
-      {blocage && (
-        <div
-          role="alertdialog"
-          aria-modal="true"
-          onClick={() => setBlocage(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-xs rounded-lg border border-danger bg-surface p-4 text-center shadow-xl"
-          >
-            <div className="mb-1 text-xl text-danger">✕</div>
-            <p className="text-sm font-medium text-foreground">{blocage}</p>
-            <button
-              autoFocus
-              onClick={() => setBlocage(null)}
-              className="accent-gradient mt-3 rounded px-5 py-1.5 text-xs font-medium text-white hover:opacity-90"
-            >
-              OK
-            </button>
-          </div>
-        </div>
-      )}
       <div className="mb-4 flex items-center justify-between">
         <div className="text-sm text-muted">
           {diagnostic.elementCount} élément(s) · {diagnostic.archesCount} arche(s) utilisée(s)
